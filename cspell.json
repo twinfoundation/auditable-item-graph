@@ -1,0 +1,28 @@
+{
+	"language": "en-GB",
+	"ignorePaths": [
+		"**/node_modules/**",
+		"LICENSE",
+		"**/coverage/**",
+		"**/dist/**",
+		"**/docs/reference/**",
+		"**/docs/open-api/**",
+		"**/tests/**",
+		"*.yaml",
+		"package.json",
+		"rollup.config.mjs",
+		"vitest.config.*",
+		"tsconfig.json",
+		"typedoc.json",
+		".eslintrc.cjs",
+		"**/wordlists/**"
+	],
+	"words": ["bech", "Faucet", "gtsc", "ipfs", "nameof", "openapi", "Stiftung", "Unrevoke"],
+	"ignoreRegExpList": [
+		"/from\\s+(['\"]).*\\1/",
+		"/eslint-disable.*/",
+		"/tst1.*/",
+		"/^```(.|\\s)*?```\\s*$/gm",
+		"eyJraWQ.*"
+	]
+}

@@ -1,0 +1,12 @@
+{
+	"error": {
+		"auditableItemGraphService": {
+			"namespaceMismatch": "The namespace in the urn \"{id}\" does not match the namespace of the Auditable Item Graph service \"{namespace}\"",
+			"createFailed": "Creating the Auditable Item Graph vertex failed",
+			"vertexNotFound": "The vertex with the Id \"{notFoundId}\" was not found",
+			"invalidChangesetHash": "The changeset with epoch \"{epoch}\" and hash \"{hash}\" is invalid",
+			"invalidChangesetSignature": "The changeset with epoch \"{epoch}\" and hash \"{hash}\" signature does not match the immutable changeset signature"
+		}
+	},
+	"auditableItemGraphService": {}
+}

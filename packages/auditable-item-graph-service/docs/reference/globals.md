@@ -1,0 +1,27 @@
+# @gtsc/auditable-item-graph-service
+
+## Classes
+
+- [AuditableItemGraphService](classes/AuditableItemGraphService.md)
+- [AuditableItemGraphAlias](classes/AuditableItemGraphAlias.md)
+- [AuditableItemGraphChangeset](classes/AuditableItemGraphChangeset.md)
+- [AuditableItemGraphEdge](classes/AuditableItemGraphEdge.md)
+- [AuditableItemGraphProperty](classes/AuditableItemGraphProperty.md)
+- [AuditableItemGraphResource](classes/AuditableItemGraphResource.md)
+- [AuditableItemGraphVertex](classes/AuditableItemGraphVertex.md)
+
+## Interfaces
+
+- [IAuditableItemGraphServiceConfig](interfaces/IAuditableItemGraphServiceConfig.md)
+
+## Variables
+
+- [tagsAuditableItemGraph](variables/tagsAuditableItemGraph.md)
+- [restEntryPoints](variables/restEntryPoints.md)
+
+## Functions
+
+- [generateRestRoutesAuditableItemGraph](functions/generateRestRoutesAuditableItemGraph.md)
+- [auditableItemGraphCreate](functions/auditableItemGraphCreate.md)
+- [auditableItemGraphGet](functions/auditableItemGraphGet.md)
+- [initSchema](functions/initSchema.md)

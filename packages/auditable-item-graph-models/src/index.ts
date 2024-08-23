@@ -8,6 +8,7 @@ export * from "./models/IAuditableItemGraphAuditedElement";
 export * from "./models/IAuditableItemGraphChangeset";
 export * from "./models/IAuditableItemGraphComponent";
 export * from "./models/IAuditableItemGraphEdge";
+export * from "./models/IAuditableItemGraphMetadataElement";
 export * from "./models/IAuditableItemGraphProperty";
 export * from "./models/IAuditableItemGraphResource";
 export * from "./models/IAuditableItemGraphVertex";

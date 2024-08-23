@@ -81,7 +81,7 @@ export class AuditableItemGraphClient
 			pathParams: {
 				id
 			},
-			queryParams: options
+			query: options
 		});
 
 		return response.body;

@@ -18,9 +18,9 @@ The id of the vertex to get.
 
 ***
 
-### queryParams?
+### query?
 
-> `optional` **queryParams**: `object`
+> `optional` **query**: `object`
 
 The query parameters.
 

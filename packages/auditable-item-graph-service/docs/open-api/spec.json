@@ -131,6 +131,33 @@
                         },
                         "style": "simple",
                         "example": "aig:1234567890"
+                    },
+                    {
+                        "name": "includeDeleted",
+                        "description": "Whether to include deleted aliases, resource, edges.",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "includeChangesets",
+                        "description": "Whether to include the changesets of the vertex.",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
+                    },
+                    {
+                        "name": "verifySignatureDepth",
+                        "description": "How many signatures to verify.",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "security": [
@@ -138,17 +165,6 @@
                         "jwtBearerAuthScheme": []
                     }
                 ],
-                "requestBody": {
-                    "description": "Get an auditable item graph vertex.",
-                    "required": true,
-                    "content": {
-                        "text/plain": {
-                            "schema": {
-                                "$ref": "#/components/schemas/AuditableItemGraphGetRequest"
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "200": {
                         "description": "Response to getting an auditable item graph vertex.",

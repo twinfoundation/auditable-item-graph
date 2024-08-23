@@ -4,7 +4,7 @@ Interface describing an auditable item graph vertex resource.
 
 ## Extends
 
-- [`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).`IAuditableItemGraphMetadataElement`
+- [`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`IAuditableItemGraphMetadataElement`](IAuditableItemGraphMetadataElement.md)
 
 ## Properties
 
@@ -54,4 +54,4 @@ Metadata to associate with the element.
 
 #### Inherited from
 
-`IAuditableItemGraphMetadataElement.metadata`
+[`IAuditableItemGraphMetadataElement`](IAuditableItemGraphMetadataElement.md).[`metadata`](IAuditableItemGraphMetadataElement.md#metadata)

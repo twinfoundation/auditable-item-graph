@@ -18,7 +18,7 @@ export interface IAuditableItemGraphGetRequest {
 	/**
 	 * The query parameters.
 	 */
-	queryParams?: {
+	query?: {
 		/**
 		 * Whether to include deleted aliases, resource, edges.
 		 * @default false

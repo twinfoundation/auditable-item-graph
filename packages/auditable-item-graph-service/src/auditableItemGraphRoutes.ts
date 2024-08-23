@@ -174,9 +174,9 @@ export async function auditableItemGraphGet(
 
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
 	const result = await component.get(request.pathParams.id, {
-		includeDeleted: request.queryParams?.includeDeleted,
-		includeChangesets: request.queryParams?.includeChangesets,
-		verifySignatureDepth: request.queryParams?.verifySignatureDepth
+		includeDeleted: request.query?.includeDeleted,
+		includeChangesets: request.query?.includeChangesets,
+		verifySignatureDepth: request.query?.verifySignatureDepth
 	});
 
 	return {

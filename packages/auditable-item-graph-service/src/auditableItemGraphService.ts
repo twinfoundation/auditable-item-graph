@@ -1,12 +1,13 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import type {
-	IAuditableItemGraphProperty,
 	IAuditableItemGraphAlias,
 	IAuditableItemGraphComponent,
-	IAuditableItemGraphVertex,
+	IAuditableItemGraphEdge,
+	IAuditableItemGraphMetadataElement,
+	IAuditableItemGraphProperty,
 	IAuditableItemGraphResource,
-	IAuditableItemGraphEdge
+	IAuditableItemGraphVertex
 } from "@gtsc/auditable-item-graph-models";
 import {
 	Converter,
@@ -34,7 +35,6 @@ import type { AuditableItemGraphProperty } from "./entities/auditableItemGraphPr
 import type { AuditableItemGraphVertex } from "./entities/auditableItemGraphVertex";
 import type { IAuditableItemGraphServiceConfig } from "./models/IAuditableItemGraphServiceConfig";
 import type { IAuditableItemGraphServiceContext } from "./models/IAuditableItemGraphServiceContext";
-import type { IAuditableItemGraphMetadataElement } from "../../auditable-item-graph-models/dist/types/models/IAuditableItemGraphMetadataElement";
 
 /**
  * Class for performing auditable item graph operations.

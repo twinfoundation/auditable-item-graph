@@ -6,6 +6,7 @@
 - [IAuditableItemGraphChangeset](interfaces/IAuditableItemGraphChangeset.md)
 - [IAuditableItemGraphComponent](interfaces/IAuditableItemGraphComponent.md)
 - [IAuditableItemGraphEdge](interfaces/IAuditableItemGraphEdge.md)
+- [IAuditableItemGraphMetadataElement](interfaces/IAuditableItemGraphMetadataElement.md)
 - [IAuditableItemGraphProperty](interfaces/IAuditableItemGraphProperty.md)
 - [IAuditableItemGraphResource](interfaces/IAuditableItemGraphResource.md)
 - [IAuditableItemGraphVertex](interfaces/IAuditableItemGraphVertex.md)

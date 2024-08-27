@@ -32,15 +32,17 @@ const secretEntityStorage = new MemoryEntityStorageConnector<VaultSecret>({
 });
 EntityStorageConnectorFactory.register("vault-secret", () => secretEntityStorage);
 
-const TEST_VAULT_CONNECTOR = new EntityStorageVaultConnector();
+export const TEST_VAULT_CONNECTOR = new EntityStorageVaultConnector();
 VaultConnectorFactory.register("vault", () => TEST_VAULT_CONNECTOR);
+
+export const TEST_VAULT_KEY = `${TEST_NODE_ID}/auditable-item-graph`;
 
 /**
  * Setup the test environment.
  */
 export async function setupTestEnv(): Promise<void> {
 	await TEST_VAULT_CONNECTOR.addKey(
-		`${TEST_NODE_ID}/auditable-item-graph`,
+		TEST_VAULT_KEY,
 		VaultKeyType.Ed25519,
 		Converter.base64ToBytes("p519gRazpBYvzqviRrFRBUT+ZNRZ24FYgOLcGO+Nj4Q="),
 		Converter.base64ToBytes("DzFGb9pwkyom+MGrKeVCAV2CMEiy04z9bJLj48XGjWw=")

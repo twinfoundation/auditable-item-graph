@@ -40,10 +40,6 @@ The timestamp of when the resource was deleted, as we never actually remove item
 
 ### metadata?
 
-> `optional` **metadata**: `object`
+> `optional` **metadata**: [`AuditableItemGraphProperty`](AuditableItemGraphProperty.md)[]
 
 Metadata to associate with the vertex.
-
-#### Index signature
-
- \[`id`: `string`\]: [`AuditableItemGraphProperty`](AuditableItemGraphProperty.md)

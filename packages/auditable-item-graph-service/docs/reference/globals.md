@@ -24,4 +24,5 @@
 - [generateRestRoutesAuditableItemGraph](functions/generateRestRoutesAuditableItemGraph.md)
 - [auditableItemGraphCreate](functions/auditableItemGraphCreate.md)
 - [auditableItemGraphGet](functions/auditableItemGraphGet.md)
+- [auditableItemGraphUpdate](functions/auditableItemGraphUpdate.md)
 - [initSchema](functions/initSchema.md)

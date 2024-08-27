@@ -4,6 +4,7 @@ Interface describing the base properties for auditable elements.
 
 ## Extended by
 
+- [`IAuditableItemGraphAlias`](IAuditableItemGraphAlias.md)
 - [`IAuditableItemGraphEdge`](IAuditableItemGraphEdge.md)
 - [`IAuditableItemGraphProperty`](IAuditableItemGraphProperty.md)
 - [`IAuditableItemGraphResource`](IAuditableItemGraphResource.md)

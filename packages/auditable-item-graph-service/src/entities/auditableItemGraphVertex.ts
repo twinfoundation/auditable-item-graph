@@ -39,8 +39,8 @@ export class AuditableItemGraphVertex {
 	/**
 	 * Metadata to associate with the vertex.
 	 */
-	@property({ type: "object", itemTypeRef: "AuditableItemGraphProperty" })
-	public metadata?: { [id: string]: AuditableItemGraphProperty };
+	@property({ type: "array", itemTypeRef: "AuditableItemGraphProperty[]" })
+	public metadata?: AuditableItemGraphProperty[];
 
 	/**
 	 * The resources attached to the vertex.

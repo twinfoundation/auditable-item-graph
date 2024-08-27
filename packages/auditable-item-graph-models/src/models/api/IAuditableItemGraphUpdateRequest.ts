@@ -3,9 +3,19 @@
 import type { IProperty } from "@gtsc/schema";
 
 /**
- * Create an auditable item graph vertex.
+ * Update an auditable item graph vertex.
  */
-export interface IAuditableItemGraphCreateRequest {
+export interface IAuditableItemGraphUpdateRequest {
+	/**
+	 * The path parameters.
+	 */
+	pathParams: {
+		/**
+		 * The id of the vertex to update.
+		 */
+		id: string;
+	};
+
 	/**
 	 * The data to be used in the vertex.
 	 */

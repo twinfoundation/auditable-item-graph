@@ -14,6 +14,14 @@ Class representing property in an auditable item graph.
 
 ## Properties
 
+### id
+
+> **id**: `string`
+
+The id of the property.
+
+***
+
 ### created
 
 > **created**: `number`

@@ -1,8 +1,22 @@
-# Interface: IAuditableItemGraphCreateRequest
+# Interface: IAuditableItemGraphUpdateRequest
 
-Create an auditable item graph vertex.
+Update an auditable item graph vertex.
 
 ## Properties
+
+### pathParams
+
+> **pathParams**: `object`
+
+The path parameters.
+
+#### id
+
+> **id**: `string`
+
+The id of the vertex to update.
+
+***
 
 ### body?
 

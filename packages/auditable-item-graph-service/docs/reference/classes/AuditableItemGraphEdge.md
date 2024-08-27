@@ -48,10 +48,6 @@ The relationship between the two vertices.
 
 ### metadata?
 
-> `optional` **metadata**: `object`
+> `optional` **metadata**: [`AuditableItemGraphProperty`](AuditableItemGraphProperty.md)[]
 
 Metadata to associate with the edge.
-
-#### Index signature
-
- \[`id`: `string`\]: [`AuditableItemGraphProperty`](AuditableItemGraphProperty.md)

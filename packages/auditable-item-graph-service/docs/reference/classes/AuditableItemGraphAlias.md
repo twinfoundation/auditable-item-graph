@@ -35,3 +35,11 @@ The timestamp of when the alias was created.
 > `optional` **deleted**: `number`
 
 The timestamp of when the alias was deleted, as we never actually remove items.
+
+***
+
+### metadata?
+
+> `optional` **metadata**: [`AuditableItemGraphProperty`](AuditableItemGraphProperty.md)[]
+
+Metadata to associate with the alias.

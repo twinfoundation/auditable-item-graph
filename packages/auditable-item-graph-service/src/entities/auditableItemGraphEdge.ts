@@ -35,6 +35,6 @@ export class AuditableItemGraphEdge {
 	/**
 	 * Metadata to associate with the edge.
 	 */
-	@property({ type: "object", itemTypeRef: "AuditableItemGraphProperty" })
-	public metadata?: { [id: string]: AuditableItemGraphProperty };
+	@property({ type: "array", itemTypeRef: "AuditableItemGraphProperty[]" })
+	public metadata?: AuditableItemGraphProperty[];
 }

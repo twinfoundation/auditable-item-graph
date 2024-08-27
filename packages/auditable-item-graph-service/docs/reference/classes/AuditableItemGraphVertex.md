@@ -48,13 +48,9 @@ Alternative aliases that can be used to identify the vertex.
 
 ### metadata?
 
-> `optional` **metadata**: `object`
+> `optional` **metadata**: [`AuditableItemGraphProperty`](AuditableItemGraphProperty.md)[]
 
 Metadata to associate with the vertex.
-
-#### Index signature
-
- \[`id`: `string`\]: [`AuditableItemGraphProperty`](AuditableItemGraphProperty.md)
 
 ***
 

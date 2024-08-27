@@ -6,6 +6,28 @@ Response to getting an auditable item graph vertex.
 
 ### body
 
-> **body**: [`IAuditableItemGraphVertex`](IAuditableItemGraphVertex.md)
+> **body**: `object`
 
 The response body.
+
+#### verified?
+
+> `optional` **verified**: `boolean`
+
+Whether the vertex has been verified.
+
+#### verification?
+
+> `optional` **verification**: `object`
+
+The verification failures if there are any.
+
+##### Index signature
+
+ \[`epoch`: `number`\]: `object`
+
+#### vertex
+
+> **vertex**: [`IAuditableItemGraphVertex`](IAuditableItemGraphVertex.md)
+
+The vertex data.

@@ -8,6 +8,12 @@ import { entity, property } from "@gtsc/entity";
 @entity()
 export class AuditableItemGraphProperty {
 	/**
+	 * The id of the property.
+	 */
+	@property({ type: "string" })
+	public id!: string;
+
+	/**
 	 * The timestamp of when the property was created.
 	 */
 	@property({ type: "number" })

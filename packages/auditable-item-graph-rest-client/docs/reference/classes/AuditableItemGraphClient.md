@@ -104,19 +104,27 @@ The response.
 
 ### create()
 
-> **create**(`aliases`?, `metadata`?): `Promise`\<`string`\>
+> **create**(`aliases`?, `metadata`?, `resources`?, `edges`?): `Promise`\<`string`\>
 
 Create a new graph vertex.
 
 #### Parameters
 
-• **aliases?**: `string`[]
+• **aliases?**: `object`[]
 
 Alternative aliases that can be used to identify the vertex.
 
 • **metadata?**: `IProperty`[]
 
 The metadata for the vertex.
+
+• **resources?**: `object`[]
+
+The resources attached to the vertex.
+
+• **edges?**: `object`[]
+
+The edges connected to the vertex.
 
 #### Returns
 
@@ -132,7 +140,7 @@ The id of the new graph item.
 
 ### get()
 
-> **get**(`id`, `options`?): `Promise`\<`IAuditableItemGraphVertex`\>
+> **get**(`id`, `options`?): `Promise`\<`object`\>
 
 Get a graph vertex.
 
@@ -160,9 +168,25 @@ How many signatures to verify, defaults to "none".
 
 #### Returns
 
-`Promise`\<`IAuditableItemGraphVertex`\>
+`Promise`\<`object`\>
 
 The vertex if found.
+
+##### verified?
+
+> `optional` **verified**: `boolean`
+
+##### verification?
+
+> `optional` **verification**: `object`
+
+###### Index signature
+
+ \[`epoch`: `number`\]: `object`
+
+##### vertex
+
+> **vertex**: `IAuditableItemGraphVertex`
 
 #### Implementation of
 
@@ -171,3 +195,43 @@ The vertex if found.
 #### Throws
 
 NotFoundError if the vertex is not found.
+
+***
+
+### update()
+
+> **update**(`id`, `aliases`?, `metadata`?, `resources`?, `edges`?): `Promise`\<`void`\>
+
+Update a graph vertex.
+
+#### Parameters
+
+• **id**: `string`
+
+The id of the vertex to update.
+
+• **aliases?**: `object`[]
+
+Alternative aliases that can be used to identify the vertex.
+
+• **metadata?**: `IProperty`[]
+
+The metadata for the vertex.
+
+• **resources?**: `object`[]
+
+The resources attached to the vertex.
+
+• **edges?**: `object`[]
+
+The edges connected to the vertex.
+
+#### Returns
+
+`Promise`\<`void`\>
+
+Nothing.
+
+#### Implementation of
+
+`IAuditableItemGraphComponent.update`

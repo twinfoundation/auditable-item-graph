@@ -102,19 +102,27 @@ Nothing.
 
 ### create()
 
-> **create**(`aliases`?, `metadata`?, `identity`?, `nodeIdentity`?): `Promise`\<`string`\>
+> **create**(`aliases`?, `metadata`?, `resources`?, `edges`?, `identity`?, `nodeIdentity`?): `Promise`\<`string`\>
 
 Create a new graph vertex.
 
 #### Parameters
 
-• **aliases?**: `string`[]
+• **aliases?**: `object`[]
 
 Alternative aliases that can be used to identify the vertex.
 
 • **metadata?**: `IProperty`[]
 
 The metadata for the vertex.
+
+• **resources?**: `object`[]
+
+The resources attached to the vertex.
+
+• **edges?**: `object`[]
+
+The edges connected to the vertex.
 
 • **identity?**: `string`
 
@@ -132,9 +140,53 @@ The id of the new graph item.
 
 ***
 
+### update()
+
+> **update**(`id`, `aliases`?, `metadata`?, `resources`?, `edges`?, `identity`?, `nodeIdentity`?): `Promise`\<`void`\>
+
+Update a graph vertex.
+
+#### Parameters
+
+• **id**: `string`
+
+The id of the vertex to update.
+
+• **aliases?**: `object`[]
+
+Alternative aliases that can be used to identify the vertex.
+
+• **metadata?**: `IProperty`[]
+
+The metadata for the vertex.
+
+• **resources?**: `object`[]
+
+The resources attached to the vertex.
+
+• **edges?**: `object`[]
+
+The edges connected to the vertex.
+
+• **identity?**: `string`
+
+The identity to create the auditable item graph operation with.
+
+• **nodeIdentity?**: `string`
+
+The node identity to use for vault operations.
+
+#### Returns
+
+`Promise`\<`void`\>
+
+Nothing.
+
+***
+
 ### get()
 
-> **get**(`id`, `options`?): `Promise`\<[`IAuditableItemGraphVertex`](IAuditableItemGraphVertex.md)\>
+> **get**(`id`, `options`?): `Promise`\<`object`\>
 
 Get a graph vertex.
 
@@ -162,9 +214,25 @@ How many signatures to verify, defaults to "none".
 
 #### Returns
 
-`Promise`\<[`IAuditableItemGraphVertex`](IAuditableItemGraphVertex.md)\>
+`Promise`\<`object`\>
 
 The vertex if found.
+
+##### verified?
+
+> `optional` **verified**: `boolean`
+
+##### verification?
+
+> `optional` **verification**: `object`
+
+###### Index signature
+
+ \[`epoch`: `number`\]: `object`
+
+##### vertex
+
+> **vertex**: [`IAuditableItemGraphVertex`](IAuditableItemGraphVertex.md)
 
 #### Throws
 

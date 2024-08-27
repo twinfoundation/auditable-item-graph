@@ -1,6 +1,6 @@
-# Interface: IAuditableItemGraphVertex
+# Interface: IAuditableItemGraphAlias
 
-Interface describing an auditable item graph vertex.
+Interface describing an alias for a vertex.
 
 ## Extends
 
@@ -55,43 +55,3 @@ Metadata to associate with the element.
 #### Inherited from
 
 [`IAuditableItemGraphMetadataElement`](IAuditableItemGraphMetadataElement.md).[`metadata`](IAuditableItemGraphMetadataElement.md#metadata)
-
-***
-
-### nodeIdentity?
-
-> `optional` **nodeIdentity**: `string`
-
-The identity of the node which controls the vertex.
-
-***
-
-### aliases?
-
-> `optional` **aliases**: [`IAuditableItemGraphAlias`](IAuditableItemGraphAlias.md)[]
-
-Alternative aliases that can be used to identify the vertex.
-
-***
-
-### resources?
-
-> `optional` **resources**: [`IAuditableItemGraphResource`](IAuditableItemGraphResource.md)[]
-
-The resources attached to the vertex.
-
-***
-
-### edges?
-
-> `optional` **edges**: [`IAuditableItemGraphEdge`](IAuditableItemGraphEdge.md)[]
-
-Edges connected to the vertex.
-
-***
-
-### changesets?
-
-> `optional` **changesets**: [`IAuditableItemGraphChangeset`](IAuditableItemGraphChangeset.md)[]
-
-Changesets containing time sliced changes to the vertex.

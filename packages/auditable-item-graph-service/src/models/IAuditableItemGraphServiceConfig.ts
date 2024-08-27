@@ -6,8 +6,15 @@
  */
 export interface IAuditableItemGraphServiceConfig {
 	/**
-	 * The key to use for signing the graph.
+	 * The key to use for the graph.
 	 * @default auditable-item-graph
 	 */
-	vaultSigningKeyId?: string;
+	vaultKeyId?: string;
+
+	/**
+	 * Enable immutable integrity checking by storing the changes encrypted in immutable storage.
+	 * This will incur additional costs and should only be enabled if you require immutable integrity checking.
+	 * @default false
+	 */
+	enableIntegrityCheck?: boolean;
 }

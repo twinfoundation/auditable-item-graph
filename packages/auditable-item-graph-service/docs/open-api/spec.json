@@ -171,32 +171,137 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/AuditableItemGraphVertex"
+                                    "$ref": "#/components/schemas/AuditableItemGraphGetResponse"
                                 },
                                 "examples": {
                                     "auditableItemGraphGetResponseExample": {
                                         "value": {
-                                            "id": "aig:1234567890",
-                                            "created": 1724220078321,
-                                            "aliases": [
-                                                {
-                                                    "created": 1724220078321,
-                                                    "id": "tst:1234567890"
-                                                }
-                                            ],
-                                            "metadata": [
-                                                {
-                                                    "id": "description",
-                                                    "type": "https://schema.org/Text",
-                                                    "value": "This is a test item",
-                                                    "created": 1724220078321
-                                                }
-                                            ]
+                                            "vertex": {
+                                                "id": "aig:1234567890",
+                                                "created": 1724220078321,
+                                                "aliases": [
+                                                    {
+                                                        "created": 1724220078321,
+                                                        "id": "tst:1234567890"
+                                                    }
+                                                ],
+                                                "metadata": [
+                                                    {
+                                                        "id": "description",
+                                                        "type": "https://schema.org/Text",
+                                                        "value": "This is a test item",
+                                                        "created": 1724220078321
+                                                    }
+                                                ]
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
+                    },
+                    "400": {
+                        "description": "The server cannot process the request, see the error field for more details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "examples": {
+                                    "exampleResponse": {
+                                        "value": {
+                                            "name": "GeneralError",
+                                            "message": "component.error",
+                                            "properties": {
+                                                "foo": "bar"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "You are not authorized to use the API or no credentials were supplied, see the error field for more details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "examples": {
+                                    "exampleResponse": {
+                                        "value": {
+                                            "name": "UnauthorizedError",
+                                            "message": "component.error"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "The server has encountered a situation it does not know how to handle, see the error field for more details.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                },
+                                "examples": {
+                                    "exampleResponse": {
+                                        "value": {
+                                            "name": "InternalServerError",
+                                            "message": "component.error"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "operationId": "auditableItemGraphUpdate",
+                "summary": "Update a graph vertex",
+                "tags": [
+                    "Auditable Item Graph"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "description": "The id of the vertex to update.",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "style": "simple",
+                        "example": "aig:1234567890"
+                    }
+                ],
+                "security": [
+                    {
+                        "jwtBearerAuthScheme": []
+                    }
+                ],
+                "requestBody": {
+                    "description": "Update an auditable item graph vertex.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AuditableItemGraphUpdateRequest"
+                            },
+                            "examples": {
+                                "auditableItemGraphUpdateRequestExample": {
+                                    "value": {}
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "The rest request ended in success with no data."
                     },
                     "400": {
                         "description": "The server cannot process the request, see the error field for more details.",
@@ -302,7 +407,22 @@
                     "aliases": {
                         "type": "array",
                         "items": {
-                            "type": "string"
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "metadata": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Property"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "id"
+                            ],
+                            "additionalProperties": false
                         },
                         "description": "Alternative aliases that can be used to identify the vertex."
                     },
@@ -311,11 +431,59 @@
                         "items": {
                             "$ref": "#/components/schemas/Property"
                         },
-                        "description": "The metadata to be used in the item."
+                        "description": "The metadata to be used in the vertex."
+                    },
+                    "resources": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "metadata": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Property"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "id"
+                            ],
+                            "additionalProperties": false
+                        },
+                        "description": "The resources attached to the vertex."
+                    },
+                    "edges": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "relationship": {
+                                    "type": "string"
+                                },
+                                "metadata": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Property"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "relationship"
+                            ],
+                            "additionalProperties": false
+                        },
+                        "description": "The edges connected to the vertex."
                     }
                 },
                 "additionalProperties": false,
-                "description": "The data to be used in the item."
+                "description": "The data to be used in the vertex."
             },
             "Property": {
                 "type": "object",
@@ -339,6 +507,49 @@
                 ],
                 "additionalProperties": false,
                 "description": "Interface describing a property."
+            },
+            "AuditableItemGraphGetResponse": {
+                "type": "object",
+                "properties": {
+                    "verified": {
+                        "type": "boolean",
+                        "description": "Whether the vertex has been verified."
+                    },
+                    "verification": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "object",
+                            "properties": {
+                                "failure": {
+                                    "type": "string"
+                                },
+                                "properties": {
+                                    "type": "object",
+                                    "additionalProperties": {}
+                                },
+                                "changes": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/AuditableItemGraphChange"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "changes"
+                            ],
+                            "additionalProperties": false
+                        },
+                        "description": "The verification failures if there are any."
+                    },
+                    "vertex": {
+                        "$ref": "#/components/schemas/AuditableItemGraphVertex"
+                    }
+                },
+                "required": [
+                    "vertex"
+                ],
+                "additionalProperties": false,
+                "description": "The response body."
             },
             "AuditableItemGraphVertex": {
                 "type": "object",
@@ -369,7 +580,7 @@
                     "aliases": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/AuditableItemGraphAuditedElement"
+                            "$ref": "#/components/schemas/AuditableItemGraphAlias"
                         },
                         "description": "Alternative aliases that can be used to identify the vertex."
                     },
@@ -434,9 +645,17 @@
                 "additionalProperties": false,
                 "description": "Interface describing a property for vertex metadata."
             },
-            "AuditableItemGraphAuditedElement": {
+            "AuditableItemGraphAlias": {
                 "type": "object",
+                "additionalProperties": false,
                 "properties": {
+                    "metadata": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AuditableItemGraphProperty"
+                        },
+                        "description": "Metadata to associate with the element."
+                    },
                     "id": {
                         "type": "string",
                         "description": "The id of the element."
@@ -451,11 +670,10 @@
                     }
                 },
                 "required": [
-                    "id",
-                    "created"
+                    "created",
+                    "id"
                 ],
-                "additionalProperties": false,
-                "description": "Interface describing the base properties for auditable elements."
+                "description": "Interface describing an alias for a vertex."
             },
             "AuditableItemGraphResource": {
                 "type": "object",
@@ -550,6 +768,90 @@
                 ],
                 "additionalProperties": false,
                 "description": "Interface describing a set of updates to the vertex."
+            },
+            "AuditableItemGraphUpdateRequest": {
+                "type": "object",
+                "properties": {
+                    "aliases": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "metadata": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Property"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "id"
+                            ],
+                            "additionalProperties": false
+                        },
+                        "description": "Alternative aliases that can be used to identify the vertex."
+                    },
+                    "metadata": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Property"
+                        },
+                        "description": "The metadata to be used in the vertex."
+                    },
+                    "resources": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "metadata": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Property"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "id"
+                            ],
+                            "additionalProperties": false
+                        },
+                        "description": "The resources attached to the vertex."
+                    },
+                    "edges": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "relationship": {
+                                    "type": "string"
+                                },
+                                "metadata": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Property"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "relationship"
+                            ],
+                            "additionalProperties": false
+                        },
+                        "description": "The edges connected to the vertex."
+                    }
+                },
+                "additionalProperties": false,
+                "description": "The data to be used in the vertex."
             }
         },
         "securitySchemes": {

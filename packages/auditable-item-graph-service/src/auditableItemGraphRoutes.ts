@@ -1,11 +1,18 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import type { ICreatedResponse, IHttpRequestContext, IRestRoute, ITag } from "@gtsc/api-models";
+import type {
+	ICreatedResponse,
+	IHttpRequestContext,
+	INoContentResponse,
+	IRestRoute,
+	ITag
+} from "@gtsc/api-models";
 import type {
 	IAuditableItemGraphComponent,
 	IAuditableItemGraphCreateRequest,
 	IAuditableItemGraphGetRequest,
-	IAuditableItemGraphGetResponse
+	IAuditableItemGraphGetResponse,
+	IAuditableItemGraphUpdateRequest
 } from "@gtsc/auditable-item-graph-models";
 import { ComponentFactory, Guards } from "@gtsc/core";
 import { nameof } from "@gtsc/nameof";
@@ -91,22 +98,24 @@ export function generateRestRoutesAuditableItemGraph(
 						id: "auditableItemGraphGetResponseExample",
 						response: {
 							body: {
-								id: "aig:1234567890",
-								created: 1724220078321,
-								aliases: [
-									{
-										created: 1724220078321,
-										id: "tst:1234567890"
-									}
-								],
-								metadata: [
-									{
-										id: "description",
-										type: "https://schema.org/Text",
-										value: "This is a test item",
-										created: 1724220078321
-									}
-								]
+								vertex: {
+									id: "aig:1234567890",
+									created: 1724220078321,
+									aliases: [
+										{
+											created: 1724220078321,
+											id: "tst:1234567890"
+										}
+									],
+									metadata: [
+										{
+											id: "description",
+											type: "https://schema.org/Text",
+											value: "This is a test item",
+											created: 1724220078321
+										}
+									]
+								}
 							}
 						}
 					}
@@ -115,7 +124,36 @@ export function generateRestRoutesAuditableItemGraph(
 		]
 	};
 
-	return [createRoute, getRoute];
+	const updateRoute: IRestRoute<IAuditableItemGraphUpdateRequest, INoContentResponse> = {
+		operationId: "auditableItemGraphUpdate",
+		summary: "Update a graph vertex",
+		tag: tagsAuditableItemGraph[0].name,
+		method: "PUT",
+		path: `${baseRouteName}/:id`,
+		handler: async (httpRequestContext, request) =>
+			auditableItemGraphUpdate(httpRequestContext, componentName, request),
+		requestType: {
+			type: nameof<IAuditableItemGraphUpdateRequest>(),
+			examples: [
+				{
+					id: "auditableItemGraphUpdateRequestExample",
+					request: {
+						pathParams: {
+							id: "aig:1234567890"
+						},
+						body: {}
+					}
+				}
+			]
+		},
+		responseType: [
+			{
+				type: nameof<INoContentResponse>()
+			}
+		]
+	};
+
+	return [createRoute, getRoute, updateRoute];
 }
 
 /**
@@ -131,16 +169,13 @@ export async function auditableItemGraphCreate(
 	request: IAuditableItemGraphCreateRequest
 ): Promise<ICreatedResponse> {
 	Guards.object<IAuditableItemGraphCreateRequest>(ROUTES_SOURCE, nameof(request), request);
-	Guards.object<IAuditableItemGraphCreateRequest["body"]>(
-		ROUTES_SOURCE,
-		nameof(request.body),
-		request.body
-	);
 
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
 	const id = await component.create(
-		request.body.aliases,
-		request.body.metadata,
+		request.body?.aliases,
+		request.body?.metadata,
+		request.body?.resources,
+		request.body?.edges,
 		httpRequestContext.userIdentity,
 		httpRequestContext.nodeIdentity
 	);
@@ -181,5 +216,40 @@ export async function auditableItemGraphGet(
 
 	return {
 		body: result
+	};
+}
+
+/**
+ * Update the graph vertex.
+ * @param httpRequestContext The request context for the API.
+ * @param componentName The name of the component to use in the routes.
+ * @param request The request.
+ * @returns The response object with additional http response properties.
+ */
+export async function auditableItemGraphUpdate(
+	httpRequestContext: IHttpRequestContext,
+	componentName: string,
+	request: IAuditableItemGraphUpdateRequest
+): Promise<INoContentResponse> {
+	Guards.object<IAuditableItemGraphUpdateRequest>(ROUTES_SOURCE, nameof(request), request);
+	Guards.object<IAuditableItemGraphUpdateRequest["pathParams"]>(
+		ROUTES_SOURCE,
+		nameof(request.pathParams),
+		request.pathParams
+	);
+	Guards.stringValue(ROUTES_SOURCE, nameof(request.pathParams.id), request.pathParams.id);
+
+	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
+	await component.update(
+		request.pathParams.id,
+		request.body?.aliases,
+		request.body?.metadata,
+		request.body?.resources,
+		request.body?.edges,
+		httpRequestContext.userIdentity,
+		httpRequestContext.nodeIdentity
+	);
+	return {
+		statusCode: HttpStatusCode.noContent
 	};
 }

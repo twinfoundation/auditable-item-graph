@@ -547,7 +547,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				conditions.push({
 					property: "aliasIndex",
 					operator: ComparisonOperator.Includes,
-					value: idOrAlias
+					value: idOrAlias.toLowerCase()
 				});
 			}
 			const results = await this._vertexStorage.query(
@@ -597,7 +597,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				});
 				aliasIndex.push(alias.id);
 			}
-			entity.aliasIndex = aliasIndex.join("||");
+			entity.aliasIndex = aliasIndex.join("||").toLowerCase();
 		}
 
 		if (Is.arrayValue(vertex.metadata)) {

@@ -4,7 +4,7 @@ Interface describing an auditable item graph vertex.
 
 ## Extends
 
-- [`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`IAuditableItemGraphMetadataElement`](IAuditableItemGraphMetadataElement.md)
+- `Omit`\<[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md), `"deleted"`\>.[`IAuditableItemGraphMetadataElement`](IAuditableItemGraphMetadataElement.md)
 
 ## Properties
 
@@ -16,7 +16,7 @@ The id of the element.
 
 #### Inherited from
 
-[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`id`](IAuditableItemGraphAuditedElement.md#id)
+`Omit.id`
 
 ***
 
@@ -28,21 +28,7 @@ The timestamp of when the element was created.
 
 #### Inherited from
 
-[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`created`](IAuditableItemGraphAuditedElement.md#created)
-
-***
-
-### deleted?
-
-> `optional` **deleted**: `number`
-
-The timestamp of when the element was deleted, as we never actually remove items.
-A property can also be marked as deleted if the value was updated, in which case
-a new value is created and the old one marked as deleted.
-
-#### Inherited from
-
-[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`deleted`](IAuditableItemGraphAuditedElement.md#deleted)
+`Omit.created`
 
 ***
 

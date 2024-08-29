@@ -28,9 +28,17 @@ The vault connector type, defaults to "vault".
 
 The entity storage for vertices, defaults to "vertex".
 
-• **options.immutableStorageType?**: `string`
+• **options.aliasIndexEntityStorageType?**: `string`
 
-The immutable storage for audit trail, defaults to "audit-trail".
+The entity storage for vertices, defaults to "alias-index".
+
+• **options.integrityImmutableStorageType?**: `string`
+
+The immutable storage for audit trail, defaults to "auditable-item-graph".
+
+• **options.identityConnectorType?**: `string`
+
+The identity connector type, defaults to "identity".
 
 • **options.config?**: [`IAuditableItemGraphServiceConfig`](../interfaces/IAuditableItemGraphServiceConfig.md)
 
@@ -130,7 +138,7 @@ Whether to include deleted aliases, resource, edges, defaults to false.
 
 Whether to include the changesets of the vertex, defaults to false.
 
-• **options.verifySignatureDepth?**: `"all"` \| `"none"` \| `"current"`
+• **options.verifySignatureDepth?**: `VerifyDepth`
 
 How many signatures to verify, defaults to "none".
 
@@ -214,96 +222,96 @@ Nothing.
 
 ***
 
-### buildChangesetMetadataList()
+### removeImmutable()
 
-> `private` **buildChangesetMetadataList**(`parentId`, `elementName`, `metadataList`, `epochSignatureObjects`): `void`
+> **removeImmutable**(`id`, `nodeIdentity`?): `Promise`\<`void`\>
 
-Build the changesets of a metadata list.
+Remove the immutable storage for an item.
 
 #### Parameters
 
-• **parentId**: `string`
+• **id**: `string`
 
-The id of the parent element.
+The id of the vertex to get.
 
-• **elementName**: `string`
+• **nodeIdentity?**: `string`
 
-The name of the element.
-
-• **metadataList**: `undefined` \| `IAuditableItemGraphProperty`[]
-
-The metadata list to verify.
-
-• **epochSignatureObjects**
-
-The epoch signature objects to add to.
+The node identity to use for vault operations.
 
 #### Returns
 
-`void`
+`Promise`\<`void`\>
+
+Nothing.
+
+#### Implementation of
+
+`IAuditableItemGraphComponent.removeImmutable`
+
+#### Throws
+
+NotFoundError if the vertex is not found.
 
 ***
 
-### buildChangesetAliasList()
+### query()
 
-> `private` **buildChangesetAliasList**(`aliases`, `epochSignatureObjects`): `void`
+> **query**(`idOrAlias`, `mode`?, `properties`?, `cursor`?, `pageSize`?): `Promise`\<`object`\>
 
-Build the changesets of an alias list.
-
-#### Parameters
-
-• **aliases**: `undefined` \| `IAuditableItemGraphAlias`[]
-
-The aliases to verify.
-
-• **epochSignatureObjects**
-
-The epoch signature objects to add to.
-
-#### Returns
-
-`void`
-
-***
-
-### buildChangesetResourceList()
-
-> `private` **buildChangesetResourceList**(`resources`, `epochSignatureObjects`): `void`
-
-Build the changesets of a resource list.
+Query the graph for vertices with the matching id or alias.
 
 #### Parameters
 
-• **resources**: `undefined` \| `IAuditableItemGraphResource`[]
+• **idOrAlias**: `string`
 
-The resources to verify.
+The id or alias to query for.
 
-• **epochSignatureObjects**
+• **mode?**: `"both"` \| `"id"` \| `"alias"`
 
-The epoch signature objects to add to.
+Look in id, alias or both, defaults to both
 
-#### Returns
+• **properties?**: keyof `IAuditableItemGraphVertex`[]
 
-`void`
+The properties to return, if not provided defaults to id, created, aliases and metadata.
 
-***
+• **cursor?**: `string`
 
-### buildChangesetEdgeList()
+The cursor to request the next page of entities.
 
-> `private` **buildChangesetEdgeList**(`edges`, `epochSignatureObjects`): `void`
+• **pageSize?**: `number`
 
-Build the changesets of an edge list.
-
-#### Parameters
-
-• **edges**: `undefined` \| `IAuditableItemGraphEdge`[]
-
-The edges to verify.
-
-• **epochSignatureObjects**
-
-The epoch signature objects to add to.
+The maximum number of entities in a page.
 
 #### Returns
 
-`void`
+`Promise`\<`object`\>
+
+The entities, which can be partial if a limited keys list was provided.
+
+##### entities
+
+> **entities**: `Partial`\<`IAuditableItemGraphVertex`\>[]
+
+The entities, which can be partial if a limited keys list was provided.
+
+##### cursor?
+
+> `optional` **cursor**: `string`
+
+An optional cursor, when defined can be used to call find to get more entities.
+
+##### pageSize?
+
+> `optional` **pageSize**: `number`
+
+Number of entities to return.
+
+##### totalEntities
+
+> **totalEntities**: `number`
+
+Total entities length.
+
+#### Implementation of
+
+`IAuditableItemGraphComponent.query`

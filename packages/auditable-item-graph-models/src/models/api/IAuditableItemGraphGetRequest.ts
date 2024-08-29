@@ -1,5 +1,6 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
+import type { VerifyDepth } from "../verifyDepth";
 
 /**
  * Get an auditable item graph vertex.
@@ -20,21 +21,18 @@ export interface IAuditableItemGraphGetRequest {
 	 */
 	query?: {
 		/**
-		 * Whether to include deleted aliases, resource, edges.
-		 * @default false
+		 * Whether to include deleted aliases, resource, edges, defaults to false.
 		 */
 		includeDeleted?: boolean;
 
 		/**
-		 * Whether to include the changesets of the vertex.
-		 * @default false
+		 * Whether to include the changesets of the vertex, defaults to false.
 		 */
 		includeChangesets?: boolean;
 
 		/**
-		 * How many signatures to verify.
-		 * @default "none"
+		 * How many signatures to verify, none, current or all, defaults to "none".
 		 */
-		verifySignatureDepth?: "none" | "current" | "all";
+		verifySignatureDepth?: VerifyDepth;
 	};
 }

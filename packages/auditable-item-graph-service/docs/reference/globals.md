@@ -25,4 +25,5 @@
 - [auditableItemGraphCreate](functions/auditableItemGraphCreate.md)
 - [auditableItemGraphGet](functions/auditableItemGraphGet.md)
 - [auditableItemGraphUpdate](functions/auditableItemGraphUpdate.md)
+- [auditableItemGraphList](functions/auditableItemGraphList.md)
 - [initSchema](functions/initSchema.md)

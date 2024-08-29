@@ -4,6 +4,7 @@ import type { IComponent } from "@gtsc/core";
 import type { IProperty } from "@gtsc/schema";
 import type { IAuditableItemGraphChange } from "./IAuditableItemGraphChange";
 import type { IAuditableItemGraphVertex } from "./IAuditableItemGraphVertex";
+import type { VerifyDepth } from "./verifyDepth";
 
 /**
  * Interface describing an auditable item graph contract.
@@ -84,7 +85,7 @@ export interface IAuditableItemGraphComponent extends IComponent {
 		options?: {
 			includeDeleted?: boolean;
 			includeChangesets?: boolean;
-			verifySignatureDepth?: "none" | "current" | "all";
+			verifySignatureDepth?: VerifyDepth;
 		}
 	): Promise<{
 		verified?: boolean;
@@ -96,5 +97,48 @@ export interface IAuditableItemGraphComponent extends IComponent {
 			};
 		};
 		vertex: IAuditableItemGraphVertex;
+	}>;
+
+	/**
+	 * Remove the immutable storage for an item.
+	 * @param id The id of the vertex to get.
+	 * @param nodeIdentity The node identity to use for vault operations.
+	 * @returns Nothing.
+	 * @throws NotFoundError if the vertex is not found.
+	 */
+	removeImmutable(id: string, nodeIdentity?: string): Promise<void>;
+
+	/**
+	 * Query the graph for vertices with the matching id or alias.
+	 * @param idOrAlias The id or alias to query for.
+	 * @param mode Look in id, alias or both, defaults to both.
+	 * @param properties The properties to return, if not provided defaults to id, created, aliases and metadata.
+	 * @param cursor The cursor to request the next page of entities.
+	 * @param pageSize The maximum number of entities in a page.
+	 * @returns The entities, which can be partial if a limited keys list was provided.
+	 */
+	query(
+		idOrAlias: string,
+		mode?: "id" | "alias" | "both",
+		properties?: (keyof IAuditableItemGraphVertex)[],
+		cursor?: string,
+		pageSize?: number
+	): Promise<{
+		/**
+		 * The entities, which can be partial if a limited keys list was provided.
+		 */
+		entities: Partial<IAuditableItemGraphVertex>[];
+		/**
+		 * An optional cursor, when defined can be used to call find to get more entities.
+		 */
+		cursor?: string;
+		/**
+		 * Number of entities to return.
+		 */
+		pageSize?: number;
+		/**
+		 * Total entities length.
+		 */
+		totalEntities: number;
 	}>;
 }

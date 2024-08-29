@@ -17,7 +17,7 @@ export class AuditableItemGraphChangeset {
 	 * The identity of the user who made the changeset.
 	 */
 	@property({ type: "string" })
-	public identity!: string;
+	public userIdentity!: string;
 
 	/**
 	 * The hash of the changeset.
@@ -29,5 +29,5 @@ export class AuditableItemGraphChangeset {
 	 * The immutable storage id which contains the signature for this changeset.
 	 */
 	@property({ type: "string" })
-	public immutableStorageId!: string;
+	public immutableStorageId?: string;
 }

@@ -7,8 +7,9 @@
 - [IAuditableItemGraphChange](interfaces/IAuditableItemGraphChange.md)
 - [IAuditableItemGraphChangeset](interfaces/IAuditableItemGraphChangeset.md)
 - [IAuditableItemGraphComponent](interfaces/IAuditableItemGraphComponent.md)
+- [IAuditableItemGraphCredential](interfaces/IAuditableItemGraphCredential.md)
 - [IAuditableItemGraphEdge](interfaces/IAuditableItemGraphEdge.md)
-- [IAuditableItemGraphImmutable](interfaces/IAuditableItemGraphImmutable.md)
+- [IAuditableItemGraphIntegrity](interfaces/IAuditableItemGraphIntegrity.md)
 - [IAuditableItemGraphMetadataElement](interfaces/IAuditableItemGraphMetadataElement.md)
 - [IAuditableItemGraphProperty](interfaces/IAuditableItemGraphProperty.md)
 - [IAuditableItemGraphResource](interfaces/IAuditableItemGraphResource.md)
@@ -16,4 +17,14 @@
 - [IAuditableItemGraphCreateRequest](interfaces/IAuditableItemGraphCreateRequest.md)
 - [IAuditableItemGraphGetRequest](interfaces/IAuditableItemGraphGetRequest.md)
 - [IAuditableItemGraphGetResponse](interfaces/IAuditableItemGraphGetResponse.md)
+- [IAuditableItemGraphListRequest](interfaces/IAuditableItemGraphListRequest.md)
+- [IAuditableItemGraphListResponse](interfaces/IAuditableItemGraphListResponse.md)
 - [IAuditableItemGraphUpdateRequest](interfaces/IAuditableItemGraphUpdateRequest.md)
+
+## Type Aliases
+
+- [VerifyDepth](type-aliases/VerifyDepth.md)
+
+## Variables
+
+- [VerifyDepth](variables/VerifyDepth.md)

@@ -11,7 +11,7 @@ import type { IAuditableItemGraphResource } from "./IAuditableItemGraphResource"
  * Interface describing an auditable item graph vertex.
  */
 export interface IAuditableItemGraphVertex
-	extends IAuditableItemGraphAuditedElement,
+	extends Omit<IAuditableItemGraphAuditedElement, "deleted">,
 		IAuditableItemGraphMetadataElement {
 	/**
 	 * The identity of the node which controls the vertex.

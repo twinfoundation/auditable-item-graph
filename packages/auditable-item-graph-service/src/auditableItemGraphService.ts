@@ -2,14 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0.
 import type {
 	IAuditableItemGraphAlias,
+	IAuditableItemGraphAuditedElement,
 	IAuditableItemGraphChange,
 	IAuditableItemGraphComponent,
+	IAuditableItemGraphCredential,
 	IAuditableItemGraphEdge,
-	IAuditableItemGraphImmutable,
+	IAuditableItemGraphIntegrity,
 	IAuditableItemGraphMetadataElement,
 	IAuditableItemGraphProperty,
 	IAuditableItemGraphResource,
-	IAuditableItemGraphVertex
+	IAuditableItemGraphVertex,
+	VerifyDepth
 } from "@gtsc/auditable-item-graph-models";
 import {
 	Converter,
@@ -23,10 +26,16 @@ import {
 	Urn
 } from "@gtsc/core";
 import { Blake2b } from "@gtsc/crypto";
+import { ComparisonOperator, LogicalOperator, SortDirection } from "@gtsc/entity";
 import {
 	EntityStorageConnectorFactory,
 	type IEntityStorageConnector
 } from "@gtsc/entity-storage-models";
+import {
+	DocumentHelper,
+	IdentityConnectorFactory,
+	type IIdentityConnector
+} from "@gtsc/identity-models";
 import {
 	ImmutableStorageConnectorFactory,
 	type IImmutableStorageConnector
@@ -38,6 +47,7 @@ import {
 	VaultEncryptionType,
 	type IVaultConnector
 } from "@gtsc/vault-models";
+import { Jwt } from "@gtsc/web";
 import type { AuditableItemGraphProperty } from "./entities/auditableItemGraphProperty";
 import type { AuditableItemGraphVertex } from "./entities/auditableItemGraphVertex";
 import type { IAuditableItemGraphServiceConfig } from "./models/IAuditableItemGraphServiceConfig";
@@ -109,16 +119,28 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	private readonly _vertexStorage: IEntityStorageConnector<AuditableItemGraphVertex>;
 
 	/**
-	 * The immutable storage for the audit trail.
+	 * The immutable storage for the integrity data.
 	 * @internal
 	 */
-	private readonly _auditTrailImmutableStorage: IImmutableStorageConnector;
+	private readonly _integrityImmutableStorage: IImmutableStorageConnector;
+
+	/**
+	 * The identity connector for generating verifiable credentials.
+	 * @internal
+	 */
+	private readonly _identityConnector: IIdentityConnector;
 
 	/**
 	 * The vault key for signing or encrypting the data.
 	 * @internal
 	 */
 	private readonly _vaultKeyId: string;
+
+	/**
+	 * The assertion method id to use for the graph.
+	 * @internal
+	 */
+	private readonly _assertionMethodId: string;
 
 	/**
 	 * Enable immutable integrity checking by storing the changes encrypted in immutable storage.
@@ -132,12 +154,16 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @param options.config The configuration for the connector.
 	 * @param options.vaultConnectorType The vault connector type, defaults to "vault".
 	 * @param options.vertexEntityStorageType The entity storage for vertices, defaults to "vertex".
-	 * @param options.immutableStorageType The immutable storage for audit trail, defaults to "audit-trail".
+	 * @param options.aliasIndexEntityStorageType The entity storage for vertices, defaults to "alias-index".
+	 * @param options.integrityImmutableStorageType The immutable storage for audit trail, defaults to "auditable-item-graph".
+	 * @param options.identityConnectorType The identity connector type, defaults to "identity".
 	 */
 	constructor(options?: {
 		vaultConnectorType?: string;
 		vertexEntityStorageType?: string;
-		immutableStorageType?: string;
+		aliasIndexEntityStorageType?: string;
+		integrityImmutableStorageType?: string;
+		identityConnectorType?: string;
 		config?: IAuditableItemGraphServiceConfig;
 	}) {
 		this._vaultConnector = VaultConnectorFactory.get(options?.vaultConnectorType ?? "vault");
@@ -146,12 +172,17 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			options?.vertexEntityStorageType ?? "vertex"
 		);
 
-		this._auditTrailImmutableStorage = ImmutableStorageConnectorFactory.get(
-			options?.immutableStorageType ?? "audit-trail"
+		this._integrityImmutableStorage = ImmutableStorageConnectorFactory.get(
+			options?.integrityImmutableStorageType ?? "auditable-item-graph"
+		);
+
+		this._identityConnector = IdentityConnectorFactory.get(
+			options?.identityConnectorType ?? "identity"
 		);
 
 		this._config = options?.config ?? {};
 		this._vaultKeyId = this._config.vaultKeyId ?? "auditable-item-graph";
+		this._assertionMethodId = this._config.assertionMethodId ?? "auditable-item-graph";
 		this._enableIntegrityCheck = this._config.enableIntegrityCheck ?? false;
 	}
 
@@ -191,7 +222,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 			const context: IAuditableItemGraphServiceContext = {
 				now: Date.now(),
-				identity,
+				userIdentity: identity,
 				nodeIdentity,
 				changes: []
 			};
@@ -232,7 +263,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		options?: {
 			includeDeleted?: boolean;
 			includeChangesets?: boolean;
-			verifySignatureDepth?: "none" | "current" | "all";
+			verifySignatureDepth?: VerifyDepth;
 		}
 	): Promise<{
 		verified?: boolean;
@@ -397,7 +428,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 			const context: IAuditableItemGraphServiceContext = {
 				now: Date.now(),
-				identity,
+				userIdentity: identity,
 				nodeIdentity,
 				changes: []
 			};
@@ -416,6 +447,132 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	}
 
 	/**
+	 * Remove the immutable storage for an item.
+	 * @param id The id of the vertex to get.
+	 * @param nodeIdentity The node identity to use for vault operations.
+	 * @returns Nothing.
+	 * @throws NotFoundError if the vertex is not found.
+	 */
+	public async removeImmutable(id: string, nodeIdentity?: string): Promise<void> {
+		Guards.stringValue(this.CLASS_NAME, nameof(id), id);
+		Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
+
+		const urnParsed = Urn.fromValidString(id);
+
+		if (urnParsed.namespaceIdentifier() !== AuditableItemGraphService.NAMESPACE) {
+			throw new GeneralError(this.CLASS_NAME, "namespaceMismatch", {
+				namespace: AuditableItemGraphService.NAMESPACE,
+				id
+			});
+		}
+
+		try {
+			const vertexId = urnParsed.namespaceSpecific(0);
+			const vertexEntity = await this._vertexStorage.get(vertexId);
+
+			if (Is.empty(vertexEntity)) {
+				throw new NotFoundError(this.CLASS_NAME, "vertexNotFound", id);
+			}
+
+			let hasChanged = false;
+
+			if (Is.arrayValue(vertexEntity.changesets)) {
+				for (const changeset of vertexEntity.changesets) {
+					if (Is.stringValue(changeset.immutableStorageId)) {
+						await this._integrityImmutableStorage.remove(
+							nodeIdentity,
+							changeset.immutableStorageId
+						);
+						delete changeset.immutableStorageId;
+						hasChanged = true;
+					}
+				}
+			}
+
+			if (hasChanged) {
+				await this._vertexStorage.set(vertexEntity);
+			}
+		} catch (error) {
+			throw new GeneralError(this.CLASS_NAME, "removeImmutableFailed", undefined, error);
+		}
+	}
+
+	/**
+	 * Query the graph for vertices with the matching id or alias.
+	 * @param idOrAlias The id or alias to query for.
+	 * @param mode Look in id, alias or both, defaults to both
+	 * @param properties The properties to return, if not provided defaults to id, created, aliases and metadata.
+	 * @param cursor The cursor to request the next page of entities.
+	 * @param pageSize The maximum number of entities in a page.
+	 * @returns The entities, which can be partial if a limited keys list was provided.
+	 */
+	public async query(
+		idOrAlias: string,
+		mode?: "id" | "alias" | "both",
+		properties?: (keyof IAuditableItemGraphVertex)[],
+		cursor?: string,
+		pageSize?: number
+	): Promise<{
+		/**
+		 * The entities, which can be partial if a limited keys list was provided.
+		 */
+		entities: Partial<IAuditableItemGraphVertex>[];
+		/**
+		 * An optional cursor, when defined can be used to call find to get more entities.
+		 */
+		cursor?: string;
+		/**
+		 * Number of entities to return.
+		 */
+		pageSize?: number;
+		/**
+		 * Total entities length.
+		 */
+		totalEntities: number;
+	}> {
+		Guards.stringValue(this.CLASS_NAME, nameof(idOrAlias), idOrAlias);
+
+		try {
+			const propertiesToReturn = properties ?? ["id", "created", "aliases", "metadata"];
+			const conditions = [];
+			mode = mode ?? "both";
+			if (mode === "id" || mode === "both") {
+				conditions.push({
+					property: "id",
+					operator: ComparisonOperator.Includes,
+					value: idOrAlias
+				});
+			}
+			if (mode === "alias" || mode === "both") {
+				conditions.push({
+					property: "aliasIndex",
+					operator: ComparisonOperator.Includes,
+					value: idOrAlias
+				});
+			}
+			const results = await this._vertexStorage.query(
+				{
+					conditions,
+					logicalOperator: LogicalOperator.Or
+				},
+				[
+					{
+						property: "created",
+						sortDirection: SortDirection.Descending
+					}
+				],
+				propertiesToReturn as (keyof AuditableItemGraphVertex)[],
+				cursor,
+				pageSize
+			);
+
+			return results;
+		} catch (error) {
+			throw new GeneralError(this.CLASS_NAME, "queryingFailed", undefined, error);
+		}
+	}
+
+	/**
 	 * Map the vertex model to an entity.
 	 * @param vertex The vertex model.
 	 * @returns The entity.
@@ -429,6 +586,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		};
 
 		if (Is.arrayValue(vertex.aliases)) {
+			const aliasIndex = [];
 			entity.aliases ??= [];
 			for (const alias of vertex.aliases) {
 				entity.aliases.push({
@@ -437,7 +595,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 					deleted: alias.deleted,
 					metadata: this.metadataModelToEntity(alias.metadata)
 				});
+				aliasIndex.push(alias.id);
 			}
+			entity.aliasIndex = aliasIndex.join("||");
 		}
 
 		if (Is.arrayValue(vertex.metadata)) {
@@ -474,7 +634,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			for (const changeset of vertex.changesets) {
 				entity.changesets.push({
 					created: changeset.created,
-					identity: changeset.identity,
+					userIdentity: changeset.userIdentity,
 					hash: changeset.hash,
 					immutableStorageId: changeset.immutableStorageId
 				});
@@ -567,7 +727,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				model.changesets ??= [];
 				model.changesets.push({
 					created: changeset.created,
-					identity: changeset.identity,
+					userIdentity: changeset.userIdentity,
 					hash: changeset.hash,
 					immutableStorageId: changeset.immutableStorageId
 				});
@@ -606,6 +766,47 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	}
 
 	/**
+	 * Add a change to the current context.
+	 * @param context The context for the operation.
+	 * @param itemType The type of the item.
+	 * @param operation The operation.
+	 * @param properties The properties of the item.
+	 * @param parentId The parent id of the item.
+	 * @internal
+	 */
+	private addContextChange(
+		context: IAuditableItemGraphServiceContext,
+		itemType: string,
+		operation: "add" | "delete",
+		properties: {
+			[id: string]: unknown;
+		},
+		parentId?: string
+	): void {
+		const change: IAuditableItemGraphChange = {
+			itemType,
+			parentId,
+			operation,
+			properties
+		};
+		context.changes.push({
+			changeHash: this.calculateChangeHash(change),
+			change
+		});
+	}
+
+	/**
+	 * Calculate the hash for a change.
+	 * @param change The change to calculate the hash for.
+	 * @returns The hash.
+	 * @internal
+	 */
+	private calculateChangeHash(change: IAuditableItemGraphChange): string {
+		const canonical = JsonHelper.canonicalize(change);
+		return Converter.bytesToBase64(Blake2b.sum256(Converter.utf8ToBytes(canonical)));
+	}
+
+	/**
 	 * Update the aliases of a vertex model.
 	 * @param context The context for the operation.
 	 * @param vertexModel The vertex model.
@@ -625,11 +826,12 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		// The active aliases that are not in the update list should be marked as deleted.
 		if (Is.arrayValue(activeAliases)) {
 			for (const alias of activeAliases.filter(a => !aliases?.find(b => b.id === a.id))) {
-				context.changes.push({
-					itemType: "alias",
-					operation: "delete",
-					changed: ObjectHelper.pick(alias, AuditableItemGraphService._ALIAS_KEYS)
-				});
+				this.addContextChange(
+					context,
+					"alias",
+					"delete",
+					ObjectHelper.pick(alias, AuditableItemGraphService._ALIAS_KEYS)
+				);
 				alias.deleted = context.now;
 			}
 		}
@@ -669,18 +871,33 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			const model: IAuditableItemGraphAlias = {
 				id: alias.id,
 				created: context.now,
-				metadata: existing?.metadata
+				metadata: ObjectHelper.clone(existing?.metadata)
 			};
 
 			vertexModel.aliases.push(model);
 
-			context.changes.push({
-				itemType: "alias",
-				operation: "add",
-				changed: ObjectHelper.pick(model, AuditableItemGraphService._ALIAS_KEYS)
-			});
+			if (!Is.empty(existing)) {
+				// If there was an existing alias property, mark it as deleted.
+				existing.deleted = context.now;
+
+				this.addContextChange(
+					context,
+					"alias",
+					"delete",
+					ObjectHelper.pick(existing, AuditableItemGraphService._ALIAS_KEYS)
+				);
+			}
+
+			this.addContextChange(
+				context,
+				"alias",
+				"add",
+				ObjectHelper.pick(model, AuditableItemGraphService._ALIAS_KEYS)
+			);
 
 			this.updateMetadataList(context, "alias", alias.id, model, alias.metadata);
+		} else {
+			this.updateMetadataList(context, "alias", existing.id, existing, alias.metadata);
 		}
 	}
 
@@ -707,12 +924,13 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			for (const alias of activeMetadataProperties.filter(
 				a => !updateMetadata?.find(b => b.key === a.id)
 			)) {
-				context.changes.push({
-					itemType: `${elementName}-metadata`,
-					parentId: elementId,
-					operation: "delete",
-					changed: ObjectHelper.pick(alias, AuditableItemGraphService._METADATA_PROPERTY_KEYS)
-				});
+				this.addContextChange(
+					context,
+					`${elementName}-metadata`,
+					"delete",
+					ObjectHelper.pick(alias, AuditableItemGraphService._METADATA_PROPERTY_KEYS),
+					elementId
+				);
 				alias.deleted = context.now;
 			}
 		}
@@ -741,8 +959,6 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		element: T,
 		metadata: IProperty
 	): void {
-		element.metadata ??= [];
-
 		// Try to find an existing metadata property with the same key.
 		const existing = element.metadata?.find(m => m.id === metadata.key);
 
@@ -752,6 +968,8 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			existing?.value !== metadata.value ||
 			existing?.type !== metadata.type
 		) {
+			element.metadata ??= [];
+
 			// Did not find a matching item, or found one which is deleted, or the value has changed.
 			const model: IAuditableItemGraphProperty = {
 				id: metadata.key,
@@ -765,20 +983,22 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				// If there was an existing metadata property, mark it as deleted.
 				existing.deleted = context.now;
 
-				context.changes.push({
-					itemType: `${elementName}-metadata`,
-					parentId: elementId,
-					operation: "delete",
-					changed: ObjectHelper.pick(existing, AuditableItemGraphService._METADATA_PROPERTY_KEYS)
-				});
+				this.addContextChange(
+					context,
+					`${elementName}-metadata`,
+					"delete",
+					ObjectHelper.pick(existing, AuditableItemGraphService._METADATA_PROPERTY_KEYS),
+					elementId
+				);
 			}
 
-			context.changes.push({
-				itemType: `${elementName}-metadata`,
-				parentId: elementId,
-				operation: "add",
-				changed: ObjectHelper.pick(model, AuditableItemGraphService._METADATA_PROPERTY_KEYS)
-			});
+			this.addContextChange(
+				context,
+				`${elementName}-metadata`,
+				"add",
+				ObjectHelper.pick(model, AuditableItemGraphService._METADATA_PROPERTY_KEYS),
+				elementId
+			);
 		}
 	}
 
@@ -802,11 +1022,12 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		// The active resources that are not in the update list should be marked as deleted.
 		if (Is.arrayValue(activeResources)) {
 			for (const resource of activeResources.filter(r => !resources?.find(b => b.id === r.id))) {
-				context.changes.push({
-					itemType: "resource",
-					operation: "delete",
-					changed: ObjectHelper.pick(resource, AuditableItemGraphService._RESOURCE_KEYS)
-				});
+				this.addContextChange(
+					context,
+					"resource",
+					"delete",
+					ObjectHelper.pick(resource, AuditableItemGraphService._RESOURCE_KEYS)
+				);
 				resource.deleted = context.now;
 			}
 		}
@@ -846,18 +1067,33 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			const model: IAuditableItemGraphResource = {
 				id: resource.id,
 				created: context.now,
-				metadata: existing?.metadata
+				metadata: ObjectHelper.clone(existing?.metadata)
 			};
 
 			vertexModel.resources.push(model);
 
-			context.changes.push({
-				itemType: "resource",
-				operation: "add",
-				changed: ObjectHelper.pick(model, AuditableItemGraphService._RESOURCE_KEYS)
-			});
+			if (!Is.empty(existing)) {
+				// If there was an existing resource property, mark it as deleted.
+				existing.deleted = context.now;
 
-			this.updateMetadataList(context, "resource", resource.id, model, resource.metadata);
+				this.addContextChange(
+					context,
+					"resource",
+					"delete",
+					ObjectHelper.pick(existing, AuditableItemGraphService._RESOURCE_KEYS)
+				);
+			}
+
+			this.addContextChange(
+				context,
+				"resource",
+				"add",
+				ObjectHelper.pick(model, AuditableItemGraphService._RESOURCE_KEYS)
+			);
+
+			this.updateMetadataList(context, "resource", model.id, model, resource.metadata);
+		} else {
+			this.updateMetadataList(context, "resource", existing.id, existing, resource.metadata);
 		}
 	}
 
@@ -882,11 +1118,12 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		// The active edges that are not in the update list should be marked as deleted.
 		if (Is.arrayValue(activeEdges)) {
 			for (const edge of activeEdges.filter(r => !edges?.find(b => b.id === r.id))) {
-				context.changes.push({
-					itemType: "edge",
-					operation: "delete",
-					changed: ObjectHelper.pick(edge, AuditableItemGraphService._EDGE_KEYS)
-				});
+				this.addContextChange(
+					context,
+					"edge",
+					"delete",
+					ObjectHelper.pick(edge, AuditableItemGraphService._EDGE_KEYS)
+				);
 				edge.deleted = context.now;
 			}
 		}
@@ -929,28 +1166,33 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				id: edge.id,
 				relationship: edge.relationship,
 				created: context.now,
-				metadata: existing?.metadata
+				metadata: ObjectHelper.clone(existing?.metadata)
 			};
 
 			vertexModel.edges.push(model);
 
 			if (!Is.empty(existing)) {
-				// If there was an existing edge, mark it as deleted.
+				// If there was an existing edge property, mark it as deleted.
 				existing.deleted = context.now;
 
-				context.changes.push({
-					itemType: "edge",
-					operation: "delete",
-					changed: ObjectHelper.pick(existing, AuditableItemGraphService._EDGE_KEYS)
-				});
+				this.addContextChange(
+					context,
+					"edge",
+					"delete",
+					ObjectHelper.pick(existing, AuditableItemGraphService._EDGE_KEYS)
+				);
 			}
-			context.changes.push({
-				itemType: "edge",
-				operation: "add",
-				changed: ObjectHelper.pick(model, AuditableItemGraphService._EDGE_KEYS)
-			});
 
-			this.updateMetadataList(context, "edge", edge.id, model, edge.metadata);
+			this.addContextChange(
+				context,
+				"edge",
+				"add",
+				ObjectHelper.pick(model, AuditableItemGraphService._EDGE_KEYS)
+			);
+
+			this.updateMetadataList(context, "edge", model.id, model, edge.metadata);
+		} else {
+			this.updateMetadataList(context, "edge", existing.id, existing, edge.metadata);
 		}
 	}
 
@@ -966,6 +1208,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	): Promise<void> {
 		const changeSets = vertex.changesets ?? [];
 
+		// console.log("Add Changeset", JSON.stringify(context.changes, null, 2));
+		context.changes.sort((a, b) => a.changeHash.localeCompare(b.changeHash));
+
 		if (context.changes.length > 0 || changeSets.length === 0) {
 			const b2b = new Blake2b(Blake2b.SIZE_256);
 
@@ -977,7 +1222,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 			// Add the epoch and the identity in to the signature
 			b2b.update(Converter.utf8ToBytes(context.now.toString()));
-			b2b.update(Converter.utf8ToBytes(context.identity));
+			b2b.update(Converter.utf8ToBytes(context.userIdentity));
 
 			// Add the signature objects to the hash.
 			for (const change of context.changes) {
@@ -992,29 +1237,46 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				changeSetHash
 			);
 
-			const immutable: IAuditableItemGraphImmutable = {
+			// Create the data for the verifiable credential
+			const credentialData: IAuditableItemGraphCredential = {
 				signature: Converter.bytesToBase64(signature)
 			};
 
+			// If integrity check is enabled add an encrypted version of the changes to the credential data.
 			if (this._enableIntegrityCheck) {
-				immutable.canonical = JsonHelper.canonicalize(context.changes);
+				const integrityData: IAuditableItemGraphIntegrity = {
+					userIdentity: context.userIdentity,
+					changes: context.changes.map(c => c.change)
+				};
+				const canonical = JsonHelper.canonicalize(integrityData);
+				const encrypted = await this._vaultConnector.encrypt(
+					`${context.nodeIdentity}/${this._vaultKeyId}`,
+					VaultEncryptionType.ChaCha20Poly1305,
+					Converter.utf8ToBytes(canonical)
+				);
+
+				credentialData.integrity = Converter.bytesToBase64(encrypted);
 			}
 
-			const encrypted = await this._vaultConnector.encrypt(
-				`${context.nodeIdentity}/${this._vaultKeyId}`,
-				VaultEncryptionType.ChaCha20Poly1305,
-				ObjectHelper.toBytes(immutable)
-			);
-
-			// Store the signature and integrity changes immutably
-			const immutableStorageId = await this._auditTrailImmutableStorage.store(
+			// Create the verifiable credential
+			const verifiableCredential = await this._identityConnector.createVerifiableCredential(
 				context.nodeIdentity,
-				encrypted
+				`${context.nodeIdentity}#${this._assertionMethodId}`,
+				undefined,
+				"AuditableItemGraphIntegrity",
+				credentialData
 			);
 
+			// Store the verifiable credential immutably
+			const immutableStorageId = await this._integrityImmutableStorage.store(
+				context.nodeIdentity,
+				Converter.utf8ToBytes(verifiableCredential.jwt)
+			);
+
+			// Link the immutable storage id to the changeset
 			changeSets.push({
 				created: context.now,
-				identity: context.identity,
+				userIdentity: context.userIdentity,
 				hash: Converter.bytesToBase64(changeSetHash),
 				immutableStorageId
 			});
@@ -1032,7 +1294,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 */
 	private async verifyChangesets(
 		vertex: IAuditableItemGraphVertex,
-		verifySignatureDepth: "current" | "all"
+		verifySignatureDepth: Omit<VerifyDepth, "none">
 	): Promise<{
 		verified?: boolean;
 		verification?: {
@@ -1054,22 +1316,49 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			  }
 			| undefined = {};
 
-		// First convert the vertex data to a map based on the epochs
-		const epochSignatureObjects: { [epoch: number]: IAuditableItemGraphChange[] } = {};
+		// First convert the vertex data to a changeset map based on the epochs
+		const epochSignatureObjects: {
+			[epoch: number]: {
+				changeHash: string;
+				change: IAuditableItemGraphChange;
+			}[];
+		} = {};
 
-		this.buildChangesetAliasList(vertex.aliases, epochSignatureObjects);
-		this.buildChangesetMetadataList(vertex.id, "vertex", vertex.metadata, epochSignatureObjects);
-		this.buildChangesetResourceList(vertex.resources, epochSignatureObjects);
-		this.buildChangesetEdgeList(vertex.edges, epochSignatureObjects);
+		this.calculateChangesetList(
+			vertex.aliases,
+			"alias",
+			AuditableItemGraphService._ALIAS_KEYS,
+			epochSignatureObjects
+		);
+		this.calculateChangesetMetadataList(
+			vertex.id,
+			"vertex",
+			vertex.metadata,
+			epochSignatureObjects
+		);
+		this.calculateChangesetList(
+			vertex.resources,
+			"resource",
+			AuditableItemGraphService._RESOURCE_KEYS,
+			epochSignatureObjects
+		);
+		this.calculateChangesetList(
+			vertex.edges,
+			"edge",
+			AuditableItemGraphService._EDGE_KEYS,
+			epochSignatureObjects
+		);
 
 		if (Is.arrayValue(vertex.changesets)) {
 			let lastHash: Uint8Array | undefined;
 			for (let i = 0; i < vertex.changesets.length; i++) {
-				const changeset = vertex.changesets[i];
-				const changes = epochSignatureObjects[changeset.created] ?? [];
+				const calculatedChangeset = vertex.changesets[i];
+				const calculatedChanges = epochSignatureObjects[calculatedChangeset.created] ?? [];
+				calculatedChanges.sort((a, b) => a.changeHash.localeCompare(b.changeHash));
+				// console.log("Calculated Changeset", JSON.stringify(calculatedChangesWithHash, null, 2));
 
 				verification[vertex.changesets[i].created] = {
-					changes
+					changes: calculatedChanges.map(c => c.change)
 				};
 
 				const b2b = new Blake2b(Blake2b.SIZE_256);
@@ -1078,22 +1367,22 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 					b2b.update(lastHash);
 				}
 				// Add the epoch and the identity in to the signature
-				b2b.update(Converter.utf8ToBytes(changeset.created.toString()));
-				b2b.update(Converter.utf8ToBytes(changeset.identity));
+				b2b.update(Converter.utf8ToBytes(calculatedChangeset.created.toString()));
+				b2b.update(Converter.utf8ToBytes(calculatedChangeset.userIdentity));
 
 				// Add the signature objects to the hash.
-				for (const change of changes) {
+				for (const change of calculatedChanges) {
 					b2b.update(ObjectHelper.toBytes(change));
 				}
 				const verifyHash = b2b.digest();
 
 				lastHash = verifyHash;
 
-				if (Converter.bytesToBase64(verifyHash) !== changeset.hash) {
+				if (Converter.bytesToBase64(verifyHash) !== calculatedChangeset.hash) {
 					verification[vertex.changesets[i].created].failure = "invalidChangesetHash";
 					verification[vertex.changesets[i].created].properties = {
-						hash: changeset.hash,
-						epoch: changeset.created
+						hash: calculatedChangeset.hash,
+						epoch: calculatedChangeset.created
 					};
 					verified = false;
 				}
@@ -1102,40 +1391,78 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 					verifySignatureDepth === "all" ||
 					(verifySignatureDepth === "current" && i === vertex.changesets.length - 1)
 				) {
-					const signature = await this._vaultConnector.sign(
+					let integrityChangeset: IAuditableItemGraphChange[] | undefined;
+					let integrityNodeIdentity: string | undefined;
+					let integrityUserIdentity: string | undefined;
+
+					// Create the signature for the local changeset
+					const changesetSignature = await this._vaultConnector.sign(
 						`${vertex.nodeIdentity}/${this._vaultKeyId}`,
 						verifyHash
 					);
 
-					let decrypted = await this._auditTrailImmutableStorage.get(changeset.immutableStorageId);
-
-					if (this._enableIntegrityCheck) {
-						decrypted = await this._vaultConnector.decrypt(
-							`${vertex.nodeIdentity}/${this._vaultKeyId}`,
-							VaultEncryptionType.ChaCha20Poly1305,
-							decrypted
+					if (Is.stringValue(calculatedChangeset.immutableStorageId)) {
+						// Get the vc from the immutable data store
+						const verifiableCredentialBytes = await this._integrityImmutableStorage.get(
+							calculatedChangeset.immutableStorageId
 						);
+						const verifiableCredentialJwt = Converter.bytesToUtf8(verifiableCredentialBytes);
+						const decodedJwt = await Jwt.decode(verifiableCredentialJwt);
+
+						// Verify the credential
+						const verificationResult =
+							await this._identityConnector.checkVerifiableCredential<IAuditableItemGraphCredential>(
+								verifiableCredentialJwt
+							);
+
+						if (verificationResult.revoked) {
+							verification[vertex.changesets[i].created].failure = "changesetCredentialRevoked";
+						} else {
+							// Credential is not revoked so check the signature
+							const credentialData = Is.array(
+								verificationResult.verifiableCredential?.credentialSubject
+							)
+								? verificationResult.verifiableCredential?.credentialSubject[0]
+								: verificationResult.verifiableCredential?.credentialSubject ?? {
+										signature: ""
+									};
+
+							integrityNodeIdentity = DocumentHelper.parse(decodedJwt.header?.kid ?? "").id;
+
+							// Does the immutable signature match the local one we calculated
+							if (credentialData.signature !== Converter.bytesToBase64(changesetSignature)) {
+								verification[vertex.changesets[i].created].failure = "invalidChangesetSignature";
+							} else if (Is.stringValue(credentialData.integrity)) {
+								const decrypted = await this._vaultConnector.decrypt(
+									`${vertex.nodeIdentity}/${this._vaultKeyId}`,
+									VaultEncryptionType.ChaCha20Poly1305,
+									Converter.base64ToBytes(credentialData.integrity)
+								);
+
+								const canonical = Converter.bytesToUtf8(decrypted);
+								const calculatedIntegrity: IAuditableItemGraphIntegrity = {
+									userIdentity: calculatedChangeset.userIdentity,
+									changes: calculatedChanges.map(c => c.change)
+								};
+								if (canonical !== JsonHelper.canonicalize(calculatedIntegrity)) {
+									verification[vertex.changesets[i].created].failure = "invalidChangesetCanonical";
+								}
+								const changesAndIdentity: IAuditableItemGraphIntegrity = JSON.parse(canonical);
+								integrityChangeset = changesAndIdentity.changes;
+								integrityUserIdentity = changesAndIdentity.userIdentity;
+							}
+						}
 					}
 
-					const immutableObject = ObjectHelper.fromBytes<IAuditableItemGraphImmutable>(decrypted);
-
-					if (immutableObject.signature !== Converter.bytesToBase64(signature)) {
-						verification[vertex.changesets[i].created].failure = "invalidChangesetSignature";
+					// If there was a failure add some additional information
+					if (Is.stringValue(verification[vertex.changesets[i].created].failure)) {
 						verification[vertex.changesets[i].created].properties = {
-							hash: changeset.hash,
-							epoch: changeset.created
-						};
-						verified = false;
-					}
-
-					if (
-						this._enableIntegrityCheck &&
-						immutableObject.canonical !== JsonHelper.canonicalize(changes)
-					) {
-						verification[vertex.changesets[i].created].failure = "invalidChangesetCanonical";
-						verification[vertex.changesets[i].created].properties = {
-							hash: changeset.hash,
-							epoch: changeset.created
+							hash: calculatedChangeset.hash,
+							epoch: calculatedChangeset.created,
+							calculatedChangeset,
+							integrityChangeset,
+							integrityNodeIdentity,
+							integrityUserIdentity
 						};
 						verified = false;
 					}
@@ -1155,133 +1482,121 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @param elementName The name of the element.
 	 * @param metadataList The metadata list to verify.
 	 * @param epochSignatureObjects The epoch signature objects to add to.
+	 * @internal
 	 */
-	private buildChangesetMetadataList(
+	private calculateChangesetMetadataList(
 		parentId: string,
 		elementName: string,
 		metadataList: IAuditableItemGraphProperty[] | undefined,
-		epochSignatureObjects: { [epoch: number]: IAuditableItemGraphChange[] }
+		epochSignatureObjects: {
+			[epoch: number]: {
+				changeHash: string;
+				change: IAuditableItemGraphChange;
+			}[];
+		}
 	): void {
 		if (Is.arrayValue(metadataList)) {
 			for (const metadata of metadataList) {
 				if (!Is.empty(metadata.deleted)) {
 					epochSignatureObjects[metadata.deleted] ??= [];
-					epochSignatureObjects[metadata.deleted].push({
+
+					const change: IAuditableItemGraphChange = {
 						itemType: `${elementName}-metadata`,
 						parentId,
 						operation: "delete",
-						changed: ObjectHelper.pick(metadata, AuditableItemGraphService._METADATA_PROPERTY_KEYS)
-					});
+						properties: ObjectHelper.pick(
+							metadata,
+							AuditableItemGraphService._METADATA_PROPERTY_KEYS
+						)
+					};
+					const changeHash = this.calculateChangeHash(change);
+					if (!epochSignatureObjects[metadata.deleted].some(a => a.changeHash === changeHash)) {
+						epochSignatureObjects[metadata.deleted].push({
+							changeHash,
+							change
+						});
+					}
 				}
 
 				epochSignatureObjects[metadata.created] ??= [];
-				epochSignatureObjects[metadata.created].push({
+
+				const change: IAuditableItemGraphChange = {
 					itemType: `${elementName}-metadata`,
 					parentId,
 					operation: "add",
-					changed: ObjectHelper.pick(metadata, AuditableItemGraphService._METADATA_PROPERTY_KEYS)
-				});
+					properties: ObjectHelper.pick(metadata, AuditableItemGraphService._METADATA_PROPERTY_KEYS)
+				};
+				const changeHash = this.calculateChangeHash(change);
+				if (!epochSignatureObjects[metadata.created].some(a => a.changeHash === changeHash)) {
+					epochSignatureObjects[metadata.created].push({
+						changeHash,
+						change
+					});
+				}
 			}
 		}
 	}
 
 	/**
-	 * Build the changesets of an alias list.
-	 * @param aliases The aliases to verify.
+	 * Build the changesets of a list.
+	 * @param items The aliases to verify.
+	 * @param itemType The type of the item.
+	 * @param keys The keys to use for signature generation.
 	 * @param epochSignatureObjects The epoch signature objects to add to.
+	 * @internal
 	 */
-	private buildChangesetAliasList(
-		aliases: IAuditableItemGraphAlias[] | undefined,
-		epochSignatureObjects: { [epoch: number]: IAuditableItemGraphChange[] }
-	): void {
-		if (Is.arrayValue(aliases)) {
-			for (const alias of aliases) {
-				if (!Is.empty(alias.deleted)) {
-					epochSignatureObjects[alias.deleted] ??= [];
-					epochSignatureObjects[alias.deleted].push({
-						itemType: "alias",
-						operation: "delete",
-						changed: ObjectHelper.pick(alias, AuditableItemGraphService._ALIAS_KEYS)
-					});
-				}
-
-				epochSignatureObjects[alias.created] ??= [];
-				epochSignatureObjects[alias.created].push({
-					itemType: "alias",
-					operation: "add",
-					changed: ObjectHelper.pick(alias, AuditableItemGraphService._ALIAS_KEYS)
-				});
-
-				this.buildChangesetMetadataList(alias.id, "alias", alias.metadata, epochSignatureObjects);
-			}
+	private calculateChangesetList<
+		T extends IAuditableItemGraphAuditedElement & IAuditableItemGraphMetadataElement
+	>(
+		items: T[] | undefined,
+		itemType: string,
+		keys: (keyof T)[],
+		epochSignatureObjects: {
+			[epoch: number]: {
+				changeHash: string;
+				change: IAuditableItemGraphChange;
+			}[];
 		}
-	}
-
-	/**
-	 * Build the changesets of a resource list.
-	 * @param resources The resources to verify.
-	 * @param epochSignatureObjects The epoch signature objects to add to.
-	 */
-	private buildChangesetResourceList(
-		resources: IAuditableItemGraphResource[] | undefined,
-		epochSignatureObjects: { [epoch: number]: IAuditableItemGraphChange[] }
 	): void {
-		if (Is.arrayValue(resources)) {
-			for (const resource of resources) {
-				if (!Is.empty(resource.deleted)) {
-					epochSignatureObjects[resource.deleted] ??= [];
-					epochSignatureObjects[resource.deleted].push({
-						itemType: "resource",
+		if (Is.arrayValue(items)) {
+			for (const item of items) {
+				if (!Is.empty(item.deleted)) {
+					epochSignatureObjects[item.deleted] ??= [];
+					const change: IAuditableItemGraphChange = {
+						itemType,
 						operation: "delete",
-						changed: ObjectHelper.pick(resource, AuditableItemGraphService._RESOURCE_KEYS)
+						properties: ObjectHelper.pick(item, keys)
+					};
+					const changeHash = this.calculateChangeHash(change);
+					if (!epochSignatureObjects[item.deleted].some(a => a.changeHash === changeHash)) {
+						epochSignatureObjects[item.deleted].push({
+							changeHash,
+							change
+						});
+					}
+				}
+
+				epochSignatureObjects[item.created] ??= [];
+
+				const change: IAuditableItemGraphChange = {
+					itemType,
+					operation: "add",
+					properties: ObjectHelper.pick(item, keys)
+				};
+				const changeHash = this.calculateChangeHash(change);
+				if (!epochSignatureObjects[item.created].some(a => a.changeHash === changeHash)) {
+					epochSignatureObjects[item.created].push({
+						changeHash,
+						change
 					});
 				}
 
-				epochSignatureObjects[resource.created] ??= [];
-				epochSignatureObjects[resource.created].push({
-					itemType: "resource",
-					operation: "add",
-					changed: ObjectHelper.pick(resource, AuditableItemGraphService._RESOURCE_KEYS)
-				});
-
-				this.buildChangesetMetadataList(
-					resource.id,
-					"resource",
-					resource.metadata,
+				this.calculateChangesetMetadataList(
+					item.id,
+					itemType,
+					item.metadata,
 					epochSignatureObjects
 				);
-			}
-		}
-	}
-
-	/**
-	 * Build the changesets of an edge list.
-	 * @param edges The edges to verify.
-	 * @param epochSignatureObjects The epoch signature objects to add to.
-	 */
-	private buildChangesetEdgeList(
-		edges: IAuditableItemGraphEdge[] | undefined,
-		epochSignatureObjects: { [epoch: number]: IAuditableItemGraphChange[] }
-	): void {
-		if (Is.arrayValue(edges)) {
-			for (const edge of edges) {
-				if (!Is.empty(edge.deleted)) {
-					epochSignatureObjects[edge.deleted] ??= [];
-					epochSignatureObjects[edge.deleted].push({
-						itemType: "edge",
-						operation: "delete",
-						changed: ObjectHelper.pick(edge, AuditableItemGraphService._EDGE_KEYS)
-					});
-				}
-
-				epochSignatureObjects[edge.created] ??= [];
-				epochSignatureObjects[edge.created].push({
-					itemType: "edge",
-					operation: "add",
-					changed: ObjectHelper.pick(edge, AuditableItemGraphService._EDGE_KEYS)
-				});
-
-				this.buildChangesetMetadataList(edge.id, "edge", edge.metadata, epochSignatureObjects);
 			}
 		}
 	}

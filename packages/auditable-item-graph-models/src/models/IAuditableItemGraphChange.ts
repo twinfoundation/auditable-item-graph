@@ -21,7 +21,7 @@ export interface IAuditableItemGraphChange {
 	operation: "add" | "delete";
 
 	/**
-	 * The data in the item that was changed.
+	 * The properties from the modified object.
 	 */
-	changed: { [id: string]: unknown };
+	properties: { [id: string]: unknown };
 }

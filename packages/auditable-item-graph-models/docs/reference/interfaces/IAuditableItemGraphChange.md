@@ -28,11 +28,11 @@ The operation that was performed on the item.
 
 ***
 
-### changed
+### properties
 
-> **changed**: `object`
+> **properties**: `object`
 
-The data in the item that was changed.
+The properties from the modified object.
 
 #### Index signature
 

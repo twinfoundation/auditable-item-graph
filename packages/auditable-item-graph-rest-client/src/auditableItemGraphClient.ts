@@ -8,10 +8,13 @@ import type {
 	IAuditableItemGraphCreateRequest,
 	IAuditableItemGraphGetRequest,
 	IAuditableItemGraphGetResponse,
+	IAuditableItemGraphListRequest,
+	IAuditableItemGraphListResponse,
 	IAuditableItemGraphUpdateRequest,
-	IAuditableItemGraphVertex
+	IAuditableItemGraphVertex,
+	VerifyDepth
 } from "@gtsc/auditable-item-graph-models";
-import { Guards } from "@gtsc/core";
+import { Guards, NotSupportedError } from "@gtsc/core";
 import { nameof } from "@gtsc/nameof";
 import type { IProperty } from "@gtsc/schema";
 
@@ -90,7 +93,7 @@ export class AuditableItemGraphClient
 		options?: {
 			includeDeleted?: boolean;
 			includeChangesets?: boolean;
-			verifySignatureDepth?: "none" | "current" | "all";
+			verifySignatureDepth?: VerifyDepth;
 		}
 	): Promise<{
 		verified?: boolean;
@@ -157,5 +160,64 @@ export class AuditableItemGraphClient
 				edges
 			}
 		});
+	}
+
+	/**
+	 * Remove the immutable storage for an item.
+	 * @param id The id of the vertex to get.
+	 * @returns Nothing.
+	 * @throws NotFoundError if the vertex is not found.
+	 */
+	public async removeImmutable(id: string): Promise<void> {
+		throw new NotSupportedError(this.CLASS_NAME, "removeImmutable");
+	}
+
+	/**
+	 * Query the graph for vertices with the matching id or alias.
+	 * @param idOrAlias The id or alias to query for.
+	 * @param mode Look in id, alias or both, defaults to both.
+	 * @param properties The properties to return, if not provided defaults to id, created, aliases and metadata.
+	 * @param cursor The cursor to request the next page of entities.
+	 * @param pageSize The maximum number of entities in a page.
+	 * @returns The entities, which can be partial if a limited keys list was provided.
+	 */
+	public async query(
+		idOrAlias: string,
+		mode?: "id" | "alias" | "both",
+		properties?: (keyof IAuditableItemGraphVertex)[],
+		cursor?: string,
+		pageSize?: number
+	): Promise<{
+		/**
+		 * The entities, which can be partial if a limited keys list was provided.
+		 */
+		entities: Partial<IAuditableItemGraphVertex>[];
+		/**
+		 * An optional cursor, when defined can be used to call find to get more entities.
+		 */
+		cursor?: string;
+		/**
+		 * Number of entities to return.
+		 */
+		pageSize?: number;
+		/**
+		 * Total entities length.
+		 */
+		totalEntities: number;
+	}> {
+		const response = await this.fetch<
+			IAuditableItemGraphListRequest,
+			IAuditableItemGraphListResponse
+		>("/", "GET", {
+			query: {
+				idOrAlias,
+				mode,
+				properties: properties?.join(","),
+				cursor,
+				pageSize
+			}
+		});
+
+		return response.body;
 	}
 }

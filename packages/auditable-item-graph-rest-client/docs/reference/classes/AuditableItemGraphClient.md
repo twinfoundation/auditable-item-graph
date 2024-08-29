@@ -162,7 +162,7 @@ Whether to include deleted aliases, resource, edges, defaults to false.
 
 Whether to include the changesets of the vertex, defaults to false.
 
-• **options.verifySignatureDepth?**: `"all"` \| `"none"` \| `"current"`
+• **options.verifySignatureDepth?**: `VerifyDepth`
 
 How many signatures to verify, defaults to "none".
 
@@ -235,3 +235,95 @@ Nothing.
 #### Implementation of
 
 `IAuditableItemGraphComponent.update`
+
+***
+
+### removeImmutable()
+
+> **removeImmutable**(`id`): `Promise`\<`void`\>
+
+Remove the immutable storage for an item.
+
+#### Parameters
+
+• **id**: `string`
+
+The id of the vertex to get.
+
+#### Returns
+
+`Promise`\<`void`\>
+
+Nothing.
+
+#### Implementation of
+
+`IAuditableItemGraphComponent.removeImmutable`
+
+#### Throws
+
+NotFoundError if the vertex is not found.
+
+***
+
+### query()
+
+> **query**(`idOrAlias`, `mode`?, `properties`?, `cursor`?, `pageSize`?): `Promise`\<`object`\>
+
+Query the graph for vertices with the matching id or alias.
+
+#### Parameters
+
+• **idOrAlias**: `string`
+
+The id or alias to query for.
+
+• **mode?**: `"both"` \| `"id"` \| `"alias"`
+
+Look in id, alias or both, defaults to both.
+
+• **properties?**: keyof `IAuditableItemGraphVertex`[]
+
+The properties to return, if not provided defaults to id, created, aliases and metadata.
+
+• **cursor?**: `string`
+
+The cursor to request the next page of entities.
+
+• **pageSize?**: `number`
+
+The maximum number of entities in a page.
+
+#### Returns
+
+`Promise`\<`object`\>
+
+The entities, which can be partial if a limited keys list was provided.
+
+##### entities
+
+> **entities**: `Partial`\<`IAuditableItemGraphVertex`\>[]
+
+The entities, which can be partial if a limited keys list was provided.
+
+##### cursor?
+
+> `optional` **cursor**: `string`
+
+An optional cursor, when defined can be used to call find to get more entities.
+
+##### pageSize?
+
+> `optional` **pageSize**: `number`
+
+Number of entities to return.
+
+##### totalEntities
+
+> **totalEntities**: `number`
+
+Total entities length.
+
+#### Implementation of
+
+`IAuditableItemGraphComponent.query`

@@ -1,6 +1,6 @@
 {
 	"name": "@gtsc/auditable-item-graph-service",
-	"version": "0.0.5-next.2",
+	"version": "0.0.5-next.3",
 	"description": "Auditable Item Graph contract implementation and REST endpoint definitions",
 	"repository": {
 		"type": "git",
@@ -30,20 +30,22 @@
 	},
 	"dependencies": {
 		"@gtsc/api-models": "next",
-		"@gtsc/auditable-item-graph-models": "0.0.5-next.2",
+		"@gtsc/auditable-item-graph-models": "0.0.5-next.3",
 		"@gtsc/core": "next",
 		"@gtsc/crypto": "next",
 		"@gtsc/entity": "next",
 		"@gtsc/entity-storage-models": "next",
-		"@gtsc/entity-storage-connector-memory": "next",
+		"@gtsc/identity-models": "next",
 		"@gtsc/immutable-storage-models": "next",
 		"@gtsc/nameof": "next",
 		"@gtsc/schema": "next",
+		"@gtsc/standards-w3c-did": "next",
 		"@gtsc/vault-models": "next",
 		"@gtsc/web": "next"
 	},
 	"devDependencies": {
 		"@gtsc/entity-storage-connector-memory": "next",
+		"@gtsc/identity-connector-entity-storage": "next",
 		"@gtsc/immutable-storage-connector-entity-storage": "next",
 		"@gtsc/vault-connector-entity-storage": "next",
 		"@gtsc/nameof-transformer": "next",

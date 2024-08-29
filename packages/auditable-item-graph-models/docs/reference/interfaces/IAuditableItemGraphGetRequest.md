@@ -28,34 +28,16 @@ The query parameters.
 
 > `optional` **includeDeleted**: `boolean`
 
-Whether to include deleted aliases, resource, edges.
-
-##### Default
-
-```ts
-false
-```
+Whether to include deleted aliases, resource, edges, defaults to false.
 
 #### includeChangesets?
 
 > `optional` **includeChangesets**: `boolean`
 
-Whether to include the changesets of the vertex.
-
-##### Default
-
-```ts
-false
-```
+Whether to include the changesets of the vertex, defaults to false.
 
 #### verifySignatureDepth?
 
-> `optional` **verifySignatureDepth**: `"all"` \| `"none"` \| `"current"`
+> `optional` **verifySignatureDepth**: [`VerifyDepth`](../type-aliases/VerifyDepth.md)
 
-How many signatures to verify.
-
-##### Default
-
-```ts
-"none"
-```
+How many signatures to verify, none, current or all, defaults to "none".

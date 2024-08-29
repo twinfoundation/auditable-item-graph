@@ -13,7 +13,7 @@ export interface IAuditableItemGraphChangeset {
 	/**
 	 * The identity of the user who made the changeset.
 	 */
-	identity: string;
+	userIdentity: string;
 
 	/**
 	 * The hash for the changeset.
@@ -23,5 +23,5 @@ export interface IAuditableItemGraphChangeset {
 	/**
 	 * The immutable storage id containing the signature for the changeset.
 	 */
-	immutableStorageId: string;
+	immutableStorageId?: string;
 }

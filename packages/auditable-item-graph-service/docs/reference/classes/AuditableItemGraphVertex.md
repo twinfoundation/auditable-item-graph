@@ -38,6 +38,14 @@ The timestamp of when the vertex was created.
 
 ***
 
+### aliasIndex?
+
+> `optional` **aliasIndex**: `string`
+
+Combined alias index for the vertex used for querying.
+
+***
+
 ### aliases?
 
 > `optional` **aliases**: [`AuditableItemGraphAlias`](AuditableItemGraphAlias.md)[]

@@ -17,4 +17,10 @@ export interface IAuditableItemGraphServiceConfig {
 	 * @default false
 	 */
 	enableIntegrityCheck?: boolean;
+
+	/**
+	 * The assertion method id to use for the graph.
+	 * @default auditable-item-graph
+	 */
+	assertionMethodId?: string;
 }

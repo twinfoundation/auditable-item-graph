@@ -17,7 +17,7 @@ export interface IAuditableItemGraphGetResponse {
 		verified?: boolean;
 
 		/**
-		 * The verification failures if there are any.
+		 * The verification changes including any failure information.
 		 */
 		verification?: {
 			[epoch: number]: {

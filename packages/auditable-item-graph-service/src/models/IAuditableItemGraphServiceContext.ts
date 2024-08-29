@@ -14,7 +14,7 @@ export interface IAuditableItemGraphServiceContext {
 	/**
 	 * The identity of the user.
 	 */
-	identity: string;
+	userIdentity: string;
 
 	/**
 	 * The identity of the node.
@@ -24,5 +24,8 @@ export interface IAuditableItemGraphServiceContext {
 	/**
 	 * The changes for the current operation.
 	 */
-	changes: IAuditableItemGraphChange[];
+	changes: {
+		changeHash: string;
+		change: IAuditableItemGraphChange;
+	}[];
 }

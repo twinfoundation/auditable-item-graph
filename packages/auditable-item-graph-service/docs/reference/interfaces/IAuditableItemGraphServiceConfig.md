@@ -30,3 +30,17 @@ This will incur additional costs and should only be enabled if you require immut
 ```ts
 false
 ```
+
+***
+
+### assertionMethodId?
+
+> `optional` **assertionMethodId**: `string`
+
+The assertion method id to use for the graph.
+
+#### Default
+
+```ts
+auditable-item-graph
+```

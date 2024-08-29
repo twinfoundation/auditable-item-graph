@@ -8,7 +8,6 @@ Interface describing the base properties for auditable elements.
 - [`IAuditableItemGraphEdge`](IAuditableItemGraphEdge.md)
 - [`IAuditableItemGraphProperty`](IAuditableItemGraphProperty.md)
 - [`IAuditableItemGraphResource`](IAuditableItemGraphResource.md)
-- [`IAuditableItemGraphVertex`](IAuditableItemGraphVertex.md)
 
 ## Properties
 

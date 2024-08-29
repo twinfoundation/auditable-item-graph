@@ -12,7 +12,10 @@ import type {
 	IAuditableItemGraphCreateRequest,
 	IAuditableItemGraphGetRequest,
 	IAuditableItemGraphGetResponse,
-	IAuditableItemGraphUpdateRequest
+	IAuditableItemGraphListRequest,
+	IAuditableItemGraphListResponse,
+	IAuditableItemGraphUpdateRequest,
+	IAuditableItemGraphVertex
 } from "@gtsc/auditable-item-graph-models";
 import { ComponentFactory, Guards } from "@gtsc/core";
 import { nameof } from "@gtsc/nameof";
@@ -57,14 +60,113 @@ export function generateRestRoutesAuditableItemGraph(
 				{
 					id: "auditableItemGraphCreateRequestExample",
 					request: {
-						body: {}
+						body: {
+							metadata: [
+								{
+									key: "counter",
+									type: "https://schema.org/Integer",
+									value: 456
+								},
+								{
+									key: "title",
+									type: "https://schema.org/Text",
+									value: "Title"
+								}
+							],
+							aliases: [
+								{
+									id: "bar456"
+								},
+								{
+									id: "foo321"
+								}
+							],
+							resources: [
+								{
+									id: "resource1",
+									metadata: [
+										{
+											key: "res-counter",
+											type: "https://schema.org/Integer",
+											value: 456
+										},
+										{
+											key: "res-title",
+											type: "https://schema.org/Text",
+											value: "Title"
+										}
+									]
+								},
+								{
+									id: "resource2",
+									metadata: [
+										{
+											key: "res-counter-2",
+											type: "https://schema.org/Integer",
+											value: 456
+										},
+										{
+											key: "res-title-2",
+											type: "https://schema.org/Text",
+											value: "Title"
+										}
+									]
+								}
+							],
+							edges: [
+								{
+									id: "edge1",
+									relationship: "frenemy",
+									metadata: [
+										{
+											key: "edge-counter",
+											type: "https://schema.org/Integer",
+											value: 456
+										},
+										{
+											key: "edge-title",
+											type: "https://schema.org/Text",
+											value: "Title"
+										}
+									]
+								},
+								{
+									id: "edge2",
+									relationship: "end",
+									metadata: [
+										{
+											key: "edge-counter-2",
+											type: "https://schema.org/Integer",
+											value: 456
+										},
+										{
+											key: "edge-title-2",
+											type: "https://schema.org/Text",
+											value: "Title"
+										}
+									]
+								}
+							]
+						}
 					}
 				}
 			]
 		},
 		responseType: [
 			{
-				type: nameof<ICreatedResponse>()
+				type: nameof<ICreatedResponse>(),
+				examples: [
+					{
+						id: "auditableItemGraphCreateResponseExample",
+						description: "The response when a new graph vertex is created.",
+						response: {
+							statusCode: HttpStatusCode.created,
+							headers: {
+								location: "aig:1234567890"
+							}
+						}
+					}
+				]
 			}
 		]
 	};
@@ -100,11 +202,11 @@ export function generateRestRoutesAuditableItemGraph(
 							body: {
 								vertex: {
 									id: "aig:1234567890",
-									created: 1724220078321,
+									created: 1234567890,
 									aliases: [
 										{
-											created: 1724220078321,
-											id: "tst:1234567890"
+											id: "tst:1234567890",
+											created: 1234567890
 										}
 									],
 									metadata: [
@@ -112,7 +214,7 @@ export function generateRestRoutesAuditableItemGraph(
 											id: "description",
 											type: "https://schema.org/Text",
 											value: "This is a test item",
-											created: 1724220078321
+											created: 1234567890
 										}
 									]
 								}
@@ -141,7 +243,94 @@ export function generateRestRoutesAuditableItemGraph(
 						pathParams: {
 							id: "aig:1234567890"
 						},
-						body: {}
+						body: {
+							metadata: [
+								{
+									key: "counter",
+									type: "https://schema.org/Integer",
+									value: 456
+								},
+								{
+									key: "title",
+									type: "https://schema.org/Text",
+									value: "Title"
+								}
+							],
+							aliases: [
+								{
+									id: "bar456"
+								},
+								{
+									id: "foo321"
+								}
+							],
+							resources: [
+								{
+									id: "resource1",
+									metadata: [
+										{
+											key: "res-counter",
+											type: "https://schema.org/Integer",
+											value: 456
+										},
+										{
+											key: "res-title",
+											type: "https://schema.org/Text",
+											value: "Title"
+										}
+									]
+								},
+								{
+									id: "resource2",
+									metadata: [
+										{
+											key: "res-counter-2",
+											type: "https://schema.org/Integer",
+											value: 456
+										},
+										{
+											key: "res-title-2",
+											type: "https://schema.org/Text",
+											value: "Title"
+										}
+									]
+								}
+							],
+							edges: [
+								{
+									id: "edge1",
+									relationship: "frenemy",
+									metadata: [
+										{
+											key: "edge-counter",
+											type: "https://schema.org/Integer",
+											value: 456
+										},
+										{
+											key: "edge-title",
+											type: "https://schema.org/Text",
+											value: "Title"
+										}
+									]
+								},
+								{
+									id: "edge2",
+									relationship: "end",
+									metadata: [
+										{
+											key: "edge-counter-2",
+											type: "https://schema.org/Integer",
+											value: 456
+										},
+										{
+											key: "edge-title-2",
+											type: "https://schema.org/Text",
+											value: "Title"
+										}
+									]
+								}
+							]
+						}
 					}
 				}
 			]
@@ -153,7 +342,58 @@ export function generateRestRoutesAuditableItemGraph(
 		]
 	};
 
-	return [createRoute, getRoute, updateRoute];
+	const listRoute: IRestRoute<IAuditableItemGraphListRequest, IAuditableItemGraphListResponse> = {
+		operationId: "auditableItemGraphList",
+		summary: "Query graph vertices by id or alias",
+		tag: tagsAuditableItemGraph[0].name,
+		method: "GET",
+		path: `${baseRouteName}/`,
+		handler: async (httpRequestContext, request) =>
+			auditableItemGraphList(httpRequestContext, componentName, request),
+		requestType: {
+			type: nameof<IAuditableItemGraphListRequest>(),
+			examples: [
+				{
+					id: "IAuditableItemGraphListRequest",
+					request: {
+						query: {
+							idOrAlias: "1234567890"
+						}
+					}
+				}
+			]
+		},
+		responseType: [
+			{
+				type: nameof<IAuditableItemGraphListResponse>(),
+				examples: [
+					{
+						id: "auditableItemGraphGetResponseExample",
+						response: {
+							body: {
+								entities: [
+									{
+										id: "0101010101010101010101010101010101010101010101010101010101010101",
+										aliases: [
+											{
+												id: "foo4",
+												created: 1234567890
+											}
+										]
+									}
+								],
+								cursor: "1",
+								pageSize: 10,
+								totalEntities: 20
+							}
+						}
+					}
+				]
+			}
+		]
+	};
+
+	return [createRoute, getRoute, updateRoute, listRoute];
 }
 
 /**
@@ -251,5 +491,40 @@ export async function auditableItemGraphUpdate(
 	);
 	return {
 		statusCode: HttpStatusCode.noContent
+	};
+}
+
+/**
+ * Query the graph vertices.
+ * @param httpRequestContext The request context for the API.
+ * @param componentName The name of the component to use in the routes.
+ * @param request The request.
+ * @returns The response object with additional http response properties.
+ */
+export async function auditableItemGraphList(
+	httpRequestContext: IHttpRequestContext,
+	componentName: string,
+	request: IAuditableItemGraphListRequest
+): Promise<IAuditableItemGraphListResponse> {
+	Guards.object<IAuditableItemGraphListRequest>(ROUTES_SOURCE, nameof(request), request);
+	Guards.object<IAuditableItemGraphListRequest["query"]>(
+		ROUTES_SOURCE,
+		nameof(request.query),
+		request.query
+	);
+	Guards.stringValue(ROUTES_SOURCE, nameof(request.query.idOrAlias), request.query.idOrAlias);
+
+	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
+
+	const result = await component.query(
+		request.query.idOrAlias,
+		request.query.mode,
+		request.query.properties?.split(",") as (keyof IAuditableItemGraphVertex)[],
+		request.query.cursor,
+		request.query.pageSize
+	);
+
+	return {
+		body: result
 	};
 }

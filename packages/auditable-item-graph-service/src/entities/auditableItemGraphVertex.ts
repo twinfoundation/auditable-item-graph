@@ -31,6 +31,12 @@ export class AuditableItemGraphVertex {
 	public created!: number;
 
 	/**
+	 * Combined alias index for the vertex used for querying.
+	 */
+	@property({ type: "string" })
+	public aliasIndex?: string;
+
+	/**
 	 * Alternative aliases that can be used to identify the vertex.
 	 */
 	@property({ type: "array", itemType: "string" })

@@ -22,9 +22,9 @@ The timestamp of when the changeset was created.
 
 ***
 
-### identity
+### userIdentity
 
-> **identity**: `string`
+> **userIdentity**: `string`
 
 The identity of the user who made the changeset.
 
@@ -38,8 +38,8 @@ The hash of the changeset.
 
 ***
 
-### immutableStorageId
+### immutableStorageId?
 
-> **immutableStorageId**: `string`
+> `optional` **immutableStorageId**: `string`
 
 The immutable storage id which contains the signature for this changeset.

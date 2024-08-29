@@ -154,14 +154,12 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @param options.config The configuration for the connector.
 	 * @param options.vaultConnectorType The vault connector type, defaults to "vault".
 	 * @param options.vertexEntityStorageType The entity storage for vertices, defaults to "vertex".
-	 * @param options.aliasIndexEntityStorageType The entity storage for vertices, defaults to "alias-index".
 	 * @param options.integrityImmutableStorageType The immutable storage for audit trail, defaults to "auditable-item-graph".
 	 * @param options.identityConnectorType The identity connector type, defaults to "identity".
 	 */
 	constructor(options?: {
 		vaultConnectorType?: string;
 		vertexEntityStorageType?: string;
-		aliasIndexEntityStorageType?: string;
 		integrityImmutableStorageType?: string;
 		identityConnectorType?: string;
 		config?: IAuditableItemGraphServiceConfig;

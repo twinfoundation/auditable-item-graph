@@ -28,10 +28,6 @@ The vault connector type, defaults to "vault".
 
 The entity storage for vertices, defaults to "vertex".
 
-• **options.aliasIndexEntityStorageType?**: `string`
-
-The entity storage for vertices, defaults to "alias-index".
-
 • **options.integrityImmutableStorageType?**: `string`
 
 The immutable storage for audit trail, defaults to "auditable-item-graph".

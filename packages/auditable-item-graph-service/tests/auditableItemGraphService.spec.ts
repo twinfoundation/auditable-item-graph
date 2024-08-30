@@ -45,7 +45,7 @@ describe("AuditableItemGraphService", () => {
 		immutableStorage = new MemoryEntityStorageConnector<ImmutableItem>({
 			entitySchema: nameof<ImmutableItem>()
 		});
-		EntityStorageConnectorFactory.register("immutable-storage", () => immutableStorage);
+		EntityStorageConnectorFactory.register("immutable-item", () => immutableStorage);
 
 		ImmutableStorageConnectorFactory.register(
 			"auditable-item-graph",

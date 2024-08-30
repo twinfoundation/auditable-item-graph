@@ -551,14 +551,14 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				if (idMode === "id" || idMode === "both") {
 					conditions.push({
 						property: "id",
-						operator: ComparisonOperator.Includes,
+						comparison: ComparisonOperator.Includes,
 						value: idOrAlias
 					});
 				}
 				if (idMode === "alias" || idMode === "both") {
 					conditions.push({
 						property: "aliasIndex",
-						operator: ComparisonOperator.Includes,
+						comparison: ComparisonOperator.Includes,
 						value: idOrAlias.toLowerCase()
 					});
 				}

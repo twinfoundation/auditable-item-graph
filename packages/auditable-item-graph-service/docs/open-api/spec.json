@@ -1262,12 +1262,12 @@
                 "anyOf": [
                     {
                         "type": "string",
-                        "const": "Ascending",
+                        "const": "asc",
                         "description": "Ascending."
                     },
                     {
                         "type": "string",
-                        "const": "Descending",
+                        "const": "desc",
                         "description": "Descending."
                     }
                 ],

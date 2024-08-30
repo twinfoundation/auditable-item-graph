@@ -38,6 +38,14 @@ The timestamp of when the vertex was created.
 
 ***
 
+### updated
+
+> **updated**: `number`
+
+The timestamp of when the vertex was last updated.
+
+***
+
 ### aliasIndex?
 
 > `optional` **aliasIndex**: `string`

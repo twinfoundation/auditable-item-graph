@@ -215,18 +215,17 @@
                 ],
                 "parameters": [
                     {
-                        "name": "idOrAlias",
+                        "name": "id",
                         "description": "The id or alias to try and find.",
                         "in": "query",
                         "required": false,
                         "schema": {
                             "type": "string"
-                        },
-                        "example": "1234567890"
+                        }
                     },
                     {
-                        "name": "mode",
-                        "description": "Which field to look in, defaults to both.",
+                        "name": "idMode",
+                        "description": "Which field to look in with the id, defaults to both.",
                         "in": "query",
                         "required": false,
                         "schema": {
@@ -236,6 +235,28 @@
                                 "alias",
                                 "both"
                             ]
+                        }
+                    },
+                    {
+                        "name": "orderBy",
+                        "description": "The order for the results, default to created.",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "created",
+                                "updated"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "orderByDirection",
+                        "description": "The direction for the order, defaults to desc.",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/components/schemas/SortDirection"
                         }
                     },
                     {
@@ -428,6 +449,7 @@
                                             "vertex": {
                                                 "id": "aig:1234567890",
                                                 "created": 1234567890,
+                                                "updated": 1234567890,
                                                 "aliases": [
                                                     {
                                                         "id": "tst:1234567890",
@@ -947,6 +969,10 @@
                         "type": "string",
                         "description": "The identity of the node which controls the vertex."
                     },
+                    "updated": {
+                        "type": "number",
+                        "description": "The timestamp of when the element was last updated."
+                    },
                     "aliases": {
                         "type": "array",
                         "items": {
@@ -1231,6 +1257,21 @@
                 },
                 "additionalProperties": false,
                 "description": "The data to be used in the vertex."
+            },
+            "SortDirection": {
+                "anyOf": [
+                    {
+                        "type": "string",
+                        "const": "Ascending",
+                        "description": "Ascending."
+                    },
+                    {
+                        "type": "string",
+                        "const": "Descending",
+                        "description": "Descending."
+                    }
+                ],
+                "description": "The sort directions."
             },
             "AuditableItemGraphListResponse": {
                 "type": "object",

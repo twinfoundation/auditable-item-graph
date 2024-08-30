@@ -19,6 +19,11 @@ export interface IAuditableItemGraphVertex
 	nodeIdentity?: string;
 
 	/**
+	 * The timestamp of when the element was last updated.
+	 */
+	updated: number;
+
+	/**
 	 * Alternative aliases that can be used to identify the vertex.
 	 */
 	aliases?: IAuditableItemGraphAlias[];

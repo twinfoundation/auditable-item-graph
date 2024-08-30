@@ -252,19 +252,31 @@ NotFoundError if the vertex is not found.
 
 ### query()
 
-> **query**(`idOrAlias`, `mode`?, `properties`?, `cursor`?, `pageSize`?): `Promise`\<`object`\>
+> **query**(`options`?, `orderBy`?, `orderByDirection`?, `properties`?, `cursor`?, `pageSize`?): `Promise`\<`object`\>
 
-Query the graph for vertices with the matching id or alias.
+Query the graph for vertices.
 
 #### Parameters
 
-• **idOrAlias**: `string`
+• **options?**
 
-The id or alias to query for.
+The query options.
 
-• **mode?**: `"both"` \| `"id"` \| `"alias"`
+• **options.id?**: `string`
 
-Look in id, alias or both, defaults to both
+The optional id to look for.
+
+• **options.idMode?**: `"both"` \| `"id"` \| `"alias"`
+
+Look in id, alias or both, defaults to both.
+
+• **orderBy?**: `"created"` \| `"updated"`
+
+The order for the results, defaults to created.
+
+• **orderByDirection?**: `SortDirection`
+
+The direction for the order, defaults to desc.
 
 • **properties?**: keyof `IAuditableItemGraphVertex`[]
 

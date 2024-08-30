@@ -4,23 +4,35 @@ Get the a list of the vertices with matching ids or aliases.
 
 ## Properties
 
-### query
+### query?
 
-> **query**: `object`
+> `optional` **query**: `object`
 
 The query parameters.
 
-#### idOrAlias
+#### id?
 
-> **idOrAlias**: `string`
+> `optional` **id**: `string`
 
 The id or alias to try and find.
 
-#### mode?
+#### idMode?
 
-> `optional` **mode**: `"both"` \| `"id"` \| `"alias"`
+> `optional` **idMode**: `"both"` \| `"id"` \| `"alias"`
 
-Which field to look in, defaults to both.
+Which field to look in with the id, defaults to both.
+
+#### orderBy?
+
+> `optional` **orderBy**: `"created"` \| `"updated"`
+
+The order for the results, default to created.
+
+#### orderByDirection?
+
+> `optional` **orderByDirection**: `SortDirection`
+
+The direction for the order, defaults to desc.
 
 #### properties?
 

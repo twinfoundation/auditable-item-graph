@@ -52,6 +52,14 @@ The identity of the node which controls the vertex.
 
 ***
 
+### updated
+
+> **updated**: `number`
+
+The timestamp of when the element was last updated.
+
+***
+
 ### aliases?
 
 > `optional` **aliases**: [`IAuditableItemGraphAlias`](IAuditableItemGraphAlias.md)[]

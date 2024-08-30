@@ -15,6 +15,7 @@ import type {
 	VerifyDepth
 } from "@gtsc/auditable-item-graph-models";
 import { Guards, NotSupportedError } from "@gtsc/core";
+import type { SortDirection } from "@gtsc/entity";
 import { nameof } from "@gtsc/nameof";
 import type { IProperty } from "@gtsc/schema";
 
@@ -173,17 +174,24 @@ export class AuditableItemGraphClient
 	}
 
 	/**
-	 * Query the graph for vertices with the matching id or alias.
-	 * @param idOrAlias The id or alias to query for.
-	 * @param mode Look in id, alias or both, defaults to both.
+	 * Query the graph for vertices.
+	 * @param options The query options.
+	 * @param options.id The optional id to look for.
+	 * @param options.idMode Look in id, alias or both, defaults to both.
+	 * @param orderBy The order for the results, defaults to created.
+	 * @param orderByDirection The direction for the order, defaults to descending.
 	 * @param properties The properties to return, if not provided defaults to id, created, aliases and metadata.
 	 * @param cursor The cursor to request the next page of entities.
 	 * @param pageSize The maximum number of entities in a page.
 	 * @returns The entities, which can be partial if a limited keys list was provided.
 	 */
 	public async query(
-		idOrAlias: string,
-		mode?: "id" | "alias" | "both",
+		options?: {
+			id?: string;
+			idMode?: "id" | "alias" | "both";
+		},
+		orderBy?: "created" | "updated",
+		orderByDirection?: SortDirection,
 		properties?: (keyof IAuditableItemGraphVertex)[],
 		cursor?: string,
 		pageSize?: number
@@ -210,8 +218,10 @@ export class AuditableItemGraphClient
 			IAuditableItemGraphListResponse
 		>("/", "GET", {
 			query: {
-				idOrAlias,
-				mode,
+				id: options?.id,
+				idMode: options?.idMode,
+				orderBy,
+				orderByDirection,
 				properties: properties?.join(","),
 				cursor,
 				pageSize

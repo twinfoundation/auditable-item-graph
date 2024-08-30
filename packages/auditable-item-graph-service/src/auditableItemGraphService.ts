@@ -228,7 +228,8 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			const vertexModel: IAuditableItemGraphVertex = {
 				id,
 				nodeIdentity,
-				created: context.now
+				created: context.now,
+				updated: context.now
 			};
 
 			this.updateAliasList(context, vertexModel, aliases);
@@ -436,9 +437,12 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			this.updateResourceList(context, vertexModel, resources);
 			this.updateEdgeList(context, vertexModel, edges);
 
-			await this.addChangeset(context, vertexModel);
+			const changes = await this.addChangeset(context, vertexModel);
 
-			await this._vertexStorage.set(this.vertexModelToEntity(vertexModel));
+			if (changes) {
+				vertexModel.updated = context.now;
+				await this._vertexStorage.set(this.vertexModelToEntity(vertexModel));
+			}
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "updateFailed", undefined, error);
 		}
@@ -496,17 +500,24 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	}
 
 	/**
-	 * Query the graph for vertices with the matching id or alias.
-	 * @param idOrAlias The id or alias to query for.
-	 * @param mode Look in id, alias or both, defaults to both
+	 * Query the graph for vertices.
+	 * @param options The query options.
+	 * @param options.id The optional id to look for.
+	 * @param options.idMode Look in id, alias or both, defaults to both.
+	 * @param orderBy The order for the results, defaults to created.
+	 * @param orderByDirection The direction for the order, defaults to desc.
 	 * @param properties The properties to return, if not provided defaults to id, created, aliases and metadata.
 	 * @param cursor The cursor to request the next page of entities.
 	 * @param pageSize The maximum number of entities in a page.
 	 * @returns The entities, which can be partial if a limited keys list was provided.
 	 */
 	public async query(
-		idOrAlias: string,
-		mode?: "id" | "alias" | "both",
+		options?: {
+			id?: string;
+			idMode?: "id" | "alias" | "both";
+		},
+		orderBy?: "created" | "updated",
+		orderByDirection?: SortDirection,
 		properties?: (keyof IAuditableItemGraphVertex)[],
 		cursor?: string,
 		pageSize?: number
@@ -528,35 +539,41 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		 */
 		totalEntities: number;
 	}> {
-		Guards.stringValue(this.CLASS_NAME, nameof(idOrAlias), idOrAlias);
-
 		try {
 			const propertiesToReturn = properties ?? ["id", "created", "aliases", "metadata"];
 			const conditions = [];
-			mode = mode ?? "both";
-			if (mode === "id" || mode === "both") {
-				conditions.push({
-					property: "id",
-					operator: ComparisonOperator.Includes,
-					value: idOrAlias
-				});
-			}
-			if (mode === "alias" || mode === "both") {
-				conditions.push({
-					property: "aliasIndex",
-					operator: ComparisonOperator.Includes,
-					value: idOrAlias.toLowerCase()
-				});
+			const orderProperty = orderBy ?? "created";
+			const orderDirection = orderByDirection ?? SortDirection.Descending;
+
+			const idOrAlias = options?.id;
+			if (Is.stringValue(idOrAlias)) {
+				const idMode = options?.idMode ?? "both";
+				if (idMode === "id" || idMode === "both") {
+					conditions.push({
+						property: "id",
+						operator: ComparisonOperator.Includes,
+						value: idOrAlias
+					});
+				}
+				if (idMode === "alias" || idMode === "both") {
+					conditions.push({
+						property: "aliasIndex",
+						operator: ComparisonOperator.Includes,
+						value: idOrAlias.toLowerCase()
+					});
+				}
 			}
 			const results = await this._vertexStorage.query(
-				{
-					conditions,
-					logicalOperator: LogicalOperator.Or
-				},
+				conditions.length > 0
+					? {
+							conditions,
+							logicalOperator: LogicalOperator.Or
+						}
+					: undefined,
 				[
 					{
-						property: "created",
-						sortDirection: SortDirection.Descending
+						property: orderProperty,
+						sortDirection: orderDirection
 					}
 				],
 				propertiesToReturn as (keyof AuditableItemGraphVertex)[],
@@ -580,6 +597,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		const entity: AuditableItemGraphVertex = {
 			id: vertex.id,
 			created: vertex.created,
+			updated: vertex.updated,
 			nodeIdentity: vertex.nodeIdentity
 		};
 
@@ -679,6 +697,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		const model: IAuditableItemGraphVertex = {
 			id: vertex.id,
 			created: vertex.created,
+			updated: vertex.updated,
 			nodeIdentity: vertex.nodeIdentity,
 			metadata: this.metadataEntityToModel(vertex.metadata)
 		};
@@ -1198,12 +1217,13 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * Add a changeset to the vertex and generate the associated verifications.
 	 * @param context The context for the operation.
 	 * @param vertex The vertex model.
+	 * @returns True if there were changes.
 	 * @internal
 	 */
 	private async addChangeset(
 		context: IAuditableItemGraphServiceContext,
 		vertex: IAuditableItemGraphVertex
-	): Promise<void> {
+	): Promise<boolean> {
 		const changeSets = vertex.changesets ?? [];
 
 		// console.log("Add Changeset", JSON.stringify(context.changes, null, 2));
@@ -1280,7 +1300,11 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			});
 
 			vertex.changesets = changeSets;
+
+			return true;
 		}
+
+		return false;
 	}
 
 	/**

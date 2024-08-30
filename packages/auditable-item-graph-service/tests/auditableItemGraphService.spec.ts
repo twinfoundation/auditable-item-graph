@@ -88,6 +88,7 @@ describe("AuditableItemGraphService", () => {
 		expect(vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
+			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
 			changesets: [
 				{
@@ -134,6 +135,7 @@ describe("AuditableItemGraphService", () => {
 		expect(vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
+			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
 			aliasIndex: "foo123||bar456",
 			aliases: [
@@ -215,6 +217,7 @@ describe("AuditableItemGraphService", () => {
 		expect(vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
+			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
 			metadata: [
 				{
@@ -302,6 +305,7 @@ describe("AuditableItemGraphService", () => {
 		expect(result.vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
+			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
 			metadata: [
 				{
@@ -350,6 +354,7 @@ describe("AuditableItemGraphService", () => {
 		expect(result.vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
+			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
 			metadata: [
 				{
@@ -414,6 +419,7 @@ describe("AuditableItemGraphService", () => {
 		expect(result.vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
+			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
 			metadata: [
 				{
@@ -487,6 +493,7 @@ describe("AuditableItemGraphService", () => {
 		expect(result.vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
+			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
 			metadata: [
 				{
@@ -560,6 +567,7 @@ describe("AuditableItemGraphService", () => {
 		expect(result.vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
+			updated: SECOND_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
 			metadata: [
 				{
@@ -727,6 +735,7 @@ describe("AuditableItemGraphService", () => {
 		expect(result.vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
+			updated: SECOND_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
 			metadata: [
 				{
@@ -971,6 +980,7 @@ describe("AuditableItemGraphService", () => {
 		expect(result.vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
+			updated: SECOND_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
 			metadata: [
 				{
@@ -1379,6 +1389,7 @@ describe("AuditableItemGraphService", () => {
 		expect(result.vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
+			updated: SECOND_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
 			edges: [
 				{
@@ -1532,6 +1543,7 @@ describe("AuditableItemGraphService", () => {
 		expect(result.vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
+			updated: SECOND_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
 			metadata: [
 				{
@@ -2156,6 +2168,7 @@ describe("AuditableItemGraphService", () => {
 			vertex: {
 				id: "0101010101010101010101010101010101010101010101010101010101010101",
 				created: FIRST_TICK,
+				updated: FIRST_TICK,
 				nodeIdentity: TEST_NODE_IDENTITY,
 				aliases: [
 					{ id: "foo123", created: FIRST_TICK },
@@ -2193,7 +2206,7 @@ describe("AuditableItemGraphService", () => {
 			TEST_NODE_IDENTITY
 		);
 
-		const results = await service.query("0");
+		const results = await service.query({ id: "0" });
 		expect(results.entities).toEqual([
 			{
 				id: "0404040404040404040404040404040404040404040404040404040404040404",
@@ -2225,7 +2238,7 @@ describe("AuditableItemGraphService", () => {
 			TEST_NODE_IDENTITY
 		);
 
-		const results = await service.query("foo");
+		const results = await service.query({ id: "foo" });
 		expect(results.entities).toEqual([
 			{
 				id: "0404040404040404040404040404040404040404040404040404040404040404",
@@ -2277,7 +2290,7 @@ describe("AuditableItemGraphService", () => {
 			TEST_NODE_IDENTITY
 		);
 
-		const results = await service.query("4");
+		const results = await service.query({ id: "4" });
 		expect(results.entities).toEqual([
 			{
 				id: "0404040404040404040404040404040404040404040404040404040404040404",
@@ -2315,7 +2328,7 @@ describe("AuditableItemGraphService", () => {
 			TEST_NODE_IDENTITY
 		);
 
-		const results = await service.query("4", "id");
+		const results = await service.query({ id: "4", idMode: "id" });
 		expect(results.entities).toEqual([
 			{
 				id: "0404040404040404040404040404040404040404040404040404040404040404",
@@ -2343,7 +2356,7 @@ describe("AuditableItemGraphService", () => {
 			TEST_NODE_IDENTITY
 		);
 
-		const results = await service.query("4", "alias");
+		const results = await service.query({ id: "4", idMode: "alias" });
 		expect(results.entities).toEqual([
 			{
 				id: "0101010101010101010101010101010101010101010101010101010101010101",

@@ -31,6 +31,12 @@ export class AuditableItemGraphVertex {
 	public created!: number;
 
 	/**
+	 * The timestamp of when the vertex was last updated.
+	 */
+	@property({ type: "number" })
+	public updated!: number;
+
+	/**
 	 * Combined alias index for the vertex used for querying.
 	 */
 	@property({ type: "string" })

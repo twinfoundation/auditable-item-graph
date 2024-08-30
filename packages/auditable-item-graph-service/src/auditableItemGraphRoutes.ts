@@ -203,6 +203,7 @@ export function generateRestRoutesAuditableItemGraph(
 								vertex: {
 									id: "aig:1234567890",
 									created: 1234567890,
+									updated: 1234567890,
 									aliases: [
 										{
 											id: "tst:1234567890",
@@ -354,10 +355,14 @@ export function generateRestRoutesAuditableItemGraph(
 			type: nameof<IAuditableItemGraphListRequest>(),
 			examples: [
 				{
-					id: "IAuditableItemGraphListRequest",
+					id: "IAuditableItemGraphListAllRequest",
+					request: {}
+				},
+				{
+					id: "IAuditableItemGraphListIdRequest",
 					request: {
 						query: {
-							idOrAlias: "1234567890"
+							id: "1234567890"
 						}
 					}
 				}
@@ -512,16 +517,19 @@ export async function auditableItemGraphList(
 		nameof(request.query),
 		request.query
 	);
-	Guards.stringValue(ROUTES_SOURCE, nameof(request.query.idOrAlias), request.query.idOrAlias);
 
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
 
 	const result = await component.query(
-		request.query.idOrAlias,
-		request.query.mode,
-		request.query.properties?.split(",") as (keyof IAuditableItemGraphVertex)[],
-		request.query.cursor,
-		request.query.pageSize
+		{
+			id: request.query?.id,
+			idMode: request.query?.idMode
+		},
+		request.query?.orderBy,
+		request.query?.orderByDirection,
+		request.query?.properties?.split(",") as (keyof IAuditableItemGraphVertex)[],
+		request.query?.cursor,
+		request.query?.pageSize
 	);
 
 	return {

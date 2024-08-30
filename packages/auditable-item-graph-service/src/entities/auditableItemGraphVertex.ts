@@ -1,6 +1,6 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import { entity, property } from "@gtsc/entity";
+import { entity, property, SortDirection } from "@gtsc/entity";
 import type { AuditableItemGraphAlias } from "./auditableItemGraphAlias";
 import type { AuditableItemGraphChangeset } from "./auditableItemGraphChangeset";
 import type { AuditableItemGraphEdge } from "./auditableItemGraphEdge";
@@ -27,19 +27,19 @@ export class AuditableItemGraphVertex {
 	/**
 	 * The timestamp of when the vertex was created.
 	 */
-	@property({ type: "number" })
+	@property({ type: "number", sortDirection: SortDirection.Descending })
 	public created!: number;
 
 	/**
 	 * The timestamp of when the vertex was last updated.
 	 */
-	@property({ type: "number" })
+	@property({ type: "number", sortDirection: SortDirection.Descending })
 	public updated!: number;
 
 	/**
 	 * Combined alias index for the vertex used for querying.
 	 */
-	@property({ type: "string" })
+	@property({ type: "string", isSecondary: true })
 	public aliasIndex?: string;
 
 	/**

@@ -40,7 +40,7 @@ describe("AuditableItemGraphService", () => {
 			entitySchema: nameof<AuditableItemGraphVertex>()
 		});
 
-		EntityStorageConnectorFactory.register("vertex", () => vertexStorage);
+		EntityStorageConnectorFactory.register("auditable-item-graph-vertex", () => vertexStorage);
 
 		immutableStorage = new MemoryEntityStorageConnector<ImmutableItem>({
 			entitySchema: nameof<ImmutableItem>()

@@ -26,7 +26,7 @@ The vault connector type, defaults to "vault".
 
 • **options.vertexEntityStorageType?**: `string`
 
-The entity storage for vertices, defaults to "vertex".
+The entity storage for vertices, defaults to "auditable-item-graph-vertex".
 
 • **options.integrityImmutableStorageType?**: `string`
 

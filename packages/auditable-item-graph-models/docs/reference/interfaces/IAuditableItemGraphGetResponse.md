@@ -18,13 +18,9 @@ Whether the vertex has been verified.
 
 #### verification?
 
-> `optional` **verification**: `object`
+> `optional` **verification**: `object`[]
 
 The verification patches including any failure information.
-
-##### Index signature
-
- \[`epoch`: `number`\]: `object`
 
 #### vertex
 

@@ -239,12 +239,11 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	): Promise<{
 		verified?: boolean;
 		verification?: {
-			[epoch: number]: {
-				failure?: string;
-				properties?: { [id: string]: unknown };
-				patches: IPatchOperation[];
-			};
-		};
+			created: number;
+			patches: IPatchOperation[];
+			failure?: string;
+			failureProperties?: { [id: string]: unknown };
+		}[];
 		vertex: IAuditableItemGraphVertex;
 	}> {
 		Guards.stringValue(this.CLASS_NAME, nameof(id), id);
@@ -271,13 +270,12 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			let verified: boolean | undefined;
 			let verification:
 				| {
-						[epoch: number]: {
-							failure?: string;
-							properties?: { [id: string]: unknown };
-							patches: IPatchOperation[];
-						};
-				  }
-				| undefined = {};
+						created: number;
+						patches: IPatchOperation[];
+						failure?: string;
+						failureProperties?: { [id: string]: unknown };
+				  }[]
+				| undefined;
 
 			if (options?.verifySignatureDepth === "current" || options?.verifySignatureDepth === "all") {
 				const verifyResult = await this.verifyChangesets(vertexModel, options.verifySignatureDepth);
@@ -997,6 +995,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			// If integrity check is enabled add an encrypted version of the changes to the credential data.
 			if (this._enableIntegrityCheck) {
 				const integrityData: IAuditableItemGraphIntegrity = {
+					created: context.now,
 					userIdentity: context.userIdentity,
 					patches
 				};
@@ -1055,32 +1054,36 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	): Promise<{
 		verified?: boolean;
 		verification?: {
-			[epoch: number]: {
-				failure?: string;
-				properties?: { [id: string]: unknown };
-				patches: IPatchOperation[];
-			};
-		};
+			created: number;
+			patches: IPatchOperation[];
+			failure?: string;
+			failureProperties?: { [id: string]: unknown };
+		}[];
 	}> {
 		let verified: boolean = true;
-		const verification:
-			| {
-					[epoch: number]: {
-						failure?: string;
-						properties?: { [id: string]: unknown };
-						patches: IPatchOperation[];
-					};
-			  }
-			| undefined = {};
+		const verification: {
+			created: number;
+			patches: IPatchOperation[];
+			failure?: string;
+			failureProperties?: { [id: string]: unknown };
+		}[] = [];
 
 		if (Is.arrayValue(vertex.changesets)) {
 			let lastHash: Uint8Array | undefined;
 			for (let i = 0; i < vertex.changesets.length; i++) {
 				const calculatedChangeset = vertex.changesets[i];
 
-				verification[vertex.changesets[i].created] = {
+				const verify: {
+					created: number;
+					patches: IPatchOperation[];
+					failure?: string;
+					failureProperties?: { [id: string]: unknown };
+				} = {
+					created: vertex.changesets[i].created,
 					patches: calculatedChangeset.patches
 				};
+
+				verification.push(verify);
 
 				const b2b = new Blake2b(Blake2b.SIZE_256);
 				// Add the last hash if there is one
@@ -1099,15 +1102,8 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				lastHash = verifyHash;
 
 				if (Converter.bytesToBase64(verifyHash) !== calculatedChangeset.hash) {
-					verification[vertex.changesets[i].created].failure = "invalidChangesetHash";
-					verification[vertex.changesets[i].created].properties = {
-						hash: calculatedChangeset.hash,
-						epoch: calculatedChangeset.created
-					};
-					verified = false;
-				}
-
-				if (
+					verify.failure = "invalidChangesetHash";
+				} else if (
 					verifySignatureDepth === "all" ||
 					(verifySignatureDepth === "current" && i === vertex.changesets.length - 1)
 				) {
@@ -1136,7 +1132,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 							);
 
 						if (verificationResult.revoked) {
-							verification[vertex.changesets[i].created].failure = "changesetCredentialRevoked";
+							verify.failure = "changesetCredentialRevoked";
 						} else {
 							// Credential is not revoked so check the signature
 							const credentialData = Is.array(
@@ -1151,7 +1147,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 							// Does the immutable signature match the local one we calculated
 							if (credentialData.signature !== Converter.bytesToBase64(changesetSignature)) {
-								verification[vertex.changesets[i].created].failure = "invalidChangesetSignature";
+								verify.failure = "invalidChangesetSignature";
 							} else if (Is.stringValue(credentialData.integrity)) {
 								const decrypted = await this._vaultConnector.decrypt(
 									`${vertex.nodeIdentity}/${this._vaultKeyId}`,
@@ -1161,11 +1157,12 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 								const canonical = Converter.bytesToUtf8(decrypted);
 								const calculatedIntegrity: IAuditableItemGraphIntegrity = {
+									created: calculatedChangeset.created,
 									userIdentity: calculatedChangeset.userIdentity,
 									patches: calculatedChangeset.patches
 								};
 								if (canonical !== JsonHelper.canonicalize(calculatedIntegrity)) {
-									verification[vertex.changesets[i].created].failure = "invalidChangesetCanonical";
+									verify.failure = "invalidChangesetCanonical";
 								}
 								const changesAndIdentity: IAuditableItemGraphIntegrity = JSON.parse(canonical);
 								integrityPatches = changesAndIdentity.patches;
@@ -1175,8 +1172,8 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 					}
 
 					// If there was a failure add some additional information
-					if (Is.stringValue(verification[vertex.changesets[i].created].failure)) {
-						verification[vertex.changesets[i].created].properties = {
+					if (Is.stringValue(verify.failure)) {
+						verify.failureProperties = {
 							hash: calculatedChangeset.hash,
 							epoch: calculatedChangeset.created,
 							calculatedChangeset,

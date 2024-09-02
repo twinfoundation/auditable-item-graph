@@ -7,6 +7,11 @@ import type { IPatchOperation } from "@gtsc/core";
  */
 export interface IAuditableItemGraphIntegrity {
 	/**
+	 * The timestamp of when the changeset was created.
+	 */
+	created: number;
+
+	/**
 	 * The user identity that created the changes.
 	 */
 	userIdentity: string;

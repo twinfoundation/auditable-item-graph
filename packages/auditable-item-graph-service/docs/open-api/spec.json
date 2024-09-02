@@ -812,25 +812,29 @@
                         "description": "Whether the vertex has been verified."
                     },
                     "verification": {
-                        "type": "object",
-                        "additionalProperties": {
+                        "type": "array",
+                        "items": {
                             "type": "object",
                             "properties": {
-                                "failure": {
-                                    "type": "string"
-                                },
-                                "properties": {
-                                    "type": "object",
-                                    "additionalProperties": {}
+                                "created": {
+                                    "type": "number"
                                 },
                                 "patches": {
                                     "type": "array",
                                     "items": {
                                         "$ref": "#/components/schemas/PatchOperation"
                                     }
+                                },
+                                "failure": {
+                                    "type": "string"
+                                },
+                                "failureProperties": {
+                                    "type": "object",
+                                    "additionalProperties": {}
                                 }
                             },
                             "required": [
+                                "created",
                                 "patches"
                             ],
                             "additionalProperties": false
@@ -1054,14 +1058,14 @@
                     },
                     "userIdentity": {
                         "type": "string",
-                        "description": "The identity of the user who made the changeset."
+                        "description": "The user identity that created the changes."
                     },
                     "patches": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/PatchOperation"
                         },
-                        "description": "The patches for the set of changes."
+                        "description": "The patches for the integrity at this epoch."
                     },
                     "hash": {
                         "type": "string",
@@ -1074,9 +1078,9 @@
                 },
                 "required": [
                     "created",
-                    "userIdentity",
+                    "hash",
                     "patches",
-                    "hash"
+                    "userIdentity"
                 ],
                 "additionalProperties": false,
                 "description": "Interface describing a set of updates to the vertex."

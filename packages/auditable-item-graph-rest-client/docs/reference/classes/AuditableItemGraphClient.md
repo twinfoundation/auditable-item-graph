@@ -182,11 +182,7 @@ The vertex if found.
 
 ##### verification?
 
-> `optional` **verification**: `object`
-
-###### Index signature
-
- \[`epoch`: `number`\]: `object`
+> `optional` **verification**: `object`[]
 
 ##### vertex
 

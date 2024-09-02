@@ -191,6 +191,7 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		expect(integrity).toEqual({
+			created: FIRST_TICK,
 			patches: [
 				{
 					op: "add",
@@ -279,6 +280,7 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		expect(integrity).toEqual({
+			created: FIRST_TICK,
 			patches: [
 				{
 					op: "add",
@@ -734,6 +736,7 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		expect(credentialSignature.integrity).toEqual({
+			created: FIRST_TICK,
 			patches: [
 				{
 					op: "add",
@@ -772,6 +775,7 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		expect(credentialSignature.integrity).toEqual({
+			created: SECOND_TICK,
 			patches: [
 				{
 					op: "add",
@@ -924,6 +928,7 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		expect(credentialSignature.integrity).toEqual({
+			created: FIRST_TICK,
 			patches: [
 				{
 					op: "add",
@@ -962,6 +967,7 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		expect(credentialSignature.integrity).toEqual({
+			created: SECOND_TICK,
 			patches: [
 				{
 					op: "remove",
@@ -1227,6 +1233,7 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		expect(credentialSignature.integrity).toEqual({
+			created: FIRST_TICK,
 			patches: [
 				{
 					op: "add",
@@ -1289,6 +1296,7 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		expect(credentialSignature.integrity).toEqual({
+			created: SECOND_TICK,
 			patches: [
 				{
 					op: "remove",
@@ -1908,6 +1916,7 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		expect(credentialSignature.integrity).toEqual({
+			created: FIRST_TICK,
 			patches: [
 				{
 					op: "add",
@@ -2007,6 +2016,7 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		expect(credentialSignature.integrity).toEqual({
+			created: SECOND_TICK,
 			patches: [
 				{
 					op: "remove",
@@ -2127,8 +2137,9 @@ describe("AuditableItemGraphService", () => {
 
 		expect(vertex).toEqual({
 			verified: true,
-			verification: {
-				[FIRST_TICK]: {
+			verification: [
+				{
+					created: FIRST_TICK,
 					patches: [
 						{
 							op: "add",
@@ -2146,7 +2157,7 @@ describe("AuditableItemGraphService", () => {
 						}
 					]
 				}
-			},
+			],
 			vertex: {
 				id: "0101010101010101010101010101010101010101010101010101010101010101",
 				created: FIRST_TICK,

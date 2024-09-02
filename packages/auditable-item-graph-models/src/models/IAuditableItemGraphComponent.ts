@@ -99,12 +99,11 @@ export interface IAuditableItemGraphComponent extends IComponent {
 	): Promise<{
 		verified?: boolean;
 		verification?: {
-			[epoch: number]: {
-				failure?: string;
-				properties?: { [id: string]: unknown };
-				patches: IPatchOperation[];
-			};
-		};
+			created: number;
+			patches: IPatchOperation[];
+			failure?: string;
+			failureProperties?: { [id: string]: unknown };
+		}[];
 		vertex: IAuditableItemGraphVertex;
 	}>;
 

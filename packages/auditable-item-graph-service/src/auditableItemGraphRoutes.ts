@@ -61,90 +61,65 @@ export function generateRestRoutesAuditableItemGraph(
 					id: "auditableItemGraphCreateRequestExample",
 					request: {
 						body: {
-							metadata: [
-								{
-									key: "counter",
-									type: "https://schema.org/Integer",
-									value: 456
-								},
-								{
-									key: "title",
-									type: "https://schema.org/Text",
-									value: "Title"
-								}
-							],
+							metadataSchema: "TestSchema",
+							metadata: {
+								title: "Title",
+								counter: 456
+							},
 							aliases: [
 								{
-									id: "bar456"
+									id: "bar456",
+									metadataSchema: "TestAliasSchema",
+									metadata: {
+										title: "Title",
+										counter: 456
+									}
 								},
 								{
-									id: "foo321"
+									id: "foo321",
+									metadataSchema: "TestAliasSchema",
+									metadata: {
+										title: "Title",
+										counter: 456
+									}
 								}
 							],
 							resources: [
 								{
 									id: "resource1",
-									metadata: [
-										{
-											key: "res-counter",
-											type: "https://schema.org/Integer",
-											value: 456
-										},
-										{
-											key: "res-title",
-											type: "https://schema.org/Text",
-											value: "Title"
-										}
-									]
+									metadataSchema: "TestResourceSchema",
+									metadata: {
+										title: "Title",
+										counter: 456
+									}
 								},
 								{
 									id: "resource2",
-									metadata: [
-										{
-											key: "res-counter-2",
-											type: "https://schema.org/Integer",
-											value: 456
-										},
-										{
-											key: "res-title-2",
-											type: "https://schema.org/Text",
-											value: "Title"
-										}
-									]
+									metadataSchema: "TestResourceSchema",
+									metadata: {
+										title: "Title",
+										counter: 456
+									}
 								}
 							],
 							edges: [
 								{
 									id: "edge1",
 									relationship: "frenemy",
-									metadata: [
-										{
-											key: "edge-counter",
-											type: "https://schema.org/Integer",
-											value: 456
-										},
-										{
-											key: "edge-title",
-											type: "https://schema.org/Text",
-											value: "Title"
-										}
-									]
+									metadataSchema: "TestEdgeSchema",
+									metadata: {
+										title: "Title",
+										counter: 456
+									}
 								},
 								{
 									id: "edge2",
 									relationship: "end",
-									metadata: [
-										{
-											key: "edge-counter-2",
-											type: "https://schema.org/Integer",
-											value: 456
-										},
-										{
-											key: "edge-title-2",
-											type: "https://schema.org/Text",
-											value: "Title"
-										}
-									]
+									metadataSchema: "TestEdgeSchema",
+									metadata: {
+										title: "Title",
+										counter: 456
+									}
 								}
 							]
 						}
@@ -204,17 +179,14 @@ export function generateRestRoutesAuditableItemGraph(
 									id: "aig:1234567890",
 									created: 1234567890,
 									updated: 1234567890,
+									metadataSchema: "TestSchema",
+									metadata: {
+										title: "Title",
+										counter: 456
+									},
 									aliases: [
 										{
 											id: "tst:1234567890",
-											created: 1234567890
-										}
-									],
-									metadata: [
-										{
-											id: "description",
-											type: "https://schema.org/Text",
-											value: "This is a test item",
 											created: 1234567890
 										}
 									]
@@ -245,90 +217,65 @@ export function generateRestRoutesAuditableItemGraph(
 							id: "aig:1234567890"
 						},
 						body: {
-							metadata: [
-								{
-									key: "counter",
-									type: "https://schema.org/Integer",
-									value: 456
-								},
-								{
-									key: "title",
-									type: "https://schema.org/Text",
-									value: "Title"
-								}
-							],
+							metadataSchema: "TestSchema",
+							metadata: {
+								title: "Title",
+								counter: 456
+							},
 							aliases: [
 								{
-									id: "bar456"
+									id: "bar456",
+									metadataSchema: "TestAliasSchema",
+									metadata: {
+										title: "Title",
+										counter: 456
+									}
 								},
 								{
-									id: "foo321"
+									id: "foo321",
+									metadataSchema: "TestAliasSchema",
+									metadata: {
+										title: "Title",
+										counter: 456
+									}
 								}
 							],
 							resources: [
 								{
 									id: "resource1",
-									metadata: [
-										{
-											key: "res-counter",
-											type: "https://schema.org/Integer",
-											value: 456
-										},
-										{
-											key: "res-title",
-											type: "https://schema.org/Text",
-											value: "Title"
-										}
-									]
+									metadataSchema: "TestResourceSchema",
+									metadata: {
+										title: "Title",
+										counter: 456
+									}
 								},
 								{
 									id: "resource2",
-									metadata: [
-										{
-											key: "res-counter-2",
-											type: "https://schema.org/Integer",
-											value: 456
-										},
-										{
-											key: "res-title-2",
-											type: "https://schema.org/Text",
-											value: "Title"
-										}
-									]
+									metadataSchema: "TestResourceSchema",
+									metadata: {
+										title: "Title",
+										counter: 456
+									}
 								}
 							],
 							edges: [
 								{
 									id: "edge1",
 									relationship: "frenemy",
-									metadata: [
-										{
-											key: "edge-counter",
-											type: "https://schema.org/Integer",
-											value: 456
-										},
-										{
-											key: "edge-title",
-											type: "https://schema.org/Text",
-											value: "Title"
-										}
-									]
+									metadataSchema: "TestEdgeSchema",
+									metadata: {
+										title: "Title",
+										counter: 456
+									}
 								},
 								{
 									id: "edge2",
 									relationship: "end",
-									metadata: [
-										{
-											key: "edge-counter-2",
-											type: "https://schema.org/Integer",
-											value: 456
-										},
-										{
-											key: "edge-title-2",
-											type: "https://schema.org/Text",
-											value: "Title"
-										}
-									]
+									metadataSchema: "TestEdgeSchema",
+									metadata: {
+										title: "Title",
+										counter: 456
+									}
 								}
 							]
 						}
@@ -417,8 +364,9 @@ export async function auditableItemGraphCreate(
 
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
 	const id = await component.create(
-		request.body?.aliases,
+		request.body?.metadataSchema,
 		request.body?.metadata,
+		request.body?.aliases,
 		request.body?.resources,
 		request.body?.edges,
 		httpRequestContext.userIdentity,
@@ -487,8 +435,9 @@ export async function auditableItemGraphUpdate(
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
 	await component.update(
 		request.pathParams.id,
-		request.body?.aliases,
+		request.body?.metadataSchema,
 		request.body?.metadata,
+		request.body?.aliases,
 		request.body?.resources,
 		request.body?.edges,
 		httpRequestContext.userIdentity,

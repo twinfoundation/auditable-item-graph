@@ -1,13 +1,17 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import type { IAuditableItemGraphProperty } from "./IAuditableItemGraphProperty";
 
 /**
- * Interface describing the metadata properties for auditable elements.
+ * Interface describing the base properties for auditable metadata elements.
  */
 export interface IAuditableItemGraphMetadataElement {
 	/**
-	 * Metadata to associate with the element.
+	 * The schema for the metadata.
 	 */
-	metadata?: IAuditableItemGraphProperty[];
+	metadataSchema?: string;
+
+	/**
+	 * The metadata to associate with the element.
+	 */
+	metadata?: unknown;
 }

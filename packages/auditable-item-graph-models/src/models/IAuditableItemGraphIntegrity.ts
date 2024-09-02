@@ -1,6 +1,6 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import type { IAuditableItemGraphChange } from "./IAuditableItemGraphChange";
+import type { IPatchOperation } from "@gtsc/core";
 
 /**
  * The integrity data used in credentials.
@@ -12,7 +12,7 @@ export interface IAuditableItemGraphIntegrity {
 	userIdentity: string;
 
 	/**
-	 * The changes.
+	 * The patches for the integrity at this epoch.
 	 */
-	changes: IAuditableItemGraphChange[];
+	patches: IPatchOperation[];
 }

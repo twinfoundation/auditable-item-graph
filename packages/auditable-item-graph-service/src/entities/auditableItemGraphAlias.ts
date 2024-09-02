@@ -1,7 +1,6 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import { entity, property } from "@gtsc/entity";
-import type { AuditableItemGraphProperty } from "./auditableItemGraphProperty";
 
 /**
  * Class describing the auditable item graph alias.
@@ -27,8 +26,14 @@ export class AuditableItemGraphAlias {
 	public deleted?: number;
 
 	/**
+	 * The schema for the metadata.
+	 */
+	@property({ type: "string" })
+	public metadataSchema?: string;
+
+	/**
 	 * Metadata to associate with the alias.
 	 */
-	@property({ type: "array", itemTypeRef: "AuditableItemGraphProperty[]" })
-	public metadata?: AuditableItemGraphProperty[];
+	@property({ type: "object" })
+	public metadata?: unknown;
 }

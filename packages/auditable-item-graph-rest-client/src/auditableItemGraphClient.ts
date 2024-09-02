@@ -3,7 +3,6 @@
 import { BaseRestClient } from "@gtsc/api-core";
 import type { IBaseRestClientConfig, ICreatedResponse, INoContentResponse } from "@gtsc/api-models";
 import type {
-	IAuditableItemGraphChange,
 	IAuditableItemGraphComponent,
 	IAuditableItemGraphCreateRequest,
 	IAuditableItemGraphGetRequest,
@@ -14,10 +13,9 @@ import type {
 	IAuditableItemGraphVertex,
 	VerifyDepth
 } from "@gtsc/auditable-item-graph-models";
-import { Guards, NotSupportedError } from "@gtsc/core";
+import { Guards, NotSupportedError, type IPatchOperation } from "@gtsc/core";
 import type { SortDirection } from "@gtsc/entity";
 import { nameof } from "@gtsc/nameof";
-import type { IProperty } from "@gtsc/schema";
 
 /**
  * Client for performing auditable item graph through to REST endpoints.
@@ -41,26 +39,31 @@ export class AuditableItemGraphClient
 
 	/**
 	 * Create a new graph vertex.
-	 * @param aliases Alternative aliases that can be used to identify the vertex.
+	 * @param metadataSchema The metadata schema for the vertex.
 	 * @param metadata The metadata for the vertex.
+	 * @param aliases Alternative aliases that can be used to identify the vertex.
 	 * @param resources The resources attached to the vertex.
 	 * @param edges The edges connected to the vertex.
 	 * @returns The id of the new graph item.
 	 */
 	public async create(
+		metadataSchema?: string,
+		metadata?: unknown,
 		aliases?: {
 			id: string;
-			metadata?: IProperty[];
+			metadataSchema?: string;
+			metadata?: unknown;
 		}[],
-		metadata?: IProperty[],
 		resources?: {
 			id: string;
-			metadata?: IProperty[];
+			metadataSchema?: string;
+			metadata?: unknown;
 		}[],
 		edges?: {
 			id: string;
 			relationship: string;
-			metadata?: IProperty[];
+			metadataSchema?: string;
+			metadata?: unknown;
 		}[]
 	): Promise<string> {
 		const response = await this.fetch<IAuditableItemGraphCreateRequest, ICreatedResponse>(
@@ -68,8 +71,9 @@ export class AuditableItemGraphClient
 			"POST",
 			{
 				body: {
-					aliases,
+					metadataSchema,
 					metadata,
+					aliases,
 					resources,
 					edges
 				}
@@ -102,7 +106,7 @@ export class AuditableItemGraphClient
 			[epoch: number]: {
 				failure?: string;
 				properties?: { [id: string]: unknown };
-				changes: IAuditableItemGraphChange[];
+				patches: IPatchOperation[];
 			};
 		};
 		vertex: IAuditableItemGraphVertex;
@@ -125,27 +129,32 @@ export class AuditableItemGraphClient
 	/**
 	 * Update a graph vertex.
 	 * @param id The id of the vertex to update.
-	 * @param aliases Alternative aliases that can be used to identify the vertex.
+	 * @param metadataSchema The metadata schema for the vertex.
 	 * @param metadata The metadata for the vertex.
+	 * @param aliases Alternative aliases that can be used to identify the vertex.
 	 * @param resources The resources attached to the vertex.
 	 * @param edges The edges connected to the vertex.
 	 * @returns Nothing.
 	 */
 	public async update(
 		id: string,
+		metadataSchema?: string,
+		metadata?: unknown,
 		aliases?: {
 			id: string;
-			metadata?: IProperty[];
+			metadataSchema?: string;
+			metadata?: unknown;
 		}[],
-		metadata?: IProperty[],
 		resources?: {
 			id: string;
-			metadata?: IProperty[];
+			metadataSchema?: string;
+			metadata?: unknown;
 		}[],
 		edges?: {
 			id: string;
 			relationship: string;
-			metadata?: IProperty[];
+			metadataSchema?: string;
+			metadata?: unknown;
 		}[]
 	): Promise<void> {
 		Guards.stringValue(this.CLASS_NAME, nameof(id), id);
@@ -155,8 +164,9 @@ export class AuditableItemGraphClient
 				id
 			},
 			body: {
-				aliases,
+				metadataSchema,
 				metadata,
+				aliases,
 				resources,
 				edges
 			}

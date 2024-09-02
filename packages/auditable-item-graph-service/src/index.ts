@@ -5,7 +5,7 @@ export * from "./auditableItemGraphService";
 export * from "./entities/auditableItemGraphAlias";
 export * from "./entities/auditableItemGraphChangeset";
 export * from "./entities/auditableItemGraphEdge";
-export * from "./entities/auditableItemGraphProperty";
+export * from "./entities/auditableItemGraphPatch";
 export * from "./entities/auditableItemGraphResource";
 export * from "./entities/auditableItemGraphVertex";
 export * from "./models/IAuditableItemGraphServiceConfig";

@@ -20,7 +20,7 @@ Whether the vertex has been verified.
 
 > `optional` **verification**: `object`
 
-The verification changes including any failure information.
+The verification patches including any failure information.
 
 ##### Index signature
 

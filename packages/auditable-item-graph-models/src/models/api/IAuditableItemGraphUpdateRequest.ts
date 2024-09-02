@@ -1,6 +1,5 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import type { IProperty } from "@gtsc/schema";
 
 /**
  * Update an auditable item graph vertex.
@@ -21,24 +20,31 @@ export interface IAuditableItemGraphUpdateRequest {
 	 */
 	body?: {
 		/**
-		 * Alternative aliases that can be used to identify the vertex.
+		 * The schema for the metadata.
 		 */
-		aliases?: {
-			id: string;
-			metadata?: IProperty[];
-		}[];
+		metadataSchema?: string;
 
 		/**
 		 * The metadata to be used in the vertex.
 		 */
-		metadata?: IProperty[];
+		metadata?: unknown;
+
+		/**
+		 * Alternative aliases that can be used to identify the vertex.
+		 */
+		aliases?: {
+			id: string;
+			metadataSchema?: string;
+			metadata?: unknown;
+		}[];
 
 		/**
 		 * The resources attached to the vertex.
 		 */
 		resources?: {
 			id: string;
-			metadata?: IProperty[];
+			metadataSchema?: string;
+			metadata?: unknown;
 		}[];
 
 		/**
@@ -47,7 +53,8 @@ export interface IAuditableItemGraphUpdateRequest {
 		edges?: {
 			id: string;
 			relationship: string;
-			metadata?: IProperty[];
+			metadataSchema?: string;
+			metadata?: unknown;
 		}[];
 	};
 }

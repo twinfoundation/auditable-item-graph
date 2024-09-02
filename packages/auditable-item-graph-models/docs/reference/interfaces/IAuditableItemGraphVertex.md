@@ -4,7 +4,7 @@ Interface describing an auditable item graph vertex.
 
 ## Extends
 
-- `Omit`\<[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md), `"deleted"`\>.[`IAuditableItemGraphMetadataElement`](IAuditableItemGraphMetadataElement.md)
+- `Omit`\<[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md), `"deleted"`\>.`IAuditableItemGraphMetadataElement`
 
 ## Properties
 
@@ -32,15 +32,39 @@ The timestamp of when the element was created.
 
 ***
 
-### metadata?
+### updated?
 
-> `optional` **metadata**: [`IAuditableItemGraphProperty`](IAuditableItemGraphProperty.md)[]
+> `optional` **updated**: `number`
 
-Metadata to associate with the element.
+The timestamp of when the element was updated.
 
 #### Inherited from
 
-[`IAuditableItemGraphMetadataElement`](IAuditableItemGraphMetadataElement.md).[`metadata`](IAuditableItemGraphMetadataElement.md#metadata)
+`Omit.updated`
+
+***
+
+### metadataSchema?
+
+> `optional` **metadataSchema**: `string`
+
+The schema for the metadata.
+
+#### Inherited from
+
+`IAuditableItemGraphMetadataElement.metadataSchema`
+
+***
+
+### metadata?
+
+> `optional` **metadata**: `unknown`
+
+The metadata to associate with the element.
+
+#### Inherited from
+
+`IAuditableItemGraphMetadataElement.metadata`
 
 ***
 
@@ -49,14 +73,6 @@ Metadata to associate with the element.
 > `optional` **nodeIdentity**: `string`
 
 The identity of the node which controls the vertex.
-
-***
-
-### updated
-
-> **updated**: `number`
-
-The timestamp of when the element was last updated.
 
 ***
 

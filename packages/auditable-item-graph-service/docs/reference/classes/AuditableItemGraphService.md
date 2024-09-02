@@ -68,19 +68,23 @@ Runtime name for the class.
 
 ### create()
 
-> **create**(`aliases`?, `metadata`?, `resources`?, `edges`?, `identity`?, `nodeIdentity`?): `Promise`\<`string`\>
+> **create**(`metadataSchema`?, `metadata`?, `aliases`?, `resources`?, `edges`?, `identity`?, `nodeIdentity`?): `Promise`\<`string`\>
 
 Create a new graph vertex.
 
 #### Parameters
 
+• **metadataSchema?**: `string`
+
+The metadata schema for the vertex.
+
+• **metadata?**: `unknown`
+
+The metadata for the vertex.
+
 • **aliases?**: `object`[]
 
 Alternative aliases that can be used to identify the vertex.
-
-• **metadata?**: `IProperty`[]
-
-The metadata for the vertex.
 
 • **resources?**: `object`[]
 
@@ -128,7 +132,7 @@ Additional options for the get operation.
 
 • **options.includeDeleted?**: `boolean`
 
-Whether to include deleted aliases, resource, edges, defaults to false.
+Whether to include deleted/updated aliases, resource, edges, defaults to false.
 
 • **options.includeChangesets?**: `boolean`
 
@@ -172,7 +176,7 @@ NotFoundError if the vertex is not found.
 
 ### update()
 
-> **update**(`id`, `aliases`?, `metadata`?, `resources`?, `edges`?, `identity`?, `nodeIdentity`?): `Promise`\<`void`\>
+> **update**(`id`, `metadataSchema`?, `metadata`?, `aliases`?, `resources`?, `edges`?, `identity`?, `nodeIdentity`?): `Promise`\<`void`\>
 
 Update a graph vertex.
 
@@ -182,13 +186,17 @@ Update a graph vertex.
 
 The id of the vertex to update.
 
+• **metadataSchema?**: `string`
+
+The metadata schema for the vertex.
+
+• **metadata?**: `unknown`
+
+The metadata for the vertex.
+
 • **aliases?**: `object`[]
 
 Alternative aliases that can be used to identify the vertex.
-
-• **metadata?**: `IProperty`[]
-
-The metadata for the vertex.
 
 • **resources?**: `object`[]
 

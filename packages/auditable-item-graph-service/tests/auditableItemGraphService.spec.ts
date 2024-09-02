@@ -10,12 +10,11 @@ import {
 } from "@gtsc/immutable-storage-connector-entity-storage";
 import { ImmutableStorageConnectorFactory } from "@gtsc/immutable-storage-models";
 import { nameof } from "@gtsc/nameof";
-import { type IProperty, PropertyHelper } from "@gtsc/schema";
 import {
 	decodeJwtToIntegrity,
 	setupTestEnv,
-	TEST_USER_IDENTITY,
-	TEST_NODE_IDENTITY
+	TEST_NODE_IDENTITY,
+	TEST_USER_IDENTITY
 } from "./setupTestEnv";
 import { AuditableItemGraphService } from "../src/auditableItemGraphService";
 import type { AuditableItemGraphVertex } from "../src/entities/auditableItemGraphVertex";
@@ -77,6 +76,7 @@ describe("AuditableItemGraphService", () => {
 			undefined,
 			undefined,
 			undefined,
+			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
@@ -94,7 +94,8 @@ describe("AuditableItemGraphService", () => {
 				{
 					created: FIRST_TICK,
 					userIdentity: TEST_USER_IDENTITY,
-					hash: "/HoaRSM9VVpFXI8alMy2SG1L91F9Jix4Xfcd4cEr9HM=",
+					patches: [],
+					hash: "5/QKaqyMYylY+/GwpcSHopUw9tSeIK3tYSNNoMuYwjw=",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 				}
@@ -111,17 +112,18 @@ describe("AuditableItemGraphService", () => {
 		const { signature, integrity } = await decodeJwtToIntegrity(immutableStore[0].data);
 
 		expect(signature).toEqual(
-			"TIybptCMNss2R/4DdbTZUrcghNwFQ7NdZ/C7sXSds/kkM7p+IeDQigoT/7QPif9/mlfa4IJj6XYJTUzD07dNBw=="
+			"khjWjRusY7cpGQb93waFkgUpzfsI1ynoCVc8JB/jqkxHnSKmPdheW9pDkGkslrVsbE5dGdpwD3wOfemSp8n8Dw=="
 		);
 		expect(integrity.userIdentity).toEqual(TEST_USER_IDENTITY);
-		expect(integrity.changes).toEqual([]);
+		expect(integrity.patches).toEqual([]);
 	});
 
 	test("Can create a vertex with an alias", async () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
-			[{ id: "foo123" }, { id: "bar456" }],
 			undefined,
+			undefined,
+			[{ id: "foo123" }, { id: "bar456" }],
 			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
@@ -152,7 +154,23 @@ describe("AuditableItemGraphService", () => {
 				{
 					created: FIRST_TICK,
 					userIdentity: TEST_USER_IDENTITY,
-					hash: "GTZhAbOqfVvVGylIndMexE+7bcgidGB3j7JBY4Q0EC4=",
+					patches: [
+						{
+							op: "add",
+							path: "/aliases",
+							value: [
+								{
+									id: "foo123",
+									created: FIRST_TICK
+								},
+								{
+									id: "bar456",
+									created: FIRST_TICK
+								}
+							]
+						}
+					],
+					hash: "Ht6zFJi0yl+MYTKgk+HdZW1PLWjJmSOwOkqrAA1NfVU=",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 				}
@@ -169,26 +187,24 @@ describe("AuditableItemGraphService", () => {
 		const { signature, integrity } = await decodeJwtToIntegrity(immutableStore[0].data);
 
 		expect(signature).toEqual(
-			"98cuw4/8kxYmdvRsAH31F2wXwbTdPYi3Tscl2szaaadqDoJ9k4CeTmkWJB3KseJ9wGO0VpsD7o04zRaD/bxJAA=="
+			"Upe1JYPqtP0FQ56xYwB5WFlR3CsyQKke55KTRmn0/waQm6/OWCz+HJlfDYR4EuMthR8NHAixrl2iweYLHZ1xAg=="
 		);
 
 		expect(integrity).toEqual({
-			changes: [
+			patches: [
 				{
-					itemType: "alias",
-					operation: "add",
-					properties: {
-						created: FIRST_TICK,
-						id: "foo123"
-					}
-				},
-				{
-					itemType: "alias",
-					operation: "add",
-					properties: {
-						created: FIRST_TICK,
-						id: "bar456"
-					}
+					op: "add",
+					path: "/aliases",
+					value: [
+						{
+							id: "foo123",
+							created: FIRST_TICK
+						},
+						{
+							id: "bar456",
+							created: FIRST_TICK
+						}
+					]
 				}
 			],
 			userIdentity: TEST_USER_IDENTITY
@@ -196,14 +212,14 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can create a vertex with some metadata", async () => {
-		const metadata: IProperty[] = [];
-		PropertyHelper.setText(metadata, "description", "This is a test");
-		PropertyHelper.setInteger(metadata, "counter", 123);
-
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
+			"TestSchema",
+			{
+				description: "This is a test",
+				counter: 123
+			},
 			undefined,
-			metadata,
 			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
@@ -219,25 +235,31 @@ describe("AuditableItemGraphService", () => {
 			created: FIRST_TICK,
 			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
-			metadata: [
-				{
-					id: "description",
-					type: "https://schema.org/Text",
-					value: "This is a test",
-					created: FIRST_TICK
-				},
-				{
-					id: "counter",
-					type: "https://schema.org/Integer",
-					value: 123,
-					created: FIRST_TICK
-				}
-			],
+			metadataSchema: "TestSchema",
+			metadata: {
+				description: "This is a test",
+				counter: 123
+			},
 			changesets: [
 				{
 					created: FIRST_TICK,
 					userIdentity: TEST_USER_IDENTITY,
-					hash: "iJQa2u1z1i7qWsM4jr4pr5DDJjat4ES/SDj8jOw8eYI=",
+					patches: [
+						{
+							op: "add",
+							path: "/metadataSchema",
+							value: "TestSchema"
+						},
+						{
+							op: "add",
+							path: "/metadata",
+							value: {
+								description: "This is a test",
+								counter: 123
+							}
+						}
+					],
+					hash: "Ioou22vvlnk7Bj/56W0/ZLx+siCwV7dToRLtP6a06gk=",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 				}
@@ -253,31 +275,22 @@ describe("AuditableItemGraphService", () => {
 		const { signature, integrity } = await decodeJwtToIntegrity(immutableStore[0].data);
 
 		expect(signature).toEqual(
-			"3Ysb05wVNQEnS+LZLcI6Q1duRzj9hlCl153rHJoEq6ePN7HQI3wD6GInTlJ9ZmL902zalPrzREROdWwukHpMCQ=="
+			"lkGbJNHiwrJfbbfJyVmp6rSgY4IHujveyr/QmaZuYzeQLMtEuDGtHyJfMtyxS4ggaDiEZaJTE7ijLb68aX/2CQ=="
 		);
 
 		expect(integrity).toEqual({
-			changes: [
+			patches: [
 				{
-					itemType: "vertex-metadata",
-					operation: "add",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: FIRST_TICK,
-						id: "counter",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
+					op: "add",
+					path: "/metadataSchema",
+					value: "TestSchema"
 				},
 				{
-					itemType: "vertex-metadata",
-					operation: "add",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: FIRST_TICK,
-						id: "description",
-						type: "https://schema.org/Text",
-						value: "This is a test"
+					op: "add",
+					path: "/metadata",
+					value: {
+						description: "This is a test",
+						counter: 123
 					}
 				}
 			],
@@ -286,14 +299,14 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can get a vertex", async () => {
-		const metadata: IProperty[] = [];
-		PropertyHelper.setText(metadata, "description", "This is a test");
-		PropertyHelper.setInteger(metadata, "counter", 123);
-
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
+			"TestSchema",
+			{
+				description: "This is a test",
+				counter: 123
+			},
 			[{ id: "foo123" }, { id: "bar456" }],
-			metadata,
 			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
@@ -302,25 +315,17 @@ describe("AuditableItemGraphService", () => {
 		expect(id.startsWith("aig:")).toEqual(true);
 
 		const result = await service.get(id);
+
 		expect(result.vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
-			metadata: [
-				{
-					id: "description",
-					type: "https://schema.org/Text",
-					value: "This is a test",
-					created: FIRST_TICK
-				},
-				{
-					id: "counter",
-					type: "https://schema.org/Integer",
-					value: 123,
-					created: FIRST_TICK
-				}
-			],
+			metadataSchema: "TestSchema",
+			metadata: {
+				description: "This is a test",
+				counter: 123
+			},
 			aliases: [
 				{
 					id: "foo123",
@@ -335,14 +340,14 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can get a vertex include changesets", async () => {
-		const metadata: IProperty[] = [];
-		PropertyHelper.setText(metadata, "description", "This is a test");
-		PropertyHelper.setInteger(metadata, "counter", 123);
-
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
+			"TestSchema",
+			{
+				description: "This is a test",
+				counter: 123
+			},
 			[{ id: "foo123" }, { id: "bar456" }],
-			metadata,
 			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
@@ -351,25 +356,17 @@ describe("AuditableItemGraphService", () => {
 		expect(id.startsWith("aig:")).toEqual(true);
 
 		const result = await service.get(id, { includeChangesets: true });
+
 		expect(result.vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
-			metadata: [
-				{
-					id: "description",
-					type: "https://schema.org/Text",
-					value: "This is a test",
-					created: FIRST_TICK
-				},
-				{
-					id: "counter",
-					type: "https://schema.org/Integer",
-					value: 123,
-					created: FIRST_TICK
-				}
-			],
+			metadataSchema: "TestSchema",
+			metadata: {
+				description: "This is a test",
+				counter: 123
+			},
 			aliases: [
 				{
 					id: "foo123",
@@ -384,7 +381,36 @@ describe("AuditableItemGraphService", () => {
 				{
 					created: FIRST_TICK,
 					userIdentity: TEST_USER_IDENTITY,
-					hash: "q+7V9GVJZdkXdNm+7RdoF7AmmcyDAmM3dLUWNYgNCL4=",
+					patches: [
+						{
+							op: "add",
+							path: "/metadataSchema",
+							value: "TestSchema"
+						},
+						{
+							op: "add",
+							path: "/metadata",
+							value: {
+								description: "This is a test",
+								counter: 123
+							}
+						},
+						{
+							op: "add",
+							path: "/aliases",
+							value: [
+								{
+									id: "foo123",
+									created: FIRST_TICK
+								},
+								{
+									id: "bar456",
+									created: FIRST_TICK
+								}
+							]
+						}
+					],
+					hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 				}
@@ -393,14 +419,14 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can get a vertex include changesets and verify current signature", async () => {
-		const metadata: IProperty[] = [];
-		PropertyHelper.setText(metadata, "description", "This is a test");
-		PropertyHelper.setInteger(metadata, "counter", 123);
-
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
+			"TestSchema",
+			{
+				description: "This is a test",
+				counter: 123
+			},
 			[{ id: "foo123" }, { id: "bar456" }],
-			metadata,
 			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
@@ -414,27 +440,16 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result.verified).toEqual(true);
-		expect(result.verification?.[FIRST_TICK].changes.length).toEqual(4);
-
 		expect(result.vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
-			metadata: [
-				{
-					id: "description",
-					type: "https://schema.org/Text",
-					value: "This is a test",
-					created: FIRST_TICK
-				},
-				{
-					id: "counter",
-					type: "https://schema.org/Integer",
-					value: 123,
-					created: FIRST_TICK
-				}
-			],
+			metadataSchema: "TestSchema",
+			metadata: {
+				description: "This is a test",
+				counter: 123
+			},
 			aliases: [
 				{
 					id: "foo123",
@@ -449,7 +464,36 @@ describe("AuditableItemGraphService", () => {
 				{
 					created: FIRST_TICK,
 					userIdentity: TEST_USER_IDENTITY,
-					hash: "q+7V9GVJZdkXdNm+7RdoF7AmmcyDAmM3dLUWNYgNCL4=",
+					patches: [
+						{
+							op: "add",
+							path: "/metadataSchema",
+							value: "TestSchema"
+						},
+						{
+							op: "add",
+							path: "/metadata",
+							value: {
+								description: "This is a test",
+								counter: 123
+							}
+						},
+						{
+							op: "add",
+							path: "/aliases",
+							value: [
+								{
+									id: "foo123",
+									created: FIRST_TICK
+								},
+								{
+									id: "bar456",
+									created: FIRST_TICK
+								}
+							]
+						}
+					],
+					hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 				}
@@ -458,14 +502,14 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can create and update with no changes and verify", async () => {
-		const metadata: IProperty[] = [];
-		PropertyHelper.setText(metadata, "description", "This is a test");
-		PropertyHelper.setInteger(metadata, "counter", 123);
-
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
+			"TestSchema",
+			{
+				description: "This is a test",
+				counter: 123
+			},
 			[{ id: "foo123" }, { id: "bar456" }],
-			metadata,
 			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
@@ -474,8 +518,12 @@ describe("AuditableItemGraphService", () => {
 
 		await service.update(
 			id,
+			"TestSchema",
+			{
+				description: "This is a test",
+				counter: 123
+			},
 			[{ id: "foo123" }, { id: "bar456" }],
-			metadata,
 			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
@@ -488,27 +536,18 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result.verified).toEqual(true);
-		expect(result.verification?.[FIRST_TICK].changes.length).toEqual(4);
 
 		expect(result.vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			updated: FIRST_TICK,
-			nodeIdentity: TEST_NODE_IDENTITY,
-			metadata: [
-				{
-					id: "description",
-					type: "https://schema.org/Text",
-					value: "This is a test",
-					created: FIRST_TICK
-				},
-				{
-					id: "counter",
-					type: "https://schema.org/Integer",
-					value: 123,
-					created: FIRST_TICK
-				}
-			],
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			metadataSchema: "TestSchema",
+			metadata: {
+				description: "This is a test",
+				counter: 123
+			},
 			aliases: [
 				{
 					id: "foo123",
@@ -522,8 +561,38 @@ describe("AuditableItemGraphService", () => {
 			changesets: [
 				{
 					created: FIRST_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					hash: "q+7V9GVJZdkXdNm+7RdoF7AmmcyDAmM3dLUWNYgNCL4=",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+					patches: [
+						{
+							op: "add",
+							path: "/metadataSchema",
+							value: "TestSchema"
+						},
+						{
+							op: "add",
+							path: "/metadata",
+							value: {
+								description: "This is a test",
+								counter: 123
+							}
+						},
+						{
+							op: "add",
+							path: "/aliases",
+							value: [
+								{
+									id: "foo123",
+									created: FIRST_TICK
+								},
+								{
+									id: "bar456",
+									created: FIRST_TICK
+								}
+							]
+						}
+					],
+					hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 				}
@@ -532,14 +601,14 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can create and update and verify aliases", async () => {
-		const metadata: IProperty[] = [];
-		PropertyHelper.setText(metadata, "description", "This is a test");
-		PropertyHelper.setInteger(metadata, "counter", 123);
-
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
+			"TestSchema",
+			{
+				description: "This is a test",
+				counter: 123
+			},
 			[{ id: "foo123" }, { id: "bar456" }],
-			metadata,
 			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
@@ -548,8 +617,12 @@ describe("AuditableItemGraphService", () => {
 
 		await service.update(
 			id,
+			"TestSchema",
+			{
+				description: "This is a test",
+				counter: 123
+			},
 			[{ id: "foo321" }, { id: "bar456" }],
-			metadata,
 			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
@@ -562,27 +635,18 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result.verified).toEqual(true);
-		expect(result.verification?.[FIRST_TICK].changes.length).toEqual(4);
 
 		expect(result.vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			updated: SECOND_TICK,
-			nodeIdentity: TEST_NODE_IDENTITY,
-			metadata: [
-				{
-					id: "description",
-					type: "https://schema.org/Text",
-					value: "This is a test",
-					created: FIRST_TICK
-				},
-				{
-					id: "counter",
-					type: "https://schema.org/Integer",
-					value: 123,
-					created: FIRST_TICK
-				}
-			],
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			metadataSchema: "TestSchema",
+			metadata: {
+				description: "This is a test",
+				counter: 123
+			},
 			aliases: [
 				{
 					id: "bar456",
@@ -596,15 +660,61 @@ describe("AuditableItemGraphService", () => {
 			changesets: [
 				{
 					created: FIRST_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					hash: "q+7V9GVJZdkXdNm+7RdoF7AmmcyDAmM3dLUWNYgNCL4=",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+					patches: [
+						{
+							op: "add",
+							path: "/metadataSchema",
+							value: "TestSchema"
+						},
+						{
+							op: "add",
+							path: "/metadata",
+							value: {
+								description: "This is a test",
+								counter: 123
+							}
+						},
+						{
+							op: "add",
+							path: "/aliases",
+							value: [
+								{
+									id: "foo123",
+									created: FIRST_TICK
+								},
+								{
+									id: "bar456",
+									created: FIRST_TICK
+								}
+							]
+						}
+					],
+					hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 				},
 				{
 					created: SECOND_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					hash: "+odhr+HxFznI38ncgZzdmEXs2TlDThQiscAPWDDruOA=",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+					patches: [
+						{
+							op: "add",
+							path: "/aliases/0/deleted",
+							value: SECOND_TICK
+						},
+						{
+							op: "add",
+							path: "/aliases/-",
+							value: {
+								id: "foo321",
+								created: SECOND_TICK
+							}
+						}
+					],
+					hash: "2W+tlN6AQPd2vGVmKywUGvDKWGkuM9rtoHWmNOHRisM=",
 					immutableStorageId:
 						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 				}
@@ -620,48 +730,37 @@ describe("AuditableItemGraphService", () => {
 
 		let credentialSignature = await decodeJwtToIntegrity(immutableStore[0].data);
 		expect(credentialSignature.signature).toEqual(
-			"2q1LBem6y8LvKvWhIEAAw6vDR3KyW+g7GoLRy2W27S/56HUe1buH3nOOtQNu2QavYjzYVg6e11Wv53w88JUpAw=="
+			"jRhXXJbjwH1ROx24un1bsC9o4ksWlWUT8VWsmAmIggXCtEvmd66I2N3ZjWA6qcDFHxq0Eg8Sf6o3iVb7B/1pCg=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
-			changes: [
+			patches: [
 				{
-					itemType: "alias",
-					operation: "add",
-					properties: {
-						created: FIRST_TICK,
-						id: "foo123"
+					op: "add",
+					path: "/metadataSchema",
+					value: "TestSchema"
+				},
+				{
+					op: "add",
+					path: "/metadata",
+					value: {
+						description: "This is a test",
+						counter: 123
 					}
 				},
 				{
-					itemType: "alias",
-					operation: "add",
-					properties: {
-						created: FIRST_TICK,
-						id: "bar456"
-					}
-				},
-				{
-					itemType: "vertex-metadata",
-					operation: "add",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: FIRST_TICK,
-						id: "counter",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
-				},
-				{
-					itemType: "vertex-metadata",
-					operation: "add",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: FIRST_TICK,
-						id: "description",
-						type: "https://schema.org/Text",
-						value: "This is a test"
-					}
+					op: "add",
+					path: "/aliases",
+					value: [
+						{
+							id: "foo123",
+							created: FIRST_TICK
+						},
+						{
+							id: "bar456",
+							created: FIRST_TICK
+						}
+					]
 				}
 			],
 			userIdentity: TEST_USER_IDENTITY
@@ -669,25 +768,22 @@ describe("AuditableItemGraphService", () => {
 
 		credentialSignature = await decodeJwtToIntegrity(immutableStore[1].data);
 		expect(credentialSignature.signature).toEqual(
-			"wCtHDHGxH5bQzOT5hWEKHvmXtXGOw5tpFq/I3e2oQcOPt8Yhk0qZ+N7NjRmDkjB3mpd/+SCf+7xmYdoF9QoMDA=="
+			"riFe1gRo3ASM+ig9EAn573vE61Kwi+nOCvV0zq/5u43EDDEvE9QOOKIN0vxn187nTh30aYfEx4ky3+SYYW7oAw=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
-			changes: [
+			patches: [
 				{
-					itemType: "alias",
-					operation: "delete",
-					properties: {
-						created: FIRST_TICK,
-						id: "foo123"
-					}
+					op: "add",
+					path: "/aliases/0/deleted",
+					value: SECOND_TICK
 				},
 				{
-					itemType: "alias",
-					operation: "add",
-					properties: {
-						created: SECOND_TICK,
-						id: "foo321"
+					op: "add",
+					path: "/aliases/-",
+					value: {
+						id: "foo321",
+						created: SECOND_TICK
 					}
 				}
 			],
@@ -696,28 +792,28 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can create and update and verify aliases and metadata", async () => {
-		const metadata: IProperty[] = [];
-		PropertyHelper.setText(metadata, "description", "This is a test");
-		PropertyHelper.setInteger(metadata, "counter", 123);
-
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
+			"TestSchema",
+			{
+				description: "This is a test",
+				counter: 123
+			},
 			[{ id: "foo123" }, { id: "bar456" }],
-			metadata,
 			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
 
-		PropertyHelper.removeValue(metadata, "description");
-		PropertyHelper.setText(metadata, "title", "Title");
-		PropertyHelper.setInteger(metadata, "counter", 456);
-
 		await service.update(
 			id,
-			[{ id: "foo321" }, { id: "bar456" }],
-			metadata,
+			"TestSchema",
+			{
+				title: "Title",
+				counter: 456
+			},
+			[{ id: "foo123" }, { id: "bar456" }],
 			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
@@ -730,49 +826,86 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result.verified).toEqual(true);
-		expect(result.verification?.[FIRST_TICK].changes.length).toEqual(4);
-
 		expect(result.vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			updated: SECOND_TICK,
-			nodeIdentity: TEST_NODE_IDENTITY,
-			metadata: [
-				{
-					id: "counter",
-					type: "https://schema.org/Integer",
-					value: 456,
-					created: SECOND_TICK
-				},
-				{
-					id: "title",
-					type: "https://schema.org/Text",
-					value: "Title",
-					created: SECOND_TICK
-				}
-			],
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			metadataSchema: "TestSchema",
+			metadata: {
+				title: "Title",
+				counter: 456
+			},
 			aliases: [
 				{
-					id: "bar456",
+					id: "foo123",
 					created: FIRST_TICK
 				},
 				{
-					id: "foo321",
-					created: SECOND_TICK
+					id: "bar456",
+					created: FIRST_TICK
 				}
 			],
 			changesets: [
 				{
 					created: FIRST_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					hash: "q+7V9GVJZdkXdNm+7RdoF7AmmcyDAmM3dLUWNYgNCL4=",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+					patches: [
+						{
+							op: "add",
+							path: "/metadataSchema",
+							value: "TestSchema"
+						},
+						{
+							op: "add",
+							path: "/metadata",
+							value: {
+								description: "This is a test",
+								counter: 123
+							}
+						},
+						{
+							op: "add",
+							path: "/aliases",
+							value: [
+								{
+									id: "foo123",
+									created: FIRST_TICK
+								},
+								{
+									id: "bar456",
+									created: FIRST_TICK
+								}
+							]
+						}
+					],
+					hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 				},
 				{
 					created: SECOND_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					hash: "IbzfHNhg+nTmHNwliaGM7qQ/YxbRGNxQ3GSLcK7HGpM=",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+					patches: [
+						{
+							op: "remove",
+							path: "/metadata/description"
+						},
+						{
+							op: "add",
+							path: "/metadata/title",
+							value: "Title"
+						},
+						{
+							op: "replace",
+							path: "/metadata/counter",
+							value: 456
+						}
+					],
+					hash: "N5sb3hFYXdqtyNHVa7LYxpsz/dIwZrcgvMBio32DETE=",
 					immutableStorageId:
 						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 				}
@@ -787,48 +920,37 @@ describe("AuditableItemGraphService", () => {
 
 		let credentialSignature = await decodeJwtToIntegrity(immutableStore[0].data);
 		expect(credentialSignature.signature).toEqual(
-			"2q1LBem6y8LvKvWhIEAAw6vDR3KyW+g7GoLRy2W27S/56HUe1buH3nOOtQNu2QavYjzYVg6e11Wv53w88JUpAw=="
+			"jRhXXJbjwH1ROx24un1bsC9o4ksWlWUT8VWsmAmIggXCtEvmd66I2N3ZjWA6qcDFHxq0Eg8Sf6o3iVb7B/1pCg=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
-			changes: [
+			patches: [
 				{
-					itemType: "alias",
-					operation: "add",
-					properties: {
-						created: FIRST_TICK,
-						id: "foo123"
+					op: "add",
+					path: "/metadataSchema",
+					value: "TestSchema"
+				},
+				{
+					op: "add",
+					path: "/metadata",
+					value: {
+						description: "This is a test",
+						counter: 123
 					}
 				},
 				{
-					itemType: "alias",
-					operation: "add",
-					properties: {
-						created: FIRST_TICK,
-						id: "bar456"
-					}
-				},
-				{
-					itemType: "vertex-metadata",
-					operation: "add",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: FIRST_TICK,
-						id: "counter",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
-				},
-				{
-					itemType: "vertex-metadata",
-					operation: "add",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: FIRST_TICK,
-						id: "description",
-						type: "https://schema.org/Text",
-						value: "This is a test"
-					}
+					op: "add",
+					path: "/aliases",
+					value: [
+						{
+							id: "foo123",
+							created: FIRST_TICK
+						},
+						{
+							id: "bar456",
+							created: FIRST_TICK
+						}
+					]
 				}
 			],
 			userIdentity: TEST_USER_IDENTITY
@@ -836,70 +958,24 @@ describe("AuditableItemGraphService", () => {
 
 		credentialSignature = await decodeJwtToIntegrity(immutableStore[1].data);
 		expect(credentialSignature.signature).toEqual(
-			"KWNlbV1883eFg6M7c5j2NmDX9BmXyx4czJLbC9cQ6hoMu18YJQ/fcg80BFkKVDIKsC/YzPZdsL4bHtROtMEcAw=="
+			"zFGn5sxj+1VH/ky7FAKBAgjCg7imtwbwOPXrDPoF4p9DXll/55nv3mEKEkx284A2ooloXSBM7MlkZbCVABz6BQ=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
-			changes: [
+			patches: [
 				{
-					itemType: "vertex-metadata",
-					operation: "add",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: SECOND_TICK,
-						id: "counter",
-						type: "https://schema.org/Integer",
-						value: 456
-					}
+					op: "remove",
+					path: "/metadata/description"
 				},
 				{
-					itemType: "alias",
-					operation: "delete",
-					properties: {
-						created: FIRST_TICK,
-						id: "foo123"
-					}
+					op: "add",
+					path: "/metadata/title",
+					value: "Title"
 				},
 				{
-					itemType: "alias",
-					operation: "add",
-					properties: {
-						created: SECOND_TICK,
-						id: "foo321"
-					}
-				},
-				{
-					itemType: "vertex-metadata",
-					operation: "add",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: SECOND_TICK,
-						id: "title",
-						type: "https://schema.org/Text",
-						value: "Title"
-					}
-				},
-				{
-					itemType: "vertex-metadata",
-					operation: "delete",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: FIRST_TICK,
-						id: "counter",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
-				},
-				{
-					itemType: "vertex-metadata",
-					operation: "delete",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: FIRST_TICK,
-						id: "description",
-						type: "https://schema.org/Text",
-						value: "This is a test"
-					}
+					op: "replace",
+					path: "/metadata/counter",
+					value: 456
 				}
 			],
 			userIdentity: TEST_USER_IDENTITY
@@ -907,30 +983,30 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can create and update and verify aliases, metadata and resources", async () => {
-		const metadata: IProperty[] = [];
-		PropertyHelper.setText(metadata, "description", "This is a test");
-		PropertyHelper.setInteger(metadata, "counter", 123);
-
-		const metadataResource1: IProperty[] = [];
-		PropertyHelper.setText(metadataResource1, "res-description", "This is a test");
-		PropertyHelper.setInteger(metadataResource1, "res-counter", 123);
-
-		const metadataResource2: IProperty[] = [];
-		PropertyHelper.setText(metadataResource2, "res-description-2", "This is a test");
-		PropertyHelper.setInteger(metadataResource2, "res-counter-2", 123);
-
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
+			"TestSchema",
+			{
+				description: "This is a test",
+				counter: 123
+			},
 			[{ id: "foo123" }, { id: "bar456" }],
-			metadata,
 			[
 				{
 					id: "resource1",
-					metadata: metadataResource1
+					metadataSchema: "TestSchemaRes",
+					metadata: {
+						resDescription: "This is a test",
+						resCounter: 123
+					}
 				},
 				{
 					id: "resource2",
-					metadata: metadataResource2
+					metadataSchema: "TestSchemaRes",
+					metadata: {
+						resDescription: "This is a test2",
+						resCounter: 456
+					}
 				}
 			],
 			undefined,
@@ -938,30 +1014,30 @@ describe("AuditableItemGraphService", () => {
 			TEST_NODE_IDENTITY
 		);
 
-		PropertyHelper.removeValue(metadata, "description");
-		PropertyHelper.setText(metadata, "title", "Title");
-		PropertyHelper.setInteger(metadata, "counter", 456);
-
-		PropertyHelper.removeValue(metadataResource1, "res-description");
-		PropertyHelper.setText(metadataResource1, "res-title", "Title");
-		PropertyHelper.setInteger(metadataResource1, "res-counter", 456);
-
-		PropertyHelper.removeValue(metadataResource2, "res-description-2");
-		PropertyHelper.setText(metadataResource2, "res-title-2", "Title");
-		PropertyHelper.setInteger(metadataResource2, "res-counter-2", 456);
-
 		await service.update(
 			id,
-			[{ id: "foo321" }, { id: "bar456" }],
-			metadata,
+			"TestSchema",
+			{
+				title: "Title",
+				counter: 456
+			},
+			[{ id: "foo123" }, { id: "bar456" }],
 			[
 				{
 					id: "resource1",
-					metadata: metadataResource1
+					metadataSchema: "TestSchemaRes",
+					metadata: {
+						resTitle: "Title",
+						resCounter: 456
+					}
 				},
 				{
 					id: "resource2",
-					metadata: metadataResource2
+					metadataSchema: "TestSchemaRes",
+					metadata: {
+						resTitle: "Title",
+						resCounter: 456
+					}
 				}
 			],
 			undefined,
@@ -975,87 +1051,164 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result.verified).toEqual(true);
-		expect(result.verification?.[FIRST_TICK].changes.length).toEqual(10);
 
 		expect(result.vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			updated: SECOND_TICK,
-			nodeIdentity: TEST_NODE_IDENTITY,
-			metadata: [
-				{
-					id: "counter",
-					type: "https://schema.org/Integer",
-					value: 456,
-					created: SECOND_TICK
-				},
-				{
-					id: "title",
-					type: "https://schema.org/Text",
-					value: "Title",
-					created: SECOND_TICK
-				}
-			],
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			metadataSchema: "TestSchema",
+			metadata: {
+				title: "Title",
+				counter: 456
+			},
 			aliases: [
 				{
-					id: "bar456",
+					id: "foo123",
 					created: FIRST_TICK
 				},
 				{
-					id: "foo321",
-					created: SECOND_TICK
+					id: "bar456",
+					created: FIRST_TICK
 				}
 			],
 			resources: [
 				{
 					id: "resource1",
 					created: FIRST_TICK,
-					metadata: [
-						{
-							id: "res-counter",
-							type: "https://schema.org/Integer",
-							value: 456,
-							created: SECOND_TICK
-						},
-						{
-							id: "res-title",
-							type: "https://schema.org/Text",
-							value: "Title",
-							created: SECOND_TICK
-						}
-					]
+					metadataSchema: "TestSchemaRes",
+					metadata: {
+						resTitle: "Title",
+						resCounter: 456
+					}
 				},
 				{
 					id: "resource2",
 					created: FIRST_TICK,
-					metadata: [
-						{
-							id: "res-counter-2",
-							type: "https://schema.org/Integer",
-							value: 456,
-							created: SECOND_TICK
-						},
-						{
-							id: "res-title-2",
-							type: "https://schema.org/Text",
-							value: "Title",
-							created: SECOND_TICK
-						}
-					]
+					metadataSchema: "TestSchemaRes",
+					metadata: {
+						resTitle: "Title",
+						resCounter: 456
+					}
 				}
 			],
 			changesets: [
 				{
 					created: FIRST_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					hash: "MqAEB3YZu9TdDWCu0YPyFJfzmiGhnUqZy/Mb4qxEd9c=",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+					patches: [
+						{
+							op: "add",
+							path: "/metadataSchema",
+							value: "TestSchema"
+						},
+						{
+							op: "add",
+							path: "/metadata",
+							value: {
+								description: "This is a test",
+								counter: 123
+							}
+						},
+						{
+							op: "add",
+							path: "/aliases",
+							value: [
+								{
+									id: "foo123",
+									created: FIRST_TICK
+								},
+								{
+									id: "bar456",
+									created: FIRST_TICK
+								}
+							]
+						},
+						{
+							op: "add",
+							path: "/resources",
+							value: [
+								{
+									id: "resource1",
+									created: FIRST_TICK,
+									metadataSchema: "TestSchemaRes",
+									metadata: {
+										resDescription: "This is a test",
+										resCounter: 123
+									}
+								},
+								{
+									id: "resource2",
+									created: FIRST_TICK,
+									metadataSchema: "TestSchemaRes",
+									metadata: {
+										resDescription: "This is a test2",
+										resCounter: 456
+									}
+								}
+							]
+						}
+					],
+					hash: "Q74F7K0Uv1dX0ty5QkwhQarr3XFT7MLkqavHyYZsrBI=",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 				},
 				{
 					created: SECOND_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					hash: "Jx0uKrqwEtxbw9DyZWHsyRFw9mpsMr3b0vCXb7MJ2SY=",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+					patches: [
+						{
+							op: "remove",
+							path: "/metadata/description"
+						},
+						{
+							op: "add",
+							path: "/metadata/title",
+							value: "Title"
+						},
+						{
+							op: "replace",
+							path: "/metadata/counter",
+							value: 456
+						},
+						{
+							op: "add",
+							path: "/resources/0/updated",
+							value: SECOND_TICK
+						},
+						{
+							op: "remove",
+							path: "/resources/0/metadata/resDescription"
+						},
+						{
+							op: "add",
+							path: "/resources/0/metadata/resTitle",
+							value: "Title"
+						},
+						{
+							op: "replace",
+							path: "/resources/0/metadata/resCounter",
+							value: 456
+						},
+						{
+							op: "add",
+							path: "/resources/1/updated",
+							value: SECOND_TICK
+						},
+						{
+							op: "remove",
+							path: "/resources/1/metadata/resDescription"
+						},
+						{
+							op: "add",
+							path: "/resources/1/metadata/resTitle",
+							value: "Title"
+						}
+					],
+					hash: "FqfkQhKG7abCegPv9qoxkHnxALiR+DapDvXPxZfImbM=",
 					immutableStorageId:
 						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 				}
@@ -1070,108 +1223,61 @@ describe("AuditableItemGraphService", () => {
 
 		let credentialSignature = await decodeJwtToIntegrity(immutableStore[0].data);
 		expect(credentialSignature.signature).toEqual(
-			"GU1NnfpoHn6InfmCFWYKzfVmZzEfp/r+1ab4uAxkomiv2Slrrfe9numLOS75h1KMoMFSrFoEj7s5WGVR2mgRBg=="
+			"mK7HUl2VBYAQyjKPomUos8goPa+DjoRzHiVovt9pOd1x/6IW88FSl1y96Z2UM1UQ88r6QpbmS5vxKbemGZVNDg=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
-			changes: [
+			patches: [
 				{
-					itemType: "resource-metadata",
-					operation: "add",
-					parentId: "resource2",
-					properties: {
-						created: FIRST_TICK,
-						id: "res-description-2",
-						type: "https://schema.org/Text",
-						value: "This is a test"
+					op: "add",
+					path: "/metadataSchema",
+					value: "TestSchema"
+				},
+				{
+					op: "add",
+					path: "/metadata",
+					value: {
+						description: "This is a test",
+						counter: 123
 					}
 				},
 				{
-					itemType: "resource-metadata",
-					operation: "add",
-					parentId: "resource2",
-					properties: {
-						created: FIRST_TICK,
-						id: "res-counter-2",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
+					op: "add",
+					path: "/aliases",
+					value: [
+						{
+							id: "foo123",
+							created: FIRST_TICK
+						},
+						{
+							id: "bar456",
+							created: FIRST_TICK
+						}
+					]
 				},
 				{
-					itemType: "resource",
-					operation: "add",
-					properties: {
-						created: FIRST_TICK,
-						id: "resource1"
-					}
-				},
-				{
-					itemType: "alias",
-					operation: "add",
-					properties: {
-						created: FIRST_TICK,
-						id: "foo123"
-					}
-				},
-				{
-					itemType: "alias",
-					operation: "add",
-					properties: {
-						created: FIRST_TICK,
-						id: "bar456"
-					}
-				},
-				{
-					itemType: "vertex-metadata",
-					operation: "add",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: FIRST_TICK,
-						id: "counter",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
-				},
-				{
-					itemType: "resource-metadata",
-					operation: "add",
-					parentId: "resource1",
-					properties: {
-						created: FIRST_TICK,
-						id: "res-counter",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
-				},
-				{
-					itemType: "resource-metadata",
-					operation: "add",
-					parentId: "resource1",
-					properties: {
-						created: FIRST_TICK,
-						id: "res-description",
-						type: "https://schema.org/Text",
-						value: "This is a test"
-					}
-				},
-				{
-					itemType: "vertex-metadata",
-					operation: "add",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: FIRST_TICK,
-						id: "description",
-						type: "https://schema.org/Text",
-						value: "This is a test"
-					}
-				},
-				{
-					itemType: "resource",
-					operation: "add",
-					properties: {
-						created: FIRST_TICK,
-						id: "resource2"
-					}
+					op: "add",
+					path: "/resources",
+					value: [
+						{
+							id: "resource1",
+							created: FIRST_TICK,
+							metadataSchema: "TestSchemaRes",
+							metadata: {
+								resDescription: "This is a test",
+								resCounter: 123
+							}
+						},
+						{
+							id: "resource2",
+							created: FIRST_TICK,
+							metadataSchema: "TestSchemaRes",
+							metadata: {
+								resDescription: "This is a test2",
+								resCounter: 456
+							}
+						}
+					]
 				}
 			],
 			userIdentity: TEST_USER_IDENTITY
@@ -1179,158 +1285,57 @@ describe("AuditableItemGraphService", () => {
 
 		credentialSignature = await decodeJwtToIntegrity(immutableStore[1].data);
 		expect(credentialSignature.signature).toEqual(
-			"85TCUTuzPsO85+BZZ2LDAY8Ji1KFhT9wfZnxjnHGjaC2WkGO/PvRL0AdyX9wlFEaqRIW578G+Sx5gdpS2nd2AQ=="
+			"0i3ST9bbvd8doZPTo7rjw+83Qfnxhc7nXJ35sZlz2+AdfXOSIwbxJviBAw+oPapF6yNKYZX4eoBVk2FeShuoBQ=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
-			changes: [
+			patches: [
 				{
-					itemType: "resource-metadata",
-					operation: "add",
-					parentId: "resource2",
-					properties: {
-						created: SECOND_TICK,
-						id: "res-counter-2",
-						type: "https://schema.org/Integer",
-						value: 456
-					}
+					op: "remove",
+					path: "/metadata/description"
 				},
 				{
-					itemType: "resource-metadata",
-					operation: "add",
-					parentId: "resource1",
-					properties: {
-						created: SECOND_TICK,
-						id: "res-title",
-						type: "https://schema.org/Text",
-						value: "Title"
-					}
+					op: "add",
+					path: "/metadata/title",
+					value: "Title"
 				},
 				{
-					itemType: "vertex-metadata",
-					operation: "add",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: SECOND_TICK,
-						id: "counter",
-						type: "https://schema.org/Integer",
-						value: 456
-					}
+					op: "replace",
+					path: "/metadata/counter",
+					value: 456
 				},
 				{
-					itemType: "alias",
-					operation: "delete",
-					properties: {
-						created: FIRST_TICK,
-						id: "foo123"
-					}
+					op: "add",
+					path: "/resources/0/updated",
+					value: SECOND_TICK
 				},
 				{
-					itemType: "alias",
-					operation: "add",
-					properties: {
-						created: SECOND_TICK,
-						id: "foo321"
-					}
+					op: "remove",
+					path: "/resources/0/metadata/resDescription"
 				},
 				{
-					itemType: "resource-metadata",
-					operation: "delete",
-					parentId: "resource2",
-					properties: {
-						created: FIRST_TICK,
-						id: "res-counter-2",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
+					op: "add",
+					path: "/resources/0/metadata/resTitle",
+					value: "Title"
 				},
 				{
-					itemType: "vertex-metadata",
-					operation: "add",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: SECOND_TICK,
-						id: "title",
-						type: "https://schema.org/Text",
-						value: "Title"
-					}
+					op: "replace",
+					path: "/resources/0/metadata/resCounter",
+					value: 456
 				},
 				{
-					itemType: "resource-metadata",
-					operation: "add",
-					parentId: "resource2",
-					properties: {
-						created: SECOND_TICK,
-						id: "res-title-2",
-						type: "https://schema.org/Text",
-						value: "Title"
-					}
+					op: "add",
+					path: "/resources/1/updated",
+					value: SECOND_TICK
 				},
 				{
-					itemType: "resource-metadata",
-					operation: "delete",
-					parentId: "resource1",
-					properties: {
-						created: FIRST_TICK,
-						id: "res-counter",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
+					op: "remove",
+					path: "/resources/1/metadata/resDescription"
 				},
 				{
-					itemType: "vertex-metadata",
-					operation: "delete",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: FIRST_TICK,
-						id: "counter",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
-				},
-				{
-					itemType: "resource-metadata",
-					operation: "delete",
-					parentId: "resource2",
-					properties: {
-						created: FIRST_TICK,
-						id: "res-description-2",
-						type: "https://schema.org/Text",
-						value: "This is a test"
-					}
-				},
-				{
-					itemType: "resource-metadata",
-					operation: "add",
-					parentId: "resource1",
-					properties: {
-						created: SECOND_TICK,
-						id: "res-counter",
-						type: "https://schema.org/Integer",
-						value: 456
-					}
-				},
-				{
-					itemType: "resource-metadata",
-					operation: "delete",
-					parentId: "resource1",
-					properties: {
-						created: FIRST_TICK,
-						id: "res-description",
-						type: "https://schema.org/Text",
-						value: "This is a test"
-					}
-				},
-				{
-					itemType: "vertex-metadata",
-					operation: "delete",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: FIRST_TICK,
-						id: "description",
-						type: "https://schema.org/Text",
-						value: "This is a test"
-					}
+					op: "add",
+					path: "/resources/1/metadata/resTitle",
+					value: "Title"
 				}
 			],
 			userIdentity: TEST_USER_IDENTITY
@@ -1338,12 +1343,9 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can create and update and verify edges", async () => {
-		const metadataEdge1: IProperty[] = [];
-		PropertyHelper.setText(metadataEdge1, "edge-description", "This is a test");
-		PropertyHelper.setInteger(metadataEdge1, "edge-counter", 123);
-
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
+			undefined,
 			undefined,
 			undefined,
 			undefined,
@@ -1351,19 +1353,20 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "edge1",
 					relationship: "friend",
-					metadata: metadataEdge1
+					metadataSchema: "TestSchemaEdge",
+					metadata: {
+						description: "This is a test",
+						counter: 123
+					}
 				}
 			],
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
 
-		PropertyHelper.removeValue(metadataEdge1, "edge-description");
-		PropertyHelper.setText(metadataEdge1, "edge-title", "Title");
-		PropertyHelper.setInteger(metadataEdge1, "edge-counter", 456);
-
 		await service.update(
 			id,
+			undefined,
 			undefined,
 			undefined,
 			undefined,
@@ -1371,7 +1374,11 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "edge1",
 					relationship: "frenemy",
-					metadata: metadataEdge1
+					metadataSchema: "TestSchemaEdge",
+					metadata: {
+						title: "Title",
+						counter: 456
+					}
 				}
 			],
 			TEST_USER_IDENTITY,
@@ -1384,46 +1391,83 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result.verified).toEqual(true);
-		expect(result.verification?.[FIRST_TICK].changes.length).toEqual(3);
 
 		expect(result.vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			updated: SECOND_TICK,
-			nodeIdentity: TEST_NODE_IDENTITY,
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			edges: [
 				{
 					id: "edge1",
-					created: SECOND_TICK,
+					created: FIRST_TICK,
 					relationship: "frenemy",
-					metadata: [
-						{
-							id: "edge-counter",
-							type: "https://schema.org/Integer",
-							value: 456,
-							created: SECOND_TICK
-						},
-						{
-							id: "edge-title",
-							type: "https://schema.org/Text",
-							value: "Title",
-							created: SECOND_TICK
-						}
-					]
+					metadataSchema: "TestSchemaEdge",
+					metadata: {
+						title: "Title",
+						counter: 456
+					}
 				}
 			],
 			changesets: [
 				{
 					created: FIRST_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					hash: "5XcAzpnzhEUx61q0MaqHZFN2WB+8s117iWxb2Osve3s=",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+					patches: [
+						{
+							op: "add",
+							path: "/edges",
+							value: [
+								{
+									id: "edge1",
+									created: FIRST_TICK,
+									metadataSchema: "TestSchemaEdge",
+									metadata: {
+										description: "This is a test",
+										counter: 123
+									},
+									relationship: "friend"
+								}
+							]
+						}
+					],
+					hash: "MNWLDkruJt3R/71dZblH4AOvIzTKvlCaZqNro5ImN6M=",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 				},
 				{
 					created: SECOND_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					hash: "j5iTAZA1d4Skj8pRqx2usZBcFpofot4YtKYeFQtpIQ0=",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+					patches: [
+						{
+							op: "add",
+							path: "/edges/0/updated",
+							value: SECOND_TICK
+						},
+						{
+							op: "replace",
+							path: "/edges/0/relationship",
+							value: "frenemy"
+						},
+						{
+							op: "remove",
+							path: "/edges/0/metadata/description"
+						},
+						{
+							op: "add",
+							path: "/edges/0/metadata/title",
+							value: "Title"
+						},
+						{
+							op: "replace",
+							path: "/edges/0/metadata/counter",
+							value: 456
+						}
+					],
+					hash: "Uto3Cy9H1Z2ektgzz/Fh312HWl8rbwSHEBEsR5NCygI=",
 					immutableStorageId:
 						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 				}
@@ -1432,100 +1476,134 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can create and update and verify aliases, metadata, resources and edges", async () => {
-		const metadata: IProperty[] = [];
-		PropertyHelper.setText(metadata, "description", "This is a test");
-		PropertyHelper.setInteger(metadata, "counter", 123);
-
-		const metadataResource1: IProperty[] = [];
-		PropertyHelper.setText(metadataResource1, "res-description", "This is a test");
-		PropertyHelper.setInteger(metadataResource1, "res-counter", 123);
-
-		const metadataResource2: IProperty[] = [];
-		PropertyHelper.setText(metadataResource2, "res-description-2", "This is a test");
-		PropertyHelper.setInteger(metadataResource2, "res-counter-2", 123);
-
-		const metadataEdge1: IProperty[] = [];
-		PropertyHelper.setText(metadataEdge1, "edge-description", "This is a test");
-		PropertyHelper.setInteger(metadataEdge1, "edge-counter", 123);
-
-		const metadataEdge2: IProperty[] = [];
-		PropertyHelper.setText(metadataEdge2, "edge-description-2", "This is a test");
-		PropertyHelper.setInteger(metadataEdge2, "edge-counter-2", 123);
-
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
-			[{ id: "foo123" }, { id: "bar456" }],
-			metadata,
+			"TestSchema",
+			{
+				description: "This is a test",
+				counter: 123
+			},
+			[
+				{
+					id: "foo123",
+					metadataSchema: "TestSchemaAlias",
+					metadata: {
+						aliasDescription: "This is a test",
+						aliasCounter: 123
+					}
+				},
+				{
+					id: "bar456",
+					metadataSchema: "TestSchemaAlias",
+					metadata: {
+						aliasDescription: "This is a test",
+						aliasCounter: 123
+					}
+				}
+			],
 			[
 				{
 					id: "resource1",
-					metadata: metadataResource1
+					metadataSchema: "TestSchemaRes",
+					metadata: {
+						resDescription: "This is a test",
+						resCounter: 123
+					}
 				},
 				{
 					id: "resource2",
-					metadata: metadataResource2
+					metadataSchema: "TestSchemaRes",
+					metadata: {
+						resDescription: "This is a test2",
+						resCounter: 456
+					}
 				}
 			],
 			[
 				{
 					id: "edge1",
 					relationship: "friend",
-					metadata: metadataEdge1
+					metadataSchema: "TestSchemaEdge",
+					metadata: {
+						edgeDescription: "This is a test",
+						edgeCounter: 123
+					}
 				},
 				{
 					id: "edge2",
 					relationship: "enemy",
-					metadata: metadataEdge2
+					metadataSchema: "TestSchemaEdge",
+					metadata: {
+						edgeDescription: "This is a test2",
+						edgeCounter: 456
+					}
 				}
 			],
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
 
-		PropertyHelper.removeValue(metadata, "description");
-		PropertyHelper.setText(metadata, "title", "Title");
-		PropertyHelper.setInteger(metadata, "counter", 456);
-
-		PropertyHelper.removeValue(metadataResource1, "res-description");
-		PropertyHelper.setText(metadataResource1, "res-title", "Title");
-		PropertyHelper.setInteger(metadataResource1, "res-counter", 456);
-
-		PropertyHelper.removeValue(metadataResource2, "res-description-2");
-		PropertyHelper.setText(metadataResource2, "res-title-2", "Title");
-		PropertyHelper.setInteger(metadataResource2, "res-counter-2", 456);
-
-		PropertyHelper.removeValue(metadataEdge1, "edge-description");
-		PropertyHelper.setText(metadataEdge1, "edge-title", "Title");
-		PropertyHelper.setInteger(metadataEdge1, "edge-counter", 456);
-
-		PropertyHelper.removeValue(metadataEdge2, "edge-description-2");
-		PropertyHelper.setText(metadataEdge2, "edge-title-2", "Title");
-		PropertyHelper.setInteger(metadataEdge2, "edge-counter-2", 456);
-
 		await service.update(
 			id,
-			[{ id: "foo321" }, { id: "bar456" }],
-			metadata,
+			"TestSchema",
+			{
+				title: "Title",
+				counter: 123
+			},
+			[
+				{
+					id: "foo123",
+					metadataSchema: "TestSchemaAlias",
+					metadata: {
+						aliasTitle: "Title",
+						aliasCounter: 123
+					}
+				},
+				{
+					id: "bar456",
+					metadataSchema: "TestSchemaAlias",
+					metadata: {
+						aliasTitle: "Title",
+						aliasCounter: 123
+					}
+				}
+			],
 			[
 				{
 					id: "resource1",
-					metadata: metadataResource1
+					metadataSchema: "TestSchemaRes",
+					metadata: {
+						resTitle: "Title",
+						resCounter: 123
+					}
 				},
 				{
 					id: "resource2",
-					metadata: metadataResource2
+					metadataSchema: "TestSchemaRes",
+					metadata: {
+						resTitle: "Title",
+						resCounter: 456
+					}
 				}
 			],
 			[
 				{
 					id: "edge1",
-					relationship: "frenemy",
-					metadata: metadataEdge1
+					relationship: "friend",
+					metadataSchema: "TestSchemaEdge",
+					metadata: {
+						edgeTitle: "Title",
+						edgeCounter: 123
+					}
 				},
 				{
 					id: "edge2",
-					relationship: "eneind",
-					metadata: metadataEdge2
+					relationship: "enemy",
+					metadataSchema: "TestSchemaEdge",
+					metadata: {
+						edgeTitle: "Title",
+						edgeCounter: 456
+					}
 				}
 			],
 			TEST_USER_IDENTITY,
@@ -1538,127 +1616,278 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result.verified).toEqual(true);
-		expect(result.verification?.[FIRST_TICK].changes.length).toEqual(16);
 
 		expect(result.vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			updated: SECOND_TICK,
-			nodeIdentity: TEST_NODE_IDENTITY,
-			metadata: [
-				{
-					id: "counter",
-					type: "https://schema.org/Integer",
-					value: 456,
-					created: SECOND_TICK
-				},
-				{
-					id: "title",
-					type: "https://schema.org/Text",
-					value: "Title",
-					created: SECOND_TICK
-				}
-			],
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			metadataSchema: "TestSchema",
+			metadata: {
+				title: "Title",
+				counter: 123
+			},
 			aliases: [
 				{
-					id: "bar456",
-					created: FIRST_TICK
+					id: "foo123",
+					created: FIRST_TICK,
+					metadataSchema: "TestSchemaAlias",
+					metadata: {
+						aliasTitle: "Title",
+						aliasCounter: 123
+					}
 				},
 				{
-					id: "foo321",
-					created: SECOND_TICK
+					id: "bar456",
+					created: FIRST_TICK,
+					metadataSchema: "TestSchemaAlias",
+					metadata: {
+						aliasTitle: "Title",
+						aliasCounter: 123
+					}
 				}
 			],
 			resources: [
 				{
 					id: "resource1",
 					created: FIRST_TICK,
-					metadata: [
-						{
-							id: "res-counter",
-							type: "https://schema.org/Integer",
-							value: 456,
-							created: SECOND_TICK
-						},
-						{
-							id: "res-title",
-							type: "https://schema.org/Text",
-							value: "Title",
-							created: SECOND_TICK
-						}
-					]
+					metadataSchema: "TestSchemaRes",
+					metadata: {
+						resTitle: "Title",
+						resCounter: 123
+					}
 				},
 				{
 					id: "resource2",
 					created: FIRST_TICK,
-					metadata: [
-						{
-							id: "res-counter-2",
-							type: "https://schema.org/Integer",
-							value: 456,
-							created: SECOND_TICK
-						},
-						{
-							id: "res-title-2",
-							type: "https://schema.org/Text",
-							value: "Title",
-							created: SECOND_TICK
-						}
-					]
+					metadataSchema: "TestSchemaRes",
+					metadata: {
+						resTitle: "Title",
+						resCounter: 456
+					}
 				}
 			],
 			edges: [
 				{
 					id: "edge1",
-					created: SECOND_TICK,
-					relationship: "frenemy",
-					metadata: [
-						{
-							id: "edge-counter",
-							type: "https://schema.org/Integer",
-							value: 456,
-							created: SECOND_TICK
-						},
-						{
-							id: "edge-title",
-							type: "https://schema.org/Text",
-							value: "Title",
-							created: SECOND_TICK
-						}
-					]
+					created: FIRST_TICK,
+					relationship: "friend",
+					metadataSchema: "TestSchemaEdge",
+					metadata: {
+						edgeTitle: "Title",
+						edgeCounter: 123
+					}
 				},
 				{
 					id: "edge2",
-					created: SECOND_TICK,
-					relationship: "eneind",
-					metadata: [
-						{
-							id: "edge-counter-2",
-							type: "https://schema.org/Integer",
-							value: 456,
-							created: SECOND_TICK
-						},
-						{
-							id: "edge-title-2",
-							type: "https://schema.org/Text",
-							value: "Title",
-							created: SECOND_TICK
-						}
-					]
+					created: FIRST_TICK,
+					relationship: "enemy",
+					metadataSchema: "TestSchemaEdge",
+					metadata: {
+						edgeTitle: "Title",
+						edgeCounter: 456
+					}
 				}
 			],
 			changesets: [
 				{
 					created: FIRST_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					hash: "mkcJ/79W/7pv2I/qD0k5PznMWxDvHS650KhovJO6QA8=",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+					patches: [
+						{
+							op: "add",
+							path: "/metadataSchema",
+							value: "TestSchema"
+						},
+						{
+							op: "add",
+							path: "/metadata",
+							value: {
+								description: "This is a test",
+								counter: 123
+							}
+						},
+						{
+							op: "add",
+							path: "/aliases",
+							value: [
+								{
+									id: "foo123",
+									created: FIRST_TICK,
+									metadataSchema: "TestSchemaAlias",
+									metadata: {
+										aliasDescription: "This is a test",
+										aliasCounter: 123
+									}
+								},
+								{
+									id: "bar456",
+									created: FIRST_TICK,
+									metadataSchema: "TestSchemaAlias",
+									metadata: {
+										aliasDescription: "This is a test",
+										aliasCounter: 123
+									}
+								}
+							]
+						},
+						{
+							op: "add",
+							path: "/resources",
+							value: [
+								{
+									id: "resource1",
+									created: FIRST_TICK,
+									metadataSchema: "TestSchemaRes",
+									metadata: {
+										resDescription: "This is a test",
+										resCounter: 123
+									}
+								},
+								{
+									id: "resource2",
+									created: FIRST_TICK,
+									metadataSchema: "TestSchemaRes",
+									metadata: {
+										resDescription: "This is a test2",
+										resCounter: 456
+									}
+								}
+							]
+						},
+						{
+							op: "add",
+							path: "/edges",
+							value: [
+								{
+									id: "edge1",
+									created: FIRST_TICK,
+									metadataSchema: "TestSchemaEdge",
+									metadata: {
+										edgeDescription: "This is a test",
+										edgeCounter: 123
+									},
+									relationship: "friend"
+								},
+								{
+									id: "edge2",
+									created: FIRST_TICK,
+									metadataSchema: "TestSchemaEdge",
+									metadata: {
+										edgeDescription: "This is a test2",
+										edgeCounter: 456
+									},
+									relationship: "enemy"
+								}
+							]
+						}
+					],
+					hash: "h7oXSBfag62pdqwHOj5C2L1bTu3dJzH+XroWfHz4yC4=",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 				},
 				{
 					created: SECOND_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					hash: "SWCb4XtEhSnzKJBuHBQUb2+MZgFiMJm+WsrPQ+hcZu0=",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+					patches: [
+						{
+							op: "remove",
+							path: "/metadata/description"
+						},
+						{
+							op: "add",
+							path: "/metadata/title",
+							value: "Title"
+						},
+						{
+							op: "add",
+							path: "/aliases/0/updated",
+							value: SECOND_TICK
+						},
+						{
+							op: "remove",
+							path: "/aliases/0/metadata/aliasDescription"
+						},
+						{
+							op: "add",
+							path: "/aliases/0/metadata/aliasTitle",
+							value: "Title"
+						},
+						{
+							op: "add",
+							path: "/aliases/1/updated",
+							value: SECOND_TICK
+						},
+						{
+							op: "remove",
+							path: "/aliases/1/metadata/aliasDescription"
+						},
+						{
+							op: "add",
+							path: "/aliases/1/metadata/aliasTitle",
+							value: "Title"
+						},
+						{
+							op: "add",
+							path: "/resources/0/updated",
+							value: SECOND_TICK
+						},
+						{
+							op: "remove",
+							path: "/resources/0/metadata/resDescription"
+						},
+						{
+							op: "add",
+							path: "/resources/0/metadata/resTitle",
+							value: "Title"
+						},
+						{
+							op: "add",
+							path: "/resources/1/updated",
+							value: SECOND_TICK
+						},
+						{
+							op: "remove",
+							path: "/resources/1/metadata/resDescription"
+						},
+						{
+							op: "add",
+							path: "/resources/1/metadata/resTitle",
+							value: "Title"
+						},
+						{
+							op: "add",
+							path: "/edges/0/updated",
+							value: SECOND_TICK
+						},
+						{
+							op: "remove",
+							path: "/edges/0/metadata/edgeDescription"
+						},
+						{
+							op: "add",
+							path: "/edges/0/metadata/edgeTitle",
+							value: "Title"
+						},
+						{
+							op: "add",
+							path: "/edges/1/updated",
+							value: SECOND_TICK
+						},
+						{
+							op: "remove",
+							path: "/edges/1/metadata/edgeDescription"
+						},
+						{
+							op: "add",
+							path: "/edges/1/metadata/edgeTitle",
+							value: "Title"
+						}
+					],
+					hash: "2paJOt97iJxl/7ws5XPYzAjxHQWCUclHHBOHVKNS6Ng=",
 					immutableStorageId:
 						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 				}
@@ -1675,170 +1904,97 @@ describe("AuditableItemGraphService", () => {
 		let credentialSignature = await decodeJwtToIntegrity(immutableStore[0].data);
 
 		expect(credentialSignature.signature).toEqual(
-			"7ibXR6OLiAA2j6d8lSLpgS59VBK5Uw5Ef+jMwjChmwi1vMvp43h98QItdZOGuZUUqkzOxbLxsdM2NkQ5CZ6SDw=="
+			"ciZX+HNgx9X3t+a8rymK5fx89bbrxjZJQlCGKDYSqaICw60YDtJEEdKQzp1F3JstLnF4QrHHEn2bCs0RHRraDw=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
-			changes: [
+			patches: [
 				{
-					itemType: "resource-metadata",
-					operation: "add",
-					parentId: "resource2",
-					properties: {
-						created: FIRST_TICK,
-						id: "res-description-2",
-						type: "https://schema.org/Text",
-						value: "This is a test"
+					op: "add",
+					path: "/metadataSchema",
+					value: "TestSchema"
+				},
+				{
+					op: "add",
+					path: "/metadata",
+					value: {
+						description: "This is a test",
+						counter: 123
 					}
 				},
 				{
-					itemType: "resource-metadata",
-					operation: "add",
-					parentId: "resource2",
-					properties: {
-						created: FIRST_TICK,
-						id: "res-counter-2",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
+					op: "add",
+					path: "/aliases",
+					value: [
+						{
+							id: "foo123",
+							created: FIRST_TICK,
+							metadataSchema: "TestSchemaAlias",
+							metadata: {
+								aliasDescription: "This is a test",
+								aliasCounter: 123
+							}
+						},
+						{
+							id: "bar456",
+							created: FIRST_TICK,
+							metadataSchema: "TestSchemaAlias",
+							metadata: {
+								aliasDescription: "This is a test",
+								aliasCounter: 123
+							}
+						}
+					]
 				},
 				{
-					itemType: "edge",
-					operation: "add",
-					properties: {
-						created: FIRST_TICK,
-						id: "edge1",
-						relationship: "friend"
-					}
+					op: "add",
+					path: "/resources",
+					value: [
+						{
+							id: "resource1",
+							created: FIRST_TICK,
+							metadataSchema: "TestSchemaRes",
+							metadata: {
+								resDescription: "This is a test",
+								resCounter: 123
+							}
+						},
+						{
+							id: "resource2",
+							created: FIRST_TICK,
+							metadataSchema: "TestSchemaRes",
+							metadata: {
+								resDescription: "This is a test2",
+								resCounter: 456
+							}
+						}
+					]
 				},
 				{
-					itemType: "resource",
-					operation: "add",
-					properties: {
-						created: FIRST_TICK,
-						id: "resource1"
-					}
-				},
-				{
-					itemType: "alias",
-					operation: "add",
-					properties: {
-						created: FIRST_TICK,
-						id: "foo123"
-					}
-				},
-				{
-					itemType: "edge",
-					operation: "add",
-					properties: {
-						created: FIRST_TICK,
-						id: "edge2",
-						relationship: "enemy"
-					}
-				},
-				{
-					itemType: "alias",
-					operation: "add",
-					properties: {
-						created: FIRST_TICK,
-						id: "bar456"
-					}
-				},
-				{
-					itemType: "edge-metadata",
-					operation: "add",
-					parentId: "edge2",
-					properties: {
-						created: FIRST_TICK,
-						id: "edge-counter-2",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
-				},
-				{
-					itemType: "edge-metadata",
-					operation: "add",
-					parentId: "edge2",
-					properties: {
-						created: FIRST_TICK,
-						id: "edge-description-2",
-						type: "https://schema.org/Text",
-						value: "This is a test"
-					}
-				},
-				{
-					itemType: "edge-metadata",
-					operation: "add",
-					parentId: "edge1",
-					properties: {
-						created: FIRST_TICK,
-						id: "edge-counter",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
-				},
-				{
-					itemType: "vertex-metadata",
-					operation: "add",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: FIRST_TICK,
-						id: "counter",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
-				},
-				{
-					itemType: "resource-metadata",
-					operation: "add",
-					parentId: "resource1",
-					properties: {
-						created: FIRST_TICK,
-						id: "res-counter",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
-				},
-				{
-					itemType: "resource-metadata",
-					operation: "add",
-					parentId: "resource1",
-					properties: {
-						created: FIRST_TICK,
-						id: "res-description",
-						type: "https://schema.org/Text",
-						value: "This is a test"
-					}
-				},
-				{
-					itemType: "edge-metadata",
-					operation: "add",
-					parentId: "edge1",
-					properties: {
-						created: FIRST_TICK,
-						id: "edge-description",
-						type: "https://schema.org/Text",
-						value: "This is a test"
-					}
-				},
-				{
-					itemType: "vertex-metadata",
-					operation: "add",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: FIRST_TICK,
-						id: "description",
-						type: "https://schema.org/Text",
-						value: "This is a test"
-					}
-				},
-				{
-					itemType: "resource",
-					operation: "add",
-					properties: {
-						created: FIRST_TICK,
-						id: "resource2"
-					}
+					op: "add",
+					path: "/edges",
+					value: [
+						{
+							id: "edge1",
+							created: FIRST_TICK,
+							metadataSchema: "TestSchemaEdge",
+							metadata: {
+								edgeDescription: "This is a test",
+								edgeCounter: 123
+							},
+							relationship: "friend"
+						},
+						{
+							id: "edge2",
+							created: FIRST_TICK,
+							metadataSchema: "TestSchemaEdge",
+							metadata: {
+								edgeDescription: "This is a test2",
+								edgeCounter: 456
+							},
+							relationship: "enemy"
+						}
+					]
 				}
 			],
 			userIdentity: TEST_USER_IDENTITY
@@ -1847,282 +2003,103 @@ describe("AuditableItemGraphService", () => {
 		credentialSignature = await decodeJwtToIntegrity(immutableStore[1].data);
 
 		expect(credentialSignature.signature).toEqual(
-			"K029lG6o1C+znWmu1YjCiQLf7Drt06K5/9Ru7BgrMbsxp6xSV4Bx1BSOjalZjqCaJbHg+OBPrVMwlQPzKQPbCg=="
+			"gMA9etTTMAQmr76YqIWtJSffF4JWcqE4xNgVZ5sQj97brqL48Ucq1EYvFiafD4iylVxEG7zCgSpYI/0uMYL5BA=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
-			changes: [
+			patches: [
 				{
-					itemType: "resource-metadata",
-					operation: "add",
-					parentId: "resource2",
-					properties: {
-						created: SECOND_TICK,
-						id: "res-counter-2",
-						type: "https://schema.org/Integer",
-						value: 456
-					}
+					op: "remove",
+					path: "/metadata/description"
 				},
 				{
-					itemType: "edge",
-					operation: "delete",
-					properties: {
-						created: FIRST_TICK,
-						id: "edge1",
-						relationship: "friend"
-					}
+					op: "add",
+					path: "/metadata/title",
+					value: "Title"
 				},
 				{
-					itemType: "edge-metadata",
-					operation: "delete",
-					parentId: "edge1",
-					properties: {
-						created: FIRST_TICK,
-						id: "edge-counter",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
+					op: "add",
+					path: "/aliases/0/updated",
+					value: SECOND_TICK
 				},
 				{
-					itemType: "edge",
-					operation: "add",
-					properties: {
-						created: SECOND_TICK,
-						id: "edge1",
-						relationship: "frenemy"
-					}
+					op: "remove",
+					path: "/aliases/0/metadata/aliasDescription"
 				},
 				{
-					itemType: "resource-metadata",
-					operation: "add",
-					parentId: "resource1",
-					properties: {
-						created: SECOND_TICK,
-						id: "res-title",
-						type: "https://schema.org/Text",
-						value: "Title"
-					}
+					op: "add",
+					path: "/aliases/0/metadata/aliasTitle",
+					value: "Title"
 				},
 				{
-					itemType: "edge-metadata",
-					operation: "delete",
-					parentId: "edge1",
-					properties: {
-						created: FIRST_TICK,
-						id: "edge-description",
-						type: "https://schema.org/Text",
-						value: "This is a test"
-					}
+					op: "add",
+					path: "/aliases/1/updated",
+					value: SECOND_TICK
 				},
 				{
-					itemType: "vertex-metadata",
-					operation: "add",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: SECOND_TICK,
-						id: "counter",
-						type: "https://schema.org/Integer",
-						value: 456
-					}
+					op: "remove",
+					path: "/aliases/1/metadata/aliasDescription"
 				},
 				{
-					itemType: "edge-metadata",
-					operation: "add",
-					parentId: "edge2",
-					properties: {
-						created: SECOND_TICK,
-						id: "edge-title-2",
-						type: "https://schema.org/Text",
-						value: "Title"
-					}
+					op: "add",
+					path: "/aliases/1/metadata/aliasTitle",
+					value: "Title"
 				},
 				{
-					itemType: "alias",
-					operation: "delete",
-					properties: {
-						created: FIRST_TICK,
-						id: "foo123"
-					}
+					op: "add",
+					path: "/resources/0/updated",
+					value: SECOND_TICK
 				},
 				{
-					itemType: "alias",
-					operation: "add",
-					properties: {
-						created: SECOND_TICK,
-						id: "foo321"
-					}
+					op: "remove",
+					path: "/resources/0/metadata/resDescription"
 				},
 				{
-					itemType: "resource-metadata",
-					operation: "delete",
-					parentId: "resource2",
-					properties: {
-						created: FIRST_TICK,
-						id: "res-counter-2",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
+					op: "add",
+					path: "/resources/0/metadata/resTitle",
+					value: "Title"
 				},
 				{
-					itemType: "vertex-metadata",
-					operation: "add",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: SECOND_TICK,
-						id: "title",
-						type: "https://schema.org/Text",
-						value: "Title"
-					}
+					op: "add",
+					path: "/resources/1/updated",
+					value: SECOND_TICK
 				},
 				{
-					itemType: "edge-metadata",
-					operation: "add",
-					parentId: "edge1",
-					properties: {
-						created: SECOND_TICK,
-						id: "edge-counter",
-						type: "https://schema.org/Integer",
-						value: 456
-					}
+					op: "remove",
+					path: "/resources/1/metadata/resDescription"
 				},
 				{
-					itemType: "resource-metadata",
-					operation: "add",
-					parentId: "resource2",
-					properties: {
-						created: SECOND_TICK,
-						id: "res-title-2",
-						type: "https://schema.org/Text",
-						value: "Title"
-					}
+					op: "add",
+					path: "/resources/1/metadata/resTitle",
+					value: "Title"
 				},
 				{
-					itemType: "edge-metadata",
-					operation: "delete",
-					parentId: "edge2",
-					properties: {
-						created: FIRST_TICK,
-						id: "edge-description-2",
-						type: "https://schema.org/Text",
-						value: "This is a test"
-					}
+					op: "add",
+					path: "/edges/0/updated",
+					value: SECOND_TICK
 				},
 				{
-					itemType: "edge",
-					operation: "delete",
-					properties: {
-						created: FIRST_TICK,
-						id: "edge2",
-						relationship: "enemy"
-					}
+					op: "remove",
+					path: "/edges/0/metadata/edgeDescription"
 				},
 				{
-					itemType: "edge-metadata",
-					operation: "delete",
-					parentId: "edge2",
-					properties: {
-						created: FIRST_TICK,
-						id: "edge-counter-2",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
+					op: "add",
+					path: "/edges/0/metadata/edgeTitle",
+					value: "Title"
 				},
 				{
-					itemType: "resource-metadata",
-					operation: "delete",
-					parentId: "resource1",
-					properties: {
-						created: FIRST_TICK,
-						id: "res-counter",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
+					op: "add",
+					path: "/edges/1/updated",
+					value: SECOND_TICK
 				},
 				{
-					itemType: "edge-metadata",
-					operation: "add",
-					parentId: "edge1",
-					properties: {
-						created: SECOND_TICK,
-						id: "edge-title",
-						type: "https://schema.org/Text",
-						value: "Title"
-					}
+					op: "remove",
+					path: "/edges/1/metadata/edgeDescription"
 				},
 				{
-					itemType: "vertex-metadata",
-					operation: "delete",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: FIRST_TICK,
-						id: "counter",
-						type: "https://schema.org/Integer",
-						value: 123
-					}
-				},
-				{
-					itemType: "resource-metadata",
-					operation: "delete",
-					parentId: "resource2",
-					properties: {
-						created: FIRST_TICK,
-						id: "res-description-2",
-						type: "https://schema.org/Text",
-						value: "This is a test"
-					}
-				},
-				{
-					itemType: "resource-metadata",
-					operation: "add",
-					parentId: "resource1",
-					properties: {
-						created: SECOND_TICK,
-						id: "res-counter",
-						type: "https://schema.org/Integer",
-						value: 456
-					}
-				},
-				{
-					itemType: "resource-metadata",
-					operation: "delete",
-					parentId: "resource1",
-					properties: {
-						created: FIRST_TICK,
-						id: "res-description",
-						type: "https://schema.org/Text",
-						value: "This is a test"
-					}
-				},
-				{
-					itemType: "edge",
-					operation: "add",
-					properties: {
-						created: SECOND_TICK,
-						id: "edge2",
-						relationship: "eneind"
-					}
-				},
-				{
-					itemType: "vertex-metadata",
-					operation: "delete",
-					parentId: "0101010101010101010101010101010101010101010101010101010101010101",
-					properties: {
-						created: FIRST_TICK,
-						id: "description",
-						type: "https://schema.org/Text",
-						value: "This is a test"
-					}
-				},
-				{
-					itemType: "edge-metadata",
-					operation: "add",
-					parentId: "edge2",
-					properties: {
-						created: SECOND_TICK,
-						id: "edge-counter-2",
-						type: "https://schema.org/Integer",
-						value: 456
-					}
+					op: "add",
+					path: "/edges/1/metadata/edgeTitle",
+					value: "Title"
 				}
 			],
 			userIdentity: TEST_USER_IDENTITY
@@ -2132,8 +2109,9 @@ describe("AuditableItemGraphService", () => {
 	test("Can remove the immutable storage for a vertex", async () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
-			[{ id: "foo123" }, { id: "bar456" }],
 			undefined,
+			undefined,
+			[{ id: "foo123" }, { id: "bar456" }],
 			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
@@ -2151,16 +2129,20 @@ describe("AuditableItemGraphService", () => {
 			verified: true,
 			verification: {
 				[FIRST_TICK]: {
-					changes: [
+					patches: [
 						{
-							itemType: "alias",
-							operation: "add",
-							properties: { id: "foo123", created: FIRST_TICK }
-						},
-						{
-							itemType: "alias",
-							operation: "add",
-							properties: { id: "bar456", created: FIRST_TICK }
+							op: "add",
+							path: "/aliases",
+							value: [
+								{
+									id: "foo123",
+									created: FIRST_TICK
+								},
+								{
+									id: "bar456",
+									created: FIRST_TICK
+								}
+							]
 						}
 					]
 				}
@@ -2169,16 +2151,40 @@ describe("AuditableItemGraphService", () => {
 				id: "0101010101010101010101010101010101010101010101010101010101010101",
 				created: FIRST_TICK,
 				updated: FIRST_TICK,
-				nodeIdentity: TEST_NODE_IDENTITY,
+				nodeIdentity:
+					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 				aliases: [
-					{ id: "foo123", created: FIRST_TICK },
-					{ id: "bar456", created: FIRST_TICK }
+					{
+						id: "foo123",
+						created: FIRST_TICK
+					},
+					{
+						id: "bar456",
+						created: FIRST_TICK
+					}
 				],
 				changesets: [
 					{
 						created: FIRST_TICK,
-						userIdentity: TEST_USER_IDENTITY,
-						hash: "GTZhAbOqfVvVGylIndMexE+7bcgidGB3j7JBY4Q0EC4="
+						userIdentity:
+							"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+						patches: [
+							{
+								op: "add",
+								path: "/aliases",
+								value: [
+									{
+										id: "foo123",
+										created: FIRST_TICK
+									},
+									{
+										id: "bar456",
+										created: FIRST_TICK
+									}
+								]
+							}
+						],
+						hash: "Ht6zFJi0yl+MYTKgk+HdZW1PLWjJmSOwOkqrAA1NfVU="
 					}
 				]
 			}
@@ -2194,10 +2200,12 @@ describe("AuditableItemGraphService", () => {
 			undefined,
 			undefined,
 			undefined,
+			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
 		await service.create(
+			undefined,
 			undefined,
 			undefined,
 			undefined,
@@ -2210,11 +2218,11 @@ describe("AuditableItemGraphService", () => {
 		expect(results.entities).toEqual([
 			{
 				id: "0404040404040404040404040404040404040404040404040404040404040404",
-				created: 1724327816272
+				created: SECOND_TICK
 			},
 			{
 				id: "0101010101010101010101010101010101010101010101010101010101010101",
-				created: 1724327716271
+				created: FIRST_TICK
 			}
 		]);
 	});
@@ -2222,16 +2230,18 @@ describe("AuditableItemGraphService", () => {
 	test("Can query for a vertex by alias", async () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		await service.create(
-			[{ id: "foo123" }, { id: "bar123" }],
 			undefined,
+			undefined,
+			[{ id: "foo123" }, { id: "bar123" }],
 			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
 		await service.create(
-			[{ id: "foo456" }, { id: "bar456" }],
 			undefined,
+			undefined,
+			[{ id: "foo456" }, { id: "bar456" }],
 			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
@@ -2242,29 +2252,29 @@ describe("AuditableItemGraphService", () => {
 		expect(results.entities).toEqual([
 			{
 				id: "0404040404040404040404040404040404040404040404040404040404040404",
-				created: 1724327816272,
+				created: SECOND_TICK,
 				aliases: [
 					{
 						id: "foo456",
-						created: 1724327816272
+						created: SECOND_TICK
 					},
 					{
 						id: "bar456",
-						created: 1724327816272
+						created: SECOND_TICK
 					}
 				]
 			},
 			{
 				id: "0101010101010101010101010101010101010101010101010101010101010101",
-				created: 1724327716271,
+				created: FIRST_TICK,
 				aliases: [
 					{
 						id: "foo123",
-						created: 1724327716271
+						created: FIRST_TICK
 					},
 					{
 						id: "bar123",
-						created: 1724327716271
+						created: FIRST_TICK
 					}
 				]
 			}
@@ -2274,14 +2284,16 @@ describe("AuditableItemGraphService", () => {
 	test("Can query for a vertex by id or alias", async () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		await service.create(
-			[{ id: "foo4" }],
 			undefined,
+			undefined,
+			[{ id: "foo4" }],
 			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
 		await service.create(
+			undefined,
 			undefined,
 			undefined,
 			undefined,
@@ -2294,15 +2306,15 @@ describe("AuditableItemGraphService", () => {
 		expect(results.entities).toEqual([
 			{
 				id: "0404040404040404040404040404040404040404040404040404040404040404",
-				created: 1724327816272
+				created: SECOND_TICK
 			},
 			{
 				id: "0101010101010101010101010101010101010101010101010101010101010101",
-				created: 1724327716271,
+				created: FIRST_TICK,
 				aliases: [
 					{
 						id: "foo4",
-						created: 1724327716271
+						created: FIRST_TICK
 					}
 				]
 			}
@@ -2312,14 +2324,16 @@ describe("AuditableItemGraphService", () => {
 	test("Can query for a vertex by mode id", async () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		await service.create(
-			[{ id: "foo4" }],
 			undefined,
+			undefined,
+			[{ id: "foo4" }],
 			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
 		await service.create(
+			undefined,
 			undefined,
 			undefined,
 			undefined,
@@ -2332,7 +2346,7 @@ describe("AuditableItemGraphService", () => {
 		expect(results.entities).toEqual([
 			{
 				id: "0404040404040404040404040404040404040404040404040404040404040404",
-				created: 1724327816272
+				created: SECOND_TICK
 			}
 		]);
 	});
@@ -2340,14 +2354,16 @@ describe("AuditableItemGraphService", () => {
 	test("Can query for a vertex by mode alias", async () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		await service.create(
-			[{ id: "foo4" }],
 			undefined,
+			undefined,
+			[{ id: "foo4" }],
 			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
 		await service.create(
+			undefined,
 			undefined,
 			undefined,
 			undefined,
@@ -2360,11 +2376,11 @@ describe("AuditableItemGraphService", () => {
 		expect(results.entities).toEqual([
 			{
 				id: "0101010101010101010101010101010101010101010101010101010101010101",
-				created: 1724327716271,
+				created: FIRST_TICK,
 				aliases: [
 					{
 						id: "foo4",
-						created: 1724327716271
+						created: FIRST_TICK
 					}
 				]
 			}

@@ -16,9 +16,12 @@ export interface IAuditableItemGraphAuditedElement {
 	created: number;
 
 	/**
+	 * The timestamp of when the element was updated.
+	 */
+	updated?: number;
+
+	/**
 	 * The timestamp of when the element was deleted, as we never actually remove items.
-	 * A property can also be marked as deleted if the value was updated, in which case
-	 * a new value is created and the old one marked as deleted.
 	 */
 	deleted?: number;
 }

@@ -46,8 +46,16 @@ The relationship between the two vertices.
 
 ***
 
+### metadataSchema?
+
+> `optional` **metadataSchema**: `string`
+
+The schema for the metadata.
+
+***
+
 ### metadata?
 
-> `optional` **metadata**: [`AuditableItemGraphProperty`](AuditableItemGraphProperty.md)[]
+> `optional` **metadata**: `unknown`
 
 Metadata to associate with the edge.

@@ -4,7 +4,7 @@ Interface describing an alias for a vertex.
 
 ## Extends
 
-- [`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`IAuditableItemGraphMetadataElement`](IAuditableItemGraphMetadataElement.md)
+- [`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).`IAuditableItemGraphMetadataElement`
 
 ## Properties
 
@@ -32,13 +32,23 @@ The timestamp of when the element was created.
 
 ***
 
+### updated?
+
+> `optional` **updated**: `number`
+
+The timestamp of when the element was updated.
+
+#### Inherited from
+
+[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`updated`](IAuditableItemGraphAuditedElement.md#updated)
+
+***
+
 ### deleted?
 
 > `optional` **deleted**: `number`
 
 The timestamp of when the element was deleted, as we never actually remove items.
-A property can also be marked as deleted if the value was updated, in which case
-a new value is created and the old one marked as deleted.
 
 #### Inherited from
 
@@ -46,12 +56,24 @@ a new value is created and the old one marked as deleted.
 
 ***
 
-### metadata?
+### metadataSchema?
 
-> `optional` **metadata**: [`IAuditableItemGraphProperty`](IAuditableItemGraphProperty.md)[]
+> `optional` **metadataSchema**: `string`
 
-Metadata to associate with the element.
+The schema for the metadata.
 
 #### Inherited from
 
-[`IAuditableItemGraphMetadataElement`](IAuditableItemGraphMetadataElement.md).[`metadata`](IAuditableItemGraphMetadataElement.md#metadata)
+`IAuditableItemGraphMetadataElement.metadataSchema`
+
+***
+
+### metadata?
+
+> `optional` **metadata**: `unknown`
+
+The metadata to associate with the element.
+
+#### Inherited from
+
+`IAuditableItemGraphMetadataElement.metadata`

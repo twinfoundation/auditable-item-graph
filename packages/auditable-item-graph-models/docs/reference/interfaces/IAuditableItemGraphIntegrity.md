@@ -12,8 +12,8 @@ The user identity that created the changes.
 
 ***
 
-### changes
+### patches
 
-> **changes**: [`IAuditableItemGraphChange`](IAuditableItemGraphChange.md)[]
+> **patches**: `IPatchOperation`[]
 
-The changes.
+The patches for the integrity at this epoch.

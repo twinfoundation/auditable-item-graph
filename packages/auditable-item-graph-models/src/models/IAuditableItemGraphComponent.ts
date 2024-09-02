@@ -1,9 +1,7 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import type { IComponent } from "@gtsc/core";
+import type { IComponent, IPatchOperation } from "@gtsc/core";
 import type { SortDirection } from "@gtsc/entity";
-import type { IProperty } from "@gtsc/schema";
-import type { IAuditableItemGraphChange } from "./IAuditableItemGraphChange";
 import type { IAuditableItemGraphVertex } from "./IAuditableItemGraphVertex";
 import type { VerifyDepth } from "./verifyDepth";
 
@@ -13,8 +11,9 @@ import type { VerifyDepth } from "./verifyDepth";
 export interface IAuditableItemGraphComponent extends IComponent {
 	/**
 	 * Create a new graph vertex.
-	 * @param aliases Alternative aliases that can be used to identify the vertex.
+	 * @param metadataSchema The metadata schema for the vertex.
 	 * @param metadata The metadata for the vertex.
+	 * @param aliases Alternative aliases that can be used to identify the vertex.
 	 * @param resources The resources attached to the vertex.
 	 * @param edges The edges connected to the vertex.
 	 * @param identity The identity to create the auditable item graph operation with.
@@ -22,19 +21,23 @@ export interface IAuditableItemGraphComponent extends IComponent {
 	 * @returns The id of the new graph item.
 	 */
 	create(
+		metadataSchema?: string,
+		metadata?: unknown,
 		aliases?: {
 			id: string;
-			metadata?: IProperty[];
+			metadataSchema?: string;
+			metadata?: unknown;
 		}[],
-		metadata?: IProperty[],
 		resources?: {
 			id: string;
-			metadata?: IProperty[];
+			metadataSchema?: string;
+			metadata?: unknown;
 		}[],
 		edges?: {
 			id: string;
 			relationship: string;
-			metadata?: IProperty[];
+			metadataSchema?: string;
+			metadata?: unknown;
 		}[],
 		identity?: string,
 		nodeIdentity?: string
@@ -43,8 +46,9 @@ export interface IAuditableItemGraphComponent extends IComponent {
 	/**
 	 * Update a graph vertex.
 	 * @param id The id of the vertex to update.
-	 * @param aliases Alternative aliases that can be used to identify the vertex.
+	 * @param metadataSchema The metadata schema for the vertex.
 	 * @param metadata The metadata for the vertex.
+	 * @param aliases Alternative aliases that can be used to identify the vertex.
 	 * @param resources The resources attached to the vertex.
 	 * @param edges The edges connected to the vertex.
 	 * @param identity The identity to create the auditable item graph operation with.
@@ -53,19 +57,23 @@ export interface IAuditableItemGraphComponent extends IComponent {
 	 */
 	update(
 		id: string,
+		metadataSchema?: string,
+		metadata?: unknown,
 		aliases?: {
 			id: string;
-			metadata?: IProperty[];
+			metadataSchema?: string;
+			metadata?: unknown;
 		}[],
-		metadata?: IProperty[],
 		resources?: {
 			id: string;
-			metadata?: IProperty[];
+			metadataSchema?: string;
+			metadata?: unknown;
 		}[],
 		edges?: {
 			id: string;
 			relationship: string;
-			metadata?: IProperty[];
+			metadataSchema?: string;
+			metadata?: unknown;
 		}[],
 		identity?: string,
 		nodeIdentity?: string
@@ -94,7 +102,7 @@ export interface IAuditableItemGraphComponent extends IComponent {
 			[epoch: number]: {
 				failure?: string;
 				properties?: { [id: string]: unknown };
-				changes: IAuditableItemGraphChange[];
+				patches: IPatchOperation[];
 			};
 		};
 		vertex: IAuditableItemGraphVertex;

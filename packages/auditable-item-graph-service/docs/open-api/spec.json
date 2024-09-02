@@ -44,90 +44,65 @@
                             "examples": {
                                 "auditableItemGraphCreateRequestExample": {
                                     "value": {
-                                        "metadata": [
-                                            {
-                                                "key": "counter",
-                                                "type": "https://schema.org/Integer",
-                                                "value": 456
-                                            },
-                                            {
-                                                "key": "title",
-                                                "type": "https://schema.org/Text",
-                                                "value": "Title"
-                                            }
-                                        ],
+                                        "metadataSchema": "TestSchema",
+                                        "metadata": {
+                                            "title": "Title",
+                                            "counter": 456
+                                        },
                                         "aliases": [
                                             {
-                                                "id": "bar456"
+                                                "id": "bar456",
+                                                "metadataSchema": "TestAliasSchema",
+                                                "metadata": {
+                                                    "title": "Title",
+                                                    "counter": 456
+                                                }
                                             },
                                             {
-                                                "id": "foo321"
+                                                "id": "foo321",
+                                                "metadataSchema": "TestAliasSchema",
+                                                "metadata": {
+                                                    "title": "Title",
+                                                    "counter": 456
+                                                }
                                             }
                                         ],
                                         "resources": [
                                             {
                                                 "id": "resource1",
-                                                "metadata": [
-                                                    {
-                                                        "key": "res-counter",
-                                                        "type": "https://schema.org/Integer",
-                                                        "value": 456
-                                                    },
-                                                    {
-                                                        "key": "res-title",
-                                                        "type": "https://schema.org/Text",
-                                                        "value": "Title"
-                                                    }
-                                                ]
+                                                "metadataSchema": "TestResourceSchema",
+                                                "metadata": {
+                                                    "title": "Title",
+                                                    "counter": 456
+                                                }
                                             },
                                             {
                                                 "id": "resource2",
-                                                "metadata": [
-                                                    {
-                                                        "key": "res-counter-2",
-                                                        "type": "https://schema.org/Integer",
-                                                        "value": 456
-                                                    },
-                                                    {
-                                                        "key": "res-title-2",
-                                                        "type": "https://schema.org/Text",
-                                                        "value": "Title"
-                                                    }
-                                                ]
+                                                "metadataSchema": "TestResourceSchema",
+                                                "metadata": {
+                                                    "title": "Title",
+                                                    "counter": 456
+                                                }
                                             }
                                         ],
                                         "edges": [
                                             {
                                                 "id": "edge1",
                                                 "relationship": "frenemy",
-                                                "metadata": [
-                                                    {
-                                                        "key": "edge-counter",
-                                                        "type": "https://schema.org/Integer",
-                                                        "value": 456
-                                                    },
-                                                    {
-                                                        "key": "edge-title",
-                                                        "type": "https://schema.org/Text",
-                                                        "value": "Title"
-                                                    }
-                                                ]
+                                                "metadataSchema": "TestEdgeSchema",
+                                                "metadata": {
+                                                    "title": "Title",
+                                                    "counter": 456
+                                                }
                                             },
                                             {
                                                 "id": "edge2",
                                                 "relationship": "end",
-                                                "metadata": [
-                                                    {
-                                                        "key": "edge-counter-2",
-                                                        "type": "https://schema.org/Integer",
-                                                        "value": 456
-                                                    },
-                                                    {
-                                                        "key": "edge-title-2",
-                                                        "type": "https://schema.org/Text",
-                                                        "value": "Title"
-                                                    }
-                                                ]
+                                                "metadataSchema": "TestEdgeSchema",
+                                                "metadata": {
+                                                    "title": "Title",
+                                                    "counter": 456
+                                                }
                                             }
                                         ]
                                     }
@@ -450,17 +425,14 @@
                                                 "id": "aig:1234567890",
                                                 "created": 1234567890,
                                                 "updated": 1234567890,
+                                                "metadataSchema": "TestSchema",
+                                                "metadata": {
+                                                    "title": "Title",
+                                                    "counter": 456
+                                                },
                                                 "aliases": [
                                                     {
                                                         "id": "tst:1234567890",
-                                                        "created": 1234567890
-                                                    }
-                                                ],
-                                                "metadata": [
-                                                    {
-                                                        "id": "description",
-                                                        "type": "https://schema.org/Text",
-                                                        "value": "This is a test item",
                                                         "created": 1234567890
                                                     }
                                                 ]
@@ -565,90 +537,65 @@
                             "examples": {
                                 "auditableItemGraphUpdateRequestExample": {
                                     "value": {
-                                        "metadata": [
-                                            {
-                                                "key": "counter",
-                                                "type": "https://schema.org/Integer",
-                                                "value": 456
-                                            },
-                                            {
-                                                "key": "title",
-                                                "type": "https://schema.org/Text",
-                                                "value": "Title"
-                                            }
-                                        ],
+                                        "metadataSchema": "TestSchema",
+                                        "metadata": {
+                                            "title": "Title",
+                                            "counter": 456
+                                        },
                                         "aliases": [
                                             {
-                                                "id": "bar456"
+                                                "id": "bar456",
+                                                "metadataSchema": "TestAliasSchema",
+                                                "metadata": {
+                                                    "title": "Title",
+                                                    "counter": 456
+                                                }
                                             },
                                             {
-                                                "id": "foo321"
+                                                "id": "foo321",
+                                                "metadataSchema": "TestAliasSchema",
+                                                "metadata": {
+                                                    "title": "Title",
+                                                    "counter": 456
+                                                }
                                             }
                                         ],
                                         "resources": [
                                             {
                                                 "id": "resource1",
-                                                "metadata": [
-                                                    {
-                                                        "key": "res-counter",
-                                                        "type": "https://schema.org/Integer",
-                                                        "value": 456
-                                                    },
-                                                    {
-                                                        "key": "res-title",
-                                                        "type": "https://schema.org/Text",
-                                                        "value": "Title"
-                                                    }
-                                                ]
+                                                "metadataSchema": "TestResourceSchema",
+                                                "metadata": {
+                                                    "title": "Title",
+                                                    "counter": 456
+                                                }
                                             },
                                             {
                                                 "id": "resource2",
-                                                "metadata": [
-                                                    {
-                                                        "key": "res-counter-2",
-                                                        "type": "https://schema.org/Integer",
-                                                        "value": 456
-                                                    },
-                                                    {
-                                                        "key": "res-title-2",
-                                                        "type": "https://schema.org/Text",
-                                                        "value": "Title"
-                                                    }
-                                                ]
+                                                "metadataSchema": "TestResourceSchema",
+                                                "metadata": {
+                                                    "title": "Title",
+                                                    "counter": 456
+                                                }
                                             }
                                         ],
                                         "edges": [
                                             {
                                                 "id": "edge1",
                                                 "relationship": "frenemy",
-                                                "metadata": [
-                                                    {
-                                                        "key": "edge-counter",
-                                                        "type": "https://schema.org/Integer",
-                                                        "value": 456
-                                                    },
-                                                    {
-                                                        "key": "edge-title",
-                                                        "type": "https://schema.org/Text",
-                                                        "value": "Title"
-                                                    }
-                                                ]
+                                                "metadataSchema": "TestEdgeSchema",
+                                                "metadata": {
+                                                    "title": "Title",
+                                                    "counter": 456
+                                                }
                                             },
                                             {
                                                 "id": "edge2",
                                                 "relationship": "end",
-                                                "metadata": [
-                                                    {
-                                                        "key": "edge-counter-2",
-                                                        "type": "https://schema.org/Integer",
-                                                        "value": 456
-                                                    },
-                                                    {
-                                                        "key": "edge-title-2",
-                                                        "type": "https://schema.org/Text",
-                                                        "value": "Title"
-                                                    }
-                                                ]
+                                                "metadataSchema": "TestEdgeSchema",
+                                                "metadata": {
+                                                    "title": "Title",
+                                                    "counter": 456
+                                                }
                                             }
                                         ]
                                     }
@@ -762,6 +709,13 @@
             "AuditableItemGraphCreateRequest": {
                 "type": "object",
                 "properties": {
+                    "metadataSchema": {
+                        "type": "string",
+                        "description": "The schema for the metadata."
+                    },
+                    "metadata": {
+                        "description": "The metadata to be used in the vertex."
+                    },
                     "aliases": {
                         "type": "array",
                         "items": {
@@ -770,12 +724,10 @@
                                 "id": {
                                     "type": "string"
                                 },
-                                "metadata": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Property"
-                                    }
-                                }
+                                "metadataSchema": {
+                                    "type": "string"
+                                },
+                                "metadata": {}
                             },
                             "required": [
                                 "id"
@@ -783,13 +735,6 @@
                             "additionalProperties": false
                         },
                         "description": "Alternative aliases that can be used to identify the vertex."
-                    },
-                    "metadata": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Property"
-                        },
-                        "description": "The metadata to be used in the vertex."
                     },
                     "resources": {
                         "type": "array",
@@ -799,12 +744,10 @@
                                 "id": {
                                     "type": "string"
                                 },
-                                "metadata": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Property"
-                                    }
-                                }
+                                "metadataSchema": {
+                                    "type": "string"
+                                },
+                                "metadata": {}
                             },
                             "required": [
                                 "id"
@@ -824,12 +767,10 @@
                                 "relationship": {
                                     "type": "string"
                                 },
-                                "metadata": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Property"
-                                    }
-                                }
+                                "metadataSchema": {
+                                    "type": "string"
+                                },
+                                "metadata": {}
                             },
                             "required": [
                                 "id",
@@ -842,29 +783,6 @@
                 },
                 "additionalProperties": false,
                 "description": "The data to be used in the vertex."
-            },
-            "Property": {
-                "type": "object",
-                "properties": {
-                    "key": {
-                        "type": "string",
-                        "description": "The key for the item."
-                    },
-                    "type": {
-                        "type": "string",
-                        "description": "The type for the item."
-                    },
-                    "value": {
-                        "description": "The value for the item."
-                    }
-                },
-                "required": [
-                    "key",
-                    "type",
-                    "value"
-                ],
-                "additionalProperties": false,
-                "description": "Interface describing a property."
             },
             "VerifyDepth": {
                 "anyOf": [
@@ -905,19 +823,19 @@
                                     "type": "object",
                                     "additionalProperties": {}
                                 },
-                                "changes": {
+                                "patches": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/AuditableItemGraphChange"
+                                        "$ref": "#/components/schemas/PatchOperation"
                                     }
                                 }
                             },
                             "required": [
-                                "changes"
+                                "patches"
                             ],
                             "additionalProperties": false
                         },
-                        "description": "The verification changes including any failure information."
+                        "description": "The verification patches including any failure information."
                     },
                     "vertex": {
                         "$ref": "#/components/schemas/AuditableItemGraphVertex"
@@ -929,38 +847,39 @@
                 "additionalProperties": false,
                 "description": "The response body."
             },
-            "AuditableItemGraphChange": {
+            "PatchOperation": {
                 "type": "object",
                 "properties": {
-                    "itemType": {
-                        "type": "string",
-                        "description": "Which item type was changed."
-                    },
-                    "parentId": {
-                        "type": "string",
-                        "description": "Which item is the parent of this change."
-                    },
-                    "operation": {
+                    "op": {
                         "type": "string",
                         "enum": [
                             "add",
-                            "delete"
+                            "remove",
+                            "replace",
+                            "move",
+                            "copy",
+                            "test"
                         ],
                         "description": "The operation that was performed on the item."
                     },
-                    "properties": {
-                        "type": "object",
-                        "additionalProperties": {},
-                        "description": "The properties from the modified object."
+                    "path": {
+                        "type": "string",
+                        "description": "The path to the object that was changed."
+                    },
+                    "from": {
+                        "type": "string",
+                        "description": "The path the value was copied or moved from."
+                    },
+                    "value": {
+                        "description": "The value to add."
                     }
                 },
                 "required": [
-                    "itemType",
-                    "operation",
-                    "properties"
+                    "op",
+                    "path"
                 ],
                 "additionalProperties": false,
-                "description": "Interface describing a change in a property."
+                "description": "Interface describing a patch operation to add a property."
             },
             "AuditableItemGraphVertex": {
                 "type": "object",
@@ -968,10 +887,6 @@
                     "nodeIdentity": {
                         "type": "string",
                         "description": "The identity of the node which controls the vertex."
-                    },
-                    "updated": {
-                        "type": "number",
-                        "description": "The timestamp of when the element was last updated."
                     },
                     "aliases": {
                         "type": "array",
@@ -1009,12 +924,16 @@
                         "type": "number",
                         "description": "The timestamp of when the element was created."
                     },
+                    "updated": {
+                        "type": "number",
+                        "description": "The timestamp of when the element was updated."
+                    },
+                    "metadataSchema": {
+                        "type": "string",
+                        "description": "The schema for the metadata."
+                    },
                     "metadata": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/AuditableItemGraphProperty"
-                        },
-                        "description": "Metadata to associate with the element."
+                        "description": "The metadata to associate with the element."
                     }
                 },
                 "additionalProperties": false
@@ -1023,12 +942,12 @@
                 "type": "object",
                 "additionalProperties": false,
                 "properties": {
+                    "metadataSchema": {
+                        "type": "string",
+                        "description": "The schema for the metadata."
+                    },
                     "metadata": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/AuditableItemGraphProperty"
-                        },
-                        "description": "Metadata to associate with the element."
+                        "description": "The metadata to associate with the element."
                     },
                     "id": {
                         "type": "string",
@@ -1038,9 +957,13 @@
                         "type": "number",
                         "description": "The timestamp of when the element was created."
                     },
+                    "updated": {
+                        "type": "number",
+                        "description": "The timestamp of when the element was updated."
+                    },
                     "deleted": {
                         "type": "number",
-                        "description": "The timestamp of when the element was deleted, as we never actually remove items. A property can also be marked as deleted if the value was updated, in which case a new value is created and the old one marked as deleted."
+                        "description": "The timestamp of when the element was deleted, as we never actually remove items."
                     }
                 },
                 "required": [
@@ -1049,48 +972,16 @@
                 ],
                 "description": "Interface describing an alias for a vertex."
             },
-            "AuditableItemGraphProperty": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "string",
-                        "description": "The id of the element."
-                    },
-                    "created": {
-                        "type": "number",
-                        "description": "The timestamp of when the element was created."
-                    },
-                    "deleted": {
-                        "type": "number",
-                        "description": "The timestamp of when the element was deleted, as we never actually remove items. A property can also be marked as deleted if the value was updated, in which case a new value is created and the old one marked as deleted."
-                    },
-                    "type": {
-                        "type": "string",
-                        "description": "The type of the property."
-                    },
-                    "value": {
-                        "description": "The value of the property."
-                    }
-                },
-                "required": [
-                    "created",
-                    "id",
-                    "type",
-                    "value"
-                ],
-                "additionalProperties": false,
-                "description": "Interface describing a property for vertex metadata."
-            },
             "AuditableItemGraphResource": {
                 "type": "object",
                 "additionalProperties": false,
                 "properties": {
+                    "metadataSchema": {
+                        "type": "string",
+                        "description": "The schema for the metadata."
+                    },
                     "metadata": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/AuditableItemGraphProperty"
-                        },
-                        "description": "Metadata to associate with the element."
+                        "description": "The metadata to associate with the element."
                     },
                     "id": {
                         "type": "string",
@@ -1100,9 +991,13 @@
                         "type": "number",
                         "description": "The timestamp of when the element was created."
                     },
+                    "updated": {
+                        "type": "number",
+                        "description": "The timestamp of when the element was updated."
+                    },
                     "deleted": {
                         "type": "number",
-                        "description": "The timestamp of when the element was deleted, as we never actually remove items. A property can also be marked as deleted if the value was updated, in which case a new value is created and the old one marked as deleted."
+                        "description": "The timestamp of when the element was deleted, as we never actually remove items."
                     }
                 },
                 "required": [
@@ -1114,12 +1009,12 @@
             "AuditableItemGraphEdge": {
                 "type": "object",
                 "properties": {
+                    "metadataSchema": {
+                        "type": "string",
+                        "description": "The schema for the metadata."
+                    },
                     "metadata": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/AuditableItemGraphProperty"
-                        },
-                        "description": "Metadata to associate with the element."
+                        "description": "The metadata to associate with the element."
                     },
                     "id": {
                         "type": "string",
@@ -1129,9 +1024,13 @@
                         "type": "number",
                         "description": "The timestamp of when the element was created."
                     },
+                    "updated": {
+                        "type": "number",
+                        "description": "The timestamp of when the element was updated."
+                    },
                     "deleted": {
                         "type": "number",
-                        "description": "The timestamp of when the element was deleted, as we never actually remove items. A property can also be marked as deleted if the value was updated, in which case a new value is created and the old one marked as deleted."
+                        "description": "The timestamp of when the element was deleted, as we never actually remove items."
                     },
                     "relationship": {
                         "type": "string",
@@ -1157,6 +1056,13 @@
                         "type": "string",
                         "description": "The identity of the user who made the changeset."
                     },
+                    "patches": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PatchOperation"
+                        },
+                        "description": "The patches for the set of changes."
+                    },
                     "hash": {
                         "type": "string",
                         "description": "The hash for the changeset."
@@ -1169,6 +1075,7 @@
                 "required": [
                     "created",
                     "userIdentity",
+                    "patches",
                     "hash"
                 ],
                 "additionalProperties": false,
@@ -1177,6 +1084,13 @@
             "AuditableItemGraphUpdateRequest": {
                 "type": "object",
                 "properties": {
+                    "metadataSchema": {
+                        "type": "string",
+                        "description": "The schema for the metadata."
+                    },
+                    "metadata": {
+                        "description": "The metadata to be used in the vertex."
+                    },
                     "aliases": {
                         "type": "array",
                         "items": {
@@ -1185,12 +1099,10 @@
                                 "id": {
                                     "type": "string"
                                 },
-                                "metadata": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Property"
-                                    }
-                                }
+                                "metadataSchema": {
+                                    "type": "string"
+                                },
+                                "metadata": {}
                             },
                             "required": [
                                 "id"
@@ -1198,13 +1110,6 @@
                             "additionalProperties": false
                         },
                         "description": "Alternative aliases that can be used to identify the vertex."
-                    },
-                    "metadata": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Property"
-                        },
-                        "description": "The metadata to be used in the vertex."
                     },
                     "resources": {
                         "type": "array",
@@ -1214,12 +1119,10 @@
                                 "id": {
                                     "type": "string"
                                 },
-                                "metadata": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Property"
-                                    }
-                                }
+                                "metadataSchema": {
+                                    "type": "string"
+                                },
+                                "metadata": {}
                             },
                             "required": [
                                 "id"
@@ -1239,12 +1142,10 @@
                                 "relationship": {
                                     "type": "string"
                                 },
-                                "metadata": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Property"
-                                    }
-                                }
+                                "metadataSchema": {
+                                    "type": "string"
+                                },
+                                "metadata": {}
                             },
                             "required": [
                                 "id",

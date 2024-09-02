@@ -10,17 +10,23 @@ Create an auditable item graph vertex.
 
 The data to be used in the vertex.
 
+#### metadataSchema?
+
+> `optional` **metadataSchema**: `string`
+
+The schema for the metadata.
+
+#### metadata?
+
+> `optional` **metadata**: `unknown`
+
+The metadata to be used in the vertex.
+
 #### aliases?
 
 > `optional` **aliases**: `object`[]
 
 Alternative aliases that can be used to identify the vertex.
-
-#### metadata?
-
-> `optional` **metadata**: `IProperty`[]
-
-The metadata to be used in the vertex.
 
 #### resources?
 

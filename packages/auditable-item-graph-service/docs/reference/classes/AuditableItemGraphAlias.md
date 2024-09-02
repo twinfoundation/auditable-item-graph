@@ -38,8 +38,16 @@ The timestamp of when the alias was deleted, as we never actually remove items.
 
 ***
 
+### metadataSchema?
+
+> `optional` **metadataSchema**: `string`
+
+The schema for the metadata.
+
+***
+
 ### metadata?
 
-> `optional` **metadata**: [`AuditableItemGraphProperty`](AuditableItemGraphProperty.md)[]
+> `optional` **metadata**: `unknown`
 
 Metadata to associate with the alias.

@@ -30,6 +30,14 @@ The identity of the user who made the changeset.
 
 ***
 
+### patches
+
+> **patches**: [`AuditableItemGraphPatch`](AuditableItemGraphPatch.md)[]
+
+The patches in the changeset.
+
+***
+
 ### hash
 
 > **hash**: `string`

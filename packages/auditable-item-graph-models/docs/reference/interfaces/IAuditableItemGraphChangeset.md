@@ -20,6 +20,14 @@ The identity of the user who made the changeset.
 
 ***
 
+### patches
+
+> **patches**: `IPatchOperation`[]
+
+The patches for the set of changes.
+
+***
+
 ### hash
 
 > **hash**: `string`

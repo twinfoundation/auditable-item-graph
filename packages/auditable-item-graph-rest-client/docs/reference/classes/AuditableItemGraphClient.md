@@ -104,19 +104,23 @@ The response.
 
 ### create()
 
-> **create**(`aliases`?, `metadata`?, `resources`?, `edges`?): `Promise`\<`string`\>
+> **create**(`metadataSchema`?, `metadata`?, `aliases`?, `resources`?, `edges`?): `Promise`\<`string`\>
 
 Create a new graph vertex.
 
 #### Parameters
 
+• **metadataSchema?**: `string`
+
+The metadata schema for the vertex.
+
+• **metadata?**: `unknown`
+
+The metadata for the vertex.
+
 • **aliases?**: `object`[]
 
 Alternative aliases that can be used to identify the vertex.
-
-• **metadata?**: `IProperty`[]
-
-The metadata for the vertex.
 
 • **resources?**: `object`[]
 
@@ -200,7 +204,7 @@ NotFoundError if the vertex is not found.
 
 ### update()
 
-> **update**(`id`, `aliases`?, `metadata`?, `resources`?, `edges`?): `Promise`\<`void`\>
+> **update**(`id`, `metadataSchema`?, `metadata`?, `aliases`?, `resources`?, `edges`?): `Promise`\<`void`\>
 
 Update a graph vertex.
 
@@ -210,13 +214,17 @@ Update a graph vertex.
 
 The id of the vertex to update.
 
+• **metadataSchema?**: `string`
+
+The metadata schema for the vertex.
+
+• **metadata?**: `unknown`
+
+The metadata for the vertex.
+
 • **aliases?**: `object`[]
 
 Alternative aliases that can be used to identify the vertex.
-
-• **metadata?**: `IProperty`[]
-
-The metadata for the vertex.
 
 • **resources?**: `object`[]
 

@@ -4,7 +4,6 @@ import { entity, property, SortDirection } from "@gtsc/entity";
 import type { AuditableItemGraphAlias } from "./auditableItemGraphAlias";
 import type { AuditableItemGraphChangeset } from "./auditableItemGraphChangeset";
 import type { AuditableItemGraphEdge } from "./auditableItemGraphEdge";
-import type { AuditableItemGraphProperty } from "./auditableItemGraphProperty";
 import type { AuditableItemGraphResource } from "./auditableItemGraphResource";
 
 /**
@@ -34,7 +33,7 @@ export class AuditableItemGraphVertex {
 	 * The timestamp of when the vertex was last updated.
 	 */
 	@property({ type: "number", sortDirection: SortDirection.Descending })
-	public updated!: number;
+	public updated?: number;
 
 	/**
 	 * Combined alias index for the vertex used for querying.
@@ -43,16 +42,22 @@ export class AuditableItemGraphVertex {
 	public aliasIndex?: string;
 
 	/**
-	 * Alternative aliases that can be used to identify the vertex.
+	 * The schema for the metadata.
 	 */
-	@property({ type: "array", itemType: "string" })
-	public aliases?: AuditableItemGraphAlias[];
+	@property({ type: "string" })
+	public metadataSchema?: string;
 
 	/**
 	 * Metadata to associate with the vertex.
 	 */
-	@property({ type: "array", itemTypeRef: "AuditableItemGraphProperty[]" })
-	public metadata?: AuditableItemGraphProperty[];
+	@property({ type: "object" })
+	public metadata?: unknown;
+
+	/**
+	 * Alternative aliases that can be used to identify the vertex.
+	 */
+	@property({ type: "array", itemType: "string" })
+	public aliases?: AuditableItemGraphAlias[];
 
 	/**
 	 * The resources attached to the vertex.

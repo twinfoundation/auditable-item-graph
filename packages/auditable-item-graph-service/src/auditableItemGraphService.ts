@@ -256,7 +256,6 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		verified?: boolean;
 		verification?: {
 			created: number;
-			patches: IPatchOperation[];
 			failure?: string;
 			failureProperties?: { [id: string]: unknown };
 		}[];
@@ -291,7 +290,6 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			let verification:
 				| {
 						created: number;
-						patches: IPatchOperation[];
 						failure?: string;
 						failureProperties?: { [id: string]: unknown };
 				  }[]
@@ -331,10 +329,10 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			}
 
 			return {
-				verified: verifySignatureDepth !== VerifyDepth.None ? verified : undefined,
-				verification: verifySignatureDepth !== VerifyDepth.None ? verification : undefined,
 				vertex: vertexModel,
-				changesets: includeChangesets ? changesets : undefined
+				changesets: includeChangesets ? changesets : undefined,
+				verified: verifySignatureDepth !== VerifyDepth.None ? verified : undefined,
+				verification: verifySignatureDepth !== VerifyDepth.None ? verification : undefined
 			};
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "getFailed", undefined, error);
@@ -1061,7 +1059,6 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		verified?: boolean;
 		verification?: {
 			created: number;
-			patches: IPatchOperation[];
 			failure?: string;
 			failureProperties?: { [id: string]: unknown };
 		}[];
@@ -1070,7 +1067,6 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		let verified: boolean = true;
 		const verification: {
 			created: number;
-			patches: IPatchOperation[];
 			failure?: string;
 			failureProperties?: { [id: string]: unknown };
 		}[] = [];
@@ -1104,12 +1100,10 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 					const verify: {
 						created: number;
-						patches: IPatchOperation[];
 						failure?: string;
 						failureProperties?: { [id: string]: unknown };
 					} = {
-						created: storedChangeset.created,
-						patches: storedChangeset.patches
+						created: storedChangeset.created
 					};
 
 					verification.push(verify);

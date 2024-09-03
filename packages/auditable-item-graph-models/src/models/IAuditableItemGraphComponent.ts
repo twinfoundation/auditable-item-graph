@@ -1,6 +1,6 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import type { IComponent, IPatchOperation } from "@gtsc/core";
+import type { IComponent } from "@gtsc/core";
 import type { SortDirection } from "@gtsc/entity";
 import type { IAuditableItemGraphChangeset } from "./IAuditableItemGraphChangeset";
 import type { IAuditableItemGraphVertex } from "./IAuditableItemGraphVertex";
@@ -101,7 +101,6 @@ export interface IAuditableItemGraphComponent extends IComponent {
 		verified?: boolean;
 		verification?: {
 			created: number;
-			patches: IPatchOperation[];
 			failure?: string;
 			failureProperties?: { [id: string]: unknown };
 		}[];

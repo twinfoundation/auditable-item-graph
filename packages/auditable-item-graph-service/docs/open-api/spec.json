@@ -805,6 +805,16 @@
             "AuditableItemGraphGetResponse": {
                 "type": "object",
                 "properties": {
+                    "vertex": {
+                        "$ref": "#/components/schemas/AuditableItemGraphVertex"
+                    },
+                    "changesets": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AuditableItemGraphChangeset"
+                        },
+                        "description": "Changesets containing time sliced changes to the vertex."
+                    },
                     "verified": {
                         "type": "boolean",
                         "description": "Whether the vertex has been verified."
@@ -817,12 +827,6 @@
                                 "created": {
                                     "type": "number"
                                 },
-                                "patches": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/PatchOperation"
-                                    }
-                                },
                                 "failure": {
                                     "type": "string"
                                 },
@@ -832,22 +836,11 @@
                                 }
                             },
                             "required": [
-                                "created",
-                                "patches"
+                                "created"
                             ],
                             "additionalProperties": false
                         },
-                        "description": "The verification patches including any failure information."
-                    },
-                    "vertex": {
-                        "$ref": "#/components/schemas/AuditableItemGraphVertex"
-                    },
-                    "changesets": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/AuditableItemGraphChangeset"
-                        },
-                        "description": "Changesets containing time sliced changes to the vertex."
+                        "description": "The verification for the changesets including any failure information."
                     }
                 },
                 "required": [
@@ -855,40 +848,6 @@
                 ],
                 "additionalProperties": false,
                 "description": "The response body."
-            },
-            "PatchOperation": {
-                "type": "object",
-                "properties": {
-                    "op": {
-                        "type": "string",
-                        "enum": [
-                            "add",
-                            "remove",
-                            "replace",
-                            "move",
-                            "copy",
-                            "test"
-                        ],
-                        "description": "The operation that was performed on the item."
-                    },
-                    "path": {
-                        "type": "string",
-                        "description": "The path to the object that was changed."
-                    },
-                    "from": {
-                        "type": "string",
-                        "description": "The path the value was copied or moved from."
-                    },
-                    "value": {
-                        "description": "The value to add."
-                    }
-                },
-                "required": [
-                    "op",
-                    "path"
-                ],
-                "additionalProperties": false,
-                "description": "Interface describing a patch operation to add a property."
             },
             "AuditableItemGraphVertex": {
                 "type": "object",
@@ -1082,6 +1041,40 @@
                 ],
                 "additionalProperties": false,
                 "description": "Interface describing a set of updates to the vertex."
+            },
+            "PatchOperation": {
+                "type": "object",
+                "properties": {
+                    "op": {
+                        "type": "string",
+                        "enum": [
+                            "add",
+                            "remove",
+                            "replace",
+                            "move",
+                            "copy",
+                            "test"
+                        ],
+                        "description": "The operation that was performed on the item."
+                    },
+                    "path": {
+                        "type": "string",
+                        "description": "The path to the object that was changed."
+                    },
+                    "from": {
+                        "type": "string",
+                        "description": "The path the value was copied or moved from."
+                    },
+                    "value": {
+                        "description": "The value to add."
+                    }
+                },
+                "required": [
+                    "op",
+                    "path"
+                ],
+                "additionalProperties": false,
+                "description": "Interface describing a patch operation to add a property."
             },
             "AuditableItemGraphUpdateRequest": {
                 "type": "object",

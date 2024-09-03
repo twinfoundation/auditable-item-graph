@@ -14,7 +14,7 @@ import type {
 	IAuditableItemGraphVertex,
 	VerifyDepth
 } from "@gtsc/auditable-item-graph-models";
-import { Guards, NotSupportedError, type IPatchOperation } from "@gtsc/core";
+import { Guards, NotSupportedError } from "@gtsc/core";
 import type { SortDirection } from "@gtsc/entity";
 import { nameof } from "@gtsc/nameof";
 
@@ -105,7 +105,6 @@ export class AuditableItemGraphClient
 		verified?: boolean;
 		verification?: {
 			created: number;
-			patches: IPatchOperation[];
 			failure?: string;
 			failureProperties?: { [id: string]: unknown };
 		}[];

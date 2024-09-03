@@ -2192,23 +2192,7 @@ describe("AuditableItemGraphService", () => {
 			verified: true,
 			verification: [
 				{
-					created: FIRST_TICK,
-					patches: [
-						{
-							op: "add",
-							path: "/aliases",
-							value: [
-								{
-									id: "foo123",
-									created: FIRST_TICK
-								},
-								{
-									id: "bar456",
-									created: FIRST_TICK
-								}
-							]
-						}
-					]
+					created: FIRST_TICK
 				}
 			],
 			vertex: {

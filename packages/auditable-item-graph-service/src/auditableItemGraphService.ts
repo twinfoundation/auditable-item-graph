@@ -1,14 +1,14 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import type {
-	IAuditableItemGraphAlias,
-	IAuditableItemGraphChangeset,
-	IAuditableItemGraphComponent,
-	IAuditableItemGraphCredential,
-	IAuditableItemGraphEdge,
-	IAuditableItemGraphIntegrity,
-	IAuditableItemGraphResource,
-	IAuditableItemGraphVertex,
+import {
+	type IAuditableItemGraphAlias,
+	type IAuditableItemGraphChangeset,
+	type IAuditableItemGraphComponent,
+	type IAuditableItemGraphCredential,
+	type IAuditableItemGraphEdge,
+	type IAuditableItemGraphIntegrity,
+	type IAuditableItemGraphResource,
+	type IAuditableItemGraphVertex,
 	VerifyDepth
 } from "@gtsc/auditable-item-graph-models";
 import {
@@ -299,8 +299,8 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			let changesets: IAuditableItemGraphChangeset[] | undefined;
 
 			if (
-				verifySignatureDepth === "current" ||
-				verifySignatureDepth === "all" ||
+				verifySignatureDepth === VerifyDepth.Current ||
+				verifySignatureDepth === VerifyDepth.All ||
 				includeChangesets
 			) {
 				const verifyResult = await this.verifyChangesets(vertexModel, verifySignatureDepth);
@@ -331,8 +331,8 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			}
 
 			return {
-				verified,
-				verification,
+				verified: verifySignatureDepth !== VerifyDepth.None ? verified : undefined,
+				verification: verifySignatureDepth !== VerifyDepth.None ? verification : undefined,
 				vertex: vertexModel,
 				changesets: includeChangesets ? changesets : undefined
 			};
@@ -1126,8 +1126,8 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 					if (Converter.bytesToBase64(verifyHash) !== storedChangeset.hash) {
 						verify.failure = "invalidChangesetHash";
 					} else if (
-						verifySignatureDepth === "all" ||
-						(verifySignatureDepth === "current" &&
+						verifySignatureDepth === VerifyDepth.All ||
+						(verifySignatureDepth === VerifyDepth.Current &&
 							!Is.stringValue(changesetsResult.cursor) &&
 							i === storedChangesets.length - 1)
 					) {

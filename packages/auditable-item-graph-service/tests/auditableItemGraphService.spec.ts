@@ -1,5 +1,6 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
+import { VerifyDepth } from "@gtsc/auditable-item-graph-models";
 import { RandomHelper } from "@gtsc/core";
 import { MemoryEntityStorageConnector } from "@gtsc/entity-storage-connector-memory";
 import { EntityStorageConnectorFactory } from "@gtsc/entity-storage-models";
@@ -461,7 +462,7 @@ describe("AuditableItemGraphService", () => {
 
 		const result = await service.get(id, {
 			includeChangesets: true,
-			verifySignatureDepth: "current"
+			verifySignatureDepth: VerifyDepth.Current
 		});
 
 		expect(result.verified).toEqual(true);
@@ -560,7 +561,7 @@ describe("AuditableItemGraphService", () => {
 
 		const result = await service.get(id, {
 			includeChangesets: true,
-			verifySignatureDepth: "current"
+			verifySignatureDepth: VerifyDepth.Current
 		});
 
 		expect(result.verified).toEqual(true);
@@ -662,7 +663,7 @@ describe("AuditableItemGraphService", () => {
 
 		const result = await service.get(id, {
 			includeChangesets: true,
-			verifySignatureDepth: "all"
+			verifySignatureDepth: VerifyDepth.All
 		});
 
 		expect(result.verified).toEqual(true);
@@ -859,7 +860,7 @@ describe("AuditableItemGraphService", () => {
 
 		const result = await service.get(id, {
 			includeChangesets: true,
-			verifySignatureDepth: "all"
+			verifySignatureDepth: VerifyDepth.All
 		});
 
 		expect(result.verified).toEqual(true);
@@ -1090,7 +1091,7 @@ describe("AuditableItemGraphService", () => {
 
 		const result = await service.get(id, {
 			includeChangesets: true,
-			verifySignatureDepth: "all"
+			verifySignatureDepth: VerifyDepth.All
 		});
 
 		expect(result.verified).toEqual(true);
@@ -1436,7 +1437,7 @@ describe("AuditableItemGraphService", () => {
 
 		const result = await service.get(id, {
 			includeChangesets: true,
-			verifySignatureDepth: "all"
+			verifySignatureDepth: VerifyDepth.All
 		});
 
 		expect(result.verified).toEqual(true);
@@ -1665,7 +1666,7 @@ describe("AuditableItemGraphService", () => {
 
 		const result = await service.get(id, {
 			includeChangesets: true,
-			verifySignatureDepth: "all"
+			verifySignatureDepth: VerifyDepth.All
 		});
 
 		expect(result.verified).toEqual(true);
@@ -2182,7 +2183,10 @@ describe("AuditableItemGraphService", () => {
 
 		await service.removeImmutable(id, TEST_NODE_IDENTITY);
 
-		const vertex = await service.get(id, { includeChangesets: true, verifySignatureDepth: "all" });
+		const vertex = await service.get(id, {
+			includeChangesets: true,
+			verifySignatureDepth: VerifyDepth.All
+		});
 
 		expect(vertex).toEqual({
 			verified: true,

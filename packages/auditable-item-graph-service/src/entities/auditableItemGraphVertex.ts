@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0.
 import { entity, property, SortDirection } from "@gtsc/entity";
 import type { AuditableItemGraphAlias } from "./auditableItemGraphAlias";
-import type { AuditableItemGraphChangeset } from "./auditableItemGraphChangeset";
 import type { AuditableItemGraphEdge } from "./auditableItemGraphEdge";
 import type { AuditableItemGraphResource } from "./auditableItemGraphResource";
 
@@ -70,10 +69,4 @@ export class AuditableItemGraphVertex {
 	 */
 	@property({ type: "array", itemTypeRef: "AuditableItemGraphEdge" })
 	public edges?: AuditableItemGraphEdge[];
-
-	/**
-	 * Changesets containing time sliced changes to the vertex.
-	 */
-	@property({ type: "array", itemTypeRef: "AuditableItemGraphChange" })
-	public changesets?: AuditableItemGraphChangeset[];
 }

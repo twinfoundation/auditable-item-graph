@@ -91,11 +91,3 @@ The resources attached to the vertex.
 > `optional` **edges**: [`AuditableItemGraphEdge`](AuditableItemGraphEdge.md)[]
 
 Edges connected to the vertex.
-
-***
-
-### changesets?
-
-> `optional` **changesets**: [`AuditableItemGraphChangeset`](AuditableItemGraphChangeset.md)[]
-
-Changesets containing time sliced changes to the vertex.

@@ -27,3 +27,9 @@ The verification patches including any failure information.
 > **vertex**: [`IAuditableItemGraphVertex`](IAuditableItemGraphVertex.md)
 
 The vertex data.
+
+#### changesets?
+
+> `optional` **changesets**: [`IAuditableItemGraphChangeset`](IAuditableItemGraphChangeset.md)[]
+
+Changesets containing time sliced changes to the vertex.

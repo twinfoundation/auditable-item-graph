@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0.
 import type {
 	IAuditableItemGraphAlias,
+	IAuditableItemGraphChangeset,
 	IAuditableItemGraphComponent,
 	IAuditableItemGraphCredential,
 	IAuditableItemGraphEdge,
@@ -19,6 +20,7 @@ import {
 	NotFoundError,
 	ObjectHelper,
 	RandomHelper,
+	StringHelper,
 	Urn,
 	type IPatchOperation
 } from "@gtsc/core";
@@ -45,6 +47,7 @@ import {
 } from "@gtsc/vault-models";
 import { Jwt } from "@gtsc/web";
 import type { AuditableItemGraphAlias } from "./entities/auditableItemGraphAlias";
+import type { AuditableItemGraphChangeset } from "./entities/auditableItemGraphChangeset";
 import type { AuditableItemGraphEdge } from "./entities/auditableItemGraphEdge";
 import type { AuditableItemGraphResource } from "./entities/auditableItemGraphResource";
 import type { AuditableItemGraphVertex } from "./entities/auditableItemGraphVertex";
@@ -84,6 +87,12 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	private readonly _vertexStorage: IEntityStorageConnector<AuditableItemGraphVertex>;
 
 	/**
+	 * The entity storage for changesets.
+	 * @internal
+	 */
+	private readonly _changesetStorage: IEntityStorageConnector<AuditableItemGraphChangeset>;
+
+	/**
 	 * The immutable storage for the integrity data.
 	 * @internal
 	 */
@@ -119,6 +128,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @param options.config The configuration for the connector.
 	 * @param options.vaultConnectorType The vault connector type, defaults to "vault".
 	 * @param options.vertexEntityStorageType The entity storage for vertices, defaults to "auditable-item-graph-vertex".
+	 * @param options.changesetEntityStorageType The entity storage for changesets, defaults to "auditable-item-graph-changeset".
 	 * @param options.integrityImmutableStorageType The immutable storage for audit trail, defaults to "auditable-item-graph".
 	 * @param options.identityConnectorType The identity connector type, defaults to "identity".
 	 */
@@ -126,13 +136,19 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		vaultConnectorType?: string;
 		vertexEntityStorageType?: string;
 		integrityImmutableStorageType?: string;
+		changesetEntityStorageType?: string;
 		identityConnectorType?: string;
 		config?: IAuditableItemGraphServiceConfig;
 	}) {
 		this._vaultConnector = VaultConnectorFactory.get(options?.vaultConnectorType ?? "vault");
 
 		this._vertexStorage = EntityStorageConnectorFactory.get(
-			options?.vertexEntityStorageType ?? "auditable-item-graph-vertex"
+			options?.vertexEntityStorageType ?? StringHelper.kebabCase(nameof<AuditableItemGraphVertex>())
+		);
+
+		this._changesetStorage = EntityStorageConnectorFactory.get(
+			options?.changesetEntityStorageType ??
+				StringHelper.kebabCase(nameof<AuditableItemGraphChangeset>())
 		);
 
 		this._integrityImmutableStorage = ImmutableStorageConnectorFactory.get(
@@ -245,6 +261,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			failureProperties?: { [id: string]: unknown };
 		}[];
 		vertex: IAuditableItemGraphVertex;
+		changesets?: IAuditableItemGraphChangeset[];
 	}> {
 		Guards.stringValue(this.CLASS_NAME, nameof(id), id);
 
@@ -267,6 +284,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 			const vertexModel = this.vertexEntityToModel(vertexEntity);
 
+			const includeChangesets = options?.includeChangesets ?? false;
+			const verifySignatureDepth = options?.verifySignatureDepth ?? "none";
+
 			let verified: boolean | undefined;
 			let verification:
 				| {
@@ -276,11 +296,17 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 						failureProperties?: { [id: string]: unknown };
 				  }[]
 				| undefined;
+			let changesets: IAuditableItemGraphChangeset[] | undefined;
 
-			if (options?.verifySignatureDepth === "current" || options?.verifySignatureDepth === "all") {
-				const verifyResult = await this.verifyChangesets(vertexModel, options.verifySignatureDepth);
+			if (
+				verifySignatureDepth === "current" ||
+				verifySignatureDepth === "all" ||
+				includeChangesets
+			) {
+				const verifyResult = await this.verifyChangesets(vertexModel, verifySignatureDepth);
 				verified = verifyResult.verified;
 				verification = verifyResult.verification;
+				changesets = verifyResult.changesets;
 			}
 
 			if (!(options?.includeDeleted ?? false)) {
@@ -304,14 +330,11 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				}
 			}
 
-			if (!(options?.includeChangesets ?? false)) {
-				delete vertexModel.changesets;
-			}
-
 			return {
 				verified,
 				verification,
-				vertex: vertexModel
+				vertex: vertexModel,
+				changesets: includeChangesets ? changesets : undefined
 			};
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "getFailed", undefined, error);
@@ -428,24 +451,35 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				throw new NotFoundError(this.CLASS_NAME, "vertexNotFound", id);
 			}
 
-			let hasChanged = false;
+			let changesetsResult;
+			do {
+				changesetsResult = await this._changesetStorage.query(
+					{
+						property: "vertexId",
+						value: vertexId,
+						comparison: ComparisonOperator.Equals
+					},
+					[
+						{
+							property: "created",
+							sortDirection: SortDirection.Ascending
+						}
+					],
+					undefined,
+					changesetsResult?.cursor
+				);
 
-			if (Is.arrayValue(vertexEntity.changesets)) {
-				for (const changeset of vertexEntity.changesets) {
+				for (const changeset of changesetsResult.entities) {
 					if (Is.stringValue(changeset.immutableStorageId)) {
 						await this._integrityImmutableStorage.remove(
 							nodeIdentity,
 							changeset.immutableStorageId
 						);
 						delete changeset.immutableStorageId;
-						hasChanged = true;
+						await this._changesetStorage.set(changeset as AuditableItemGraphChangeset);
 					}
 				}
-			}
-
-			if (hasChanged) {
-				await this._vertexStorage.set(vertexEntity);
-			}
+			} while (Is.stringValue(changesetsResult.cursor));
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "removeImmutableFailed", undefined, error);
 		}
@@ -482,14 +516,6 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		 * An optional cursor, when defined can be used to call find to get more entities.
 		 */
 		cursor?: string;
-		/**
-		 * Number of entities to return.
-		 */
-		pageSize?: number;
-		/**
-		 * Total entities length.
-		 */
-		totalEntities: number;
 	}> {
 		try {
 			const propertiesToReturn = properties ?? ["id", "created", "aliases", "metadata"];
@@ -542,9 +568,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				entities: (results.entities as AuditableItemGraphVertex[]).map(e =>
 					this.vertexEntityToModel(e)
 				),
-				cursor: results.cursor,
-				pageSize: results.pageSize,
-				totalEntities: results.totalEntities
+				cursor: results.cursor
 			};
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "queryingFailed", undefined, error);
@@ -613,19 +637,6 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			}
 		}
 
-		if (Is.arrayValue(vertexModel.changesets)) {
-			entity.changesets ??= [];
-			for (const changeset of vertexModel.changesets) {
-				entity.changesets.push({
-					created: changeset.created,
-					userIdentity: changeset.userIdentity,
-					patches: changeset.patches,
-					hash: changeset.hash,
-					immutableStorageId: changeset.immutableStorageId
-				});
-			}
-		}
-
 		return entity;
 	}
 
@@ -685,19 +696,6 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 					metadata: edgeEntity.metadata
 				};
 				model.edges.push(edgeModel);
-			}
-		}
-
-		if (Is.arrayValue(vertexEntity.changesets)) {
-			model.changesets ??= [];
-			for (const changeset of vertexEntity.changesets) {
-				model.changesets.push({
-					created: changeset.created,
-					userIdentity: changeset.userIdentity,
-					patches: changeset.patches,
-					hash: changeset.hash,
-					immutableStorageId: changeset.immutableStorageId
-				});
 			}
 		}
 
@@ -774,7 +772,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			vertexModel.aliases.push(model);
 		} else if (
 			existing.metadataSchema !== alias.metadataSchema ||
-			JsonHelper.canonicalize(existing.metadata) !== JsonHelper.canonicalize(alias.metadata)
+			!ObjectHelper.equal(existing.metadata, alias.metadata, false)
 		) {
 			// Existing alias found, update the metadata.
 			existing.updated = context.now;
@@ -853,7 +851,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			vertexModel.resources.push(model);
 		} else if (
 			existing.metadataSchema !== resource.metadataSchema ||
-			JsonHelper.canonicalize(existing.metadata) !== JsonHelper.canonicalize(resource.metadata)
+			!ObjectHelper.equal(existing.metadata, resource.metadata, false)
 		) {
 			// Existing resource found, update the metadata.
 			existing.updated = context.now;
@@ -937,7 +935,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		} else if (
 			existing.relationship !== edge.relationship ||
 			existing.metadataSchema !== edge.metadataSchema ||
-			JsonHelper.canonicalize(existing.metadata) !== JsonHelper.canonicalize(edge.metadata)
+			!ObjectHelper.equal(existing.metadata, edge.metadata, false)
 		) {
 			// Existing resource found, update the metadata.
 			existing.updated = context.now;
@@ -961,25 +959,34 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	): Promise<boolean> {
 		const patches = JsonHelper.diff(originalModel, updatedModel);
 
-		const changeSets = originalModel.changesets ?? [];
+		const lastChangesetResult = await this._changesetStorage.query(
+			{
+				property: "vertexId",
+				value: originalModel.id,
+				comparison: ComparisonOperator.Equals
+			},
+			[
+				{
+					property: "created",
+					sortDirection: SortDirection.Descending
+				}
+			],
+			undefined,
+			undefined,
+			1
+		);
 
-		if (patches.length > 0 || changeSets.length === 0) {
-			const b2b = new Blake2b(Blake2b.SIZE_256);
+		const lastChangeset = lastChangesetResult.entities[0];
 
-			// If there are previous changesets, add the most recent one to the new hash.
-			// This provides a link to previous integrity checks.
-			if (changeSets.length > 0) {
-				b2b.update(Converter.base64ToBytes(changeSets[changeSets.length - 1].hash));
-			}
-
-			// Add the epoch and the identity in to the signature
-			b2b.update(Converter.utf8ToBytes(context.now.toString()));
-			b2b.update(Converter.utf8ToBytes(context.userIdentity));
-
-			// Add the patch operations to the hash.
-			b2b.update(ObjectHelper.toBytes(patches));
-
-			const changeSetHash = b2b.digest();
+		if (patches.length > 0 || Is.empty(lastChangeset)) {
+			const changeSetHash = this.calculateChangesetHash(
+				context.now,
+				context.userIdentity,
+				patches,
+				Is.stringValue(lastChangeset?.hash)
+					? Converter.base64ToBytes(lastChangeset.hash)
+					: undefined
+			);
 
 			// Generate the signature for the changeset using the hash.
 			const signature = await this._vaultConnector.sign(
@@ -1025,15 +1032,14 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			);
 
 			// Link the immutable storage id to the changeset
-			changeSets.push({
+			await this._changesetStorage.set({
+				hash: Converter.bytesToBase64(changeSetHash),
+				vertexId: updatedModel.id,
 				created: context.now,
 				userIdentity: context.userIdentity,
 				patches,
-				hash: Converter.bytesToBase64(changeSetHash),
 				immutableStorageId
 			});
-
-			updatedModel.changesets = changeSets;
 
 			return true;
 		}
@@ -1050,7 +1056,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 */
 	private async verifyChangesets(
 		vertex: IAuditableItemGraphVertex,
-		verifySignatureDepth: Omit<VerifyDepth, "none">
+		verifySignatureDepth: VerifyDepth
 	): Promise<{
 		verified?: boolean;
 		verification?: {
@@ -1059,6 +1065,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			failure?: string;
 			failureProperties?: { [id: string]: unknown };
 		}[];
+		changesets?: IAuditableItemGraphChangeset[];
 	}> {
 		let verified: boolean = true;
 		const verification: {
@@ -1067,129 +1074,180 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			failure?: string;
 			failureProperties?: { [id: string]: unknown };
 		}[] = [];
+		const changesets: IAuditableItemGraphChangeset[] = [];
 
-		if (Is.arrayValue(vertex.changesets)) {
-			let lastHash: Uint8Array | undefined;
-			for (let i = 0; i < vertex.changesets.length; i++) {
-				const calculatedChangeset = vertex.changesets[i];
+		let changesetsResult;
+		let lastHash: Uint8Array | undefined;
 
-				const verify: {
-					created: number;
-					patches: IPatchOperation[];
-					failure?: string;
-					failureProperties?: { [id: string]: unknown };
-				} = {
-					created: vertex.changesets[i].created,
-					patches: calculatedChangeset.patches
-				};
+		do {
+			changesetsResult = await this._changesetStorage.query(
+				{
+					property: "vertexId",
+					value: vertex.id,
+					comparison: ComparisonOperator.Equals
+				},
+				[
+					{
+						property: "created",
+						sortDirection: SortDirection.Ascending
+					}
+				],
+				undefined,
+				changesetsResult?.cursor
+			);
 
-				verification.push(verify);
+			const storedChangesets = changesetsResult.entities as AuditableItemGraphChangeset[];
+			if (Is.arrayValue(storedChangesets)) {
+				for (let i = 0; i < storedChangesets.length; i++) {
+					const storedChangeset = storedChangesets[i];
+					changesets.push(storedChangeset);
 
-				const b2b = new Blake2b(Blake2b.SIZE_256);
-				// Add the last hash if there is one
-				if (Is.uint8Array(lastHash)) {
-					b2b.update(lastHash);
-				}
-				// Add the epoch and the identity in to the signature
-				b2b.update(Converter.utf8ToBytes(calculatedChangeset.created.toString()));
-				b2b.update(Converter.utf8ToBytes(calculatedChangeset.userIdentity));
+					const verify: {
+						created: number;
+						patches: IPatchOperation[];
+						failure?: string;
+						failureProperties?: { [id: string]: unknown };
+					} = {
+						created: storedChangeset.created,
+						patches: storedChangeset.patches
+					};
 
-				// Add the patch operations to the hash.
-				b2b.update(ObjectHelper.toBytes(calculatedChangeset.patches));
+					verification.push(verify);
 
-				const verifyHash = b2b.digest();
-
-				lastHash = verifyHash;
-
-				if (Converter.bytesToBase64(verifyHash) !== calculatedChangeset.hash) {
-					verify.failure = "invalidChangesetHash";
-				} else if (
-					verifySignatureDepth === "all" ||
-					(verifySignatureDepth === "current" && i === vertex.changesets.length - 1)
-				) {
-					let integrityPatches: IPatchOperation[] | undefined;
-					let integrityNodeIdentity: string | undefined;
-					let integrityUserIdentity: string | undefined;
-
-					// Create the signature for the local changeset
-					const changesetSignature = await this._vaultConnector.sign(
-						`${vertex.nodeIdentity}/${this._vaultKeyId}`,
-						verifyHash
+					const verifyHash = this.calculateChangesetHash(
+						storedChangeset.created,
+						storedChangeset.userIdentity,
+						storedChangeset.patches,
+						lastHash
 					);
 
-					if (Is.stringValue(calculatedChangeset.immutableStorageId)) {
-						// Get the vc from the immutable data store
-						const verifiableCredentialBytes = await this._integrityImmutableStorage.get(
-							calculatedChangeset.immutableStorageId
+					lastHash = verifyHash;
+
+					if (Converter.bytesToBase64(verifyHash) !== storedChangeset.hash) {
+						verify.failure = "invalidChangesetHash";
+					} else if (
+						verifySignatureDepth === "all" ||
+						(verifySignatureDepth === "current" &&
+							!Is.stringValue(changesetsResult.cursor) &&
+							i === storedChangesets.length - 1)
+					) {
+						let integrityPatches: IPatchOperation[] | undefined;
+						let integrityNodeIdentity: string | undefined;
+						let integrityUserIdentity: string | undefined;
+
+						// Create the signature for the local changeset
+						const changesetSignature = await this._vaultConnector.sign(
+							`${vertex.nodeIdentity}/${this._vaultKeyId}`,
+							verifyHash
 						);
-						const verifiableCredentialJwt = Converter.bytesToUtf8(verifiableCredentialBytes);
-						const decodedJwt = await Jwt.decode(verifiableCredentialJwt);
 
-						// Verify the credential
-						const verificationResult =
-							await this._identityConnector.checkVerifiableCredential<IAuditableItemGraphCredential>(
-								verifiableCredentialJwt
+						if (Is.stringValue(storedChangeset.immutableStorageId)) {
+							// Get the vc from the immutable data store
+							const verifiableCredentialBytes = await this._integrityImmutableStorage.get(
+								storedChangeset.immutableStorageId
 							);
+							const verifiableCredentialJwt = Converter.bytesToUtf8(verifiableCredentialBytes);
+							const decodedJwt = await Jwt.decode(verifiableCredentialJwt);
 
-						if (verificationResult.revoked) {
-							verify.failure = "changesetCredentialRevoked";
-						} else {
-							// Credential is not revoked so check the signature
-							const credentialData = Is.array(
-								verificationResult.verifiableCredential?.credentialSubject
-							)
-								? verificationResult.verifiableCredential?.credentialSubject[0]
-								: verificationResult.verifiableCredential?.credentialSubject ?? {
-										signature: ""
-									};
-
-							integrityNodeIdentity = DocumentHelper.parse(decodedJwt.header?.kid ?? "").id;
-
-							// Does the immutable signature match the local one we calculated
-							if (credentialData.signature !== Converter.bytesToBase64(changesetSignature)) {
-								verify.failure = "invalidChangesetSignature";
-							} else if (Is.stringValue(credentialData.integrity)) {
-								const decrypted = await this._vaultConnector.decrypt(
-									`${vertex.nodeIdentity}/${this._vaultKeyId}`,
-									VaultEncryptionType.ChaCha20Poly1305,
-									Converter.base64ToBytes(credentialData.integrity)
+							// Verify the credential
+							const verificationResult =
+								await this._identityConnector.checkVerifiableCredential<IAuditableItemGraphCredential>(
+									verifiableCredentialJwt
 								);
 
-								const canonical = Converter.bytesToUtf8(decrypted);
-								const calculatedIntegrity: IAuditableItemGraphIntegrity = {
-									created: calculatedChangeset.created,
-									userIdentity: calculatedChangeset.userIdentity,
-									patches: calculatedChangeset.patches
-								};
-								if (canonical !== JsonHelper.canonicalize(calculatedIntegrity)) {
-									verify.failure = "invalidChangesetCanonical";
+							if (verificationResult.revoked) {
+								verify.failure = "changesetCredentialRevoked";
+							} else {
+								// Credential is not revoked so check the signature
+								const credentialData = Is.array(
+									verificationResult.verifiableCredential?.credentialSubject
+								)
+									? verificationResult.verifiableCredential?.credentialSubject[0]
+									: verificationResult.verifiableCredential?.credentialSubject ?? {
+											signature: ""
+										};
+
+								integrityNodeIdentity = DocumentHelper.parse(decodedJwt.header?.kid ?? "").id;
+
+								// Does the immutable signature match the local one we calculated
+								if (credentialData.signature !== Converter.bytesToBase64(changesetSignature)) {
+									verify.failure = "invalidChangesetSignature";
+								} else if (Is.stringValue(credentialData.integrity)) {
+									const decrypted = await this._vaultConnector.decrypt(
+										`${vertex.nodeIdentity}/${this._vaultKeyId}`,
+										VaultEncryptionType.ChaCha20Poly1305,
+										Converter.base64ToBytes(credentialData.integrity)
+									);
+
+									const canonical = Converter.bytesToUtf8(decrypted);
+									const calculatedIntegrity: IAuditableItemGraphIntegrity = {
+										created: storedChangeset.created,
+										userIdentity: storedChangeset.userIdentity,
+										patches: storedChangeset.patches
+									};
+									if (canonical !== JsonHelper.canonicalize(calculatedIntegrity)) {
+										verify.failure = "invalidChangesetCanonical";
+									}
+									const changesAndIdentity: IAuditableItemGraphIntegrity = JSON.parse(canonical);
+									integrityPatches = changesAndIdentity.patches;
+									integrityUserIdentity = changesAndIdentity.userIdentity;
 								}
-								const changesAndIdentity: IAuditableItemGraphIntegrity = JSON.parse(canonical);
-								integrityPatches = changesAndIdentity.patches;
-								integrityUserIdentity = changesAndIdentity.userIdentity;
 							}
 						}
-					}
 
-					// If there was a failure add some additional information
-					if (Is.stringValue(verify.failure)) {
-						verify.failureProperties = {
-							hash: calculatedChangeset.hash,
-							epoch: calculatedChangeset.created,
-							calculatedChangeset,
-							integrityChangeset: integrityPatches,
-							integrityNodeIdentity,
-							integrityUserIdentity
-						};
-						verified = false;
+						// If there was a failure add some additional information
+						if (Is.stringValue(verify.failure)) {
+							verify.failureProperties = {
+								hash: storedChangeset.hash,
+								epoch: storedChangeset.created,
+								integrityPatches,
+								integrityNodeIdentity,
+								integrityUserIdentity
+							};
+							verified = false;
+						}
 					}
 				}
 			}
-		}
+		} while (Is.stringValue(changesetsResult.cursor));
 
 		return {
 			verified,
-			verification
+			verification,
+			changesets
 		};
+	}
+
+	/**
+	 * Calculate the changeset hash.
+	 * @param now The current epoch.
+	 * @param userIdentity The user identity.
+	 * @param patches The patches.
+	 * @param lastHash The last hash.
+	 * @returns The hash.
+	 * @internal
+	 */
+	private calculateChangesetHash(
+		now: number,
+		userIdentity: string,
+		patches: IPatchOperation[],
+		lastHash: Uint8Array | undefined
+	): Uint8Array {
+		const b2b = new Blake2b(Blake2b.SIZE_256);
+
+		// If there is a previous changeset, add the most recent one to the new hash.
+		// This provides a link to previous integrity checks.
+		if (Is.uint8Array(lastHash)) {
+			b2b.update(lastHash);
+		}
+
+		// Add the epoch and the identity in to the signature
+		b2b.update(Converter.utf8ToBytes(now.toString()));
+		b2b.update(Converter.utf8ToBytes(userIdentity));
+
+		// Add the patch operations to the hash.
+		b2b.update(ObjectHelper.toBytes(patches));
+
+		return b2b.digest();
 	}
 }

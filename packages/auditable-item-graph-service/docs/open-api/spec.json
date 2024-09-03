@@ -289,9 +289,7 @@
                                                     ]
                                                 }
                                             ],
-                                            "cursor": "1",
-                                            "pageSize": 10,
-                                            "totalEntities": 20
+                                            "cursor": "1"
                                         }
                                     }
                                 }
@@ -843,6 +841,13 @@
                     },
                     "vertex": {
                         "$ref": "#/components/schemas/AuditableItemGraphVertex"
+                    },
+                    "changesets": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AuditableItemGraphChangeset"
+                        },
+                        "description": "Changesets containing time sliced changes to the vertex."
                     }
                 },
                 "required": [
@@ -912,13 +917,6 @@
                             "$ref": "#/components/schemas/AuditableItemGraphEdge"
                         },
                         "description": "Edges connected to the vertex."
-                    },
-                    "changesets": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/AuditableItemGraphChangeset"
-                        },
-                        "description": "Changesets containing time sliced changes to the vertex."
                     },
                     "id": {
                         "type": "string",
@@ -1191,19 +1189,10 @@
                     "cursor": {
                         "type": "string",
                         "description": "An optional cursor, when defined can be used to call find to get more entities."
-                    },
-                    "pageSize": {
-                        "type": "number",
-                        "description": "Number of entities to return."
-                    },
-                    "totalEntities": {
-                        "type": "number",
-                        "description": "Total entities length."
                     }
                 },
                 "required": [
-                    "entities",
-                    "totalEntities"
+                    "entities"
                 ],
                 "additionalProperties": false,
                 "description": "The response payload."

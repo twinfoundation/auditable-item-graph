@@ -32,6 +32,10 @@ The entity storage for vertices, defaults to "auditable-item-graph-vertex".
 
 The immutable storage for audit trail, defaults to "auditable-item-graph".
 
+• **options.changesetEntityStorageType?**: `string`
+
+The entity storage for changesets, defaults to "auditable-item-graph-changeset".
+
 • **options.identityConnectorType?**: `string`
 
 The identity connector type, defaults to "identity".
@@ -159,6 +163,10 @@ The vertex if found.
 ##### vertex
 
 > **vertex**: `IAuditableItemGraphVertex`
+
+##### changesets?
+
+> `optional` **changesets**: `IAuditableItemGraphChangeset`[]
 
 #### Implementation of
 
@@ -311,18 +319,6 @@ The entities, which can be partial if a limited keys list was provided.
 > `optional` **cursor**: `string`
 
 An optional cursor, when defined can be used to call find to get more entities.
-
-##### pageSize?
-
-> `optional` **pageSize**: `number`
-
-Number of entities to return.
-
-##### totalEntities
-
-> **totalEntities**: `number`
-
-Total entities length.
 
 #### Implementation of
 

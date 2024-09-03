@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0.
 import type { IComponent, IPatchOperation } from "@gtsc/core";
 import type { SortDirection } from "@gtsc/entity";
+import type { IAuditableItemGraphChangeset } from "./IAuditableItemGraphChangeset";
 import type { IAuditableItemGraphVertex } from "./IAuditableItemGraphVertex";
 import type { VerifyDepth } from "./verifyDepth";
 
@@ -105,6 +106,7 @@ export interface IAuditableItemGraphComponent extends IComponent {
 			failureProperties?: { [id: string]: unknown };
 		}[];
 		vertex: IAuditableItemGraphVertex;
+		changesets?: IAuditableItemGraphChangeset[];
 	}>;
 
 	/**
@@ -147,13 +149,5 @@ export interface IAuditableItemGraphComponent extends IComponent {
 		 * An optional cursor, when defined can be used to call find to get more entities.
 		 */
 		cursor?: string;
-		/**
-		 * Number of entities to return.
-		 */
-		pageSize?: number;
-		/**
-		 * Total entities length.
-		 */
-		totalEntities: number;
 	}>;
 }

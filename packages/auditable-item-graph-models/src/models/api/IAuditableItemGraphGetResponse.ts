@@ -1,6 +1,7 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import type { IPatchOperation } from "@gtsc/core";
+import type { IAuditableItemGraphChangeset } from "../IAuditableItemGraphChangeset";
 import type { IAuditableItemGraphVertex } from "../IAuditableItemGraphVertex";
 
 /**
@@ -30,5 +31,10 @@ export interface IAuditableItemGraphGetResponse {
 		 * The vertex data.
 		 */
 		vertex: IAuditableItemGraphVertex;
+
+		/**
+		 * Changesets containing time sliced changes to the vertex.
+		 */
+		changesets?: IAuditableItemGraphChangeset[];
 	};
 }

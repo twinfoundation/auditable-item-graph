@@ -17,10 +17,12 @@ import {
 	TEST_USER_IDENTITY
 } from "./setupTestEnv";
 import { AuditableItemGraphService } from "../src/auditableItemGraphService";
+import type { AuditableItemGraphChangeset } from "../src/entities/auditableItemGraphChangeset";
 import type { AuditableItemGraphVertex } from "../src/entities/auditableItemGraphVertex";
 import { initSchema } from "../src/schema";
 
 let vertexStorage: MemoryEntityStorageConnector<AuditableItemGraphVertex>;
+let changesetStorage: MemoryEntityStorageConnector<AuditableItemGraphChangeset>;
 let immutableStorage: MemoryEntityStorageConnector<ImmutableItem>;
 
 const FIRST_TICK = 1724327716271;
@@ -39,7 +41,15 @@ describe("AuditableItemGraphService", () => {
 			entitySchema: nameof<AuditableItemGraphVertex>()
 		});
 
+		changesetStorage = new MemoryEntityStorageConnector<AuditableItemGraphChangeset>({
+			entitySchema: nameof<AuditableItemGraphChangeset>()
+		});
+
 		EntityStorageConnectorFactory.register("auditable-item-graph-vertex", () => vertexStorage);
+		EntityStorageConnectorFactory.register(
+			"auditable-item-graph-changeset",
+			() => changesetStorage
+		);
 
 		immutableStorage = new MemoryEntityStorageConnector<ImmutableItem>({
 			entitySchema: nameof<ImmutableItem>()
@@ -89,23 +99,26 @@ describe("AuditableItemGraphService", () => {
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			updated: FIRST_TICK,
-			nodeIdentity: TEST_NODE_IDENTITY,
-			changesets: [
-				{
-					created: FIRST_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					patches: [],
-					hash: "5/QKaqyMYylY+/GwpcSHopUw9tSeIK3tYSNNoMuYwjw=",
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
-				}
-			]
+			nodeIdentity: TEST_NODE_IDENTITY
+		});
+
+		const changesetStore = changesetStorage.getStore();
+		const changeset = changesetStore[0];
+
+		expect(changeset).toEqual({
+			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+			created: FIRST_TICK,
+			userIdentity: TEST_USER_IDENTITY,
+			patches: [],
+			hash: "5/QKaqyMYylY+/GwpcSHopUw9tSeIK3tYSNNoMuYwjw=",
+			immutableStorageId:
+				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
 
 		const immutableStore = immutableStorage.getStore();
 
 		expect(`immutable:entity-storage:${immutableStore[0].id}`).toEqual(
-			vertex.changesets?.[0].immutableStorageId
+			changeset.immutableStorageId
 		);
 		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
 
@@ -149,38 +162,41 @@ describe("AuditableItemGraphService", () => {
 					id: "bar456",
 					created: FIRST_TICK
 				}
-			],
-			changesets: [
-				{
-					created: FIRST_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					patches: [
-						{
-							op: "add",
-							path: "/aliases",
-							value: [
-								{
-									id: "foo123",
-									created: FIRST_TICK
-								},
-								{
-									id: "bar456",
-									created: FIRST_TICK
-								}
-							]
-						}
-					],
-					hash: "Ht6zFJi0yl+MYTKgk+HdZW1PLWjJmSOwOkqrAA1NfVU=",
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
-				}
 			]
+		});
+
+		const changesetStore = changesetStorage.getStore();
+		const changeset = changesetStore[0];
+
+		expect(changeset).toEqual({
+			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+			created: FIRST_TICK,
+			userIdentity: TEST_USER_IDENTITY,
+			patches: [
+				{
+					op: "add",
+					path: "/aliases",
+					value: [
+						{
+							id: "foo123",
+							created: FIRST_TICK
+						},
+						{
+							id: "bar456",
+							created: FIRST_TICK
+						}
+					]
+				}
+			],
+			hash: "Ht6zFJi0yl+MYTKgk+HdZW1PLWjJmSOwOkqrAA1NfVU=",
+			immutableStorageId:
+				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
 
 		const immutableStore = immutableStorage.getStore();
 
 		expect(`immutable:entity-storage:${immutableStore[0].id}`).toEqual(
-			vertex.changesets?.[0].immutableStorageId
+			changeset.immutableStorageId
 		);
 		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
 
@@ -240,36 +256,40 @@ describe("AuditableItemGraphService", () => {
 			metadata: {
 				description: "This is a test",
 				counter: 123
-			},
-			changesets: [
-				{
-					created: FIRST_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					patches: [
-						{
-							op: "add",
-							path: "/metadataSchema",
-							value: "TestSchema"
-						},
-						{
-							op: "add",
-							path: "/metadata",
-							value: {
-								description: "This is a test",
-								counter: 123
-							}
-						}
-					],
-					hash: "Ioou22vvlnk7Bj/56W0/ZLx+siCwV7dToRLtP6a06gk=",
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
-				}
-			]
+			}
 		});
+
+		const changesetStore = changesetStorage.getStore();
+		const changeset = changesetStore[0];
+
+		expect(changeset).toEqual({
+			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+			created: FIRST_TICK,
+			userIdentity: TEST_USER_IDENTITY,
+			patches: [
+				{
+					op: "add",
+					path: "/metadataSchema",
+					value: "TestSchema"
+				},
+				{
+					op: "add",
+					path: "/metadata",
+					value: {
+						description: "This is a test",
+						counter: 123
+					}
+				}
+			],
+			hash: "Ioou22vvlnk7Bj/56W0/ZLx+siCwV7dToRLtP6a06gk=",
+			immutableStorageId:
+				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+		});
+
 		const immutableStore = immutableStorage.getStore();
 
 		expect(`immutable:entity-storage:${immutableStore[0].id}`).toEqual(
-			vertex.changesets?.[0].immutableStorageId
+			changeset.immutableStorageId
 		);
 		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
 
@@ -378,45 +398,48 @@ describe("AuditableItemGraphService", () => {
 					id: "bar456",
 					created: FIRST_TICK
 				}
-			],
-			changesets: [
-				{
-					created: FIRST_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					patches: [
-						{
-							op: "add",
-							path: "/metadataSchema",
-							value: "TestSchema"
-						},
-						{
-							op: "add",
-							path: "/metadata",
-							value: {
-								description: "This is a test",
-								counter: 123
-							}
-						},
-						{
-							op: "add",
-							path: "/aliases",
-							value: [
-								{
-									id: "foo123",
-									created: FIRST_TICK
-								},
-								{
-									id: "bar456",
-									created: FIRST_TICK
-								}
-							]
-						}
-					],
-					hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
-				}
 			]
+		});
+
+		const changesetStore = changesetStorage.getStore();
+		const changeset = changesetStore[0];
+
+		expect(changeset).toEqual({
+			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+			created: FIRST_TICK,
+			userIdentity: TEST_USER_IDENTITY,
+			patches: [
+				{
+					op: "add",
+					path: "/metadataSchema",
+					value: "TestSchema"
+				},
+				{
+					op: "add",
+					path: "/metadata",
+					value: {
+						description: "This is a test",
+						counter: 123
+					}
+				},
+				{
+					op: "add",
+					path: "/aliases",
+					value: [
+						{
+							id: "foo123",
+							created: FIRST_TICK
+						},
+						{
+							id: "bar456",
+							created: FIRST_TICK
+						}
+					]
+				}
+			],
+			hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
+			immutableStorageId:
+				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
 	});
 
@@ -461,45 +484,48 @@ describe("AuditableItemGraphService", () => {
 					id: "bar456",
 					created: FIRST_TICK
 				}
-			],
-			changesets: [
-				{
-					created: FIRST_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					patches: [
-						{
-							op: "add",
-							path: "/metadataSchema",
-							value: "TestSchema"
-						},
-						{
-							op: "add",
-							path: "/metadata",
-							value: {
-								description: "This is a test",
-								counter: 123
-							}
-						},
-						{
-							op: "add",
-							path: "/aliases",
-							value: [
-								{
-									id: "foo123",
-									created: FIRST_TICK
-								},
-								{
-									id: "bar456",
-									created: FIRST_TICK
-								}
-							]
-						}
-					],
-					hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
-				}
 			]
+		});
+
+		const changesetStore = changesetStorage.getStore();
+		const changeset = changesetStore[0];
+
+		expect(changeset).toEqual({
+			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+			created: FIRST_TICK,
+			userIdentity: TEST_USER_IDENTITY,
+			patches: [
+				{
+					op: "add",
+					path: "/metadataSchema",
+					value: "TestSchema"
+				},
+				{
+					op: "add",
+					path: "/metadata",
+					value: {
+						description: "This is a test",
+						counter: 123
+					}
+				},
+				{
+					op: "add",
+					path: "/aliases",
+					value: [
+						{
+							id: "foo123",
+							created: FIRST_TICK
+						},
+						{
+							id: "bar456",
+							created: FIRST_TICK
+						}
+					]
+				}
+			],
+			hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
+			immutableStorageId:
+				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
 	});
 
@@ -559,46 +585,49 @@ describe("AuditableItemGraphService", () => {
 					id: "bar456",
 					created: FIRST_TICK
 				}
-			],
-			changesets: [
-				{
-					created: FIRST_TICK,
-					userIdentity:
-						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-					patches: [
-						{
-							op: "add",
-							path: "/metadataSchema",
-							value: "TestSchema"
-						},
-						{
-							op: "add",
-							path: "/metadata",
-							value: {
-								description: "This is a test",
-								counter: 123
-							}
-						},
-						{
-							op: "add",
-							path: "/aliases",
-							value: [
-								{
-									id: "foo123",
-									created: FIRST_TICK
-								},
-								{
-									id: "bar456",
-									created: FIRST_TICK
-								}
-							]
-						}
-					],
-					hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
-				}
 			]
+		});
+
+		const changesetStore = changesetStorage.getStore();
+		const changeset = changesetStore[0];
+
+		expect(changeset).toEqual({
+			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+			created: FIRST_TICK,
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			patches: [
+				{
+					op: "add",
+					path: "/metadataSchema",
+					value: "TestSchema"
+				},
+				{
+					op: "add",
+					path: "/metadata",
+					value: {
+						description: "This is a test",
+						counter: 123
+					}
+				},
+				{
+					op: "add",
+					path: "/aliases",
+					value: [
+						{
+							id: "foo123",
+							created: FIRST_TICK
+						},
+						{
+							id: "bar456",
+							created: FIRST_TICK
+						}
+					]
+				}
+			],
+			hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
+			immutableStorageId:
+				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
 	});
 
@@ -658,75 +687,79 @@ describe("AuditableItemGraphService", () => {
 					id: "foo321",
 					created: SECOND_TICK
 				}
-			],
-			changesets: [
+			]
+		});
+
+		const changesetStore = changesetStorage.getStore();
+
+		expect(changesetStore[0]).toEqual({
+			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+			created: FIRST_TICK,
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			patches: [
 				{
-					created: FIRST_TICK,
-					userIdentity:
-						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-					patches: [
-						{
-							op: "add",
-							path: "/metadataSchema",
-							value: "TestSchema"
-						},
-						{
-							op: "add",
-							path: "/metadata",
-							value: {
-								description: "This is a test",
-								counter: 123
-							}
-						},
-						{
-							op: "add",
-							path: "/aliases",
-							value: [
-								{
-									id: "foo123",
-									created: FIRST_TICK
-								},
-								{
-									id: "bar456",
-									created: FIRST_TICK
-								}
-							]
-						}
-					],
-					hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+					op: "add",
+					path: "/metadataSchema",
+					value: "TestSchema"
 				},
 				{
-					created: SECOND_TICK,
-					userIdentity:
-						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-					patches: [
+					op: "add",
+					path: "/metadata",
+					value: {
+						description: "This is a test",
+						counter: 123
+					}
+				},
+				{
+					op: "add",
+					path: "/aliases",
+					value: [
 						{
-							op: "add",
-							path: "/aliases/0/deleted",
-							value: SECOND_TICK
+							id: "foo123",
+							created: FIRST_TICK
 						},
 						{
-							op: "add",
-							path: "/aliases/-",
-							value: {
-								id: "foo321",
-								created: SECOND_TICK
-							}
+							id: "bar456",
+							created: FIRST_TICK
 						}
-					],
-					hash: "2W+tlN6AQPd2vGVmKywUGvDKWGkuM9rtoHWmNOHRisM=",
-					immutableStorageId:
-						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
+					]
 				}
-			]
+			],
+			hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
+			immutableStorageId:
+				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+		});
+
+		expect(changesetStore[1]).toEqual({
+			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+			created: SECOND_TICK,
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			patches: [
+				{
+					op: "add",
+					path: "/aliases/0/deleted",
+					value: SECOND_TICK
+				},
+				{
+					op: "add",
+					path: "/aliases/-",
+					value: {
+						id: "foo321",
+						created: SECOND_TICK
+					}
+				}
+			],
+			hash: "2W+tlN6AQPd2vGVmKywUGvDKWGkuM9rtoHWmNOHRisM=",
+			immutableStorageId:
+				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
 
 		const immutableStore = immutableStorage.getStore();
 
 		expect(`immutable:entity-storage:${immutableStore[0].id}`).toEqual(
-			result.vertex.changesets?.[0].immutableStorageId
+			changesetStore[0].immutableStorageId
 		);
 		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
 
@@ -850,75 +883,79 @@ describe("AuditableItemGraphService", () => {
 					id: "bar456",
 					created: FIRST_TICK
 				}
-			],
-			changesets: [
+			]
+		});
+
+		const changesetStore = changesetStorage.getStore();
+
+		expect(changesetStore[0]).toEqual({
+			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+			created: FIRST_TICK,
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			patches: [
 				{
-					created: FIRST_TICK,
-					userIdentity:
-						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-					patches: [
-						{
-							op: "add",
-							path: "/metadataSchema",
-							value: "TestSchema"
-						},
-						{
-							op: "add",
-							path: "/metadata",
-							value: {
-								description: "This is a test",
-								counter: 123
-							}
-						},
-						{
-							op: "add",
-							path: "/aliases",
-							value: [
-								{
-									id: "foo123",
-									created: FIRST_TICK
-								},
-								{
-									id: "bar456",
-									created: FIRST_TICK
-								}
-							]
-						}
-					],
-					hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+					op: "add",
+					path: "/metadataSchema",
+					value: "TestSchema"
 				},
 				{
-					created: SECOND_TICK,
-					userIdentity:
-						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-					patches: [
+					op: "add",
+					path: "/metadata",
+					value: {
+						description: "This is a test",
+						counter: 123
+					}
+				},
+				{
+					op: "add",
+					path: "/aliases",
+					value: [
 						{
-							op: "remove",
-							path: "/metadata/description"
+							id: "foo123",
+							created: FIRST_TICK
 						},
 						{
-							op: "add",
-							path: "/metadata/title",
-							value: "Title"
-						},
-						{
-							op: "replace",
-							path: "/metadata/counter",
-							value: 456
+							id: "bar456",
+							created: FIRST_TICK
 						}
-					],
-					hash: "N5sb3hFYXdqtyNHVa7LYxpsz/dIwZrcgvMBio32DETE=",
-					immutableStorageId:
-						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
+					]
 				}
-			]
+			],
+			hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
+			immutableStorageId:
+				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+		});
+
+		expect(changesetStore[1]).toEqual({
+			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+			created: SECOND_TICK,
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			patches: [
+				{
+					op: "remove",
+					path: "/metadata/description"
+				},
+				{
+					op: "add",
+					path: "/metadata/title",
+					value: "Title"
+				},
+				{
+					op: "replace",
+					path: "/metadata/counter",
+					value: 456
+				}
+			],
+			hash: "N5sb3hFYXdqtyNHVa7LYxpsz/dIwZrcgvMBio32DETE=",
+			immutableStorageId:
+				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
 
 		const immutableStore = immutableStorage.getStore();
 		expect(`immutable:entity-storage:${immutableStore[0].id}`).toEqual(
-			result.vertex.changesets?.[0].immutableStorageId
+			changesetStore[0].immutableStorageId
 		);
 		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
 
@@ -1098,132 +1135,136 @@ describe("AuditableItemGraphService", () => {
 						resCounter: 456
 					}
 				}
-			],
-			changesets: [
+			]
+		});
+
+		const changesetStore = changesetStorage.getStore();
+
+		expect(changesetStore[0]).toEqual({
+			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+			created: FIRST_TICK,
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			patches: [
 				{
-					created: FIRST_TICK,
-					userIdentity:
-						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-					patches: [
+					op: "add",
+					path: "/metadataSchema",
+					value: "TestSchema"
+				},
+				{
+					op: "add",
+					path: "/metadata",
+					value: {
+						description: "This is a test",
+						counter: 123
+					}
+				},
+				{
+					op: "add",
+					path: "/aliases",
+					value: [
 						{
-							op: "add",
-							path: "/metadataSchema",
-							value: "TestSchema"
+							id: "foo123",
+							created: FIRST_TICK
 						},
 						{
-							op: "add",
-							path: "/metadata",
-							value: {
-								description: "This is a test",
-								counter: 123
+							id: "bar456",
+							created: FIRST_TICK
+						}
+					]
+				},
+				{
+					op: "add",
+					path: "/resources",
+					value: [
+						{
+							id: "resource1",
+							created: FIRST_TICK,
+							metadataSchema: "TestSchemaRes",
+							metadata: {
+								resDescription: "This is a test",
+								resCounter: 123
 							}
 						},
 						{
-							op: "add",
-							path: "/aliases",
-							value: [
-								{
-									id: "foo123",
-									created: FIRST_TICK
-								},
-								{
-									id: "bar456",
-									created: FIRST_TICK
-								}
-							]
-						},
-						{
-							op: "add",
-							path: "/resources",
-							value: [
-								{
-									id: "resource1",
-									created: FIRST_TICK,
-									metadataSchema: "TestSchemaRes",
-									metadata: {
-										resDescription: "This is a test",
-										resCounter: 123
-									}
-								},
-								{
-									id: "resource2",
-									created: FIRST_TICK,
-									metadataSchema: "TestSchemaRes",
-									metadata: {
-										resDescription: "This is a test2",
-										resCounter: 456
-									}
-								}
-							]
+							id: "resource2",
+							created: FIRST_TICK,
+							metadataSchema: "TestSchemaRes",
+							metadata: {
+								resDescription: "This is a test2",
+								resCounter: 456
+							}
 						}
-					],
-					hash: "Q74F7K0Uv1dX0ty5QkwhQarr3XFT7MLkqavHyYZsrBI=",
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+					]
+				}
+			],
+			hash: "Q74F7K0Uv1dX0ty5QkwhQarr3XFT7MLkqavHyYZsrBI=",
+			immutableStorageId:
+				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+		});
+
+		expect(changesetStore[1]).toEqual({
+			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+			created: SECOND_TICK,
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			patches: [
+				{
+					op: "remove",
+					path: "/metadata/description"
 				},
 				{
-					created: SECOND_TICK,
-					userIdentity:
-						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-					patches: [
-						{
-							op: "remove",
-							path: "/metadata/description"
-						},
-						{
-							op: "add",
-							path: "/metadata/title",
-							value: "Title"
-						},
-						{
-							op: "replace",
-							path: "/metadata/counter",
-							value: 456
-						},
-						{
-							op: "add",
-							path: "/resources/0/updated",
-							value: SECOND_TICK
-						},
-						{
-							op: "remove",
-							path: "/resources/0/metadata/resDescription"
-						},
-						{
-							op: "add",
-							path: "/resources/0/metadata/resTitle",
-							value: "Title"
-						},
-						{
-							op: "replace",
-							path: "/resources/0/metadata/resCounter",
-							value: 456
-						},
-						{
-							op: "add",
-							path: "/resources/1/updated",
-							value: SECOND_TICK
-						},
-						{
-							op: "remove",
-							path: "/resources/1/metadata/resDescription"
-						},
-						{
-							op: "add",
-							path: "/resources/1/metadata/resTitle",
-							value: "Title"
-						}
-					],
-					hash: "FqfkQhKG7abCegPv9qoxkHnxALiR+DapDvXPxZfImbM=",
-					immutableStorageId:
-						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
+					op: "add",
+					path: "/metadata/title",
+					value: "Title"
+				},
+				{
+					op: "replace",
+					path: "/metadata/counter",
+					value: 456
+				},
+				{
+					op: "add",
+					path: "/resources/0/updated",
+					value: SECOND_TICK
+				},
+				{
+					op: "remove",
+					path: "/resources/0/metadata/resDescription"
+				},
+				{
+					op: "add",
+					path: "/resources/0/metadata/resTitle",
+					value: "Title"
+				},
+				{
+					op: "replace",
+					path: "/resources/0/metadata/resCounter",
+					value: 456
+				},
+				{
+					op: "add",
+					path: "/resources/1/updated",
+					value: SECOND_TICK
+				},
+				{
+					op: "remove",
+					path: "/resources/1/metadata/resDescription"
+				},
+				{
+					op: "add",
+					path: "/resources/1/metadata/resTitle",
+					value: "Title"
 				}
-			]
+			],
+			hash: "FqfkQhKG7abCegPv9qoxkHnxALiR+DapDvXPxZfImbM=",
+			immutableStorageId:
+				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
 
 		const immutableStore = immutableStorage.getStore();
 		expect(`immutable:entity-storage:${immutableStore[0].id}`).toEqual(
-			result.vertex.changesets?.[0].immutableStorageId
+			changesetStore[0].immutableStorageId
 		);
 		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
 
@@ -1417,69 +1458,73 @@ describe("AuditableItemGraphService", () => {
 						counter: 456
 					}
 				}
-			],
-			changesets: [
+			]
+		});
+
+		const changesetStore = changesetStorage.getStore();
+
+		expect(changesetStore[0]).toEqual({
+			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+			created: FIRST_TICK,
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			patches: [
 				{
-					created: FIRST_TICK,
-					userIdentity:
-						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-					patches: [
+					op: "add",
+					path: "/edges",
+					value: [
 						{
-							op: "add",
-							path: "/edges",
-							value: [
-								{
-									id: "edge1",
-									created: FIRST_TICK,
-									metadataSchema: "TestSchemaEdge",
-									metadata: {
-										description: "This is a test",
-										counter: 123
-									},
-									relationship: "friend"
-								}
-							]
+							id: "edge1",
+							created: FIRST_TICK,
+							metadataSchema: "TestSchemaEdge",
+							metadata: {
+								description: "This is a test",
+								counter: 123
+							},
+							relationship: "friend"
 						}
-					],
-					hash: "MNWLDkruJt3R/71dZblH4AOvIzTKvlCaZqNro5ImN6M=",
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+					]
+				}
+			],
+			hash: "MNWLDkruJt3R/71dZblH4AOvIzTKvlCaZqNro5ImN6M=",
+			immutableStorageId:
+				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+		});
+
+		expect(changesetStore[1]).toEqual({
+			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+			created: SECOND_TICK,
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			patches: [
+				{
+					op: "add",
+					path: "/edges/0/updated",
+					value: SECOND_TICK
 				},
 				{
-					created: SECOND_TICK,
-					userIdentity:
-						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-					patches: [
-						{
-							op: "add",
-							path: "/edges/0/updated",
-							value: SECOND_TICK
-						},
-						{
-							op: "replace",
-							path: "/edges/0/relationship",
-							value: "frenemy"
-						},
-						{
-							op: "remove",
-							path: "/edges/0/metadata/description"
-						},
-						{
-							op: "add",
-							path: "/edges/0/metadata/title",
-							value: "Title"
-						},
-						{
-							op: "replace",
-							path: "/edges/0/metadata/counter",
-							value: 456
-						}
-					],
-					hash: "Uto3Cy9H1Z2ektgzz/Fh312HWl8rbwSHEBEsR5NCygI=",
-					immutableStorageId:
-						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
+					op: "replace",
+					path: "/edges/0/relationship",
+					value: "frenemy"
+				},
+				{
+					op: "remove",
+					path: "/edges/0/metadata/description"
+				},
+				{
+					op: "add",
+					path: "/edges/0/metadata/title",
+					value: "Title"
+				},
+				{
+					op: "replace",
+					path: "/edges/0/metadata/counter",
+					value: 456
 				}
-			]
+			],
+			hash: "Uto3Cy9H1Z2ektgzz/Fh312HWl8rbwSHEBEsR5NCygI=",
+			immutableStorageId:
+				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
 	});
 
@@ -1697,215 +1742,219 @@ describe("AuditableItemGraphService", () => {
 						edgeCounter: 456
 					}
 				}
-			],
-			changesets: [
+			]
+		});
+
+		const changesetStore = changesetStorage.getStore();
+
+		expect(changesetStore[0]).toEqual({
+			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+			created: FIRST_TICK,
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			patches: [
 				{
-					created: FIRST_TICK,
-					userIdentity:
-						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-					patches: [
+					op: "add",
+					path: "/metadataSchema",
+					value: "TestSchema"
+				},
+				{
+					op: "add",
+					path: "/metadata",
+					value: {
+						description: "This is a test",
+						counter: 123
+					}
+				},
+				{
+					op: "add",
+					path: "/aliases",
+					value: [
 						{
-							op: "add",
-							path: "/metadataSchema",
-							value: "TestSchema"
-						},
-						{
-							op: "add",
-							path: "/metadata",
-							value: {
-								description: "This is a test",
-								counter: 123
+							id: "foo123",
+							created: FIRST_TICK,
+							metadataSchema: "TestSchemaAlias",
+							metadata: {
+								aliasDescription: "This is a test",
+								aliasCounter: 123
 							}
 						},
 						{
-							op: "add",
-							path: "/aliases",
-							value: [
-								{
-									id: "foo123",
-									created: FIRST_TICK,
-									metadataSchema: "TestSchemaAlias",
-									metadata: {
-										aliasDescription: "This is a test",
-										aliasCounter: 123
-									}
-								},
-								{
-									id: "bar456",
-									created: FIRST_TICK,
-									metadataSchema: "TestSchemaAlias",
-									metadata: {
-										aliasDescription: "This is a test",
-										aliasCounter: 123
-									}
-								}
-							]
-						},
-						{
-							op: "add",
-							path: "/resources",
-							value: [
-								{
-									id: "resource1",
-									created: FIRST_TICK,
-									metadataSchema: "TestSchemaRes",
-									metadata: {
-										resDescription: "This is a test",
-										resCounter: 123
-									}
-								},
-								{
-									id: "resource2",
-									created: FIRST_TICK,
-									metadataSchema: "TestSchemaRes",
-									metadata: {
-										resDescription: "This is a test2",
-										resCounter: 456
-									}
-								}
-							]
-						},
-						{
-							op: "add",
-							path: "/edges",
-							value: [
-								{
-									id: "edge1",
-									created: FIRST_TICK,
-									metadataSchema: "TestSchemaEdge",
-									metadata: {
-										edgeDescription: "This is a test",
-										edgeCounter: 123
-									},
-									relationship: "friend"
-								},
-								{
-									id: "edge2",
-									created: FIRST_TICK,
-									metadataSchema: "TestSchemaEdge",
-									metadata: {
-										edgeDescription: "This is a test2",
-										edgeCounter: 456
-									},
-									relationship: "enemy"
-								}
-							]
+							id: "bar456",
+							created: FIRST_TICK,
+							metadataSchema: "TestSchemaAlias",
+							metadata: {
+								aliasDescription: "This is a test",
+								aliasCounter: 123
+							}
 						}
-					],
-					hash: "h7oXSBfag62pdqwHOj5C2L1bTu3dJzH+XroWfHz4yC4=",
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+					]
 				},
 				{
-					created: SECOND_TICK,
-					userIdentity:
-						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-					patches: [
+					op: "add",
+					path: "/resources",
+					value: [
 						{
-							op: "remove",
-							path: "/metadata/description"
+							id: "resource1",
+							created: FIRST_TICK,
+							metadataSchema: "TestSchemaRes",
+							metadata: {
+								resDescription: "This is a test",
+								resCounter: 123
+							}
 						},
 						{
-							op: "add",
-							path: "/metadata/title",
-							value: "Title"
-						},
-						{
-							op: "add",
-							path: "/aliases/0/updated",
-							value: SECOND_TICK
-						},
-						{
-							op: "remove",
-							path: "/aliases/0/metadata/aliasDescription"
-						},
-						{
-							op: "add",
-							path: "/aliases/0/metadata/aliasTitle",
-							value: "Title"
-						},
-						{
-							op: "add",
-							path: "/aliases/1/updated",
-							value: SECOND_TICK
-						},
-						{
-							op: "remove",
-							path: "/aliases/1/metadata/aliasDescription"
-						},
-						{
-							op: "add",
-							path: "/aliases/1/metadata/aliasTitle",
-							value: "Title"
-						},
-						{
-							op: "add",
-							path: "/resources/0/updated",
-							value: SECOND_TICK
-						},
-						{
-							op: "remove",
-							path: "/resources/0/metadata/resDescription"
-						},
-						{
-							op: "add",
-							path: "/resources/0/metadata/resTitle",
-							value: "Title"
-						},
-						{
-							op: "add",
-							path: "/resources/1/updated",
-							value: SECOND_TICK
-						},
-						{
-							op: "remove",
-							path: "/resources/1/metadata/resDescription"
-						},
-						{
-							op: "add",
-							path: "/resources/1/metadata/resTitle",
-							value: "Title"
-						},
-						{
-							op: "add",
-							path: "/edges/0/updated",
-							value: SECOND_TICK
-						},
-						{
-							op: "remove",
-							path: "/edges/0/metadata/edgeDescription"
-						},
-						{
-							op: "add",
-							path: "/edges/0/metadata/edgeTitle",
-							value: "Title"
-						},
-						{
-							op: "add",
-							path: "/edges/1/updated",
-							value: SECOND_TICK
-						},
-						{
-							op: "remove",
-							path: "/edges/1/metadata/edgeDescription"
-						},
-						{
-							op: "add",
-							path: "/edges/1/metadata/edgeTitle",
-							value: "Title"
+							id: "resource2",
+							created: FIRST_TICK,
+							metadataSchema: "TestSchemaRes",
+							metadata: {
+								resDescription: "This is a test2",
+								resCounter: 456
+							}
 						}
-					],
-					hash: "2paJOt97iJxl/7ws5XPYzAjxHQWCUclHHBOHVKNS6Ng=",
-					immutableStorageId:
-						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
+					]
+				},
+				{
+					op: "add",
+					path: "/edges",
+					value: [
+						{
+							id: "edge1",
+							created: FIRST_TICK,
+							metadataSchema: "TestSchemaEdge",
+							metadata: {
+								edgeDescription: "This is a test",
+								edgeCounter: 123
+							},
+							relationship: "friend"
+						},
+						{
+							id: "edge2",
+							created: FIRST_TICK,
+							metadataSchema: "TestSchemaEdge",
+							metadata: {
+								edgeDescription: "This is a test2",
+								edgeCounter: 456
+							},
+							relationship: "enemy"
+						}
+					]
 				}
-			]
+			],
+			hash: "h7oXSBfag62pdqwHOj5C2L1bTu3dJzH+XroWfHz4yC4=",
+			immutableStorageId:
+				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+		});
+
+		expect(changesetStore[1]).toEqual({
+			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+			created: SECOND_TICK,
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			patches: [
+				{
+					op: "remove",
+					path: "/metadata/description"
+				},
+				{
+					op: "add",
+					path: "/metadata/title",
+					value: "Title"
+				},
+				{
+					op: "add",
+					path: "/aliases/0/updated",
+					value: SECOND_TICK
+				},
+				{
+					op: "remove",
+					path: "/aliases/0/metadata/aliasDescription"
+				},
+				{
+					op: "add",
+					path: "/aliases/0/metadata/aliasTitle",
+					value: "Title"
+				},
+				{
+					op: "add",
+					path: "/aliases/1/updated",
+					value: SECOND_TICK
+				},
+				{
+					op: "remove",
+					path: "/aliases/1/metadata/aliasDescription"
+				},
+				{
+					op: "add",
+					path: "/aliases/1/metadata/aliasTitle",
+					value: "Title"
+				},
+				{
+					op: "add",
+					path: "/resources/0/updated",
+					value: SECOND_TICK
+				},
+				{
+					op: "remove",
+					path: "/resources/0/metadata/resDescription"
+				},
+				{
+					op: "add",
+					path: "/resources/0/metadata/resTitle",
+					value: "Title"
+				},
+				{
+					op: "add",
+					path: "/resources/1/updated",
+					value: SECOND_TICK
+				},
+				{
+					op: "remove",
+					path: "/resources/1/metadata/resDescription"
+				},
+				{
+					op: "add",
+					path: "/resources/1/metadata/resTitle",
+					value: "Title"
+				},
+				{
+					op: "add",
+					path: "/edges/0/updated",
+					value: SECOND_TICK
+				},
+				{
+					op: "remove",
+					path: "/edges/0/metadata/edgeDescription"
+				},
+				{
+					op: "add",
+					path: "/edges/0/metadata/edgeTitle",
+					value: "Title"
+				},
+				{
+					op: "add",
+					path: "/edges/1/updated",
+					value: SECOND_TICK
+				},
+				{
+					op: "remove",
+					path: "/edges/1/metadata/edgeDescription"
+				},
+				{
+					op: "add",
+					path: "/edges/1/metadata/edgeTitle",
+					value: "Title"
+				}
+			],
+			hash: "2paJOt97iJxl/7ws5XPYzAjxHQWCUclHHBOHVKNS6Ng=",
+			immutableStorageId:
+				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
 
 		const immutableStore = immutableStorage.getStore();
 
 		expect(`immutable:entity-storage:${immutableStore[0].id}`).toEqual(
-			result.vertex.changesets?.[0].immutableStorageId
+			changesetStore[0].immutableStorageId
 		);
 		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
 
@@ -2173,32 +2222,33 @@ describe("AuditableItemGraphService", () => {
 						id: "bar456",
 						created: FIRST_TICK
 					}
-				],
-				changesets: [
-					{
-						created: FIRST_TICK,
-						userIdentity:
-							"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-						patches: [
-							{
-								op: "add",
-								path: "/aliases",
-								value: [
-									{
-										id: "foo123",
-										created: FIRST_TICK
-									},
-									{
-										id: "bar456",
-										created: FIRST_TICK
-									}
-								]
-							}
-						],
-						hash: "Ht6zFJi0yl+MYTKgk+HdZW1PLWjJmSOwOkqrAA1NfVU="
-					}
 				]
-			}
+			},
+			changesets: [
+				{
+					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					created: FIRST_TICK,
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+					patches: [
+						{
+							op: "add",
+							path: "/aliases",
+							value: [
+								{
+									id: "foo123",
+									created: FIRST_TICK
+								},
+								{
+									id: "bar456",
+									created: FIRST_TICK
+								}
+							]
+						}
+					],
+					hash: "Ht6zFJi0yl+MYTKgk+HdZW1PLWjJmSOwOkqrAA1NfVU="
+				}
+			]
 		});
 
 		expect(immutableStore.length).toEqual(0);

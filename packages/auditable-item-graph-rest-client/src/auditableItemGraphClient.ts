@@ -3,6 +3,7 @@
 import { BaseRestClient } from "@gtsc/api-core";
 import type { IBaseRestClientConfig, ICreatedResponse, INoContentResponse } from "@gtsc/api-models";
 import type {
+	IAuditableItemGraphChangeset,
 	IAuditableItemGraphComponent,
 	IAuditableItemGraphCreateRequest,
 	IAuditableItemGraphGetRequest,
@@ -109,6 +110,7 @@ export class AuditableItemGraphClient
 			failureProperties?: { [id: string]: unknown };
 		}[];
 		vertex: IAuditableItemGraphVertex;
+		changesets?: IAuditableItemGraphChangeset[];
 	}> {
 		Guards.stringValue(this.CLASS_NAME, nameof(id), id);
 
@@ -213,14 +215,6 @@ export class AuditableItemGraphClient
 		 * An optional cursor, when defined can be used to call find to get more entities.
 		 */
 		cursor?: string;
-		/**
-		 * Number of entities to return.
-		 */
-		pageSize?: number;
-		/**
-		 * Total entities length.
-		 */
-		totalEntities: number;
 	}> {
 		const response = await this.fetch<
 			IAuditableItemGraphListRequest,

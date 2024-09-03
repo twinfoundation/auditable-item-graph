@@ -334,9 +334,7 @@ export function generateRestRoutesAuditableItemGraph(
 										]
 									}
 								],
-								cursor: "1",
-								pageSize: 10,
-								totalEntities: 20
+								cursor: "1"
 							}
 						}
 					}

@@ -1,6 +1,6 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import { entity, property } from "@gtsc/entity";
+import { entity, property, SortDirection } from "@gtsc/entity";
 import type { AuditableItemGraphPatch } from "./auditableItemGraphPatch";
 
 /**
@@ -9,9 +9,21 @@ import type { AuditableItemGraphPatch } from "./auditableItemGraphPatch";
 @entity()
 export class AuditableItemGraphChangeset {
 	/**
+	 * The hash of the changeset.
+	 */
+	@property({ type: "string", isPrimary: true })
+	public hash!: string;
+
+	/**
+	 * The vertex the changeset belongs to.
+	 */
+	@property({ type: "string", isSecondary: true })
+	public vertexId!: string;
+
+	/**
 	 * The timestamp of when the changeset was created.
 	 */
-	@property({ type: "number" })
+	@property({ type: "number", sortDirection: SortDirection.Ascending })
 	public created!: number;
 
 	/**
@@ -25,12 +37,6 @@ export class AuditableItemGraphChangeset {
 	 */
 	@property({ type: "array", itemTypeRef: "AuditableItemGraphPatch" })
 	public patches!: AuditableItemGraphPatch[];
-
-	/**
-	 * The hash of the changeset.
-	 */
-	@property({ type: "string" })
-	public hash!: string;
 
 	/**
 	 * The immutable storage id which contains the signature for this changeset.

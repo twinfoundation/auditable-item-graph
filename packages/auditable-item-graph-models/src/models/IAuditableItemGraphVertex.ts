@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0.
 import type { IAuditableItemGraphAlias } from "./IAuditableItemGraphAlias";
 import type { IAuditableItemGraphAuditedElement } from "./IAuditableItemGraphAuditedElement";
-import type { IAuditableItemGraphChangeset } from "./IAuditableItemGraphChangeset";
 import type { IAuditableItemGraphEdge } from "./IAuditableItemGraphEdge";
 import type { IAuditableItemGraphMetadataElement } from "./IAuditableItemGraphMetadataElement";
 import type { IAuditableItemGraphResource } from "./IAuditableItemGraphResource";
@@ -32,9 +31,4 @@ export interface IAuditableItemGraphVertex
 	 * Edges connected to the vertex.
 	 */
 	edges?: IAuditableItemGraphEdge[];
-
-	/**
-	 * Changesets containing time sliced changes to the vertex.
-	 */
-	changesets?: IAuditableItemGraphChangeset[];
 }

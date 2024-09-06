@@ -26,13 +26,7 @@ export class AuditableItemGraphResource {
 	public deleted?: number;
 
 	/**
-	 * The schema for the metadata.
-	 */
-	@property({ type: "string" })
-	public metadataSchema?: string;
-
-	/**
-	 * Metadata to associate with the resource.
+	 * Metadata to associate with the resource as JSON-LD.
 	 */
 	@property({ type: "object" })
 	public metadata?: unknown;

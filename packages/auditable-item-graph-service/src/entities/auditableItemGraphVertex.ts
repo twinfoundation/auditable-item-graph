@@ -41,13 +41,7 @@ export class AuditableItemGraphVertex {
 	public aliasIndex?: string;
 
 	/**
-	 * The schema for the metadata.
-	 */
-	@property({ type: "string" })
-	public metadataSchema?: string;
-
-	/**
-	 * Metadata to associate with the vertex.
+	 * Metadata to associate with the vertex as JSON-LD.
 	 */
 	@property({ type: "object" })
 	public metadata?: unknown;

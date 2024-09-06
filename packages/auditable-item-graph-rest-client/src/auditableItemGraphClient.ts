@@ -40,7 +40,6 @@ export class AuditableItemGraphClient
 
 	/**
 	 * Create a new graph vertex.
-	 * @param metadataSchema The metadata schema for the vertex.
 	 * @param metadata The metadata for the vertex.
 	 * @param aliases Alternative aliases that can be used to identify the vertex.
 	 * @param resources The resources attached to the vertex.
@@ -48,22 +47,18 @@ export class AuditableItemGraphClient
 	 * @returns The id of the new graph item.
 	 */
 	public async create(
-		metadataSchema?: string,
 		metadata?: unknown,
 		aliases?: {
 			id: string;
-			metadataSchema?: string;
 			metadata?: unknown;
 		}[],
 		resources?: {
 			id: string;
-			metadataSchema?: string;
 			metadata?: unknown;
 		}[],
 		edges?: {
 			id: string;
 			relationship: string;
-			metadataSchema?: string;
 			metadata?: unknown;
 		}[]
 	): Promise<string> {
@@ -72,7 +67,6 @@ export class AuditableItemGraphClient
 			"POST",
 			{
 				body: {
-					metadataSchema,
 					metadata,
 					aliases,
 					resources,
@@ -129,8 +123,7 @@ export class AuditableItemGraphClient
 	/**
 	 * Update a graph vertex.
 	 * @param id The id of the vertex to update.
-	 * @param metadataSchema The metadata schema for the vertex.
-	 * @param metadata The metadata for the vertex.
+	 * @param metadata The metadata for the vertex as JSON-LD.
 	 * @param aliases Alternative aliases that can be used to identify the vertex.
 	 * @param resources The resources attached to the vertex.
 	 * @param edges The edges connected to the vertex.
@@ -138,22 +131,18 @@ export class AuditableItemGraphClient
 	 */
 	public async update(
 		id: string,
-		metadataSchema?: string,
 		metadata?: unknown,
 		aliases?: {
 			id: string;
-			metadataSchema?: string;
 			metadata?: unknown;
 		}[],
 		resources?: {
 			id: string;
-			metadataSchema?: string;
 			metadata?: unknown;
 		}[],
 		edges?: {
 			id: string;
 			relationship: string;
-			metadataSchema?: string;
 			metadata?: unknown;
 		}[]
 	): Promise<void> {
@@ -164,7 +153,6 @@ export class AuditableItemGraphClient
 				id
 			},
 			body: {
-				metadataSchema,
 				metadata,
 				aliases,
 				resources,

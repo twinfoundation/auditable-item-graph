@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0.
 import { VerifyDepth } from "@gtsc/auditable-item-graph-models";
 import { RandomHelper } from "@gtsc/core";
-import { DataTypeHandlerFactory } from "@gtsc/data-core";
 import { MemoryEntityStorageConnector } from "@gtsc/entity-storage-connector-memory";
 import { EntityStorageConnectorFactory } from "@gtsc/entity-storage-models";
 import {
@@ -88,7 +87,6 @@ describe("AuditableItemGraphService", () => {
 			undefined,
 			undefined,
 			undefined,
-			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
@@ -136,7 +134,6 @@ describe("AuditableItemGraphService", () => {
 	test("Can create a vertex with an alias", async () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
-			undefined,
 			undefined,
 			[{ id: "foo123" }, { id: "bar456" }],
 			undefined,
@@ -233,7 +230,6 @@ describe("AuditableItemGraphService", () => {
 	test("Can create a vertex with some metadata", async () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
-			"TestSchema",
 			{
 				description: "This is a test",
 				counter: 123
@@ -254,7 +250,6 @@ describe("AuditableItemGraphService", () => {
 			created: FIRST_TICK,
 			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
-			metadataSchema: "TestSchema",
 			metadata: {
 				description: "This is a test",
 				counter: 123
@@ -271,11 +266,6 @@ describe("AuditableItemGraphService", () => {
 			patches: [
 				{
 					op: "add",
-					path: "/metadataSchema",
-					value: "TestSchema"
-				},
-				{
-					op: "add",
 					path: "/metadata",
 					value: {
 						description: "This is a test",
@@ -283,7 +273,7 @@ describe("AuditableItemGraphService", () => {
 					}
 				}
 			],
-			hash: "Ioou22vvlnk7Bj/56W0/ZLx+siCwV7dToRLtP6a06gk=",
+			hash: "XO3aD55mKvby+c8Wa4epNoBs29ohiAjZyFiR1L1LLtU=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -298,17 +288,12 @@ describe("AuditableItemGraphService", () => {
 		const { signature, integrity } = await decodeJwtToIntegrity(immutableStore[0].data);
 
 		expect(signature).toEqual(
-			"lkGbJNHiwrJfbbfJyVmp6rSgY4IHujveyr/QmaZuYzeQLMtEuDGtHyJfMtyxS4ggaDiEZaJTE7ijLb68aX/2CQ=="
+			"l52JqGY3zFON2k8jMg8syMa0JNWeayabD2E2g807a20OJtw1m39TVrZP0Yvu+DbIzun4h8fxD81HD872SqlrDw=="
 		);
 
 		expect(integrity).toEqual({
 			created: FIRST_TICK,
 			patches: [
-				{
-					op: "add",
-					path: "/metadataSchema",
-					value: "TestSchema"
-				},
 				{
 					op: "add",
 					path: "/metadata",
@@ -325,7 +310,6 @@ describe("AuditableItemGraphService", () => {
 	test("Can get a vertex", async () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
-			"TestSchema",
 			{
 				description: "This is a test",
 				counter: 123
@@ -345,7 +329,6 @@ describe("AuditableItemGraphService", () => {
 			created: FIRST_TICK,
 			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
-			metadataSchema: "TestSchema",
 			metadata: {
 				description: "This is a test",
 				counter: 123
@@ -366,7 +349,6 @@ describe("AuditableItemGraphService", () => {
 	test("Can get a vertex include changesets", async () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
-			"TestSchema",
 			{
 				description: "This is a test",
 				counter: 123
@@ -386,7 +368,6 @@ describe("AuditableItemGraphService", () => {
 			created: FIRST_TICK,
 			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
-			metadataSchema: "TestSchema",
 			metadata: {
 				description: "This is a test",
 				counter: 123
@@ -411,11 +392,6 @@ describe("AuditableItemGraphService", () => {
 			created: FIRST_TICK,
 			userIdentity: TEST_USER_IDENTITY,
 			patches: [
-				{
-					op: "add",
-					path: "/metadataSchema",
-					value: "TestSchema"
-				},
 				{
 					op: "add",
 					path: "/metadata",
@@ -439,7 +415,7 @@ describe("AuditableItemGraphService", () => {
 					]
 				}
 			],
-			hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
+			hash: "9w/vi3/OZPZ+kuWB4PHNlDE1YxI9Ev3BpSX6+Tttk6U=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -448,7 +424,6 @@ describe("AuditableItemGraphService", () => {
 	test("Can get a vertex include changesets and verify current signature", async () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
-			"TestSchema",
 			{
 				description: "This is a test",
 				counter: 123
@@ -472,7 +447,6 @@ describe("AuditableItemGraphService", () => {
 			created: FIRST_TICK,
 			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
-			metadataSchema: "TestSchema",
 			metadata: {
 				description: "This is a test",
 				counter: 123
@@ -499,11 +473,6 @@ describe("AuditableItemGraphService", () => {
 			patches: [
 				{
 					op: "add",
-					path: "/metadataSchema",
-					value: "TestSchema"
-				},
-				{
-					op: "add",
 					path: "/metadata",
 					value: {
 						description: "This is a test",
@@ -525,7 +494,7 @@ describe("AuditableItemGraphService", () => {
 					]
 				}
 			],
-			hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
+			hash: "9w/vi3/OZPZ+kuWB4PHNlDE1YxI9Ev3BpSX6+Tttk6U=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -534,7 +503,6 @@ describe("AuditableItemGraphService", () => {
 	test("Can create and update with no changes and verify", async () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
-			"TestSchema",
 			{
 				description: "This is a test",
 				counter: 123
@@ -548,7 +516,6 @@ describe("AuditableItemGraphService", () => {
 
 		await service.update(
 			id,
-			"TestSchema",
 			{
 				description: "This is a test",
 				counter: 123
@@ -573,7 +540,6 @@ describe("AuditableItemGraphService", () => {
 			updated: FIRST_TICK,
 			nodeIdentity:
 				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
-			metadataSchema: "TestSchema",
 			metadata: {
 				description: "This is a test",
 				counter: 123
@@ -601,11 +567,6 @@ describe("AuditableItemGraphService", () => {
 			patches: [
 				{
 					op: "add",
-					path: "/metadataSchema",
-					value: "TestSchema"
-				},
-				{
-					op: "add",
 					path: "/metadata",
 					value: {
 						description: "This is a test",
@@ -627,7 +588,7 @@ describe("AuditableItemGraphService", () => {
 					]
 				}
 			],
-			hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
+			hash: "9w/vi3/OZPZ+kuWB4PHNlDE1YxI9Ev3BpSX6+Tttk6U=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -636,7 +597,6 @@ describe("AuditableItemGraphService", () => {
 	test("Can create and update and verify aliases", async () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
-			"TestSchema",
 			{
 				description: "This is a test",
 				counter: 123
@@ -650,7 +610,6 @@ describe("AuditableItemGraphService", () => {
 
 		await service.update(
 			id,
-			"TestSchema",
 			{
 				description: "This is a test",
 				counter: 123
@@ -675,7 +634,6 @@ describe("AuditableItemGraphService", () => {
 			updated: SECOND_TICK,
 			nodeIdentity:
 				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
-			metadataSchema: "TestSchema",
 			metadata: {
 				description: "This is a test",
 				counter: 123
@@ -702,11 +660,6 @@ describe("AuditableItemGraphService", () => {
 			patches: [
 				{
 					op: "add",
-					path: "/metadataSchema",
-					value: "TestSchema"
-				},
-				{
-					op: "add",
 					path: "/metadata",
 					value: {
 						description: "This is a test",
@@ -728,7 +681,7 @@ describe("AuditableItemGraphService", () => {
 					]
 				}
 			],
-			hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
+			hash: "9w/vi3/OZPZ+kuWB4PHNlDE1YxI9Ev3BpSX6+Tttk6U=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -753,7 +706,7 @@ describe("AuditableItemGraphService", () => {
 					}
 				}
 			],
-			hash: "2W+tlN6AQPd2vGVmKywUGvDKWGkuM9rtoHWmNOHRisM=",
+			hash: "b4dMpT7Cy3KKpTRz9KmPq06isXbrmE7UWGHhLgPSdng=",
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
@@ -767,17 +720,12 @@ describe("AuditableItemGraphService", () => {
 
 		let credentialSignature = await decodeJwtToIntegrity(immutableStore[0].data);
 		expect(credentialSignature.signature).toEqual(
-			"jRhXXJbjwH1ROx24un1bsC9o4ksWlWUT8VWsmAmIggXCtEvmd66I2N3ZjWA6qcDFHxq0Eg8Sf6o3iVb7B/1pCg=="
+			"/ROnxm0c84ujgzT2gQlhiXh2PqBueNx59i7hixlyeB/17CuF4wFcGgCCQE9gcqymzIKBX7r1YHMlNvoPavruAQ=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
 			created: FIRST_TICK,
 			patches: [
-				{
-					op: "add",
-					path: "/metadataSchema",
-					value: "TestSchema"
-				},
 				{
 					op: "add",
 					path: "/metadata",
@@ -806,7 +754,7 @@ describe("AuditableItemGraphService", () => {
 
 		credentialSignature = await decodeJwtToIntegrity(immutableStore[1].data);
 		expect(credentialSignature.signature).toEqual(
-			"riFe1gRo3ASM+ig9EAn573vE61Kwi+nOCvV0zq/5u43EDDEvE9QOOKIN0vxn187nTh30aYfEx4ky3+SYYW7oAw=="
+			"olKZmmv95/BHrB7TGZnX4Nlc9XwmV3pAzjd6EajTHL4oCTU31PNcG2LmIqzBhaE7PHLVUYD34CrXFVdcMQP1AQ=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
@@ -833,7 +781,6 @@ describe("AuditableItemGraphService", () => {
 	test("Can create and update and verify aliases and metadata", async () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
-			"TestSchema",
 			{
 				description: "This is a test",
 				counter: 123
@@ -847,7 +794,7 @@ describe("AuditableItemGraphService", () => {
 
 		await service.update(
 			id,
-			"TestSchema",
+
 			{
 				title: "Title",
 				counter: 456
@@ -871,7 +818,6 @@ describe("AuditableItemGraphService", () => {
 			updated: SECOND_TICK,
 			nodeIdentity:
 				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
-			metadataSchema: "TestSchema",
 			metadata: {
 				title: "Title",
 				counter: 456
@@ -898,11 +844,6 @@ describe("AuditableItemGraphService", () => {
 			patches: [
 				{
 					op: "add",
-					path: "/metadataSchema",
-					value: "TestSchema"
-				},
-				{
-					op: "add",
 					path: "/metadata",
 					value: {
 						description: "This is a test",
@@ -924,7 +865,7 @@ describe("AuditableItemGraphService", () => {
 					]
 				}
 			],
-			hash: "nB3V/1VjvkUfXWxfNedAbrjGIwGI2T/z33ESGsSuQJ0=",
+			hash: "9w/vi3/OZPZ+kuWB4PHNlDE1YxI9Ev3BpSX6+Tttk6U=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -950,7 +891,7 @@ describe("AuditableItemGraphService", () => {
 					value: 456
 				}
 			],
-			hash: "N5sb3hFYXdqtyNHVa7LYxpsz/dIwZrcgvMBio32DETE=",
+			hash: "I+v6vhvoUMMvX+mfg3BhUa6vQ2qogMWuAOqGw1/NXH0=",
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
@@ -963,17 +904,12 @@ describe("AuditableItemGraphService", () => {
 
 		let credentialSignature = await decodeJwtToIntegrity(immutableStore[0].data);
 		expect(credentialSignature.signature).toEqual(
-			"jRhXXJbjwH1ROx24un1bsC9o4ksWlWUT8VWsmAmIggXCtEvmd66I2N3ZjWA6qcDFHxq0Eg8Sf6o3iVb7B/1pCg=="
+			"/ROnxm0c84ujgzT2gQlhiXh2PqBueNx59i7hixlyeB/17CuF4wFcGgCCQE9gcqymzIKBX7r1YHMlNvoPavruAQ=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
 			created: FIRST_TICK,
 			patches: [
-				{
-					op: "add",
-					path: "/metadataSchema",
-					value: "TestSchema"
-				},
 				{
 					op: "add",
 					path: "/metadata",
@@ -1002,7 +938,7 @@ describe("AuditableItemGraphService", () => {
 
 		credentialSignature = await decodeJwtToIntegrity(immutableStore[1].data);
 		expect(credentialSignature.signature).toEqual(
-			"zFGn5sxj+1VH/ky7FAKBAgjCg7imtwbwOPXrDPoF4p9DXll/55nv3mEKEkx284A2ooloXSBM7MlkZbCVABz6BQ=="
+			"W9jtC6G56swSEpNhZN9I5tthrD9yce786KKhD6Xz13mATco3WC0kjWYsw/Khg2fmIx07CAadauj0B/UnrZ4RAw=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
@@ -1030,7 +966,6 @@ describe("AuditableItemGraphService", () => {
 	test("Can create and update and verify aliases, metadata and resources", async () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
-			"TestSchema",
 			{
 				description: "This is a test",
 				counter: 123
@@ -1039,7 +974,6 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "resource1",
-					metadataSchema: "TestSchemaRes",
 					metadata: {
 						resDescription: "This is a test",
 						resCounter: 123
@@ -1047,7 +981,6 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					id: "resource2",
-					metadataSchema: "TestSchemaRes",
 					metadata: {
 						resDescription: "This is a test2",
 						resCounter: 456
@@ -1061,7 +994,7 @@ describe("AuditableItemGraphService", () => {
 
 		await service.update(
 			id,
-			"TestSchema",
+
 			{
 				title: "Title",
 				counter: 456
@@ -1070,7 +1003,6 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "resource1",
-					metadataSchema: "TestSchemaRes",
 					metadata: {
 						resTitle: "Title",
 						resCounter: 456
@@ -1078,7 +1010,6 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					id: "resource2",
-					metadataSchema: "TestSchemaRes",
 					metadata: {
 						resTitle: "Title",
 						resCounter: 456
@@ -1103,7 +1034,6 @@ describe("AuditableItemGraphService", () => {
 			updated: SECOND_TICK,
 			nodeIdentity:
 				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
-			metadataSchema: "TestSchema",
 			metadata: {
 				title: "Title",
 				counter: 456
@@ -1122,7 +1052,6 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "resource1",
 					created: FIRST_TICK,
-					metadataSchema: "TestSchemaRes",
 					metadata: {
 						resTitle: "Title",
 						resCounter: 456
@@ -1131,7 +1060,6 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "resource2",
 					created: FIRST_TICK,
-					metadataSchema: "TestSchemaRes",
 					metadata: {
 						resTitle: "Title",
 						resCounter: 456
@@ -1148,11 +1076,6 @@ describe("AuditableItemGraphService", () => {
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			patches: [
-				{
-					op: "add",
-					path: "/metadataSchema",
-					value: "TestSchema"
-				},
 				{
 					op: "add",
 					path: "/metadata",
@@ -1182,7 +1105,6 @@ describe("AuditableItemGraphService", () => {
 						{
 							id: "resource1",
 							created: FIRST_TICK,
-							metadataSchema: "TestSchemaRes",
 							metadata: {
 								resDescription: "This is a test",
 								resCounter: 123
@@ -1191,7 +1113,6 @@ describe("AuditableItemGraphService", () => {
 						{
 							id: "resource2",
 							created: FIRST_TICK,
-							metadataSchema: "TestSchemaRes",
 							metadata: {
 								resDescription: "This is a test2",
 								resCounter: 456
@@ -1200,7 +1121,7 @@ describe("AuditableItemGraphService", () => {
 					]
 				}
 			],
-			hash: "Q74F7K0Uv1dX0ty5QkwhQarr3XFT7MLkqavHyYZsrBI=",
+			hash: "bB8pbe9pCulcv+mYWl8OV963IUrlCclpheAtwBh1vkA=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -1259,7 +1180,7 @@ describe("AuditableItemGraphService", () => {
 					value: "Title"
 				}
 			],
-			hash: "FqfkQhKG7abCegPv9qoxkHnxALiR+DapDvXPxZfImbM=",
+			hash: "B2/OVFCLFXukixMkxt7au9vtk1nG+aEg6xIAyewQ3Ws=",
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
@@ -1272,17 +1193,12 @@ describe("AuditableItemGraphService", () => {
 
 		let credentialSignature = await decodeJwtToIntegrity(immutableStore[0].data);
 		expect(credentialSignature.signature).toEqual(
-			"mK7HUl2VBYAQyjKPomUos8goPa+DjoRzHiVovt9pOd1x/6IW88FSl1y96Z2UM1UQ88r6QpbmS5vxKbemGZVNDg=="
+			"ca+naU/ylRTAHcWykr54XLklKfDzWTCOiaMi/2pJ3k2mZzTO7q1JAEuoU+kT3bC6ufIjf3bKTO8rOdLoKYlDAQ=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
 			created: FIRST_TICK,
 			patches: [
-				{
-					op: "add",
-					path: "/metadataSchema",
-					value: "TestSchema"
-				},
 				{
 					op: "add",
 					path: "/metadata",
@@ -1312,7 +1228,6 @@ describe("AuditableItemGraphService", () => {
 						{
 							id: "resource1",
 							created: FIRST_TICK,
-							metadataSchema: "TestSchemaRes",
 							metadata: {
 								resDescription: "This is a test",
 								resCounter: 123
@@ -1321,7 +1236,6 @@ describe("AuditableItemGraphService", () => {
 						{
 							id: "resource2",
 							created: FIRST_TICK,
-							metadataSchema: "TestSchemaRes",
 							metadata: {
 								resDescription: "This is a test2",
 								resCounter: 456
@@ -1335,7 +1249,7 @@ describe("AuditableItemGraphService", () => {
 
 		credentialSignature = await decodeJwtToIntegrity(immutableStore[1].data);
 		expect(credentialSignature.signature).toEqual(
-			"0i3ST9bbvd8doZPTo7rjw+83Qfnxhc7nXJ35sZlz2+AdfXOSIwbxJviBAw+oPapF6yNKYZX4eoBVk2FeShuoBQ=="
+			"FKpPLGVHYD4mpBr1XV1J7mHVL82wv4AHu+Qb1sj3Kb1kdYFIpw83bXbQIjTbfEiFrXKRezEP/eQYwDKGb/HHAA=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
@@ -1399,12 +1313,10 @@ describe("AuditableItemGraphService", () => {
 			undefined,
 			undefined,
 			undefined,
-			undefined,
 			[
 				{
 					id: "edge1",
 					relationship: "friend",
-					metadataSchema: "TestSchemaEdge",
 					metadata: {
 						description: "This is a test",
 						counter: 123
@@ -1420,12 +1332,10 @@ describe("AuditableItemGraphService", () => {
 			undefined,
 			undefined,
 			undefined,
-			undefined,
 			[
 				{
 					id: "edge1",
 					relationship: "frenemy",
-					metadataSchema: "TestSchemaEdge",
 					metadata: {
 						title: "Title",
 						counter: 456
@@ -1454,7 +1364,6 @@ describe("AuditableItemGraphService", () => {
 					id: "edge1",
 					created: FIRST_TICK,
 					relationship: "frenemy",
-					metadataSchema: "TestSchemaEdge",
 					metadata: {
 						title: "Title",
 						counter: 456
@@ -1478,7 +1387,6 @@ describe("AuditableItemGraphService", () => {
 						{
 							id: "edge1",
 							created: FIRST_TICK,
-							metadataSchema: "TestSchemaEdge",
 							metadata: {
 								description: "This is a test",
 								counter: 123
@@ -1488,7 +1396,7 @@ describe("AuditableItemGraphService", () => {
 					]
 				}
 			],
-			hash: "MNWLDkruJt3R/71dZblH4AOvIzTKvlCaZqNro5ImN6M=",
+			hash: "F+qfuzpBTDE8mhDPzev1bzdSbHTn6qrOtJL7jWINeNM=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -1524,7 +1432,7 @@ describe("AuditableItemGraphService", () => {
 					value: 456
 				}
 			],
-			hash: "Uto3Cy9H1Z2ektgzz/Fh312HWl8rbwSHEBEsR5NCygI=",
+			hash: "BP1rU6d9qoKbfEZBE7OIAOEnQzIzV1Ni4p8s9sqUM1o=",
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
@@ -1533,7 +1441,6 @@ describe("AuditableItemGraphService", () => {
 	test("Can create and update and verify aliases, metadata, resources and edges", async () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
-			"TestSchema",
 			{
 				description: "This is a test",
 				counter: 123
@@ -1541,7 +1448,6 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "foo123",
-					metadataSchema: "TestSchemaAlias",
 					metadata: {
 						aliasDescription: "This is a test",
 						aliasCounter: 123
@@ -1549,7 +1455,6 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					id: "bar456",
-					metadataSchema: "TestSchemaAlias",
 					metadata: {
 						aliasDescription: "This is a test",
 						aliasCounter: 123
@@ -1559,7 +1464,6 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "resource1",
-					metadataSchema: "TestSchemaRes",
 					metadata: {
 						resDescription: "This is a test",
 						resCounter: 123
@@ -1567,7 +1471,6 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					id: "resource2",
-					metadataSchema: "TestSchemaRes",
 					metadata: {
 						resDescription: "This is a test2",
 						resCounter: 456
@@ -1578,7 +1481,6 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "edge1",
 					relationship: "friend",
-					metadataSchema: "TestSchemaEdge",
 					metadata: {
 						edgeDescription: "This is a test",
 						edgeCounter: 123
@@ -1587,7 +1489,6 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "edge2",
 					relationship: "enemy",
-					metadataSchema: "TestSchemaEdge",
 					metadata: {
 						edgeDescription: "This is a test2",
 						edgeCounter: 456
@@ -1600,7 +1501,7 @@ describe("AuditableItemGraphService", () => {
 
 		await service.update(
 			id,
-			"TestSchema",
+
 			{
 				title: "Title",
 				counter: 123
@@ -1608,7 +1509,6 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "foo123",
-					metadataSchema: "TestSchemaAlias",
 					metadata: {
 						aliasTitle: "Title",
 						aliasCounter: 123
@@ -1616,7 +1516,6 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					id: "bar456",
-					metadataSchema: "TestSchemaAlias",
 					metadata: {
 						aliasTitle: "Title",
 						aliasCounter: 123
@@ -1626,7 +1525,6 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "resource1",
-					metadataSchema: "TestSchemaRes",
 					metadata: {
 						resTitle: "Title",
 						resCounter: 123
@@ -1634,7 +1532,6 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					id: "resource2",
-					metadataSchema: "TestSchemaRes",
 					metadata: {
 						resTitle: "Title",
 						resCounter: 456
@@ -1645,7 +1542,6 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "edge1",
 					relationship: "friend",
-					metadataSchema: "TestSchemaEdge",
 					metadata: {
 						edgeTitle: "Title",
 						edgeCounter: 123
@@ -1654,7 +1550,6 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "edge2",
 					relationship: "enemy",
-					metadataSchema: "TestSchemaEdge",
 					metadata: {
 						edgeTitle: "Title",
 						edgeCounter: 456
@@ -1678,7 +1573,6 @@ describe("AuditableItemGraphService", () => {
 			updated: SECOND_TICK,
 			nodeIdentity:
 				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
-			metadataSchema: "TestSchema",
 			metadata: {
 				title: "Title",
 				counter: 123
@@ -1687,7 +1581,6 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "foo123",
 					created: FIRST_TICK,
-					metadataSchema: "TestSchemaAlias",
 					metadata: {
 						aliasTitle: "Title",
 						aliasCounter: 123
@@ -1696,7 +1589,6 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "bar456",
 					created: FIRST_TICK,
-					metadataSchema: "TestSchemaAlias",
 					metadata: {
 						aliasTitle: "Title",
 						aliasCounter: 123
@@ -1707,7 +1599,6 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "resource1",
 					created: FIRST_TICK,
-					metadataSchema: "TestSchemaRes",
 					metadata: {
 						resTitle: "Title",
 						resCounter: 123
@@ -1716,7 +1607,6 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "resource2",
 					created: FIRST_TICK,
-					metadataSchema: "TestSchemaRes",
 					metadata: {
 						resTitle: "Title",
 						resCounter: 456
@@ -1728,7 +1618,6 @@ describe("AuditableItemGraphService", () => {
 					id: "edge1",
 					created: FIRST_TICK,
 					relationship: "friend",
-					metadataSchema: "TestSchemaEdge",
 					metadata: {
 						edgeTitle: "Title",
 						edgeCounter: 123
@@ -1738,7 +1627,6 @@ describe("AuditableItemGraphService", () => {
 					id: "edge2",
 					created: FIRST_TICK,
 					relationship: "enemy",
-					metadataSchema: "TestSchemaEdge",
 					metadata: {
 						edgeTitle: "Title",
 						edgeCounter: 456
@@ -1757,11 +1645,6 @@ describe("AuditableItemGraphService", () => {
 			patches: [
 				{
 					op: "add",
-					path: "/metadataSchema",
-					value: "TestSchema"
-				},
-				{
-					op: "add",
 					path: "/metadata",
 					value: {
 						description: "This is a test",
@@ -1775,7 +1658,6 @@ describe("AuditableItemGraphService", () => {
 						{
 							id: "foo123",
 							created: FIRST_TICK,
-							metadataSchema: "TestSchemaAlias",
 							metadata: {
 								aliasDescription: "This is a test",
 								aliasCounter: 123
@@ -1784,7 +1666,6 @@ describe("AuditableItemGraphService", () => {
 						{
 							id: "bar456",
 							created: FIRST_TICK,
-							metadataSchema: "TestSchemaAlias",
 							metadata: {
 								aliasDescription: "This is a test",
 								aliasCounter: 123
@@ -1799,7 +1680,6 @@ describe("AuditableItemGraphService", () => {
 						{
 							id: "resource1",
 							created: FIRST_TICK,
-							metadataSchema: "TestSchemaRes",
 							metadata: {
 								resDescription: "This is a test",
 								resCounter: 123
@@ -1808,7 +1688,6 @@ describe("AuditableItemGraphService", () => {
 						{
 							id: "resource2",
 							created: FIRST_TICK,
-							metadataSchema: "TestSchemaRes",
 							metadata: {
 								resDescription: "This is a test2",
 								resCounter: 456
@@ -1823,7 +1702,6 @@ describe("AuditableItemGraphService", () => {
 						{
 							id: "edge1",
 							created: FIRST_TICK,
-							metadataSchema: "TestSchemaEdge",
 							metadata: {
 								edgeDescription: "This is a test",
 								edgeCounter: 123
@@ -1833,7 +1711,6 @@ describe("AuditableItemGraphService", () => {
 						{
 							id: "edge2",
 							created: FIRST_TICK,
-							metadataSchema: "TestSchemaEdge",
 							metadata: {
 								edgeDescription: "This is a test2",
 								edgeCounter: 456
@@ -1843,7 +1720,7 @@ describe("AuditableItemGraphService", () => {
 					]
 				}
 			],
-			hash: "h7oXSBfag62pdqwHOj5C2L1bTu3dJzH+XroWfHz4yC4=",
+			hash: "8fZufYAsB92ULJZyrNXQzJQTQDZUlRDivUKjx3Vlges=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -1948,7 +1825,7 @@ describe("AuditableItemGraphService", () => {
 					value: "Title"
 				}
 			],
-			hash: "2paJOt97iJxl/7ws5XPYzAjxHQWCUclHHBOHVKNS6Ng=",
+			hash: "96ihiKSmWpkjXfpJGcr619EjBg7Tdi/PQOjjdM2Wv2M=",
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
@@ -1963,17 +1840,12 @@ describe("AuditableItemGraphService", () => {
 		let credentialSignature = await decodeJwtToIntegrity(immutableStore[0].data);
 
 		expect(credentialSignature.signature).toEqual(
-			"ciZX+HNgx9X3t+a8rymK5fx89bbrxjZJQlCGKDYSqaICw60YDtJEEdKQzp1F3JstLnF4QrHHEn2bCs0RHRraDw=="
+			"uENNDXxEvMpxu45dIsfSWlESqfeyUQS5cNHnUBTFXv5QMGpYsPmaRxkiZmeT8nhB4MDk7x235DfXS/p5ytndCA=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
 			created: FIRST_TICK,
 			patches: [
-				{
-					op: "add",
-					path: "/metadataSchema",
-					value: "TestSchema"
-				},
 				{
 					op: "add",
 					path: "/metadata",
@@ -1989,7 +1861,6 @@ describe("AuditableItemGraphService", () => {
 						{
 							id: "foo123",
 							created: FIRST_TICK,
-							metadataSchema: "TestSchemaAlias",
 							metadata: {
 								aliasDescription: "This is a test",
 								aliasCounter: 123
@@ -1998,7 +1869,6 @@ describe("AuditableItemGraphService", () => {
 						{
 							id: "bar456",
 							created: FIRST_TICK,
-							metadataSchema: "TestSchemaAlias",
 							metadata: {
 								aliasDescription: "This is a test",
 								aliasCounter: 123
@@ -2013,7 +1883,6 @@ describe("AuditableItemGraphService", () => {
 						{
 							id: "resource1",
 							created: FIRST_TICK,
-							metadataSchema: "TestSchemaRes",
 							metadata: {
 								resDescription: "This is a test",
 								resCounter: 123
@@ -2022,7 +1891,6 @@ describe("AuditableItemGraphService", () => {
 						{
 							id: "resource2",
 							created: FIRST_TICK,
-							metadataSchema: "TestSchemaRes",
 							metadata: {
 								resDescription: "This is a test2",
 								resCounter: 456
@@ -2037,7 +1905,6 @@ describe("AuditableItemGraphService", () => {
 						{
 							id: "edge1",
 							created: FIRST_TICK,
-							metadataSchema: "TestSchemaEdge",
 							metadata: {
 								edgeDescription: "This is a test",
 								edgeCounter: 123
@@ -2047,7 +1914,6 @@ describe("AuditableItemGraphService", () => {
 						{
 							id: "edge2",
 							created: FIRST_TICK,
-							metadataSchema: "TestSchemaEdge",
 							metadata: {
 								edgeDescription: "This is a test2",
 								edgeCounter: 456
@@ -2063,7 +1929,7 @@ describe("AuditableItemGraphService", () => {
 		credentialSignature = await decodeJwtToIntegrity(immutableStore[1].data);
 
 		expect(credentialSignature.signature).toEqual(
-			"gMA9etTTMAQmr76YqIWtJSffF4JWcqE4xNgVZ5sQj97brqL48Ucq1EYvFiafD4iylVxEG7zCgSpYI/0uMYL5BA=="
+			"WVzwOhr8Xm6MigCgz4eNxYFKuVVkPjOdiJUq9PuteGGVr6femFeYge2tp5NaGQYMmGfSi1R14tP2Z4uFe+VcCA=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
@@ -2171,7 +2037,6 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
 			undefined,
-			undefined,
 			[{ id: "foo123" }, { id: "bar456" }],
 			undefined,
 			undefined,
@@ -2250,12 +2115,10 @@ describe("AuditableItemGraphService", () => {
 			undefined,
 			undefined,
 			undefined,
-			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
 		await service.create(
-			undefined,
 			undefined,
 			undefined,
 			undefined,
@@ -2281,7 +2144,6 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		await service.create(
 			undefined,
-			undefined,
 			[{ id: "foo123" }, { id: "bar123" }],
 			undefined,
 			undefined,
@@ -2289,7 +2151,6 @@ describe("AuditableItemGraphService", () => {
 			TEST_NODE_IDENTITY
 		);
 		await service.create(
-			undefined,
 			undefined,
 			[{ id: "foo456" }, { id: "bar456" }],
 			undefined,
@@ -2335,7 +2196,6 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		await service.create(
 			undefined,
-			undefined,
 			[{ id: "foo4" }],
 			undefined,
 			undefined,
@@ -2343,7 +2203,6 @@ describe("AuditableItemGraphService", () => {
 			TEST_NODE_IDENTITY
 		);
 		await service.create(
-			undefined,
 			undefined,
 			undefined,
 			undefined,
@@ -2375,7 +2234,6 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		await service.create(
 			undefined,
-			undefined,
 			[{ id: "foo4" }],
 			undefined,
 			undefined,
@@ -2383,7 +2241,6 @@ describe("AuditableItemGraphService", () => {
 			TEST_NODE_IDENTITY
 		);
 		await service.create(
-			undefined,
 			undefined,
 			undefined,
 			undefined,
@@ -2405,7 +2262,6 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		await service.create(
 			undefined,
-			undefined,
 			[{ id: "foo4" }],
 			undefined,
 			undefined,
@@ -2413,7 +2269,6 @@ describe("AuditableItemGraphService", () => {
 			TEST_NODE_IDENTITY
 		);
 		await service.create(
-			undefined,
 			undefined,
 			undefined,
 			undefined,
@@ -2440,13 +2295,7 @@ describe("AuditableItemGraphService", () => {
 	test("Can create a vertex with some metadata and a valid schema", async () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 
-		DataTypeHandlerFactory.register("TestSchema", () => ({
-			type: "TestSchema",
-			defaultValue: ""
-		}));
-
 		const id = await service.create(
-			"TestSchema",
 			{
 				description: "This is a test",
 				counter: 123
@@ -2467,7 +2316,6 @@ describe("AuditableItemGraphService", () => {
 			created: FIRST_TICK,
 			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
-			metadataSchema: "TestSchema",
 			metadata: {
 				description: "This is a test",
 				counter: 123
@@ -2484,11 +2332,6 @@ describe("AuditableItemGraphService", () => {
 			patches: [
 				{
 					op: "add",
-					path: "/metadataSchema",
-					value: "TestSchema"
-				},
-				{
-					op: "add",
 					path: "/metadata",
 					value: {
 						description: "This is a test",
@@ -2496,7 +2339,7 @@ describe("AuditableItemGraphService", () => {
 					}
 				}
 			],
-			hash: "Ioou22vvlnk7Bj/56W0/ZLx+siCwV7dToRLtP6a06gk=",
+			hash: "XO3aD55mKvby+c8Wa4epNoBs29ohiAjZyFiR1L1LLtU=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -2511,17 +2354,12 @@ describe("AuditableItemGraphService", () => {
 		const { signature, integrity } = await decodeJwtToIntegrity(immutableStore[0].data);
 
 		expect(signature).toEqual(
-			"lkGbJNHiwrJfbbfJyVmp6rSgY4IHujveyr/QmaZuYzeQLMtEuDGtHyJfMtyxS4ggaDiEZaJTE7ijLb68aX/2CQ=="
+			"l52JqGY3zFON2k8jMg8syMa0JNWeayabD2E2g807a20OJtw1m39TVrZP0Yvu+DbIzun4h8fxD81HD872SqlrDw=="
 		);
 
 		expect(integrity).toEqual({
 			created: FIRST_TICK,
 			patches: [
-				{
-					op: "add",
-					path: "/metadataSchema",
-					value: "TestSchema"
-				},
 				{
 					op: "add",
 					path: "/metadata",

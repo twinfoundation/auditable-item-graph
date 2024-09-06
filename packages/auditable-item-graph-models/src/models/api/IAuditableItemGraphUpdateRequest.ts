@@ -20,12 +20,7 @@ export interface IAuditableItemGraphUpdateRequest {
 	 */
 	body?: {
 		/**
-		 * The schema for the metadata.
-		 */
-		metadataSchema?: string;
-
-		/**
-		 * The metadata to be used in the vertex.
+		 * The metadata to be used in the vertex as JSON-LD.
 		 */
 		metadata?: unknown;
 
@@ -34,7 +29,6 @@ export interface IAuditableItemGraphUpdateRequest {
 		 */
 		aliases?: {
 			id: string;
-			metadataSchema?: string;
 			metadata?: unknown;
 		}[];
 
@@ -43,7 +37,6 @@ export interface IAuditableItemGraphUpdateRequest {
 		 */
 		resources?: {
 			id: string;
-			metadataSchema?: string;
 			metadata?: unknown;
 		}[];
 
@@ -53,7 +46,6 @@ export interface IAuditableItemGraphUpdateRequest {
 		edges?: {
 			id: string;
 			relationship: string;
-			metadataSchema?: string;
 			metadata?: unknown;
 		}[];
 	};

@@ -54,19 +54,11 @@ Combined alias index for the vertex used for querying.
 
 ***
 
-### metadataSchema?
-
-> `optional` **metadataSchema**: `string`
-
-The schema for the metadata.
-
-***
-
 ### metadata?
 
 > `optional` **metadata**: `unknown`
 
-Metadata to associate with the vertex.
+Metadata to associate with the vertex as JSON-LD.
 
 ***
 

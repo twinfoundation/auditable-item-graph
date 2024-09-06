@@ -61,7 +61,6 @@ export function generateRestRoutesAuditableItemGraph(
 					id: "auditableItemGraphCreateRequestExample",
 					request: {
 						body: {
-							metadataSchema: "TestSchema",
 							metadata: {
 								title: "Title",
 								counter: 456
@@ -69,7 +68,6 @@ export function generateRestRoutesAuditableItemGraph(
 							aliases: [
 								{
 									id: "bar456",
-									metadataSchema: "TestAliasSchema",
 									metadata: {
 										title: "Title",
 										counter: 456
@@ -77,7 +75,6 @@ export function generateRestRoutesAuditableItemGraph(
 								},
 								{
 									id: "foo321",
-									metadataSchema: "TestAliasSchema",
 									metadata: {
 										title: "Title",
 										counter: 456
@@ -87,7 +84,6 @@ export function generateRestRoutesAuditableItemGraph(
 							resources: [
 								{
 									id: "resource1",
-									metadataSchema: "TestResourceSchema",
 									metadata: {
 										title: "Title",
 										counter: 456
@@ -95,7 +91,6 @@ export function generateRestRoutesAuditableItemGraph(
 								},
 								{
 									id: "resource2",
-									metadataSchema: "TestResourceSchema",
 									metadata: {
 										title: "Title",
 										counter: 456
@@ -106,7 +101,6 @@ export function generateRestRoutesAuditableItemGraph(
 								{
 									id: "edge1",
 									relationship: "frenemy",
-									metadataSchema: "TestEdgeSchema",
 									metadata: {
 										title: "Title",
 										counter: 456
@@ -115,7 +109,6 @@ export function generateRestRoutesAuditableItemGraph(
 								{
 									id: "edge2",
 									relationship: "end",
-									metadataSchema: "TestEdgeSchema",
 									metadata: {
 										title: "Title",
 										counter: 456
@@ -179,7 +172,6 @@ export function generateRestRoutesAuditableItemGraph(
 									id: "aig:1234567890",
 									created: 1234567890,
 									updated: 1234567890,
-									metadataSchema: "TestSchema",
 									metadata: {
 										title: "Title",
 										counter: 456
@@ -217,7 +209,6 @@ export function generateRestRoutesAuditableItemGraph(
 							id: "aig:1234567890"
 						},
 						body: {
-							metadataSchema: "TestSchema",
 							metadata: {
 								title: "Title",
 								counter: 456
@@ -225,7 +216,6 @@ export function generateRestRoutesAuditableItemGraph(
 							aliases: [
 								{
 									id: "bar456",
-									metadataSchema: "TestAliasSchema",
 									metadata: {
 										title: "Title",
 										counter: 456
@@ -233,7 +223,6 @@ export function generateRestRoutesAuditableItemGraph(
 								},
 								{
 									id: "foo321",
-									metadataSchema: "TestAliasSchema",
 									metadata: {
 										title: "Title",
 										counter: 456
@@ -243,7 +232,6 @@ export function generateRestRoutesAuditableItemGraph(
 							resources: [
 								{
 									id: "resource1",
-									metadataSchema: "TestResourceSchema",
 									metadata: {
 										title: "Title",
 										counter: 456
@@ -251,7 +239,6 @@ export function generateRestRoutesAuditableItemGraph(
 								},
 								{
 									id: "resource2",
-									metadataSchema: "TestResourceSchema",
 									metadata: {
 										title: "Title",
 										counter: 456
@@ -262,7 +249,6 @@ export function generateRestRoutesAuditableItemGraph(
 								{
 									id: "edge1",
 									relationship: "frenemy",
-									metadataSchema: "TestEdgeSchema",
 									metadata: {
 										title: "Title",
 										counter: 456
@@ -271,7 +257,6 @@ export function generateRestRoutesAuditableItemGraph(
 								{
 									id: "edge2",
 									relationship: "end",
-									metadataSchema: "TestEdgeSchema",
 									metadata: {
 										title: "Title",
 										counter: 456
@@ -362,7 +347,6 @@ export async function auditableItemGraphCreate(
 
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
 	const id = await component.create(
-		request.body?.metadataSchema,
 		request.body?.metadata,
 		request.body?.aliases,
 		request.body?.resources,
@@ -433,7 +417,6 @@ export async function auditableItemGraphUpdate(
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
 	await component.update(
 		request.pathParams.id,
-		request.body?.metadataSchema,
 		request.body?.metadata,
 		request.body?.aliases,
 		request.body?.resources,

@@ -64,23 +64,11 @@ The relationship between the two vertices.
 
 ***
 
-### metadataSchema?
-
-> `optional` **metadataSchema**: `string`
-
-The schema for the metadata.
-
-#### Inherited from
-
-`IAuditableItemGraphMetadataElement.metadataSchema`
-
-***
-
 ### metadata?
 
 > `optional` **metadata**: `unknown`
 
-The metadata to associate with the element.
+The metadata to associate with the element as JSON-LD.
 
 #### Inherited from
 

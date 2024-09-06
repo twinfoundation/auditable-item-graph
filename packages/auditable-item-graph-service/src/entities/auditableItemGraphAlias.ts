@@ -26,13 +26,7 @@ export class AuditableItemGraphAlias {
 	public deleted?: number;
 
 	/**
-	 * The schema for the metadata.
-	 */
-	@property({ type: "string" })
-	public metadataSchema?: string;
-
-	/**
-	 * Metadata to associate with the alias.
+	 * Metadata to associate with the alias as JSON-LD.
 	 */
 	@property({ type: "object" })
 	public metadata?: unknown;

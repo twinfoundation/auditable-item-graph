@@ -44,7 +44,6 @@
                             "examples": {
                                 "auditableItemGraphCreateRequestExample": {
                                     "value": {
-                                        "metadataSchema": "TestSchema",
                                         "metadata": {
                                             "title": "Title",
                                             "counter": 456
@@ -52,7 +51,6 @@
                                         "aliases": [
                                             {
                                                 "id": "bar456",
-                                                "metadataSchema": "TestAliasSchema",
                                                 "metadata": {
                                                     "title": "Title",
                                                     "counter": 456
@@ -60,7 +58,6 @@
                                             },
                                             {
                                                 "id": "foo321",
-                                                "metadataSchema": "TestAliasSchema",
                                                 "metadata": {
                                                     "title": "Title",
                                                     "counter": 456
@@ -70,7 +67,6 @@
                                         "resources": [
                                             {
                                                 "id": "resource1",
-                                                "metadataSchema": "TestResourceSchema",
                                                 "metadata": {
                                                     "title": "Title",
                                                     "counter": 456
@@ -78,7 +74,6 @@
                                             },
                                             {
                                                 "id": "resource2",
-                                                "metadataSchema": "TestResourceSchema",
                                                 "metadata": {
                                                     "title": "Title",
                                                     "counter": 456
@@ -89,7 +84,6 @@
                                             {
                                                 "id": "edge1",
                                                 "relationship": "frenemy",
-                                                "metadataSchema": "TestEdgeSchema",
                                                 "metadata": {
                                                     "title": "Title",
                                                     "counter": 456
@@ -98,7 +92,6 @@
                                             {
                                                 "id": "edge2",
                                                 "relationship": "end",
-                                                "metadataSchema": "TestEdgeSchema",
                                                 "metadata": {
                                                     "title": "Title",
                                                     "counter": 456
@@ -423,7 +416,6 @@
                                                 "id": "aig:1234567890",
                                                 "created": 1234567890,
                                                 "updated": 1234567890,
-                                                "metadataSchema": "TestSchema",
                                                 "metadata": {
                                                     "title": "Title",
                                                     "counter": 456
@@ -535,7 +527,6 @@
                             "examples": {
                                 "auditableItemGraphUpdateRequestExample": {
                                     "value": {
-                                        "metadataSchema": "TestSchema",
                                         "metadata": {
                                             "title": "Title",
                                             "counter": 456
@@ -543,7 +534,6 @@
                                         "aliases": [
                                             {
                                                 "id": "bar456",
-                                                "metadataSchema": "TestAliasSchema",
                                                 "metadata": {
                                                     "title": "Title",
                                                     "counter": 456
@@ -551,7 +541,6 @@
                                             },
                                             {
                                                 "id": "foo321",
-                                                "metadataSchema": "TestAliasSchema",
                                                 "metadata": {
                                                     "title": "Title",
                                                     "counter": 456
@@ -561,7 +550,6 @@
                                         "resources": [
                                             {
                                                 "id": "resource1",
-                                                "metadataSchema": "TestResourceSchema",
                                                 "metadata": {
                                                     "title": "Title",
                                                     "counter": 456
@@ -569,7 +557,6 @@
                                             },
                                             {
                                                 "id": "resource2",
-                                                "metadataSchema": "TestResourceSchema",
                                                 "metadata": {
                                                     "title": "Title",
                                                     "counter": 456
@@ -580,7 +567,6 @@
                                             {
                                                 "id": "edge1",
                                                 "relationship": "frenemy",
-                                                "metadataSchema": "TestEdgeSchema",
                                                 "metadata": {
                                                     "title": "Title",
                                                     "counter": 456
@@ -589,7 +575,6 @@
                                             {
                                                 "id": "edge2",
                                                 "relationship": "end",
-                                                "metadataSchema": "TestEdgeSchema",
                                                 "metadata": {
                                                     "title": "Title",
                                                     "counter": 456
@@ -707,12 +692,8 @@
             "AuditableItemGraphCreateRequest": {
                 "type": "object",
                 "properties": {
-                    "metadataSchema": {
-                        "type": "string",
-                        "description": "The schema for the metadata."
-                    },
                     "metadata": {
-                        "description": "The metadata to be used in the vertex."
+                        "description": "The metadata to be used in the vertex as JSON-LD."
                     },
                     "aliases": {
                         "type": "array",
@@ -720,9 +701,6 @@
                             "type": "object",
                             "properties": {
                                 "id": {
-                                    "type": "string"
-                                },
-                                "metadataSchema": {
                                     "type": "string"
                                 },
                                 "metadata": {}
@@ -740,9 +718,6 @@
                             "type": "object",
                             "properties": {
                                 "id": {
-                                    "type": "string"
-                                },
-                                "metadataSchema": {
                                     "type": "string"
                                 },
                                 "metadata": {}
@@ -763,9 +738,6 @@
                                     "type": "string"
                                 },
                                 "relationship": {
-                                    "type": "string"
-                                },
-                                "metadataSchema": {
                                     "type": "string"
                                 },
                                 "metadata": {}
@@ -889,12 +861,8 @@
                         "type": "number",
                         "description": "The timestamp of when the element was updated."
                     },
-                    "metadataSchema": {
-                        "type": "string",
-                        "description": "The schema for the metadata."
-                    },
                     "metadata": {
-                        "description": "The metadata to associate with the element."
+                        "description": "The metadata to associate with the element as JSON-LD."
                     }
                 },
                 "additionalProperties": false
@@ -903,12 +871,8 @@
                 "type": "object",
                 "additionalProperties": false,
                 "properties": {
-                    "metadataSchema": {
-                        "type": "string",
-                        "description": "The schema for the metadata."
-                    },
                     "metadata": {
-                        "description": "The metadata to associate with the element."
+                        "description": "The metadata to associate with the element as JSON-LD."
                     },
                     "id": {
                         "type": "string",
@@ -937,12 +901,8 @@
                 "type": "object",
                 "additionalProperties": false,
                 "properties": {
-                    "metadataSchema": {
-                        "type": "string",
-                        "description": "The schema for the metadata."
-                    },
                     "metadata": {
-                        "description": "The metadata to associate with the element."
+                        "description": "The metadata to associate with the element as JSON-LD."
                     },
                     "id": {
                         "type": "string",
@@ -970,12 +930,8 @@
             "AuditableItemGraphEdge": {
                 "type": "object",
                 "properties": {
-                    "metadataSchema": {
-                        "type": "string",
-                        "description": "The schema for the metadata."
-                    },
                     "metadata": {
-                        "description": "The metadata to associate with the element."
+                        "description": "The metadata to associate with the element as JSON-LD."
                     },
                     "id": {
                         "type": "string",
@@ -1079,12 +1035,8 @@
             "AuditableItemGraphUpdateRequest": {
                 "type": "object",
                 "properties": {
-                    "metadataSchema": {
-                        "type": "string",
-                        "description": "The schema for the metadata."
-                    },
                     "metadata": {
-                        "description": "The metadata to be used in the vertex."
+                        "description": "The metadata to be used in the vertex as JSON-LD."
                     },
                     "aliases": {
                         "type": "array",
@@ -1092,9 +1044,6 @@
                             "type": "object",
                             "properties": {
                                 "id": {
-                                    "type": "string"
-                                },
-                                "metadataSchema": {
                                     "type": "string"
                                 },
                                 "metadata": {}
@@ -1112,9 +1061,6 @@
                             "type": "object",
                             "properties": {
                                 "id": {
-                                    "type": "string"
-                                },
-                                "metadataSchema": {
                                     "type": "string"
                                 },
                                 "metadata": {}
@@ -1135,9 +1081,6 @@
                                     "type": "string"
                                 },
                                 "relationship": {
-                                    "type": "string"
-                                },
-                                "metadataSchema": {
                                     "type": "string"
                                 },
                                 "metadata": {}

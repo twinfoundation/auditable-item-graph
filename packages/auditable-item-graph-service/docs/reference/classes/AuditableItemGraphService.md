@@ -72,19 +72,15 @@ Runtime name for the class.
 
 ### create()
 
-> **create**(`metadataSchema`?, `metadata`?, `aliases`?, `resources`?, `edges`?, `identity`?, `nodeIdentity`?): `Promise`\<`string`\>
+> **create**(`metadata`?, `aliases`?, `resources`?, `edges`?, `identity`?, `nodeIdentity`?): `Promise`\<`string`\>
 
 Create a new graph vertex.
 
 #### Parameters
 
-• **metadataSchema?**: `string`
-
-The metadata schema for the vertex.
-
 • **metadata?**: `unknown`
 
-The metadata for the vertex.
+The metadata for the vertex as JSON-LD.
 
 • **aliases?**: `object`[]
 
@@ -180,7 +176,7 @@ NotFoundError if the vertex is not found.
 
 ### update()
 
-> **update**(`id`, `metadataSchema`?, `metadata`?, `aliases`?, `resources`?, `edges`?, `identity`?, `nodeIdentity`?): `Promise`\<`void`\>
+> **update**(`id`, `metadata`?, `aliases`?, `resources`?, `edges`?, `identity`?, `nodeIdentity`?): `Promise`\<`void`\>
 
 Update a graph vertex.
 
@@ -189,10 +185,6 @@ Update a graph vertex.
 • **id**: `string`
 
 The id of the vertex to update.
-
-• **metadataSchema?**: `string`
-
-The metadata schema for the vertex.
 
 • **metadata?**: `unknown`
 

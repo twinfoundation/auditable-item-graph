@@ -32,13 +32,7 @@ export class AuditableItemGraphEdge {
 	public relationship!: string;
 
 	/**
-	 * The schema for the metadata.
-	 */
-	@property({ type: "string" })
-	public metadataSchema?: string;
-
-	/**
-	 * Metadata to associate with the edge.
+	 * Metadata to associate with the edge as JSON-LD.
 	 */
 	@property({ type: "object" })
 	public metadata?: unknown;

@@ -38,16 +38,8 @@ The timestamp of when the resource was deleted, as we never actually remove item
 
 ***
 
-### metadataSchema?
-
-> `optional` **metadataSchema**: `string`
-
-The schema for the metadata.
-
-***
-
 ### metadata?
 
 > `optional` **metadata**: `unknown`
 
-Metadata to associate with the resource.
+Metadata to associate with the resource as JSON-LD.

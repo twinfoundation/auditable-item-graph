@@ -38,16 +38,8 @@ The timestamp of when the alias was deleted, as we never actually remove items.
 
 ***
 
-### metadataSchema?
-
-> `optional` **metadataSchema**: `string`
-
-The schema for the metadata.
-
-***
-
 ### metadata?
 
 > `optional` **metadata**: `unknown`
 
-Metadata to associate with the alias.
+Metadata to associate with the alias as JSON-LD.

@@ -46,16 +46,8 @@ The relationship between the two vertices.
 
 ***
 
-### metadataSchema?
-
-> `optional` **metadataSchema**: `string`
-
-The schema for the metadata.
-
-***
-
 ### metadata?
 
 > `optional` **metadata**: `unknown`
 
-Metadata to associate with the edge.
+Metadata to associate with the edge as JSON-LD.

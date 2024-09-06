@@ -104,15 +104,11 @@ The response.
 
 ### create()
 
-> **create**(`metadataSchema`?, `metadata`?, `aliases`?, `resources`?, `edges`?): `Promise`\<`string`\>
+> **create**(`metadata`?, `aliases`?, `resources`?, `edges`?): `Promise`\<`string`\>
 
 Create a new graph vertex.
 
 #### Parameters
-
-• **metadataSchema?**: `string`
-
-The metadata schema for the vertex.
 
 • **metadata?**: `unknown`
 
@@ -204,7 +200,7 @@ NotFoundError if the vertex is not found.
 
 ### update()
 
-> **update**(`id`, `metadataSchema`?, `metadata`?, `aliases`?, `resources`?, `edges`?): `Promise`\<`void`\>
+> **update**(`id`, `metadata`?, `aliases`?, `resources`?, `edges`?): `Promise`\<`void`\>
 
 Update a graph vertex.
 
@@ -214,13 +210,9 @@ Update a graph vertex.
 
 The id of the vertex to update.
 
-• **metadataSchema?**: `string`
-
-The metadata schema for the vertex.
-
 • **metadata?**: `unknown`
 
-The metadata for the vertex.
+The metadata for the vertex as JSON-LD.
 
 • **aliases?**: `object`[]
 

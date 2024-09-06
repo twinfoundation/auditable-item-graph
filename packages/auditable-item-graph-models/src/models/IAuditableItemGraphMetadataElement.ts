@@ -6,12 +6,7 @@
  */
 export interface IAuditableItemGraphMetadataElement {
 	/**
-	 * The schema for the metadata.
-	 */
-	metadataSchema?: string;
-
-	/**
-	 * The metadata to associate with the element.
+	 * The metadata to associate with the element as JSON-LD.
 	 */
 	metadata?: unknown;
 }

@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0.
 import { VerifyDepth } from "@gtsc/auditable-item-graph-models";
 import { RandomHelper } from "@gtsc/core";
+import { DataTypeHandlerFactory } from "@gtsc/data-core";
 import { MemoryEntityStorageConnector } from "@gtsc/entity-storage-connector-memory";
 import { EntityStorageConnectorFactory } from "@gtsc/entity-storage-models";
 import {
@@ -2434,5 +2435,103 @@ describe("AuditableItemGraphService", () => {
 				]
 			}
 		]);
+	});
+
+	test("Can create a vertex with some metadata and a valid schema", async () => {
+		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+
+		DataTypeHandlerFactory.register("TestSchema", () => ({
+			type: "TestSchema",
+			defaultValue: ""
+		}));
+
+		const id = await service.create(
+			"TestSchema",
+			{
+				description: "This is a test",
+				counter: 123
+			},
+			undefined,
+			undefined,
+			undefined,
+			TEST_USER_IDENTITY,
+			TEST_NODE_IDENTITY
+		);
+		expect(id.startsWith("aig:")).toEqual(true);
+
+		const vertexStore = vertexStorage.getStore();
+		const vertex = vertexStore[0];
+
+		expect(vertex).toEqual({
+			id: "0101010101010101010101010101010101010101010101010101010101010101",
+			created: FIRST_TICK,
+			updated: FIRST_TICK,
+			nodeIdentity: TEST_NODE_IDENTITY,
+			metadataSchema: "TestSchema",
+			metadata: {
+				description: "This is a test",
+				counter: 123
+			}
+		});
+
+		const changesetStore = changesetStorage.getStore();
+		const changeset = changesetStore[0];
+
+		expect(changeset).toEqual({
+			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+			created: FIRST_TICK,
+			userIdentity: TEST_USER_IDENTITY,
+			patches: [
+				{
+					op: "add",
+					path: "/metadataSchema",
+					value: "TestSchema"
+				},
+				{
+					op: "add",
+					path: "/metadata",
+					value: {
+						description: "This is a test",
+						counter: 123
+					}
+				}
+			],
+			hash: "Ioou22vvlnk7Bj/56W0/ZLx+siCwV7dToRLtP6a06gk=",
+			immutableStorageId:
+				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+		});
+
+		const immutableStore = immutableStorage.getStore();
+
+		expect(`immutable:entity-storage:${immutableStore[0].id}`).toEqual(
+			changeset.immutableStorageId
+		);
+		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
+
+		const { signature, integrity } = await decodeJwtToIntegrity(immutableStore[0].data);
+
+		expect(signature).toEqual(
+			"lkGbJNHiwrJfbbfJyVmp6rSgY4IHujveyr/QmaZuYzeQLMtEuDGtHyJfMtyxS4ggaDiEZaJTE7ijLb68aX/2CQ=="
+		);
+
+		expect(integrity).toEqual({
+			created: FIRST_TICK,
+			patches: [
+				{
+					op: "add",
+					path: "/metadataSchema",
+					value: "TestSchema"
+				},
+				{
+					op: "add",
+					path: "/metadata",
+					value: {
+						description: "This is a test",
+						counter: 123
+					}
+				}
+			],
+			userIdentity: TEST_USER_IDENTITY
+		});
 	});
 });

@@ -1,6 +1,7 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import {
+	VerifyDepth,
 	type IAuditableItemGraphAlias,
 	type IAuditableItemGraphChangeset,
 	type IAuditableItemGraphComponent,
@@ -8,8 +9,7 @@ import {
 	type IAuditableItemGraphEdge,
 	type IAuditableItemGraphIntegrity,
 	type IAuditableItemGraphResource,
-	type IAuditableItemGraphVertex,
-	VerifyDepth
+	type IAuditableItemGraphVertex
 } from "@gtsc/auditable-item-graph-models";
 import {
 	Converter,
@@ -22,9 +22,12 @@ import {
 	RandomHelper,
 	StringHelper,
 	Urn,
-	type IPatchOperation
+	Validation,
+	type IPatchOperation,
+	type IValidationFailure
 } from "@gtsc/core";
 import { Blake2b } from "@gtsc/crypto";
+import { DataTypeHelper } from "@gtsc/data-core";
 import { ComparisonOperator, LogicalOperator, SortDirection } from "@gtsc/entity";
 import {
 	EntityStorageConnectorFactory,
@@ -218,12 +221,16 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			};
 			const originalModel = ObjectHelper.clone(vertexModel);
 
+			const validationFailures: IValidationFailure[] = [];
+			await DataTypeHelper.validate("vertex", metadataSchema, metadata, validationFailures);
+			Validation.asValidationError(this.CLASS_NAME, "vertex", validationFailures);
+
 			vertexModel.metadataSchema = metadataSchema;
 			vertexModel.metadata = metadata;
 
-			this.updateAliasList(context, vertexModel, aliases);
-			this.updateResourceList(context, vertexModel, resources);
-			this.updateEdgeList(context, vertexModel, edges);
+			await this.updateAliasList(context, vertexModel, aliases);
+			await this.updateResourceList(context, vertexModel, resources);
+			await this.updateEdgeList(context, vertexModel, edges);
 
 			await this.addChangeset(context, originalModel, vertexModel);
 
@@ -403,12 +410,17 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 			const vertexModel = this.vertexEntityToModel(vertexEntity);
 			const originalModel = ObjectHelper.clone(vertexModel);
+
+			const validationFailures: IValidationFailure[] = [];
+			await DataTypeHelper.validate("vertex", metadataSchema, metadata, validationFailures);
+			Validation.asValidationError(this.CLASS_NAME, "vertex", validationFailures);
+
 			vertexModel.metadataSchema = metadataSchema;
 			vertexModel.metadata = metadata;
 
-			this.updateAliasList(context, vertexModel, aliases);
-			this.updateResourceList(context, vertexModel, resources);
-			this.updateEdgeList(context, vertexModel, edges);
+			await this.updateAliasList(context, vertexModel, aliases);
+			await this.updateResourceList(context, vertexModel, resources);
+			await this.updateEdgeList(context, vertexModel, edges);
 
 			const changes = await this.addChangeset(context, originalModel, vertexModel);
 
@@ -707,7 +719,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @param aliases The aliases to update.
 	 * @internal
 	 */
-	private updateAliasList(
+	private async updateAliasList(
 		context: IAuditableItemGraphServiceContext,
 		vertexModel: IAuditableItemGraphVertex,
 		aliases?: {
@@ -715,7 +727,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			metadataSchema?: string;
 			metadata?: unknown;
 		}[]
-	): void {
+	): Promise<void> {
 		const active = vertexModel.aliases?.filter(a => Is.empty(a.deleted)) ?? [];
 
 		// The active aliases that are not in the update list should be marked as deleted.
@@ -729,7 +741,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 		if (Is.arrayValue(aliases)) {
 			for (const alias of aliases) {
-				this.updateAlias(context, vertexModel, alias);
+				await this.updateAlias(context, vertexModel, alias);
 			}
 		}
 	}
@@ -741,7 +753,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @param alias The alias.
 	 * @internal
 	 */
-	private updateAlias(
+	private async updateAlias(
 		context: IAuditableItemGraphServiceContext,
 		vertexModel: IAuditableItemGraphVertex,
 		alias: {
@@ -749,9 +761,18 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			metadataSchema?: string;
 			metadata?: unknown;
 		}
-	): void {
+	): Promise<void> {
 		Guards.object(this.CLASS_NAME, nameof(alias), alias);
 		Guards.stringValue(this.CLASS_NAME, nameof(alias.id), alias.id);
+
+		const validationFailures: IValidationFailure[] = [];
+		await DataTypeHelper.validate(
+			"alias",
+			alias.metadataSchema,
+			alias.metadata,
+			validationFailures
+		);
+		Validation.asValidationError(this.CLASS_NAME, "vertex", validationFailures);
 
 		// Try to find an existing alias with the same id.
 		const existing = vertexModel.aliases?.find(a => a.id === alias.id);
@@ -786,7 +807,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @param resources The resources to update.
 	 * @internal
 	 */
-	private updateResourceList(
+	private async updateResourceList(
 		context: IAuditableItemGraphServiceContext,
 		vertexModel: IAuditableItemGraphVertex,
 		resources?: {
@@ -794,7 +815,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			metadataSchema?: string;
 			metadata?: unknown;
 		}[]
-	): void {
+	): Promise<void> {
 		const active = vertexModel.resources?.filter(r => Is.empty(r.deleted)) ?? [];
 
 		// The active resources that are not in the update list should be marked as deleted.
@@ -808,7 +829,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 		if (Is.arrayValue(resources)) {
 			for (const resource of resources) {
-				this.updateResource(context, vertexModel, resource);
+				await this.updateResource(context, vertexModel, resource);
 			}
 		}
 	}
@@ -820,7 +841,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @param resource The resource.
 	 * @internal
 	 */
-	private updateResource(
+	private async updateResource(
 		context: IAuditableItemGraphServiceContext,
 		vertexModel: IAuditableItemGraphVertex,
 		resource: {
@@ -828,9 +849,18 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			metadataSchema?: string;
 			metadata?: unknown;
 		}
-	): void {
+	): Promise<void> {
 		Guards.object(this.CLASS_NAME, nameof(resource), resource);
 		Guards.stringValue(this.CLASS_NAME, nameof(resource.id), resource.id);
+
+		const validationFailures: IValidationFailure[] = [];
+		await DataTypeHelper.validate(
+			"resource",
+			resource.metadataSchema,
+			resource.metadata,
+			validationFailures
+		);
+		Validation.asValidationError(this.CLASS_NAME, "vertex", validationFailures);
 
 		// Try to find an existing resource with the same id.
 		const existing = vertexModel.resources?.find(r => r.id === resource.id);
@@ -865,7 +895,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @param edges The edges to update.
 	 * @internal
 	 */
-	private updateEdgeList(
+	private async updateEdgeList(
 		context: IAuditableItemGraphServiceContext,
 		vertexModel: IAuditableItemGraphVertex,
 		edges?: {
@@ -874,7 +904,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			metadataSchema?: string;
 			metadata?: unknown;
 		}[]
-	): void {
+	): Promise<void> {
 		const active = vertexModel.edges?.filter(e => Is.empty(e.deleted)) ?? [];
 
 		// The active edges that are not in the update list should be marked as deleted.
@@ -888,7 +918,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 		if (Is.arrayValue(edges)) {
 			for (const edge of edges) {
-				this.updateEdge(context, vertexModel, edge);
+				await this.updateEdge(context, vertexModel, edge);
 			}
 		}
 	}
@@ -900,7 +930,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @param edge The edge.
 	 * @internal
 	 */
-	private updateEdge(
+	private async updateEdge(
 		context: IAuditableItemGraphServiceContext,
 		vertexModel: IAuditableItemGraphVertex,
 		edge: {
@@ -909,10 +939,14 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			metadataSchema?: string;
 			metadata?: unknown;
 		}
-	): void {
+	): Promise<void> {
 		Guards.object(this.CLASS_NAME, nameof(edge), edge);
 		Guards.stringValue(this.CLASS_NAME, nameof(edge.id), edge.id);
 		Guards.stringValue(this.CLASS_NAME, nameof(edge.relationship), edge.relationship);
+
+		const validationFailures: IValidationFailure[] = [];
+		await DataTypeHelper.validate("edge", edge.metadataSchema, edge.metadata, validationFailures);
+		Validation.asValidationError(this.CLASS_NAME, "vertex", validationFailures);
 
 		// Try to find an existing edge with the same id.
 		const existing = vertexModel.edges?.find(r => r.id === edge.id);

@@ -3,12 +3,12 @@
 import { DataTypeHandlerFactory } from "@gtsc/data-core";
 import type { JSONSchema7 } from "json-schema";
 import { AuditableItemGraphTypes } from "../models/auditableItemGraphTypes";
-import AuditableItemGraphAliasSchema from "../schemas/auditableItemGraphAlias.json";
-import AuditableItemGraphChangesetSchema from "../schemas/auditableItemGraphChangeset.json";
-import AuditableItemGraphEdgeSchema from "../schemas/auditableItemGraphEdge.json";
-import AuditableItemGraphPatchOperationSchema from "../schemas/auditableItemGraphPatchOperation.json";
-import AuditableItemGraphResourceSchema from "../schemas/auditableItemGraphResource.json";
-import AuditableItemGraphVertexSchema from "../schemas/auditableItemGraphVertex.json";
+import AuditableItemGraphAliasSchema from "../schemas/AuditableItemGraphAlias.json";
+import AuditableItemGraphChangesetSchema from "../schemas/AuditableItemGraphChangeset.json";
+import AuditableItemGraphEdgeSchema from "../schemas/AuditableItemGraphEdge.json";
+import AuditableItemGraphPatchOperationSchema from "../schemas/AuditableItemGraphPatchOperation.json";
+import AuditableItemGraphResourceSchema from "../schemas/AuditableItemGraphResource.json";
+import AuditableItemGraphVertexSchema from "../schemas/AuditableItemGraphVertex.json";
 
 /**
  * Handle all the data types for auditable item graph.

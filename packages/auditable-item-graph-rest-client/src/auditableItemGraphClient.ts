@@ -3,7 +3,6 @@
 import { BaseRestClient } from "@gtsc/api-core";
 import type { IBaseRestClientConfig, ICreatedResponse, INoContentResponse } from "@gtsc/api-models";
 import type {
-	IAuditableItemGraphChangeset,
 	IAuditableItemGraphComponent,
 	IAuditableItemGraphCreateRequest,
 	IAuditableItemGraphGetRequest,
@@ -15,8 +14,10 @@ import type {
 	VerifyDepth
 } from "@gtsc/auditable-item-graph-models";
 import { Guards, NotSupportedError } from "@gtsc/core";
+import type { IJsonLdDocument, IJsonLdNodeObject } from "@gtsc/data-json-ld";
 import type { SortDirection } from "@gtsc/entity";
 import { nameof } from "@gtsc/nameof";
+import { MimeTypes } from "@gtsc/web";
 
 /**
  * Client for performing auditable item graph through to REST endpoints.
@@ -47,19 +48,19 @@ export class AuditableItemGraphClient
 	 * @returns The id of the new graph item.
 	 */
 	public async create(
-		metadata?: unknown,
+		metadata?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[],
 		resources?: {
 			id: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[],
 		edges?: {
 			id: string;
 			relationship: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[]
 	): Promise<string> {
 		const response = await this.fetch<IAuditableItemGraphCreateRequest, ICreatedResponse>(
@@ -83,9 +84,10 @@ export class AuditableItemGraphClient
 	 * @param id The id of the vertex to get.
 	 * @returns The vertex if found.
 	 * @param options Additional options for the get operation.
-	 * @param options.includeDeleted Whether to include deleted aliases, resource, edges, defaults to false.
+	 * @param options.includeDeleted Whether to include deleted/updated aliases, resource, edges, defaults to false.
 	 * @param options.includeChangesets Whether to include the changesets of the vertex, defaults to false.
 	 * @param options.verifySignatureDepth How many signatures to verify, defaults to "none".
+	 * @param responseType The response type to return, defaults to application/json.
 	 * @throws NotFoundError if the vertex is not found.
 	 */
 	public async get(
@@ -94,23 +96,28 @@ export class AuditableItemGraphClient
 			includeDeleted?: boolean;
 			includeChangesets?: boolean;
 			verifySignatureDepth?: VerifyDepth;
+		},
+		// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
+		responseType?: typeof MimeTypes.Json | typeof MimeTypes.JsonLd
+	): Promise<
+		(IAuditableItemGraphVertex | IJsonLdDocument) & {
+			verified?: boolean;
+			verification?: {
+				created: number;
+				failure?: string;
+				failureProperties?: { [id: string]: unknown };
+			}[];
 		}
-	): Promise<{
-		verified?: boolean;
-		verification?: {
-			created: number;
-			failure?: string;
-			failureProperties?: { [id: string]: unknown };
-		}[];
-		vertex: IAuditableItemGraphVertex;
-		changesets?: IAuditableItemGraphChangeset[];
-	}> {
+	> {
 		Guards.stringValue(this.CLASS_NAME, nameof(id), id);
 
 		const response = await this.fetch<
 			IAuditableItemGraphGetRequest,
 			IAuditableItemGraphGetResponse
 		>("/:id", "GET", {
+			headers: {
+				Accept: responseType ?? MimeTypes.Json
+			},
 			pathParams: {
 				id
 			},
@@ -131,19 +138,19 @@ export class AuditableItemGraphClient
 	 */
 	public async update(
 		id: string,
-		metadata?: unknown,
+		metadata?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[],
 		resources?: {
 			id: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[],
 		edges?: {
 			id: string;
 			relationship: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[]
 	): Promise<void> {
 		Guards.stringValue(this.CLASS_NAME, nameof(id), id);

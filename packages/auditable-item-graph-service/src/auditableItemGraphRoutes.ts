@@ -19,7 +19,7 @@ import type {
 } from "@gtsc/auditable-item-graph-models";
 import { ComponentFactory, Guards } from "@gtsc/core";
 import { nameof } from "@gtsc/nameof";
-import { HttpStatusCode } from "@gtsc/web";
+import { HttpStatusCode, MimeTypes } from "@gtsc/web";
 
 /**
  * The source used when communicating about these routes.
@@ -62,22 +62,25 @@ export function generateRestRoutesAuditableItemGraph(
 					request: {
 						body: {
 							metadata: {
-								title: "Title",
-								counter: 456
+								"@context": "http://schema.org/",
+								"@type": "Note",
+								content: "This is a simple note"
 							},
 							aliases: [
 								{
 									id: "bar456",
 									metadata: {
-										title: "Title",
-										counter: 456
+										"@context": "http://schema.org/",
+										"@type": "Note",
+										content: "This is a simple note"
 									}
 								},
 								{
 									id: "foo321",
 									metadata: {
-										title: "Title",
-										counter: 456
+										"@context": "http://schema.org/",
+										"@type": "Note",
+										content: "This is a simple note"
 									}
 								}
 							],
@@ -85,15 +88,17 @@ export function generateRestRoutesAuditableItemGraph(
 								{
 									id: "resource1",
 									metadata: {
-										title: "Title",
-										counter: 456
+										"@context": "http://schema.org/",
+										"@type": "Note",
+										content: "This is a simple note"
 									}
 								},
 								{
 									id: "resource2",
 									metadata: {
-										title: "Title",
-										counter: 456
+										"@context": "http://schema.org/",
+										"@type": "Note",
+										content: "This is a simple note"
 									}
 								}
 							],
@@ -102,16 +107,18 @@ export function generateRestRoutesAuditableItemGraph(
 									id: "edge1",
 									relationship: "frenemy",
 									metadata: {
-										title: "Title",
-										counter: 456
+										"@context": "http://schema.org/",
+										"@type": "Note",
+										content: "This is a simple note"
 									}
 								},
 								{
 									id: "edge2",
 									relationship: "end",
 									metadata: {
-										title: "Title",
-										counter: 456
+										"@context": "http://schema.org/",
+										"@type": "Note",
+										content: "This is a simple note"
 									}
 								}
 							]
@@ -153,6 +160,9 @@ export function generateRestRoutesAuditableItemGraph(
 				{
 					id: "auditableItemGraphGetRequestExample",
 					request: {
+						headers: {
+							Accept: MimeTypes.Json
+						},
 						pathParams: {
 							id: "aig:1234567890"
 						}
@@ -168,21 +178,53 @@ export function generateRestRoutesAuditableItemGraph(
 						id: "auditableItemGraphGetResponseExample",
 						response: {
 							body: {
-								vertex: {
-									id: "aig:1234567890",
-									created: 1234567890,
-									updated: 1234567890,
-									metadata: {
-										title: "Title",
-										counter: 456
-									},
-									aliases: [
-										{
-											id: "tst:1234567890",
-											created: 1234567890
-										}
-									]
-								}
+								id: "aig:1234567890",
+								created: 1234567890,
+								updated: 1234567890,
+								metadata: {
+									"@context": "http://schema.org/",
+									"@type": "Note",
+									content: "This is a simple note"
+								},
+								aliases: [
+									{
+										id: "tst:1234567890",
+										created: 1234567890
+									}
+								]
+							}
+						}
+					}
+				]
+			},
+			{
+				type: nameof<IAuditableItemGraphGetResponse>(),
+				mimeType: MimeTypes.JsonLd,
+				examples: [
+					{
+						id: "auditableItemGraphJsonLdGetResponseExample",
+						response: {
+							headers: {
+								"Content-Type": MimeTypes.JsonLd
+							},
+							body: {
+								"@context": "https://schema.gtsc.io/v2/",
+								"@type": "vertex",
+								id: "aig:1234567890",
+								created: "2024-08-22T11:55:16.271Z",
+								updated: "2024-08-22T11:55:16.271Z",
+								metadata: {
+									"@context": "http://schema.org/",
+									"@type": "Note",
+									content: "This is a simple note"
+								},
+								aliases: [
+									{
+										"@type": "alias",
+										created: "2024-08-22T11:55:16.271Z",
+										id: "tst:1234567890"
+									}
+								]
 							}
 						}
 					}
@@ -210,22 +252,25 @@ export function generateRestRoutesAuditableItemGraph(
 						},
 						body: {
 							metadata: {
-								title: "Title",
-								counter: 456
+								"@context": "http://schema.org/",
+								"@type": "Note",
+								content: "This is a simple note"
 							},
 							aliases: [
 								{
 									id: "bar456",
 									metadata: {
-										title: "Title",
-										counter: 456
+										"@context": "http://schema.org/",
+										"@type": "Note",
+										content: "This is a simple note"
 									}
 								},
 								{
 									id: "foo321",
 									metadata: {
-										title: "Title",
-										counter: 456
+										"@context": "http://schema.org/",
+										"@type": "Note",
+										content: "This is a simple note"
 									}
 								}
 							],
@@ -233,15 +278,17 @@ export function generateRestRoutesAuditableItemGraph(
 								{
 									id: "resource1",
 									metadata: {
-										title: "Title",
-										counter: 456
+										"@context": "http://schema.org/",
+										"@type": "Note",
+										content: "This is a simple note"
 									}
 								},
 								{
 									id: "resource2",
 									metadata: {
-										title: "Title",
-										counter: 456
+										"@context": "http://schema.org/",
+										"@type": "Note",
+										content: "This is a simple note"
 									}
 								}
 							],
@@ -250,16 +297,18 @@ export function generateRestRoutesAuditableItemGraph(
 									id: "edge1",
 									relationship: "frenemy",
 									metadata: {
-										title: "Title",
-										counter: 456
+										"@context": "http://schema.org/",
+										"@type": "Note",
+										content: "This is a simple note"
 									}
 								},
 								{
 									id: "edge2",
 									relationship: "end",
 									metadata: {
-										title: "Title",
-										counter: 456
+										"@context": "http://schema.org/",
+										"@type": "Note",
+										content: "This is a simple note"
 									}
 								}
 							]
@@ -383,13 +432,25 @@ export async function auditableItemGraphGet(
 	Guards.stringValue(ROUTES_SOURCE, nameof(request.pathParams.id), request.pathParams.id);
 
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
-	const result = await component.get(request.pathParams.id, {
-		includeDeleted: request.query?.includeDeleted,
-		includeChangesets: request.query?.includeChangesets,
-		verifySignatureDepth: request.query?.verifySignatureDepth
-	});
+	const result = await component.get(
+		request.pathParams.id,
+		{
+			includeDeleted: request.query?.includeDeleted,
+			includeChangesets: request.query?.includeChangesets,
+			verifySignatureDepth: request.query?.verifySignatureDepth
+		},
+		request.headers?.Accept
+	);
+
+	let headers;
+	if (request.headers?.Accept === MimeTypes.JsonLd) {
+		headers = {
+			"Content-Type": MimeTypes.JsonLd
+		};
+	}
 
 	return {
+		headers,
 		body: result
 	};
 }

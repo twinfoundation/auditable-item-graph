@@ -1,0 +1,12 @@
+{
+	"baseUrl": "https://schema.gtsc.io/v2/",
+	"sources": ["./src/models/**/*.ts"],
+	"types": [
+		"IAuditableItemGraphVertex",
+		"IAuditableItemGraphAlias",
+		"IAuditableItemGraphResource",
+		"IAuditableItemGraphEdge",
+		"IAuditableItemGraphChangeset",
+		"IAuditableItemGraphPatchOperation"
+	]
+}

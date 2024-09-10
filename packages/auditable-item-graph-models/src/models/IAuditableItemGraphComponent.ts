@@ -1,8 +1,9 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import type { IComponent } from "@gtsc/core";
+import type { IJsonLdDocument, IJsonLdNodeObject } from "@gtsc/data-json-ld";
 import type { SortDirection } from "@gtsc/entity";
-import type { IAuditableItemGraphChangeset } from "./IAuditableItemGraphChangeset";
+import type { MimeTypes } from "@gtsc/web";
 import type { IAuditableItemGraphVertex } from "./IAuditableItemGraphVertex";
 import type { VerifyDepth } from "./verifyDepth";
 
@@ -21,19 +22,19 @@ export interface IAuditableItemGraphComponent extends IComponent {
 	 * @returns The id of the new graph item.
 	 */
 	create(
-		metadata?: unknown,
+		metadata?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[],
 		resources?: {
 			id: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[],
 		edges?: {
 			id: string;
 			relationship: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[],
 		identity?: string,
 		nodeIdentity?: string
@@ -52,19 +53,19 @@ export interface IAuditableItemGraphComponent extends IComponent {
 	 */
 	update(
 		id: string,
-		metadata?: unknown,
+		metadata?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[],
 		resources?: {
 			id: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[],
 		edges?: {
 			id: string;
 			relationship: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[],
 		identity?: string,
 		nodeIdentity?: string
@@ -77,6 +78,7 @@ export interface IAuditableItemGraphComponent extends IComponent {
 	 * @param options.includeDeleted Whether to include deleted aliases, resource, edges, defaults to false.
 	 * @param options.includeChangesets Whether to include the changesets of the vertex, defaults to false.
 	 * @param options.verifySignatureDepth How many signatures to verify, defaults to "none".
+	 * @param responseType The response type to return, defaults to application/json.
 	 * @returns The vertex if found.
 	 * @throws NotFoundError if the vertex is not found.
 	 */
@@ -86,17 +88,19 @@ export interface IAuditableItemGraphComponent extends IComponent {
 			includeDeleted?: boolean;
 			includeChangesets?: boolean;
 			verifySignatureDepth?: VerifyDepth;
+		},
+		// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
+		responseType?: typeof MimeTypes.Json | typeof MimeTypes.JsonLd
+	): Promise<
+		(IAuditableItemGraphVertex | IJsonLdDocument) & {
+			verified?: boolean;
+			verification?: {
+				created: number;
+				failure?: string;
+				failureProperties?: { [id: string]: unknown };
+			}[];
 		}
-	): Promise<{
-		verified?: boolean;
-		verification?: {
-			created: number;
-			failure?: string;
-			failureProperties?: { [id: string]: unknown };
-		}[];
-		vertex: IAuditableItemGraphVertex;
-		changesets?: IAuditableItemGraphChangeset[];
-	}>;
+	>;
 
 	/**
 	 * Remove the immutable storage for an item.

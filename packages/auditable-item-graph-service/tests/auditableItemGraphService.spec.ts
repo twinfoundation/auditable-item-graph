@@ -11,6 +11,7 @@ import {
 } from "@gtsc/immutable-storage-connector-entity-storage";
 import { ImmutableStorageConnectorFactory } from "@gtsc/immutable-storage-models";
 import { nameof } from "@gtsc/nameof";
+import { MimeTypes } from "@gtsc/web";
 import {
 	decodeJwtToIntegrity,
 	setupTestEnv,
@@ -64,6 +65,7 @@ describe("AuditableItemGraphService", () => {
 
 		Date.now = vi
 			.fn()
+			.mockImplementationOnce(() => FIRST_TICK)
 			.mockImplementationOnce(() => FIRST_TICK)
 			.mockImplementation(() => SECOND_TICK);
 		RandomHelper.generate = vi
@@ -231,8 +233,18 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
 			{
-				description: "This is a test",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@type": "Person",
+					"@id": "acct:person@example.org",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note"
+				},
+				published: "2015-01-25T12:34:56Z"
 			},
 			undefined,
 			undefined,
@@ -251,8 +263,18 @@ describe("AuditableItemGraphService", () => {
 			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
 			metadata: {
-				description: "This is a test",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@type": "Person",
+					"@id": "acct:person@example.org",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note"
+				},
+				published: "2015-01-25T12:34:56Z"
 			}
 		});
 
@@ -268,12 +290,22 @@ describe("AuditableItemGraphService", () => {
 					op: "add",
 					path: "/metadata",
 					value: {
-						description: "This is a test",
-						counter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@type": "Person",
+							"@id": "acct:person@example.org",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				}
 			],
-			hash: "XO3aD55mKvby+c8Wa4epNoBs29ohiAjZyFiR1L1LLtU=",
+			hash: "a6YPG/e5uPE5UujQHMUFBWDRS9hquN0zMx4NYbgFLJU=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -288,7 +320,7 @@ describe("AuditableItemGraphService", () => {
 		const { signature, integrity } = await decodeJwtToIntegrity(immutableStore[0].data);
 
 		expect(signature).toEqual(
-			"l52JqGY3zFON2k8jMg8syMa0JNWeayabD2E2g807a20OJtw1m39TVrZP0Yvu+DbIzun4h8fxD81HD872SqlrDw=="
+			"OS1vlNYFDDFm37RQMH0PcLkcCepVgMnb2/8HBdGSyvJkzaIk3acuqoguFi6ByizCduVV7tK4QJ8jNQSJzC4nAw=="
 		);
 
 		expect(integrity).toEqual({
@@ -298,8 +330,18 @@ describe("AuditableItemGraphService", () => {
 					op: "add",
 					path: "/metadata",
 					value: {
-						description: "This is a test",
-						counter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@type": "Person",
+							"@id": "acct:person@example.org",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				}
 			],
@@ -311,8 +353,18 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
 			{
-				description: "This is a test",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@type": "Person",
+					"@id": "acct:person@example.org",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note"
+				},
+				published: "2015-01-25T12:34:56Z"
 			},
 			[{ id: "foo123" }, { id: "bar456" }],
 			undefined,
@@ -324,14 +376,24 @@ describe("AuditableItemGraphService", () => {
 
 		const result = await service.get(id);
 
-		expect(result.vertex).toEqual({
+		expect(result).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
 			metadata: {
-				description: "This is a test",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@type": "Person",
+					"@id": "acct:person@example.org",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note"
+				},
+				published: "2015-01-25T12:34:56Z"
 			},
 			aliases: [
 				{
@@ -350,8 +412,18 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
 			{
-				description: "This is a test",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@type": "Person",
+					"@id": "acct:person@example.org",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note"
+				},
+				published: "2015-01-25T12:34:56Z"
 			},
 			[{ id: "foo123" }, { id: "bar456" }],
 			undefined,
@@ -363,23 +435,51 @@ describe("AuditableItemGraphService", () => {
 
 		const result = await service.get(id, { includeChangesets: true });
 
-		expect(result.vertex).toEqual({
+		expect(result).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
 			metadata: {
-				description: "This is a test",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
+				object: { "@type": "Note", content: "This is a simple note" },
+				published: "2015-01-25T12:34:56Z"
 			},
 			aliases: [
+				{ id: "foo123", created: FIRST_TICK },
+				{ id: "bar456", created: FIRST_TICK }
+			],
+			changesets: [
 				{
-					id: "foo123",
-					created: FIRST_TICK
-				},
-				{
-					id: "bar456",
-					created: FIRST_TICK
+					hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
+					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					created: FIRST_TICK,
+					userIdentity: TEST_USER_IDENTITY,
+					patches: [
+						{
+							op: "add",
+							path: "/metadata",
+							value: {
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple note" },
+								published: "2015-01-25T12:34:56Z"
+							}
+						},
+						{
+							op: "add",
+							path: "/aliases",
+							value: [
+								{ id: "foo123", created: FIRST_TICK },
+								{ id: "bar456", created: FIRST_TICK }
+							]
+						}
+					],
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 				}
 			]
 		});
@@ -396,8 +496,18 @@ describe("AuditableItemGraphService", () => {
 					op: "add",
 					path: "/metadata",
 					value: {
-						description: "This is a test",
-						counter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@type": "Person",
+							"@id": "acct:person@example.org",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
@@ -415,7 +525,7 @@ describe("AuditableItemGraphService", () => {
 					]
 				}
 			],
-			hash: "9w/vi3/OZPZ+kuWB4PHNlDE1YxI9Ev3BpSX6+Tttk6U=",
+			hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -425,8 +535,18 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
 			{
-				description: "This is a test",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@type": "Person",
+					"@id": "acct:person@example.org",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note"
+				},
+				published: "2015-01-25T12:34:56Z"
 			},
 			[{ id: "foo123" }, { id: "bar456" }],
 			undefined,
@@ -441,26 +561,55 @@ describe("AuditableItemGraphService", () => {
 			verifySignatureDepth: VerifyDepth.Current
 		});
 
-		expect(result.verified).toEqual(true);
-		expect(result.vertex).toEqual({
+		expect(result).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
 			metadata: {
-				description: "This is a test",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
+				object: { "@type": "Note", content: "This is a simple note" },
+				published: "2015-01-25T12:34:56Z"
 			},
 			aliases: [
+				{ id: "foo123", created: FIRST_TICK },
+				{ id: "bar456", created: FIRST_TICK }
+			],
+			changesets: [
 				{
-					id: "foo123",
-					created: FIRST_TICK
-				},
-				{
-					id: "bar456",
-					created: FIRST_TICK
+					hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
+					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					created: FIRST_TICK,
+					userIdentity: TEST_USER_IDENTITY,
+					patches: [
+						{
+							op: "add",
+							path: "/metadata",
+							value: {
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple note" },
+								published: "2015-01-25T12:34:56Z"
+							}
+						},
+						{
+							op: "add",
+							path: "/aliases",
+							value: [
+								{ id: "foo123", created: FIRST_TICK },
+								{ id: "bar456", created: FIRST_TICK }
+							]
+						}
+					],
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 				}
-			]
+			],
+			verified: true,
+			verification: [{ created: FIRST_TICK }]
 		});
 
 		const changesetStore = changesetStorage.getStore();
@@ -475,8 +624,18 @@ describe("AuditableItemGraphService", () => {
 					op: "add",
 					path: "/metadata",
 					value: {
-						description: "This is a test",
-						counter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@type": "Person",
+							"@id": "acct:person@example.org",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
@@ -494,7 +653,7 @@ describe("AuditableItemGraphService", () => {
 					]
 				}
 			],
-			hash: "9w/vi3/OZPZ+kuWB4PHNlDE1YxI9Ev3BpSX6+Tttk6U=",
+			hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -504,8 +663,18 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
 			{
-				description: "This is a test",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@type": "Person",
+					"@id": "acct:person@example.org",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note"
+				},
+				published: "2015-01-25T12:34:56Z"
 			},
 			[{ id: "foo123" }, { id: "bar456" }],
 			undefined,
@@ -517,8 +686,18 @@ describe("AuditableItemGraphService", () => {
 		await service.update(
 			id,
 			{
-				description: "This is a test",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@type": "Person",
+					"@id": "acct:person@example.org",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note"
+				},
+				published: "2015-01-25T12:34:56Z"
 			},
 			[{ id: "foo123" }, { id: "bar456" }],
 			undefined,
@@ -532,28 +711,55 @@ describe("AuditableItemGraphService", () => {
 			verifySignatureDepth: VerifyDepth.Current
 		});
 
-		expect(result.verified).toEqual(true);
-
-		expect(result.vertex).toEqual({
+		expect(result).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			updated: FIRST_TICK,
-			nodeIdentity:
-				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			nodeIdentity: TEST_NODE_IDENTITY,
 			metadata: {
-				description: "This is a test",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
+				object: { "@type": "Note", content: "This is a simple note" },
+				published: "2015-01-25T12:34:56Z"
 			},
 			aliases: [
+				{ id: "foo123", created: FIRST_TICK },
+				{ id: "bar456", created: FIRST_TICK }
+			],
+			changesets: [
 				{
-					id: "foo123",
-					created: FIRST_TICK
-				},
-				{
-					id: "bar456",
-					created: FIRST_TICK
+					hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
+					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					created: FIRST_TICK,
+					userIdentity: TEST_USER_IDENTITY,
+					patches: [
+						{
+							op: "add",
+							path: "/metadata",
+							value: {
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple note" },
+								published: "2015-01-25T12:34:56Z"
+							}
+						},
+						{
+							op: "add",
+							path: "/aliases",
+							value: [
+								{ id: "foo123", created: FIRST_TICK },
+								{ id: "bar456", created: FIRST_TICK }
+							]
+						}
+					],
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 				}
-			]
+			],
+			verified: true,
+			verification: [{ created: FIRST_TICK }]
 		});
 
 		const changesetStore = changesetStorage.getStore();
@@ -562,15 +768,24 @@ describe("AuditableItemGraphService", () => {
 		expect(changeset).toEqual({
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
-			userIdentity:
-				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
 					op: "add",
 					path: "/metadata",
 					value: {
-						description: "This is a test",
-						counter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@type": "Person",
+							"@id": "acct:person@example.org",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
@@ -588,7 +803,7 @@ describe("AuditableItemGraphService", () => {
 					]
 				}
 			],
-			hash: "9w/vi3/OZPZ+kuWB4PHNlDE1YxI9Ev3BpSX6+Tttk6U=",
+			hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -598,8 +813,18 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
 			{
-				description: "This is a test",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@type": "Person",
+					"@id": "acct:person@example.org",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note"
+				},
+				published: "2015-01-25T12:34:56Z"
 			},
 			[{ id: "foo123" }, { id: "bar456" }],
 			undefined,
@@ -611,8 +836,18 @@ describe("AuditableItemGraphService", () => {
 		await service.update(
 			id,
 			{
-				description: "This is a test",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@type": "Person",
+					"@id": "acct:person@example.org",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note"
+				},
+				published: "2015-01-25T12:34:56Z"
 			},
 			[{ id: "foo321" }, { id: "bar456" }],
 			undefined,
@@ -626,28 +861,67 @@ describe("AuditableItemGraphService", () => {
 			verifySignatureDepth: VerifyDepth.All
 		});
 
-		expect(result.verified).toEqual(true);
-
-		expect(result.vertex).toEqual({
+		expect(result).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			updated: SECOND_TICK,
-			nodeIdentity:
-				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			nodeIdentity: TEST_NODE_IDENTITY,
 			metadata: {
-				description: "This is a test",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
+				object: { "@type": "Note", content: "This is a simple note" },
+				published: "2015-01-25T12:34:56Z"
 			},
 			aliases: [
+				{ id: "bar456", created: FIRST_TICK },
+				{ id: "foo321", created: SECOND_TICK }
+			],
+			changesets: [
 				{
-					id: "bar456",
-					created: FIRST_TICK
+					hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
+					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					created: FIRST_TICK,
+					userIdentity: TEST_USER_IDENTITY,
+					patches: [
+						{
+							op: "add",
+							path: "/metadata",
+							value: {
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple note" },
+								published: "2015-01-25T12:34:56Z"
+							}
+						},
+						{
+							op: "add",
+							path: "/aliases",
+							value: [
+								{ id: "foo123", created: FIRST_TICK },
+								{ id: "bar456", created: FIRST_TICK }
+							]
+						}
+					],
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 				},
 				{
-					id: "foo321",
-					created: SECOND_TICK
+					hash: "Utd6Kg4vk2814eqbmZwSRE2L7292lfn7rAKskXrJRXo=",
+					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					created: SECOND_TICK,
+					userIdentity: TEST_USER_IDENTITY,
+					patches: [
+						{ op: "add", path: "/aliases/0/deleted", value: SECOND_TICK },
+						{ op: "add", path: "/aliases/-", value: { id: "foo321", created: SECOND_TICK } }
+					],
+					immutableStorageId:
+						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 				}
-			]
+			],
+			verified: true,
+			verification: [{ created: FIRST_TICK }, { created: SECOND_TICK }]
 		});
 
 		const changesetStore = changesetStorage.getStore();
@@ -655,15 +929,24 @@ describe("AuditableItemGraphService", () => {
 		expect(changesetStore[0]).toEqual({
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
-			userIdentity:
-				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
 					op: "add",
 					path: "/metadata",
 					value: {
-						description: "This is a test",
-						counter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@type": "Person",
+							"@id": "acct:person@example.org",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
@@ -681,7 +964,7 @@ describe("AuditableItemGraphService", () => {
 					]
 				}
 			],
-			hash: "9w/vi3/OZPZ+kuWB4PHNlDE1YxI9Ev3BpSX6+Tttk6U=",
+			hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -689,8 +972,7 @@ describe("AuditableItemGraphService", () => {
 		expect(changesetStore[1]).toEqual({
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: SECOND_TICK,
-			userIdentity:
-				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
 					op: "add",
@@ -706,7 +988,7 @@ describe("AuditableItemGraphService", () => {
 					}
 				}
 			],
-			hash: "b4dMpT7Cy3KKpTRz9KmPq06isXbrmE7UWGHhLgPSdng=",
+			hash: "Utd6Kg4vk2814eqbmZwSRE2L7292lfn7rAKskXrJRXo=",
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
@@ -720,7 +1002,7 @@ describe("AuditableItemGraphService", () => {
 
 		let credentialSignature = await decodeJwtToIntegrity(immutableStore[0].data);
 		expect(credentialSignature.signature).toEqual(
-			"/ROnxm0c84ujgzT2gQlhiXh2PqBueNx59i7hixlyeB/17CuF4wFcGgCCQE9gcqymzIKBX7r1YHMlNvoPavruAQ=="
+			"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
@@ -730,8 +1012,18 @@ describe("AuditableItemGraphService", () => {
 					op: "add",
 					path: "/metadata",
 					value: {
-						description: "This is a test",
-						counter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@type": "Person",
+							"@id": "acct:person@example.org",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
@@ -754,7 +1046,7 @@ describe("AuditableItemGraphService", () => {
 
 		credentialSignature = await decodeJwtToIntegrity(immutableStore[1].data);
 		expect(credentialSignature.signature).toEqual(
-			"olKZmmv95/BHrB7TGZnX4Nlc9XwmV3pAzjd6EajTHL4oCTU31PNcG2LmIqzBhaE7PHLVUYD34CrXFVdcMQP1AQ=="
+			"SubKHkO1ET+QRzujzvKu5zTEll055+Ctu1o8Y5iJHTV6wnk0UjYC3GB398tjrVjd0wjOfqOdRgFCMgbLV5wNBg=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
@@ -782,8 +1074,18 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
 			{
-				description: "This is a test",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@type": "Person",
+					"@id": "acct:person@example.org",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note"
+				},
+				published: "2015-01-25T12:34:56Z"
 			},
 			[{ id: "foo123" }, { id: "bar456" }],
 			undefined,
@@ -796,8 +1098,18 @@ describe("AuditableItemGraphService", () => {
 			id,
 
 			{
-				title: "Title",
-				counter: 456
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@type": "Person",
+					"@id": "acct:person@example.org",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note 2"
+				},
+				published: "2015-01-25T12:34:56Z"
 			},
 			[{ id: "foo123" }, { id: "bar456" }],
 			undefined,
@@ -811,27 +1123,66 @@ describe("AuditableItemGraphService", () => {
 			verifySignatureDepth: VerifyDepth.All
 		});
 
-		expect(result.verified).toEqual(true);
-		expect(result.vertex).toEqual({
+		expect(result).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			updated: SECOND_TICK,
-			nodeIdentity:
-				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			nodeIdentity: TEST_NODE_IDENTITY,
 			metadata: {
-				title: "Title",
-				counter: 456
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
+				object: { "@type": "Note", content: "This is a simple note 2" },
+				published: "2015-01-25T12:34:56Z"
 			},
 			aliases: [
+				{ id: "foo123", created: FIRST_TICK },
+				{ id: "bar456", created: FIRST_TICK }
+			],
+			changesets: [
 				{
-					id: "foo123",
-					created: FIRST_TICK
+					hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
+					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					created: FIRST_TICK,
+					userIdentity: TEST_USER_IDENTITY,
+					patches: [
+						{
+							op: "add",
+							path: "/metadata",
+							value: {
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple note" },
+								published: "2015-01-25T12:34:56Z"
+							}
+						},
+						{
+							op: "add",
+							path: "/aliases",
+							value: [
+								{ id: "foo123", created: FIRST_TICK },
+								{ id: "bar456", created: FIRST_TICK }
+							]
+						}
+					],
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 				},
 				{
-					id: "bar456",
-					created: FIRST_TICK
+					hash: "Og/b7ggB83h+4wq3zDp7FT1DOK+qEIuChFnQV2M6UFw=",
+					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					created: SECOND_TICK,
+					userIdentity: TEST_USER_IDENTITY,
+					patches: [
+						{ op: "replace", path: "/metadata/object/content", value: "This is a simple note 2" }
+					],
+					immutableStorageId:
+						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 				}
-			]
+			],
+			verified: true,
+			verification: [{ created: FIRST_TICK }, { created: SECOND_TICK }]
 		});
 
 		const changesetStore = changesetStorage.getStore();
@@ -839,15 +1190,24 @@ describe("AuditableItemGraphService", () => {
 		expect(changesetStore[0]).toEqual({
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
-			userIdentity:
-				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
 					op: "add",
 					path: "/metadata",
 					value: {
-						description: "This is a test",
-						counter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@type": "Person",
+							"@id": "acct:person@example.org",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
@@ -865,7 +1225,7 @@ describe("AuditableItemGraphService", () => {
 					]
 				}
 			],
-			hash: "9w/vi3/OZPZ+kuWB4PHNlDE1YxI9Ev3BpSX6+Tttk6U=",
+			hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -873,25 +1233,15 @@ describe("AuditableItemGraphService", () => {
 		expect(changesetStore[1]).toEqual({
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: SECOND_TICK,
-			userIdentity:
-				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
-					op: "remove",
-					path: "/metadata/description"
-				},
-				{
-					op: "add",
-					path: "/metadata/title",
-					value: "Title"
-				},
-				{
 					op: "replace",
-					path: "/metadata/counter",
-					value: 456
+					path: "/metadata/object/content",
+					value: "This is a simple note 2"
 				}
 			],
-			hash: "I+v6vhvoUMMvX+mfg3BhUa6vQ2qogMWuAOqGw1/NXH0=",
+			hash: "Og/b7ggB83h+4wq3zDp7FT1DOK+qEIuChFnQV2M6UFw=",
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
@@ -904,7 +1254,7 @@ describe("AuditableItemGraphService", () => {
 
 		let credentialSignature = await decodeJwtToIntegrity(immutableStore[0].data);
 		expect(credentialSignature.signature).toEqual(
-			"/ROnxm0c84ujgzT2gQlhiXh2PqBueNx59i7hixlyeB/17CuF4wFcGgCCQE9gcqymzIKBX7r1YHMlNvoPavruAQ=="
+			"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
@@ -914,8 +1264,18 @@ describe("AuditableItemGraphService", () => {
 					op: "add",
 					path: "/metadata",
 					value: {
-						description: "This is a test",
-						counter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@type": "Person",
+							"@id": "acct:person@example.org",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
@@ -938,25 +1298,16 @@ describe("AuditableItemGraphService", () => {
 
 		credentialSignature = await decodeJwtToIntegrity(immutableStore[1].data);
 		expect(credentialSignature.signature).toEqual(
-			"W9jtC6G56swSEpNhZN9I5tthrD9yce786KKhD6Xz13mATco3WC0kjWYsw/Khg2fmIx07CAadauj0B/UnrZ4RAw=="
+			"qVnHQT1BBzP6d7tYDqBWv40eXTRazEFDr+LkYp19/cAr5J1lSzFz22UTmZ5JdCA0u3P3tkevaslz0uNMJWCyAg=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
 			created: SECOND_TICK,
 			patches: [
 				{
-					op: "remove",
-					path: "/metadata/description"
-				},
-				{
-					op: "add",
-					path: "/metadata/title",
-					value: "Title"
-				},
-				{
 					op: "replace",
-					path: "/metadata/counter",
-					value: 456
+					path: "/metadata/object/content",
+					value: "This is a simple note 2"
 				}
 			],
 			userIdentity: TEST_USER_IDENTITY
@@ -967,23 +1318,53 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
 			{
-				description: "This is a test",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@type": "Person",
+					"@id": "acct:person@example.org",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note"
+				},
+				published: "2015-01-25T12:34:56Z"
 			},
 			[{ id: "foo123" }, { id: "bar456" }],
 			[
 				{
 					id: "resource1",
 					metadata: {
-						resDescription: "This is a test",
-						resCounter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@type": "Person",
+							"@id": "acct:person@example.org",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note resource"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
 					id: "resource2",
 					metadata: {
-						resDescription: "This is a test2",
-						resCounter: 456
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@type": "Person",
+							"@id": "acct:person@example.org",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note resource 2"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				}
 			],
@@ -994,25 +1375,54 @@ describe("AuditableItemGraphService", () => {
 
 		await service.update(
 			id,
-
 			{
-				title: "Title",
-				counter: 456
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@type": "Person",
+					"@id": "acct:person@example.org",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note 2"
+				},
+				published: "2015-01-25T12:34:56Z"
 			},
 			[{ id: "foo123" }, { id: "bar456" }],
 			[
 				{
 					id: "resource1",
 					metadata: {
-						resTitle: "Title",
-						resCounter: 456
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@type": "Person",
+							"@id": "acct:person@example.org",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note resource 10"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
 					id: "resource2",
 					metadata: {
-						resTitle: "Title",
-						resCounter: 456
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@type": "Person",
+							"@id": "acct:person@example.org",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note resource 11"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				}
 			],
@@ -1026,46 +1436,130 @@ describe("AuditableItemGraphService", () => {
 			verifySignatureDepth: VerifyDepth.All
 		});
 
-		expect(result.verified).toEqual(true);
-
-		expect(result.vertex).toEqual({
+		expect(result).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			updated: SECOND_TICK,
-			nodeIdentity:
-				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			nodeIdentity: TEST_NODE_IDENTITY,
 			metadata: {
-				title: "Title",
-				counter: 456
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
+				object: { "@type": "Note", content: "This is a simple note 2" },
+				published: "2015-01-25T12:34:56Z"
 			},
 			aliases: [
-				{
-					id: "foo123",
-					created: FIRST_TICK
-				},
-				{
-					id: "bar456",
-					created: FIRST_TICK
-				}
+				{ id: "foo123", created: FIRST_TICK },
+				{ id: "bar456", created: FIRST_TICK }
 			],
 			resources: [
 				{
 					id: "resource1",
 					created: FIRST_TICK,
 					metadata: {
-						resTitle: "Title",
-						resCounter: 456
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
+						object: { "@type": "Note", content: "This is a simple note resource 10" },
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
 					id: "resource2",
 					created: FIRST_TICK,
 					metadata: {
-						resTitle: "Title",
-						resCounter: 456
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
+						object: { "@type": "Note", content: "This is a simple note resource 11" },
+						published: "2015-01-25T12:34:56Z"
 					}
 				}
-			]
+			],
+			changesets: [
+				{
+					hash: "Tkc0/RReCBn307kfgUyc2YGqHV+jizsYCySVaYc+4+U=",
+					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					created: FIRST_TICK,
+					userIdentity: TEST_USER_IDENTITY,
+					patches: [
+						{
+							op: "add",
+							path: "/metadata",
+							value: {
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple note" },
+								published: "2015-01-25T12:34:56Z"
+							}
+						},
+						{
+							op: "add",
+							path: "/aliases",
+							value: [
+								{ id: "foo123", created: FIRST_TICK },
+								{ id: "bar456", created: FIRST_TICK }
+							]
+						},
+						{
+							op: "add",
+							path: "/resources",
+							value: [
+								{
+									id: "resource1",
+									created: FIRST_TICK,
+									metadata: {
+										"@context": "https://www.w3.org/ns/activitystreams",
+										"@type": "Create",
+										actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
+										object: { "@type": "Note", content: "This is a simple note resource" },
+										published: "2015-01-25T12:34:56Z"
+									}
+								},
+								{
+									id: "resource2",
+									created: FIRST_TICK,
+									metadata: {
+										"@context": "https://www.w3.org/ns/activitystreams",
+										"@type": "Create",
+										actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
+										object: { "@type": "Note", content: "This is a simple note resource 2" },
+										published: "2015-01-25T12:34:56Z"
+									}
+								}
+							]
+						}
+					],
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+				},
+				{
+					hash: "JjtD2ONbYEFNCqgMoFYwjufOdB2e6EwvZMABM8syQ6Q=",
+					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					created: SECOND_TICK,
+					userIdentity: TEST_USER_IDENTITY,
+					patches: [
+						{ op: "replace", path: "/metadata/object/content", value: "This is a simple note 2" },
+						{ op: "add", path: "/resources/0/updated", value: SECOND_TICK },
+						{
+							op: "replace",
+							path: "/resources/0/metadata/object/content",
+							value: "This is a simple note resource 10"
+						},
+						{ op: "add", path: "/resources/1/updated", value: SECOND_TICK },
+						{
+							op: "replace",
+							path: "/resources/1/metadata/object/content",
+							value: "This is a simple note resource 11"
+						}
+					],
+					immutableStorageId:
+						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
+				}
+			],
+			verified: true,
+			verification: [{ created: FIRST_TICK }, { created: SECOND_TICK }]
 		});
 
 		const changesetStore = changesetStorage.getStore();
@@ -1073,15 +1567,24 @@ describe("AuditableItemGraphService", () => {
 		expect(changesetStore[0]).toEqual({
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
-			userIdentity:
-				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
 					op: "add",
 					path: "/metadata",
 					value: {
-						description: "This is a test",
-						counter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@type": "Person",
+							"@id": "acct:person@example.org",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
@@ -1106,22 +1609,42 @@ describe("AuditableItemGraphService", () => {
 							id: "resource1",
 							created: FIRST_TICK,
 							metadata: {
-								resDescription: "This is a test",
-								resCounter: 123
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: {
+									"@type": "Person",
+									"@id": "acct:person@example.org",
+									name: "Person"
+								},
+								object: {
+									"@type": "Note",
+									content: "This is a simple note resource"
+								},
+								published: "2015-01-25T12:34:56Z"
 							}
 						},
 						{
 							id: "resource2",
 							created: FIRST_TICK,
 							metadata: {
-								resDescription: "This is a test2",
-								resCounter: 456
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: {
+									"@type": "Person",
+									"@id": "acct:person@example.org",
+									name: "Person"
+								},
+								object: {
+									"@type": "Note",
+									content: "This is a simple note resource 2"
+								},
+								published: "2015-01-25T12:34:56Z"
 							}
 						}
 					]
 				}
 			],
-			hash: "bB8pbe9pCulcv+mYWl8OV963IUrlCclpheAtwBh1vkA=",
+			hash: "Tkc0/RReCBn307kfgUyc2YGqHV+jizsYCySVaYc+4+U=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -1129,22 +1652,12 @@ describe("AuditableItemGraphService", () => {
 		expect(changesetStore[1]).toEqual({
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: SECOND_TICK,
-			userIdentity:
-				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
-					op: "remove",
-					path: "/metadata/description"
-				},
-				{
-					op: "add",
-					path: "/metadata/title",
-					value: "Title"
-				},
-				{
 					op: "replace",
-					path: "/metadata/counter",
-					value: 456
+					path: "/metadata/object/content",
+					value: "This is a simple note 2"
 				},
 				{
 					op: "add",
@@ -1152,18 +1665,9 @@ describe("AuditableItemGraphService", () => {
 					value: SECOND_TICK
 				},
 				{
-					op: "remove",
-					path: "/resources/0/metadata/resDescription"
-				},
-				{
-					op: "add",
-					path: "/resources/0/metadata/resTitle",
-					value: "Title"
-				},
-				{
 					op: "replace",
-					path: "/resources/0/metadata/resCounter",
-					value: 456
+					path: "/resources/0/metadata/object/content",
+					value: "This is a simple note resource 10"
 				},
 				{
 					op: "add",
@@ -1171,16 +1675,12 @@ describe("AuditableItemGraphService", () => {
 					value: SECOND_TICK
 				},
 				{
-					op: "remove",
-					path: "/resources/1/metadata/resDescription"
-				},
-				{
-					op: "add",
-					path: "/resources/1/metadata/resTitle",
-					value: "Title"
+					op: "replace",
+					path: "/resources/1/metadata/object/content",
+					value: "This is a simple note resource 11"
 				}
 			],
-			hash: "B2/OVFCLFXukixMkxt7au9vtk1nG+aEg6xIAyewQ3Ws=",
+			hash: "JjtD2ONbYEFNCqgMoFYwjufOdB2e6EwvZMABM8syQ6Q=",
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
@@ -1193,7 +1693,7 @@ describe("AuditableItemGraphService", () => {
 
 		let credentialSignature = await decodeJwtToIntegrity(immutableStore[0].data);
 		expect(credentialSignature.signature).toEqual(
-			"ca+naU/ylRTAHcWykr54XLklKfDzWTCOiaMi/2pJ3k2mZzTO7q1JAEuoU+kT3bC6ufIjf3bKTO8rOdLoKYlDAQ=="
+			"AOqjzgjhXI8JXMRLV3cXBJJzZ7jJf89vITgsimGOEnN0Xn0W25pokKf47jKlOqrcZlB4Gt6IkSWkmw3KtQU7DQ=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
@@ -1203,8 +1703,18 @@ describe("AuditableItemGraphService", () => {
 					op: "add",
 					path: "/metadata",
 					value: {
-						description: "This is a test",
-						counter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
@@ -1212,12 +1722,12 @@ describe("AuditableItemGraphService", () => {
 					path: "/aliases",
 					value: [
 						{
-							id: "foo123",
-							created: FIRST_TICK
+							created: FIRST_TICK,
+							id: "foo123"
 						},
 						{
-							id: "bar456",
-							created: FIRST_TICK
+							created: FIRST_TICK,
+							id: "bar456"
 						}
 					]
 				},
@@ -1226,19 +1736,39 @@ describe("AuditableItemGraphService", () => {
 					path: "/resources",
 					value: [
 						{
-							id: "resource1",
 							created: FIRST_TICK,
+							id: "resource1",
 							metadata: {
-								resDescription: "This is a test",
-								resCounter: 123
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: {
+									"@id": "acct:person@example.org",
+									"@type": "Person",
+									name: "Person"
+								},
+								object: {
+									"@type": "Note",
+									content: "This is a simple note resource"
+								},
+								published: "2015-01-25T12:34:56Z"
 							}
 						},
 						{
-							id: "resource2",
 							created: FIRST_TICK,
+							id: "resource2",
 							metadata: {
-								resDescription: "This is a test2",
-								resCounter: 456
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: {
+									"@id": "acct:person@example.org",
+									"@type": "Person",
+									name: "Person"
+								},
+								object: {
+									"@type": "Note",
+									content: "This is a simple note resource 2"
+								},
+								published: "2015-01-25T12:34:56Z"
 							}
 						}
 					]
@@ -1249,58 +1779,24 @@ describe("AuditableItemGraphService", () => {
 
 		credentialSignature = await decodeJwtToIntegrity(immutableStore[1].data);
 		expect(credentialSignature.signature).toEqual(
-			"FKpPLGVHYD4mpBr1XV1J7mHVL82wv4AHu+Qb1sj3Kb1kdYFIpw83bXbQIjTbfEiFrXKRezEP/eQYwDKGb/HHAA=="
+			"xDnUf+WPlPzv7OoAqLwX3Gr2lRgDQ0Ap2yNxiyjsdww/ucdPef0uQSx8Zvaz10KuQGyqYFYuYjs90oP3bdOcAQ=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
 			created: SECOND_TICK,
 			patches: [
-				{
-					op: "remove",
-					path: "/metadata/description"
-				},
-				{
-					op: "add",
-					path: "/metadata/title",
-					value: "Title"
-				},
+				{ op: "replace", path: "/metadata/object/content", value: "This is a simple note 2" },
+				{ op: "add", path: "/resources/0/updated", value: SECOND_TICK },
 				{
 					op: "replace",
-					path: "/metadata/counter",
-					value: 456
+					path: "/resources/0/metadata/object/content",
+					value: "This is a simple note resource 10"
 				},
-				{
-					op: "add",
-					path: "/resources/0/updated",
-					value: SECOND_TICK
-				},
-				{
-					op: "remove",
-					path: "/resources/0/metadata/resDescription"
-				},
-				{
-					op: "add",
-					path: "/resources/0/metadata/resTitle",
-					value: "Title"
-				},
+				{ op: "add", path: "/resources/1/updated", value: SECOND_TICK },
 				{
 					op: "replace",
-					path: "/resources/0/metadata/resCounter",
-					value: 456
-				},
-				{
-					op: "add",
-					path: "/resources/1/updated",
-					value: SECOND_TICK
-				},
-				{
-					op: "remove",
-					path: "/resources/1/metadata/resDescription"
-				},
-				{
-					op: "add",
-					path: "/resources/1/metadata/resTitle",
-					value: "Title"
+					path: "/resources/1/metadata/object/content",
+					value: "This is a simple note resource 11"
 				}
 			],
 			userIdentity: TEST_USER_IDENTITY
@@ -1318,8 +1814,18 @@ describe("AuditableItemGraphService", () => {
 					id: "edge1",
 					relationship: "friend",
 					metadata: {
-						description: "This is a test",
-						counter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				}
 			],
@@ -1337,8 +1843,18 @@ describe("AuditableItemGraphService", () => {
 					id: "edge1",
 					relationship: "frenemy",
 					metadata: {
-						title: "Title",
-						counter: 456
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note 2"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				}
 			],
@@ -1351,34 +1867,83 @@ describe("AuditableItemGraphService", () => {
 			verifySignatureDepth: VerifyDepth.All
 		});
 
-		expect(result.verified).toEqual(true);
-
-		expect(result.vertex).toEqual({
+		expect(result).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			updated: SECOND_TICK,
-			nodeIdentity:
-				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			nodeIdentity: TEST_NODE_IDENTITY,
 			edges: [
 				{
 					id: "edge1",
 					created: FIRST_TICK,
 					relationship: "frenemy",
 					metadata: {
-						title: "Title",
-						counter: 456
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+						object: { "@type": "Note", content: "This is a simple note 2" },
+						published: "2015-01-25T12:34:56Z"
 					}
 				}
-			]
+			],
+			changesets: [
+				{
+					hash: "r6+XCDXDoVoZfIBtDlORWaWb/eMIietTidH1JPXRdVs=",
+					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					created: FIRST_TICK,
+					userIdentity: TEST_USER_IDENTITY,
+					patches: [
+						{
+							op: "add",
+							path: "/edges",
+							value: [
+								{
+									id: "edge1",
+									created: FIRST_TICK,
+									metadata: {
+										"@context": "https://www.w3.org/ns/activitystreams",
+										"@type": "Create",
+										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+										object: { "@type": "Note", content: "This is a simple note" },
+										published: "2015-01-25T12:34:56Z"
+									},
+									relationship: "friend"
+								}
+							]
+						}
+					],
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+				},
+				{
+					hash: "9HOMirKU9l+iZa+b4WPprlNKCdmWBFB0m5fQxjRdzF8=",
+					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					created: SECOND_TICK,
+					userIdentity: TEST_USER_IDENTITY,
+					patches: [
+						{ op: "add", path: "/edges/0/updated", value: SECOND_TICK },
+						{ op: "replace", path: "/edges/0/relationship", value: "frenemy" },
+						{
+							op: "replace",
+							path: "/edges/0/metadata/object/content",
+							value: "This is a simple note 2"
+						}
+					],
+					immutableStorageId:
+						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
+				}
+			],
+			verified: true,
+			verification: [{ created: FIRST_TICK }, { created: SECOND_TICK }]
 		});
 
 		const changesetStore = changesetStorage.getStore();
 
 		expect(changesetStore[0]).toEqual({
+			hash: "r6+XCDXDoVoZfIBtDlORWaWb/eMIietTidH1JPXRdVs=",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
-			userIdentity:
-				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
 					op: "add",
@@ -1388,51 +1953,35 @@ describe("AuditableItemGraphService", () => {
 							id: "edge1",
 							created: FIRST_TICK,
 							metadata: {
-								description: "This is a test",
-								counter: 123
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple note" },
+								published: "2015-01-25T12:34:56Z"
 							},
 							relationship: "friend"
 						}
 					]
 				}
 			],
-			hash: "F+qfuzpBTDE8mhDPzev1bzdSbHTn6qrOtJL7jWINeNM=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
 
 		expect(changesetStore[1]).toEqual({
+			hash: "9HOMirKU9l+iZa+b4WPprlNKCdmWBFB0m5fQxjRdzF8=",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: SECOND_TICK,
-			userIdentity:
-				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			userIdentity: TEST_USER_IDENTITY,
 			patches: [
-				{
-					op: "add",
-					path: "/edges/0/updated",
-					value: SECOND_TICK
-				},
+				{ op: "add", path: "/edges/0/updated", value: SECOND_TICK },
+				{ op: "replace", path: "/edges/0/relationship", value: "frenemy" },
 				{
 					op: "replace",
-					path: "/edges/0/relationship",
-					value: "frenemy"
-				},
-				{
-					op: "remove",
-					path: "/edges/0/metadata/description"
-				},
-				{
-					op: "add",
-					path: "/edges/0/metadata/title",
-					value: "Title"
-				},
-				{
-					op: "replace",
-					path: "/edges/0/metadata/counter",
-					value: 456
+					path: "/edges/0/metadata/object/content",
+					value: "This is a simple note 2"
 				}
 			],
-			hash: "BP1rU6d9qoKbfEZBE7OIAOEnQzIzV1Ni4p8s9sqUM1o=",
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
@@ -1442,22 +1991,52 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
 		const id = await service.create(
 			{
-				description: "This is a test",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@id": "acct:person@example.org",
+					"@type": "Person",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note"
+				},
+				published: "2015-01-25T12:34:56Z"
 			},
 			[
 				{
 					id: "foo123",
 					metadata: {
-						aliasDescription: "This is a test",
-						aliasCounter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple alias 1"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
 					id: "bar456",
 					metadata: {
-						aliasDescription: "This is a test",
-						aliasCounter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note alias 2"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				}
 			],
@@ -1465,15 +2044,35 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "resource1",
 					metadata: {
-						resDescription: "This is a test",
-						resCounter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note resource 1"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
 					id: "resource2",
 					metadata: {
-						resDescription: "This is a test2",
-						resCounter: 456
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple resource 2"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				}
 			],
@@ -1482,16 +2081,36 @@ describe("AuditableItemGraphService", () => {
 					id: "edge1",
 					relationship: "friend",
 					metadata: {
-						edgeDescription: "This is a test",
-						edgeCounter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple edge 1"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
 					id: "edge2",
 					relationship: "enemy",
 					metadata: {
-						edgeDescription: "This is a test2",
-						edgeCounter: 456
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple edge 2"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				}
 			],
@@ -1501,24 +2120,53 @@ describe("AuditableItemGraphService", () => {
 
 		await service.update(
 			id,
-
 			{
-				title: "Title",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@id": "acct:person@example.org",
+					"@type": "Person",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note 2"
+				},
+				published: "2015-01-25T12:34:56Z"
 			},
 			[
 				{
 					id: "foo123",
 					metadata: {
-						aliasTitle: "Title",
-						aliasCounter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note alias 10"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
 					id: "bar456",
 					metadata: {
-						aliasTitle: "Title",
-						aliasCounter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note alias 20"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				}
 			],
@@ -1526,15 +2174,35 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "resource1",
 					metadata: {
-						resTitle: "Title",
-						resCounter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note resource 10"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
 					id: "resource2",
 					metadata: {
-						resTitle: "Title",
-						resCounter: 456
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note resource 20"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				}
 			],
@@ -1543,16 +2211,36 @@ describe("AuditableItemGraphService", () => {
 					id: "edge1",
 					relationship: "friend",
 					metadata: {
-						edgeTitle: "Title",
-						edgeCounter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note edge 10"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
 					id: "edge2",
 					relationship: "enemy",
 					metadata: {
-						edgeTitle: "Title",
-						edgeCounter: 456
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note edge 20"
+						},
+						published: "2015-01-25T12:34:56Z"
 					}
 				}
 			],
@@ -1565,33 +2253,39 @@ describe("AuditableItemGraphService", () => {
 			verifySignatureDepth: VerifyDepth.All
 		});
 
-		expect(result.verified).toEqual(true);
-
-		expect(result.vertex).toEqual({
+		expect(result).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			updated: SECOND_TICK,
-			nodeIdentity:
-				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			nodeIdentity: TEST_NODE_IDENTITY,
 			metadata: {
-				title: "Title",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+				object: { "@type": "Note", content: "This is a simple note 2" },
+				published: "2015-01-25T12:34:56Z"
 			},
 			aliases: [
 				{
 					id: "foo123",
 					created: FIRST_TICK,
 					metadata: {
-						aliasTitle: "Title",
-						aliasCounter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+						object: { "@type": "Note", content: "This is a simple note alias 10" },
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
 					id: "bar456",
 					created: FIRST_TICK,
 					metadata: {
-						aliasTitle: "Title",
-						aliasCounter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+						object: { "@type": "Note", content: "This is a simple note alias 20" },
+						published: "2015-01-25T12:34:56Z"
 					}
 				}
 			],
@@ -1600,16 +2294,22 @@ describe("AuditableItemGraphService", () => {
 					id: "resource1",
 					created: FIRST_TICK,
 					metadata: {
-						resTitle: "Title",
-						resCounter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+						object: { "@type": "Note", content: "This is a simple note resource 10" },
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
 					id: "resource2",
 					created: FIRST_TICK,
 					metadata: {
-						resTitle: "Title",
-						resCounter: 456
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+						object: { "@type": "Note", content: "This is a simple note resource 20" },
+						published: "2015-01-25T12:34:56Z"
 					}
 				}
 			],
@@ -1619,8 +2319,11 @@ describe("AuditableItemGraphService", () => {
 					created: FIRST_TICK,
 					relationship: "friend",
 					metadata: {
-						edgeTitle: "Title",
-						edgeCounter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+						object: { "@type": "Note", content: "This is a simple note edge 10" },
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
@@ -1628,27 +2331,191 @@ describe("AuditableItemGraphService", () => {
 					created: FIRST_TICK,
 					relationship: "enemy",
 					metadata: {
-						edgeTitle: "Title",
-						edgeCounter: 456
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+						object: { "@type": "Note", content: "This is a simple note edge 20" },
+						published: "2015-01-25T12:34:56Z"
 					}
 				}
-			]
+			],
+			changesets: [
+				{
+					hash: "jTb9qgSQtXraoLWMpEB8DqHby6amfHbh2rdKu1O/144=",
+					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					created: FIRST_TICK,
+					userIdentity: TEST_USER_IDENTITY,
+					patches: [
+						{
+							op: "add",
+							path: "/metadata",
+							value: {
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple note" },
+								published: "2015-01-25T12:34:56Z"
+							}
+						},
+						{
+							op: "add",
+							path: "/aliases",
+							value: [
+								{
+									id: "foo123",
+									created: FIRST_TICK,
+									metadata: {
+										"@context": "https://www.w3.org/ns/activitystreams",
+										"@type": "Create",
+										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+										object: { "@type": "Note", content: "This is a simple alias 1" },
+										published: "2015-01-25T12:34:56Z"
+									}
+								},
+								{
+									id: "bar456",
+									created: FIRST_TICK,
+									metadata: {
+										"@context": "https://www.w3.org/ns/activitystreams",
+										"@type": "Create",
+										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+										object: { "@type": "Note", content: "This is a simple note alias 2" },
+										published: "2015-01-25T12:34:56Z"
+									}
+								}
+							]
+						},
+						{
+							op: "add",
+							path: "/resources",
+							value: [
+								{
+									id: "resource1",
+									created: FIRST_TICK,
+									metadata: {
+										"@context": "https://www.w3.org/ns/activitystreams",
+										"@type": "Create",
+										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+										object: { "@type": "Note", content: "This is a simple note resource 1" },
+										published: "2015-01-25T12:34:56Z"
+									}
+								},
+								{
+									id: "resource2",
+									created: FIRST_TICK,
+									metadata: {
+										"@context": "https://www.w3.org/ns/activitystreams",
+										"@type": "Create",
+										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+										object: { "@type": "Note", content: "This is a simple resource 2" },
+										published: "2015-01-25T12:34:56Z"
+									}
+								}
+							]
+						},
+						{
+							op: "add",
+							path: "/edges",
+							value: [
+								{
+									id: "edge1",
+									created: FIRST_TICK,
+									metadata: {
+										"@context": "https://www.w3.org/ns/activitystreams",
+										"@type": "Create",
+										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+										object: { "@type": "Note", content: "This is a simple edge 1" },
+										published: "2015-01-25T12:34:56Z"
+									},
+									relationship: "friend"
+								},
+								{
+									id: "edge2",
+									created: FIRST_TICK,
+									metadata: {
+										"@context": "https://www.w3.org/ns/activitystreams",
+										"@type": "Create",
+										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+										object: { "@type": "Note", content: "This is a simple edge 2" },
+										published: "2015-01-25T12:34:56Z"
+									},
+									relationship: "enemy"
+								}
+							]
+						}
+					],
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+				},
+				{
+					hash: "snnM4wJd36iJyQU3z2RyJNpbJKyFUch/0itVwmBpPOQ=",
+					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					created: SECOND_TICK,
+					userIdentity: TEST_USER_IDENTITY,
+					patches: [
+						{ op: "replace", path: "/metadata/object/content", value: "This is a simple note 2" },
+						{ op: "add", path: "/aliases/0/updated", value: SECOND_TICK },
+						{
+							op: "replace",
+							path: "/aliases/0/metadata/object/content",
+							value: "This is a simple note alias 10"
+						},
+						{ op: "add", path: "/aliases/1/updated", value: SECOND_TICK },
+						{
+							op: "replace",
+							path: "/aliases/1/metadata/object/content",
+							value: "This is a simple note alias 20"
+						},
+						{ op: "add", path: "/resources/0/updated", value: SECOND_TICK },
+						{
+							op: "replace",
+							path: "/resources/0/metadata/object/content",
+							value: "This is a simple note resource 10"
+						},
+						{ op: "add", path: "/resources/1/updated", value: SECOND_TICK },
+						{
+							op: "replace",
+							path: "/resources/1/metadata/object/content",
+							value: "This is a simple note resource 20"
+						},
+						{ op: "add", path: "/edges/0/updated", value: SECOND_TICK },
+						{
+							op: "replace",
+							path: "/edges/0/metadata/object/content",
+							value: "This is a simple note edge 10"
+						},
+						{ op: "add", path: "/edges/1/updated", value: SECOND_TICK },
+						{
+							op: "replace",
+							path: "/edges/1/metadata/object/content",
+							value: "This is a simple note edge 20"
+						}
+					],
+					immutableStorageId:
+						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
+				}
+			],
+			verified: true,
+			verification: [{ created: FIRST_TICK }, { created: SECOND_TICK }]
 		});
 
 		const changesetStore = changesetStorage.getStore();
 
 		expect(changesetStore[0]).toEqual({
+			hash: "jTb9qgSQtXraoLWMpEB8DqHby6amfHbh2rdKu1O/144=",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
-			userIdentity:
-				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
 					op: "add",
 					path: "/metadata",
 					value: {
-						description: "This is a test",
-						counter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+						object: { "@type": "Note", content: "This is a simple note" },
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
@@ -1659,16 +2526,22 @@ describe("AuditableItemGraphService", () => {
 							id: "foo123",
 							created: FIRST_TICK,
 							metadata: {
-								aliasDescription: "This is a test",
-								aliasCounter: 123
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple alias 1" },
+								published: "2015-01-25T12:34:56Z"
 							}
 						},
 						{
 							id: "bar456",
 							created: FIRST_TICK,
 							metadata: {
-								aliasDescription: "This is a test",
-								aliasCounter: 123
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple note alias 2" },
+								published: "2015-01-25T12:34:56Z"
 							}
 						}
 					]
@@ -1681,16 +2554,22 @@ describe("AuditableItemGraphService", () => {
 							id: "resource1",
 							created: FIRST_TICK,
 							metadata: {
-								resDescription: "This is a test",
-								resCounter: 123
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple note resource 1" },
+								published: "2015-01-25T12:34:56Z"
 							}
 						},
 						{
 							id: "resource2",
 							created: FIRST_TICK,
 							metadata: {
-								resDescription: "This is a test2",
-								resCounter: 456
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple resource 2" },
+								published: "2015-01-25T12:34:56Z"
 							}
 						}
 					]
@@ -1703,8 +2582,11 @@ describe("AuditableItemGraphService", () => {
 							id: "edge1",
 							created: FIRST_TICK,
 							metadata: {
-								edgeDescription: "This is a test",
-								edgeCounter: 123
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple edge 1" },
+								published: "2015-01-25T12:34:56Z"
 							},
 							relationship: "friend"
 						},
@@ -1712,120 +2594,65 @@ describe("AuditableItemGraphService", () => {
 							id: "edge2",
 							created: FIRST_TICK,
 							metadata: {
-								edgeDescription: "This is a test2",
-								edgeCounter: 456
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple edge 2" },
+								published: "2015-01-25T12:34:56Z"
 							},
 							relationship: "enemy"
 						}
 					]
 				}
 			],
-			hash: "8fZufYAsB92ULJZyrNXQzJQTQDZUlRDivUKjx3Vlges=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
 
 		expect(changesetStore[1]).toEqual({
+			hash: "snnM4wJd36iJyQU3z2RyJNpbJKyFUch/0itVwmBpPOQ=",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: SECOND_TICK,
-			userIdentity:
-				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			userIdentity: TEST_USER_IDENTITY,
 			patches: [
+				{ op: "replace", path: "/metadata/object/content", value: "This is a simple note 2" },
+				{ op: "add", path: "/aliases/0/updated", value: SECOND_TICK },
 				{
-					op: "remove",
-					path: "/metadata/description"
+					op: "replace",
+					path: "/aliases/0/metadata/object/content",
+					value: "This is a simple note alias 10"
 				},
+				{ op: "add", path: "/aliases/1/updated", value: SECOND_TICK },
 				{
-					op: "add",
-					path: "/metadata/title",
-					value: "Title"
+					op: "replace",
+					path: "/aliases/1/metadata/object/content",
+					value: "This is a simple note alias 20"
 				},
+				{ op: "add", path: "/resources/0/updated", value: SECOND_TICK },
 				{
-					op: "add",
-					path: "/aliases/0/updated",
-					value: SECOND_TICK
+					op: "replace",
+					path: "/resources/0/metadata/object/content",
+					value: "This is a simple note resource 10"
 				},
+				{ op: "add", path: "/resources/1/updated", value: SECOND_TICK },
 				{
-					op: "remove",
-					path: "/aliases/0/metadata/aliasDescription"
+					op: "replace",
+					path: "/resources/1/metadata/object/content",
+					value: "This is a simple note resource 20"
 				},
+				{ op: "add", path: "/edges/0/updated", value: SECOND_TICK },
 				{
-					op: "add",
-					path: "/aliases/0/metadata/aliasTitle",
-					value: "Title"
+					op: "replace",
+					path: "/edges/0/metadata/object/content",
+					value: "This is a simple note edge 10"
 				},
+				{ op: "add", path: "/edges/1/updated", value: SECOND_TICK },
 				{
-					op: "add",
-					path: "/aliases/1/updated",
-					value: SECOND_TICK
-				},
-				{
-					op: "remove",
-					path: "/aliases/1/metadata/aliasDescription"
-				},
-				{
-					op: "add",
-					path: "/aliases/1/metadata/aliasTitle",
-					value: "Title"
-				},
-				{
-					op: "add",
-					path: "/resources/0/updated",
-					value: SECOND_TICK
-				},
-				{
-					op: "remove",
-					path: "/resources/0/metadata/resDescription"
-				},
-				{
-					op: "add",
-					path: "/resources/0/metadata/resTitle",
-					value: "Title"
-				},
-				{
-					op: "add",
-					path: "/resources/1/updated",
-					value: SECOND_TICK
-				},
-				{
-					op: "remove",
-					path: "/resources/1/metadata/resDescription"
-				},
-				{
-					op: "add",
-					path: "/resources/1/metadata/resTitle",
-					value: "Title"
-				},
-				{
-					op: "add",
-					path: "/edges/0/updated",
-					value: SECOND_TICK
-				},
-				{
-					op: "remove",
-					path: "/edges/0/metadata/edgeDescription"
-				},
-				{
-					op: "add",
-					path: "/edges/0/metadata/edgeTitle",
-					value: "Title"
-				},
-				{
-					op: "add",
-					path: "/edges/1/updated",
-					value: SECOND_TICK
-				},
-				{
-					op: "remove",
-					path: "/edges/1/metadata/edgeDescription"
-				},
-				{
-					op: "add",
-					path: "/edges/1/metadata/edgeTitle",
-					value: "Title"
+					op: "replace",
+					path: "/edges/1/metadata/object/content",
+					value: "This is a simple note edge 20"
 				}
 			],
-			hash: "96ihiKSmWpkjXfpJGcr619EjBg7Tdi/PQOjjdM2Wv2M=",
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
@@ -1840,7 +2667,7 @@ describe("AuditableItemGraphService", () => {
 		let credentialSignature = await decodeJwtToIntegrity(immutableStore[0].data);
 
 		expect(credentialSignature.signature).toEqual(
-			"uENNDXxEvMpxu45dIsfSWlESqfeyUQS5cNHnUBTFXv5QMGpYsPmaRxkiZmeT8nhB4MDk7x235DfXS/p5ytndCA=="
+			"623KrKM43+giT9gpq12YewVrY2Cn2qGkHFubvQDyamHnpowgur2aK5QHwunM1NmxzKc8v2QbAxHf9hQQq2TPAg=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
@@ -1850,8 +2677,11 @@ describe("AuditableItemGraphService", () => {
 					op: "add",
 					path: "/metadata",
 					value: {
-						description: "This is a test",
-						counter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+						object: { "@type": "Note", content: "This is a simple note" },
+						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
@@ -1859,19 +2689,25 @@ describe("AuditableItemGraphService", () => {
 					path: "/aliases",
 					value: [
 						{
-							id: "foo123",
 							created: FIRST_TICK,
+							id: "foo123",
 							metadata: {
-								aliasDescription: "This is a test",
-								aliasCounter: 123
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple alias 1" },
+								published: "2015-01-25T12:34:56Z"
 							}
 						},
 						{
-							id: "bar456",
 							created: FIRST_TICK,
+							id: "bar456",
 							metadata: {
-								aliasDescription: "This is a test",
-								aliasCounter: 123
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple note alias 2" },
+								published: "2015-01-25T12:34:56Z"
 							}
 						}
 					]
@@ -1881,19 +2717,25 @@ describe("AuditableItemGraphService", () => {
 					path: "/resources",
 					value: [
 						{
-							id: "resource1",
 							created: FIRST_TICK,
+							id: "resource1",
 							metadata: {
-								resDescription: "This is a test",
-								resCounter: 123
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple note resource 1" },
+								published: "2015-01-25T12:34:56Z"
 							}
 						},
 						{
-							id: "resource2",
 							created: FIRST_TICK,
+							id: "resource2",
 							metadata: {
-								resDescription: "This is a test2",
-								resCounter: 456
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple resource 2" },
+								published: "2015-01-25T12:34:56Z"
 							}
 						}
 					]
@@ -1903,20 +2745,26 @@ describe("AuditableItemGraphService", () => {
 					path: "/edges",
 					value: [
 						{
-							id: "edge1",
 							created: FIRST_TICK,
+							id: "edge1",
 							metadata: {
-								edgeDescription: "This is a test",
-								edgeCounter: 123
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple edge 1" },
+								published: "2015-01-25T12:34:56Z"
 							},
 							relationship: "friend"
 						},
 						{
-							id: "edge2",
 							created: FIRST_TICK,
+							id: "edge2",
 							metadata: {
-								edgeDescription: "This is a test2",
-								edgeCounter: 456
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple edge 2" },
+								published: "2015-01-25T12:34:56Z"
 							},
 							relationship: "enemy"
 						}
@@ -1929,107 +2777,1108 @@ describe("AuditableItemGraphService", () => {
 		credentialSignature = await decodeJwtToIntegrity(immutableStore[1].data);
 
 		expect(credentialSignature.signature).toEqual(
-			"WVzwOhr8Xm6MigCgz4eNxYFKuVVkPjOdiJUq9PuteGGVr6femFeYge2tp5NaGQYMmGfSi1R14tP2Z4uFe+VcCA=="
+			"ZIPvcuMyzIX/2VsymzuigdSoC1lbGqHO3jj/rm9w1eCWo6vTeyLIxy/k5x0/hMf1Ls4l9o+ELt5jN/ITAFSrDA=="
 		);
 
 		expect(credentialSignature.integrity).toEqual({
 			created: SECOND_TICK,
 			patches: [
+				{ op: "replace", path: "/metadata/object/content", value: "This is a simple note 2" },
+				{ op: "add", path: "/aliases/0/updated", value: SECOND_TICK },
 				{
-					op: "remove",
-					path: "/metadata/description"
+					op: "replace",
+					path: "/aliases/0/metadata/object/content",
+					value: "This is a simple note alias 10"
 				},
+				{ op: "add", path: "/aliases/1/updated", value: SECOND_TICK },
 				{
-					op: "add",
-					path: "/metadata/title",
-					value: "Title"
+					op: "replace",
+					path: "/aliases/1/metadata/object/content",
+					value: "This is a simple note alias 20"
 				},
+				{ op: "add", path: "/resources/0/updated", value: SECOND_TICK },
 				{
-					op: "add",
-					path: "/aliases/0/updated",
-					value: SECOND_TICK
+					op: "replace",
+					path: "/resources/0/metadata/object/content",
+					value: "This is a simple note resource 10"
 				},
+				{ op: "add", path: "/resources/1/updated", value: SECOND_TICK },
 				{
-					op: "remove",
-					path: "/aliases/0/metadata/aliasDescription"
+					op: "replace",
+					path: "/resources/1/metadata/object/content",
+					value: "This is a simple note resource 20"
 				},
+				{ op: "add", path: "/edges/0/updated", value: SECOND_TICK },
 				{
-					op: "add",
-					path: "/aliases/0/metadata/aliasTitle",
-					value: "Title"
+					op: "replace",
+					path: "/edges/0/metadata/object/content",
+					value: "This is a simple note edge 10"
 				},
+				{ op: "add", path: "/edges/1/updated", value: SECOND_TICK },
 				{
-					op: "add",
-					path: "/aliases/1/updated",
-					value: SECOND_TICK
-				},
-				{
-					op: "remove",
-					path: "/aliases/1/metadata/aliasDescription"
-				},
-				{
-					op: "add",
-					path: "/aliases/1/metadata/aliasTitle",
-					value: "Title"
-				},
-				{
-					op: "add",
-					path: "/resources/0/updated",
-					value: SECOND_TICK
-				},
-				{
-					op: "remove",
-					path: "/resources/0/metadata/resDescription"
-				},
-				{
-					op: "add",
-					path: "/resources/0/metadata/resTitle",
-					value: "Title"
-				},
-				{
-					op: "add",
-					path: "/resources/1/updated",
-					value: SECOND_TICK
-				},
-				{
-					op: "remove",
-					path: "/resources/1/metadata/resDescription"
-				},
-				{
-					op: "add",
-					path: "/resources/1/metadata/resTitle",
-					value: "Title"
-				},
-				{
-					op: "add",
-					path: "/edges/0/updated",
-					value: SECOND_TICK
-				},
-				{
-					op: "remove",
-					path: "/edges/0/metadata/edgeDescription"
-				},
-				{
-					op: "add",
-					path: "/edges/0/metadata/edgeTitle",
-					value: "Title"
-				},
-				{
-					op: "add",
-					path: "/edges/1/updated",
-					value: SECOND_TICK
-				},
-				{
-					op: "remove",
-					path: "/edges/1/metadata/edgeDescription"
-				},
-				{
-					op: "add",
-					path: "/edges/1/metadata/edgeTitle",
-					value: "Title"
+					op: "replace",
+					path: "/edges/1/metadata/object/content",
+					value: "This is a simple note edge 20"
 				}
 			],
 			userIdentity: TEST_USER_IDENTITY
+		});
+	});
+
+	test("Can get an updated vertex as JSON-LD", async () => {
+		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const id = await service.create(
+			{
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@id": "acct:person@example.org",
+					"@type": "Person",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note"
+				},
+				published: "2015-01-25T12:34:56Z"
+			},
+			[
+				{
+					id: "foo123",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple alias 1"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				},
+				{
+					id: "bar456",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note alias 2"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				}
+			],
+			[
+				{
+					id: "resource1",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note resource 1"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				},
+				{
+					id: "resource2",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple resource 2"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				}
+			],
+			[
+				{
+					id: "edge1",
+					relationship: "friend",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple edge 1"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				},
+				{
+					id: "edge2",
+					relationship: "enemy",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple edge 2"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				}
+			],
+			TEST_USER_IDENTITY,
+			TEST_NODE_IDENTITY
+		);
+
+		await service.update(
+			id,
+			{
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@id": "acct:person@example.org",
+					"@type": "Person",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note 2"
+				},
+				published: "2015-01-25T12:34:56Z"
+			},
+			[
+				{
+					id: "foo123",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note alias 10"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				},
+				{
+					id: "bar456",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note alias 20"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				}
+			],
+			[
+				{
+					id: "resource1",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note resource 10"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				},
+				{
+					id: "resource2",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note resource 20"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				}
+			],
+			[
+				{
+					id: "edge1",
+					relationship: "friend",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note edge 10"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				},
+				{
+					id: "edge2",
+					relationship: "enemy",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note edge 20"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				}
+			],
+			TEST_USER_IDENTITY,
+			TEST_NODE_IDENTITY
+		);
+
+		const result = await service.get(id, undefined, MimeTypes.JsonLd);
+
+		expect(result).toEqual({
+			"@context": "https://schema.gtsc.io/v2/",
+			"@type": "vertex",
+			aliases: [
+				{
+					"@type": "alias",
+					created: "2024-08-22T11:55:16.271Z",
+					id: "foo123",
+					metadata: {
+						"@type": "https://www.w3.org/ns/activitystreams#Create",
+						"https://www.w3.org/ns/activitystreams#actor": {
+							"@id": "acct:person@example.org",
+							"@type": "https://www.w3.org/ns/activitystreams#Person",
+							"https://www.w3.org/ns/activitystreams#name": "Person"
+						},
+						"https://www.w3.org/ns/activitystreams#object": {
+							"@type": "https://www.w3.org/ns/activitystreams#Note",
+							"https://www.w3.org/ns/activitystreams#content": "This is a simple note alias 10"
+						},
+						"https://www.w3.org/ns/activitystreams#published": {
+							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+							"@value": "2015-01-25T12:34:56Z"
+						}
+					}
+				},
+				{
+					"@type": "alias",
+					created: "2024-08-22T11:55:16.271Z",
+					id: "bar456",
+					metadata: {
+						"@type": "https://www.w3.org/ns/activitystreams#Create",
+						"https://www.w3.org/ns/activitystreams#actor": {
+							"@id": "acct:person@example.org",
+							"@type": "https://www.w3.org/ns/activitystreams#Person",
+							"https://www.w3.org/ns/activitystreams#name": "Person"
+						},
+						"https://www.w3.org/ns/activitystreams#object": {
+							"@type": "https://www.w3.org/ns/activitystreams#Note",
+							"https://www.w3.org/ns/activitystreams#content": "This is a simple note alias 20"
+						},
+						"https://www.w3.org/ns/activitystreams#published": {
+							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+							"@value": "2015-01-25T12:34:56Z"
+						}
+					}
+				}
+			],
+			edges: [
+				{
+					"@type": "edge",
+					created: "2024-08-22T11:55:16.271Z",
+					id: "edge1",
+					metadata: {
+						"@type": "https://www.w3.org/ns/activitystreams#Create",
+						"https://www.w3.org/ns/activitystreams#actor": {
+							"@id": "acct:person@example.org",
+							"@type": "https://www.w3.org/ns/activitystreams#Person",
+							"https://www.w3.org/ns/activitystreams#name": "Person"
+						},
+						"https://www.w3.org/ns/activitystreams#object": {
+							"@type": "https://www.w3.org/ns/activitystreams#Note",
+							"https://www.w3.org/ns/activitystreams#content": "This is a simple note edge 10"
+						},
+						"https://www.w3.org/ns/activitystreams#published": {
+							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+							"@value": "2015-01-25T12:34:56Z"
+						}
+					},
+					relationship: "friend"
+				},
+				{
+					"@type": "edge",
+					created: "2024-08-22T11:55:16.271Z",
+					id: "edge2",
+					metadata: {
+						"@type": "https://www.w3.org/ns/activitystreams#Create",
+						"https://www.w3.org/ns/activitystreams#actor": {
+							"@id": "acct:person@example.org",
+							"@type": "https://www.w3.org/ns/activitystreams#Person",
+							"https://www.w3.org/ns/activitystreams#name": "Person"
+						},
+						"https://www.w3.org/ns/activitystreams#object": {
+							"@type": "https://www.w3.org/ns/activitystreams#Note",
+							"https://www.w3.org/ns/activitystreams#content": "This is a simple note edge 20"
+						},
+						"https://www.w3.org/ns/activitystreams#published": {
+							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+							"@value": "2015-01-25T12:34:56Z"
+						}
+					},
+					relationship: "enemy"
+				}
+			],
+			resources: [
+				{
+					"@type": "resource",
+					created: "2024-08-22T11:55:16.271Z",
+					id: "resource1",
+					metadata: {
+						"@type": "https://www.w3.org/ns/activitystreams#Create",
+						"https://www.w3.org/ns/activitystreams#actor": {
+							"@id": "acct:person@example.org",
+							"@type": "https://www.w3.org/ns/activitystreams#Person",
+							"https://www.w3.org/ns/activitystreams#name": "Person"
+						},
+						"https://www.w3.org/ns/activitystreams#object": {
+							"@type": "https://www.w3.org/ns/activitystreams#Note",
+							"https://www.w3.org/ns/activitystreams#content": "This is a simple note resource 10"
+						},
+						"https://www.w3.org/ns/activitystreams#published": {
+							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+							"@value": "2015-01-25T12:34:56Z"
+						}
+					}
+				},
+				{
+					"@type": "resource",
+					created: "2024-08-22T11:55:16.271Z",
+					id: "resource2",
+					metadata: {
+						"@type": "https://www.w3.org/ns/activitystreams#Create",
+						"https://www.w3.org/ns/activitystreams#actor": {
+							"@id": "acct:person@example.org",
+							"@type": "https://www.w3.org/ns/activitystreams#Person",
+							"https://www.w3.org/ns/activitystreams#name": "Person"
+						},
+						"https://www.w3.org/ns/activitystreams#object": {
+							"@type": "https://www.w3.org/ns/activitystreams#Note",
+							"https://www.w3.org/ns/activitystreams#content": "This is a simple note resource 20"
+						},
+						"https://www.w3.org/ns/activitystreams#published": {
+							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+							"@value": "2015-01-25T12:34:56Z"
+						}
+					}
+				}
+			],
+			created: "2024-08-22T11:55:16.271Z",
+			id: "0101010101010101010101010101010101010101010101010101010101010101",
+			metadata: {
+				"@type": "https://www.w3.org/ns/activitystreams#Create",
+				"https://www.w3.org/ns/activitystreams#actor": {
+					"@id": "acct:person@example.org",
+					"@type": "https://www.w3.org/ns/activitystreams#Person",
+					"https://www.w3.org/ns/activitystreams#name": "Person"
+				},
+				"https://www.w3.org/ns/activitystreams#object": {
+					"@type": "https://www.w3.org/ns/activitystreams#Note",
+					"https://www.w3.org/ns/activitystreams#content": "This is a simple note 2"
+				},
+				"https://www.w3.org/ns/activitystreams#published": {
+					"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+					"@value": "2015-01-25T12:34:56Z"
+				}
+			},
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			updated: "2024-08-22T11:56:56.272Z"
+		});
+	});
+
+	test("Can get an updated vertex as JSON-LD with changeset", async () => {
+		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const id = await service.create(
+			{
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@id": "acct:person@example.org",
+					"@type": "Person",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note"
+				},
+				published: "2015-01-25T12:34:56Z"
+			},
+			[
+				{
+					id: "foo123",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple alias 1"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				},
+				{
+					id: "bar456",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note alias 2"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				}
+			],
+			[
+				{
+					id: "resource1",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note resource 1"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				},
+				{
+					id: "resource2",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple resource 2"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				}
+			],
+			[
+				{
+					id: "edge1",
+					relationship: "friend",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple edge 1"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				},
+				{
+					id: "edge2",
+					relationship: "enemy",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple edge 2"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				}
+			],
+			TEST_USER_IDENTITY,
+			TEST_NODE_IDENTITY
+		);
+
+		await service.update(
+			id,
+			{
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@id": "acct:person@example.org",
+					"@type": "Person",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note 2"
+				},
+				published: "2015-01-25T12:34:56Z"
+			},
+			[
+				{
+					id: "foo123",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note alias 10"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				},
+				{
+					id: "bar456",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note alias 20"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				}
+			],
+			[
+				{
+					id: "resource1",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note resource 10"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				},
+				{
+					id: "resource2",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note resource 20"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				}
+			],
+			[
+				{
+					id: "edge1",
+					relationship: "friend",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note edge 10"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				},
+				{
+					id: "edge2",
+					relationship: "enemy",
+					metadata: {
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: {
+							"@id": "acct:person@example.org",
+							"@type": "Person",
+							name: "Person"
+						},
+						object: {
+							"@type": "Note",
+							content: "This is a simple note edge 20"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				}
+			],
+			TEST_USER_IDENTITY,
+			TEST_NODE_IDENTITY
+		);
+
+		const result = await service.get(
+			id,
+			{
+				includeChangesets: true
+			},
+			MimeTypes.JsonLd
+		);
+
+		expect(result).toEqual({
+			"@context": "https://schema.gtsc.io/v2/",
+			"@type": "vertex",
+			aliases: [
+				{
+					"@type": "alias",
+					created: "2024-08-22T11:55:16.271Z",
+					id: "foo123",
+					metadata: {
+						"@type": "https://www.w3.org/ns/activitystreams#Create",
+						"https://www.w3.org/ns/activitystreams#actor": {
+							"@id": "acct:person@example.org",
+							"@type": "https://www.w3.org/ns/activitystreams#Person",
+							"https://www.w3.org/ns/activitystreams#name": "Person"
+						},
+						"https://www.w3.org/ns/activitystreams#object": {
+							"@type": "https://www.w3.org/ns/activitystreams#Note",
+							"https://www.w3.org/ns/activitystreams#content": "This is a simple note alias 10"
+						},
+						"https://www.w3.org/ns/activitystreams#published": {
+							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+							"@value": "2015-01-25T12:34:56Z"
+						}
+					}
+				},
+				{
+					"@type": "alias",
+					created: "2024-08-22T11:55:16.271Z",
+					id: "bar456",
+					metadata: {
+						"@type": "https://www.w3.org/ns/activitystreams#Create",
+						"https://www.w3.org/ns/activitystreams#actor": {
+							"@id": "acct:person@example.org",
+							"@type": "https://www.w3.org/ns/activitystreams#Person",
+							"https://www.w3.org/ns/activitystreams#name": "Person"
+						},
+						"https://www.w3.org/ns/activitystreams#object": {
+							"@type": "https://www.w3.org/ns/activitystreams#Note",
+							"https://www.w3.org/ns/activitystreams#content": "This is a simple note alias 20"
+						},
+						"https://www.w3.org/ns/activitystreams#published": {
+							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+							"@value": "2015-01-25T12:34:56Z"
+						}
+					}
+				}
+			],
+			changesets: [
+				{
+					"@type": "changeset",
+					patches: [
+						{
+							"@type": "patch",
+							patchOperation: "add",
+							patchPath: "/metadata",
+							patchValue: {
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+								object: { "@type": "Note", content: "This is a simple note" },
+								published: "2015-01-25T12:34:56Z"
+							}
+						},
+						{
+							"@type": "patch",
+							patchOperation: "add",
+							patchPath: "/aliases",
+							patchValue: [
+								{
+									id: "foo123",
+									created: 1724327716271,
+									metadata: {
+										"@context": "https://www.w3.org/ns/activitystreams",
+										"@type": "Create",
+										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+										object: { "@type": "Note", content: "This is a simple alias 1" },
+										published: "2015-01-25T12:34:56Z"
+									}
+								},
+								{
+									id: "bar456",
+									created: 1724327716271,
+									metadata: {
+										"@context": "https://www.w3.org/ns/activitystreams",
+										"@type": "Create",
+										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+										object: { "@type": "Note", content: "This is a simple note alias 2" },
+										published: "2015-01-25T12:34:56Z"
+									}
+								}
+							]
+						},
+						{
+							"@type": "patch",
+							patchOperation: "add",
+							patchPath: "/resources",
+							patchValue: [
+								{
+									id: "resource1",
+									created: 1724327716271,
+									metadata: {
+										"@context": "https://www.w3.org/ns/activitystreams",
+										"@type": "Create",
+										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+										object: { "@type": "Note", content: "This is a simple note resource 1" },
+										published: "2015-01-25T12:34:56Z"
+									}
+								},
+								{
+									id: "resource2",
+									created: 1724327716271,
+									metadata: {
+										"@context": "https://www.w3.org/ns/activitystreams",
+										"@type": "Create",
+										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+										object: { "@type": "Note", content: "This is a simple resource 2" },
+										published: "2015-01-25T12:34:56Z"
+									}
+								}
+							]
+						},
+						{
+							"@type": "patch",
+							patchOperation: "add",
+							patchPath: "/edges",
+							patchValue: [
+								{
+									id: "edge1",
+									created: 1724327716271,
+									metadata: {
+										"@context": "https://www.w3.org/ns/activitystreams",
+										"@type": "Create",
+										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+										object: { "@type": "Note", content: "This is a simple edge 1" },
+										published: "2015-01-25T12:34:56Z"
+									},
+									relationship: "friend"
+								},
+								{
+									id: "edge2",
+									created: 1724327716271,
+									metadata: {
+										"@context": "https://www.w3.org/ns/activitystreams",
+										"@type": "Create",
+										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+										object: { "@type": "Note", content: "This is a simple edge 2" },
+										published: "2015-01-25T12:34:56Z"
+									},
+									relationship: "enemy"
+								}
+							]
+						}
+					],
+					created: "2024-08-22T11:55:16.271Z",
+					hash: "jTb9qgSQtXraoLWMpEB8DqHby6amfHbh2rdKu1O/144=",
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
+					nodeIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
+				},
+				{
+					"@type": "changeset",
+					patches: [
+						{
+							"@type": "patch",
+							patchOperation: "replace",
+							patchPath: "/metadata/object/content",
+							patchValue: "This is a simple note 2"
+						},
+						{
+							"@type": "patch",
+							patchOperation: "add",
+							patchPath: "/aliases/0/updated",
+							patchValue: 1724327816272
+						},
+						{
+							"@type": "patch",
+							patchOperation: "replace",
+							patchPath: "/aliases/0/metadata/object/content",
+							patchValue: "This is a simple note alias 10"
+						},
+						{
+							"@type": "patch",
+							patchOperation: "add",
+							patchPath: "/aliases/1/updated",
+							patchValue: 1724327816272
+						},
+						{
+							"@type": "patch",
+							patchOperation: "replace",
+							patchPath: "/aliases/1/metadata/object/content",
+							patchValue: "This is a simple note alias 20"
+						},
+						{
+							"@type": "patch",
+							patchOperation: "add",
+							patchPath: "/resources/0/updated",
+							patchValue: 1724327816272
+						},
+						{
+							"@type": "patch",
+							patchOperation: "replace",
+							patchPath: "/resources/0/metadata/object/content",
+							patchValue: "This is a simple note resource 10"
+						},
+						{
+							"@type": "patch",
+							patchOperation: "add",
+							patchPath: "/resources/1/updated",
+							patchValue: 1724327816272
+						},
+						{
+							"@type": "patch",
+							patchOperation: "replace",
+							patchPath: "/resources/1/metadata/object/content",
+							patchValue: "This is a simple note resource 20"
+						},
+						{
+							"@type": "patch",
+							patchOperation: "add",
+							patchPath: "/edges/0/updated",
+							patchValue: 1724327816272
+						},
+						{
+							"@type": "patch",
+							patchOperation: "replace",
+							patchPath: "/edges/0/metadata/object/content",
+							patchValue: "This is a simple note edge 10"
+						},
+						{
+							"@type": "patch",
+							patchOperation: "add",
+							patchPath: "/edges/1/updated",
+							patchValue: 1724327816272
+						},
+						{
+							"@type": "patch",
+							patchOperation: "replace",
+							patchPath: "/edges/1/metadata/object/content",
+							patchValue: "This is a simple note edge 20"
+						}
+					],
+					created: "2024-08-22T11:56:56.272Z",
+					hash: "snnM4wJd36iJyQU3z2RyJNpbJKyFUch/0itVwmBpPOQ=",
+					immutableStorageId:
+						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505",
+					nodeIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
+				}
+			],
+			edges: [
+				{
+					"@type": "edge",
+					created: "2024-08-22T11:55:16.271Z",
+					id: "edge1",
+					metadata: {
+						"@type": "https://www.w3.org/ns/activitystreams#Create",
+						"https://www.w3.org/ns/activitystreams#actor": {
+							"@id": "acct:person@example.org",
+							"@type": "https://www.w3.org/ns/activitystreams#Person",
+							"https://www.w3.org/ns/activitystreams#name": "Person"
+						},
+						"https://www.w3.org/ns/activitystreams#object": {
+							"@type": "https://www.w3.org/ns/activitystreams#Note",
+							"https://www.w3.org/ns/activitystreams#content": "This is a simple note edge 10"
+						},
+						"https://www.w3.org/ns/activitystreams#published": {
+							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+							"@value": "2015-01-25T12:34:56Z"
+						}
+					},
+					relationship: "friend"
+				},
+				{
+					"@type": "edge",
+					created: "2024-08-22T11:55:16.271Z",
+					id: "edge2",
+					metadata: {
+						"@type": "https://www.w3.org/ns/activitystreams#Create",
+						"https://www.w3.org/ns/activitystreams#actor": {
+							"@id": "acct:person@example.org",
+							"@type": "https://www.w3.org/ns/activitystreams#Person",
+							"https://www.w3.org/ns/activitystreams#name": "Person"
+						},
+						"https://www.w3.org/ns/activitystreams#object": {
+							"@type": "https://www.w3.org/ns/activitystreams#Note",
+							"https://www.w3.org/ns/activitystreams#content": "This is a simple note edge 20"
+						},
+						"https://www.w3.org/ns/activitystreams#published": {
+							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+							"@value": "2015-01-25T12:34:56Z"
+						}
+					},
+					relationship: "enemy"
+				}
+			],
+			resources: [
+				{
+					"@type": "resource",
+					created: "2024-08-22T11:55:16.271Z",
+					id: "resource1",
+					metadata: {
+						"@type": "https://www.w3.org/ns/activitystreams#Create",
+						"https://www.w3.org/ns/activitystreams#actor": {
+							"@id": "acct:person@example.org",
+							"@type": "https://www.w3.org/ns/activitystreams#Person",
+							"https://www.w3.org/ns/activitystreams#name": "Person"
+						},
+						"https://www.w3.org/ns/activitystreams#object": {
+							"@type": "https://www.w3.org/ns/activitystreams#Note",
+							"https://www.w3.org/ns/activitystreams#content": "This is a simple note resource 10"
+						},
+						"https://www.w3.org/ns/activitystreams#published": {
+							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+							"@value": "2015-01-25T12:34:56Z"
+						}
+					}
+				},
+				{
+					"@type": "resource",
+					created: "2024-08-22T11:55:16.271Z",
+					id: "resource2",
+					metadata: {
+						"@type": "https://www.w3.org/ns/activitystreams#Create",
+						"https://www.w3.org/ns/activitystreams#actor": {
+							"@id": "acct:person@example.org",
+							"@type": "https://www.w3.org/ns/activitystreams#Person",
+							"https://www.w3.org/ns/activitystreams#name": "Person"
+						},
+						"https://www.w3.org/ns/activitystreams#object": {
+							"@type": "https://www.w3.org/ns/activitystreams#Note",
+							"https://www.w3.org/ns/activitystreams#content": "This is a simple note resource 20"
+						},
+						"https://www.w3.org/ns/activitystreams#published": {
+							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+							"@value": "2015-01-25T12:34:56Z"
+						}
+					}
+				}
+			],
+			created: "2024-08-22T11:55:16.271Z",
+			id: "0101010101010101010101010101010101010101010101010101010101010101",
+			metadata: {
+				"@type": "https://www.w3.org/ns/activitystreams#Create",
+				"https://www.w3.org/ns/activitystreams#actor": {
+					"@id": "acct:person@example.org",
+					"@type": "https://www.w3.org/ns/activitystreams#Person",
+					"https://www.w3.org/ns/activitystreams#name": "Person"
+				},
+				"https://www.w3.org/ns/activitystreams#object": {
+					"@type": "https://www.w3.org/ns/activitystreams#Note",
+					"https://www.w3.org/ns/activitystreams#content": "This is a simple note 2"
+				},
+				"https://www.w3.org/ns/activitystreams#published": {
+					"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+					"@value": "2015-01-25T12:34:56Z"
+				}
+			},
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			updated: "2024-08-22T11:56:56.272Z"
 		});
 	});
 
@@ -2049,60 +3898,40 @@ describe("AuditableItemGraphService", () => {
 
 		await service.removeImmutable(id, TEST_NODE_IDENTITY);
 
-		const vertex = await service.get(id, {
+		const result = await service.get(id, {
 			includeChangesets: true,
 			verifySignatureDepth: VerifyDepth.All
 		});
 
-		expect(vertex).toEqual({
-			verified: true,
-			verification: [
-				{
-					created: FIRST_TICK
-				}
+		expect(result).toEqual({
+			id: "0101010101010101010101010101010101010101010101010101010101010101",
+			created: FIRST_TICK,
+			updated: FIRST_TICK,
+			nodeIdentity: TEST_NODE_IDENTITY,
+			aliases: [
+				{ id: "foo123", created: FIRST_TICK },
+				{ id: "bar456", created: FIRST_TICK }
 			],
-			vertex: {
-				id: "0101010101010101010101010101010101010101010101010101010101010101",
-				created: FIRST_TICK,
-				updated: FIRST_TICK,
-				nodeIdentity:
-					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
-				aliases: [
-					{
-						id: "foo123",
-						created: FIRST_TICK
-					},
-					{
-						id: "bar456",
-						created: FIRST_TICK
-					}
-				]
-			},
 			changesets: [
 				{
+					hash: "Ht6zFJi0yl+MYTKgk+HdZW1PLWjJmSOwOkqrAA1NfVU=",
 					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 					created: FIRST_TICK,
-					userIdentity:
-						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+					userIdentity: TEST_USER_IDENTITY,
 					patches: [
 						{
 							op: "add",
 							path: "/aliases",
 							value: [
-								{
-									id: "foo123",
-									created: FIRST_TICK
-								},
-								{
-									id: "bar456",
-									created: FIRST_TICK
-								}
+								{ id: "foo123", created: FIRST_TICK },
+								{ id: "bar456", created: FIRST_TICK }
 							]
 						}
-					],
-					hash: "Ht6zFJi0yl+MYTKgk+HdZW1PLWjJmSOwOkqrAA1NfVU="
+					]
 				}
-			]
+			],
+			verified: true,
+			verification: [{ created: FIRST_TICK }]
 		});
 
 		expect(immutableStore.length).toEqual(0);
@@ -2297,8 +4126,18 @@ describe("AuditableItemGraphService", () => {
 
 		const id = await service.create(
 			{
-				description: "This is a test",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@id": "acct:person@example.org",
+					"@type": "Person",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note 2"
+				},
+				published: "2015-01-25T12:34:56Z"
 			},
 			undefined,
 			undefined,
@@ -2317,8 +4156,11 @@ describe("AuditableItemGraphService", () => {
 			updated: FIRST_TICK,
 			nodeIdentity: TEST_NODE_IDENTITY,
 			metadata: {
-				description: "This is a test",
-				counter: 123
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+				object: { "@type": "Note", content: "This is a simple note 2" },
+				published: "2015-01-25T12:34:56Z"
 			}
 		});
 
@@ -2326,6 +4168,7 @@ describe("AuditableItemGraphService", () => {
 		const changeset = changesetStore[0];
 
 		expect(changeset).toEqual({
+			hash: "+b1f6l+JkK6vJYOmk84EExH5mxV1lqY5QJ/L+D7UWsk=",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			userIdentity: TEST_USER_IDENTITY,
@@ -2334,12 +4177,14 @@ describe("AuditableItemGraphService", () => {
 					op: "add",
 					path: "/metadata",
 					value: {
-						description: "This is a test",
-						counter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+						object: { "@type": "Note", content: "This is a simple note 2" },
+						published: "2015-01-25T12:34:56Z"
 					}
 				}
 			],
-			hash: "XO3aD55mKvby+c8Wa4epNoBs29ohiAjZyFiR1L1LLtU=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -2354,7 +4199,7 @@ describe("AuditableItemGraphService", () => {
 		const { signature, integrity } = await decodeJwtToIntegrity(immutableStore[0].data);
 
 		expect(signature).toEqual(
-			"l52JqGY3zFON2k8jMg8syMa0JNWeayabD2E2g807a20OJtw1m39TVrZP0Yvu+DbIzun4h8fxD81HD872SqlrDw=="
+			"Jgvd1FjWd0VsQdkkqzxaByLkkCCDVuQtDEtskD6o3ZhxZfDx5towOGbYtHc8vz9cj8/v8NED+iBVFSjtHgugCQ=="
 		);
 
 		expect(integrity).toEqual({
@@ -2364,8 +4209,11 @@ describe("AuditableItemGraphService", () => {
 					op: "add",
 					path: "/metadata",
 					value: {
-						description: "This is a test",
-						counter: 123
+						"@context": "https://www.w3.org/ns/activitystreams",
+						"@type": "Create",
+						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+						object: { "@type": "Note", content: "This is a simple note 2" },
+						published: "2015-01-25T12:34:56Z"
 					}
 				}
 			],

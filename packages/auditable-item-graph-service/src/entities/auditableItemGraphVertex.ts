@@ -1,5 +1,6 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
+import type { IJsonLdNodeObject } from "@gtsc/data-json-ld";
 import { entity, property, SortDirection } from "@gtsc/entity";
 import type { AuditableItemGraphAlias } from "./auditableItemGraphAlias";
 import type { AuditableItemGraphEdge } from "./auditableItemGraphEdge";
@@ -43,8 +44,8 @@ export class AuditableItemGraphVertex {
 	/**
 	 * Metadata to associate with the vertex as JSON-LD.
 	 */
-	@property({ type: "object" })
-	public metadata?: unknown;
+	@property({ type: "object", itemTypeRef: "IJsonLdNodeObject" })
+	public metadata?: IJsonLdNodeObject;
 
 	/**
 	 * Alternative aliases that can be used to identify the vertex.

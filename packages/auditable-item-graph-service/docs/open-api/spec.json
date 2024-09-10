@@ -45,22 +45,25 @@
                                 "auditableItemGraphCreateRequestExample": {
                                     "value": {
                                         "metadata": {
-                                            "title": "Title",
-                                            "counter": 456
+                                            "@context": "http://schema.org/",
+                                            "@type": "Note",
+                                            "content": "This is a simple note"
                                         },
                                         "aliases": [
                                             {
                                                 "id": "bar456",
                                                 "metadata": {
-                                                    "title": "Title",
-                                                    "counter": 456
+                                                    "@context": "http://schema.org/",
+                                                    "@type": "Note",
+                                                    "content": "This is a simple note"
                                                 }
                                             },
                                             {
                                                 "id": "foo321",
                                                 "metadata": {
-                                                    "title": "Title",
-                                                    "counter": 456
+                                                    "@context": "http://schema.org/",
+                                                    "@type": "Note",
+                                                    "content": "This is a simple note"
                                                 }
                                             }
                                         ],
@@ -68,15 +71,17 @@
                                             {
                                                 "id": "resource1",
                                                 "metadata": {
-                                                    "title": "Title",
-                                                    "counter": 456
+                                                    "@context": "http://schema.org/",
+                                                    "@type": "Note",
+                                                    "content": "This is a simple note"
                                                 }
                                             },
                                             {
                                                 "id": "resource2",
                                                 "metadata": {
-                                                    "title": "Title",
-                                                    "counter": 456
+                                                    "@context": "http://schema.org/",
+                                                    "@type": "Note",
+                                                    "content": "This is a simple note"
                                                 }
                                             }
                                         ],
@@ -85,16 +90,18 @@
                                                 "id": "edge1",
                                                 "relationship": "frenemy",
                                                 "metadata": {
-                                                    "title": "Title",
-                                                    "counter": 456
+                                                    "@context": "http://schema.org/",
+                                                    "@type": "Note",
+                                                    "content": "This is a simple note"
                                                 }
                                             },
                                             {
                                                 "id": "edge2",
                                                 "relationship": "end",
                                                 "metadata": {
-                                                    "title": "Title",
-                                                    "counter": 456
+                                                    "@context": "http://schema.org/",
+                                                    "@type": "Note",
+                                                    "content": "This is a simple note"
                                                 }
                                             }
                                         ]
@@ -394,6 +401,16 @@
                         "schema": {
                             "$ref": "#/components/schemas/VerifyDepth"
                         }
+                    },
+                    {
+                        "name": "Accept",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "style": "simple",
+                        "example": "application/json"
                     }
                 ],
                 "security": [
@@ -412,24 +429,59 @@
                                 "examples": {
                                     "auditableItemGraphGetResponseExample": {
                                         "value": {
-                                            "vertex": {
-                                                "id": "aig:1234567890",
-                                                "created": 1234567890,
-                                                "updated": 1234567890,
-                                                "metadata": {
-                                                    "title": "Title",
-                                                    "counter": 456
-                                                },
-                                                "aliases": [
-                                                    {
-                                                        "id": "tst:1234567890",
-                                                        "created": 1234567890
-                                                    }
-                                                ]
-                                            }
+                                            "id": "aig:1234567890",
+                                            "created": 1234567890,
+                                            "updated": 1234567890,
+                                            "metadata": {
+                                                "@context": "http://schema.org/",
+                                                "@type": "Note",
+                                                "content": "This is a simple note"
+                                            },
+                                            "aliases": [
+                                                {
+                                                    "id": "tst:1234567890",
+                                                    "created": 1234567890
+                                                }
+                                            ]
                                         }
                                     }
                                 }
+                            },
+                            "application/ld+json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuditableItemGraphGetResponse"
+                                },
+                                "examples": {
+                                    "auditableItemGraphJsonLdGetResponseExample": {
+                                        "value": {
+                                            "@context": "https://schema.gtsc.io/v2/",
+                                            "@type": "vertex",
+                                            "id": "aig:1234567890",
+                                            "created": "2024-08-22T11:55:16.271Z",
+                                            "updated": "2024-08-22T11:55:16.271Z",
+                                            "metadata": {
+                                                "@context": "http://schema.org/",
+                                                "@type": "Note",
+                                                "content": "This is a simple note"
+                                            },
+                                            "aliases": [
+                                                {
+                                                    "@type": "alias",
+                                                    "created": "2024-08-22T11:55:16.271Z",
+                                                    "id": "tst:1234567890"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "headers": {
+                            "Content-Type": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "description": "e.g. application/ld+json"
                             }
                         }
                     },
@@ -528,22 +580,25 @@
                                 "auditableItemGraphUpdateRequestExample": {
                                     "value": {
                                         "metadata": {
-                                            "title": "Title",
-                                            "counter": 456
+                                            "@context": "http://schema.org/",
+                                            "@type": "Note",
+                                            "content": "This is a simple note"
                                         },
                                         "aliases": [
                                             {
                                                 "id": "bar456",
                                                 "metadata": {
-                                                    "title": "Title",
-                                                    "counter": 456
+                                                    "@context": "http://schema.org/",
+                                                    "@type": "Note",
+                                                    "content": "This is a simple note"
                                                 }
                                             },
                                             {
                                                 "id": "foo321",
                                                 "metadata": {
-                                                    "title": "Title",
-                                                    "counter": 456
+                                                    "@context": "http://schema.org/",
+                                                    "@type": "Note",
+                                                    "content": "This is a simple note"
                                                 }
                                             }
                                         ],
@@ -551,15 +606,17 @@
                                             {
                                                 "id": "resource1",
                                                 "metadata": {
-                                                    "title": "Title",
-                                                    "counter": 456
+                                                    "@context": "http://schema.org/",
+                                                    "@type": "Note",
+                                                    "content": "This is a simple note"
                                                 }
                                             },
                                             {
                                                 "id": "resource2",
                                                 "metadata": {
-                                                    "title": "Title",
-                                                    "counter": 456
+                                                    "@context": "http://schema.org/",
+                                                    "@type": "Note",
+                                                    "content": "This is a simple note"
                                                 }
                                             }
                                         ],
@@ -568,16 +625,18 @@
                                                 "id": "edge1",
                                                 "relationship": "frenemy",
                                                 "metadata": {
-                                                    "title": "Title",
-                                                    "counter": 456
+                                                    "@context": "http://schema.org/",
+                                                    "@type": "Note",
+                                                    "content": "This is a simple note"
                                                 }
                                             },
                                             {
                                                 "id": "edge2",
                                                 "relationship": "end",
                                                 "metadata": {
-                                                    "title": "Title",
-                                                    "counter": 456
+                                                    "@context": "http://schema.org/",
+                                                    "@type": "Note",
+                                                    "content": "This is a simple note"
                                                 }
                                             }
                                         ]
@@ -693,7 +752,7 @@
                 "type": "object",
                 "properties": {
                     "metadata": {
-                        "description": "The metadata to be used in the vertex as JSON-LD."
+                        "$ref": "#/components/schemas/JsonLdNodeObject"
                     },
                     "aliases": {
                         "type": "array",
@@ -703,7 +762,9 @@
                                 "id": {
                                     "type": "string"
                                 },
-                                "metadata": {}
+                                "metadata": {
+                                    "$ref": "#/components/schemas/JsonLdNodeObject"
+                                }
                             },
                             "required": [
                                 "id"
@@ -720,7 +781,9 @@
                                 "id": {
                                     "type": "string"
                                 },
-                                "metadata": {}
+                                "metadata": {
+                                    "$ref": "#/components/schemas/JsonLdNodeObject"
+                                }
                             },
                             "required": [
                                 "id"
@@ -740,7 +803,9 @@
                                 "relationship": {
                                     "type": "string"
                                 },
-                                "metadata": {}
+                                "metadata": {
+                                    "$ref": "#/components/schemas/JsonLdNodeObject"
+                                }
                             },
                             "required": [
                                 "id",
@@ -753,6 +818,1105 @@
                 },
                 "additionalProperties": false,
                 "description": "The data to be used in the vertex."
+            },
+            "JsonLdNodeObject": {
+                "type": "object",
+                "properties": {
+                    "@context": {
+                        "anyOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "$ref": "#/components/schemas/JsonLdContextDefinition"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "type": "null"
+                                        },
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/JsonLdContextDefinition"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "@id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        ]
+                    },
+                    "@included": {
+                        "$ref": "#/components/schemas/JsonLdIncludedBlock"
+                    },
+                    "@graph": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/JsonLdNodeObject"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/JsonLdNodeObject"
+                                }
+                            }
+                        ]
+                    },
+                    "@nest": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/JsonLdJsonObject"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/JsonLdJsonObject"
+                                }
+                            }
+                        ]
+                    },
+                    "@type": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        ]
+                    },
+                    "@reverse": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    },
+                    "@index": {
+                        "type": "string"
+                    }
+                },
+                "additionalProperties": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/components/schemas/JsonLdNodePrimitive"
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/JsonLdNodePrimitive"
+                            }
+                        },
+                        {
+                            "$ref": "#/components/schemas/JsonLdLanguageMap"
+                        },
+                        {
+                            "$ref": "#/components/schemas/JsonLdIndexMap"
+                        },
+                        {
+                            "$ref": "#/components/schemas/JsonLdIncludedBlock"
+                        },
+                        {
+                            "$ref": "#/components/schemas/JsonLdIdMap"
+                        },
+                        {
+                            "$ref": "#/components/schemas/JsonLdTypeMap"
+                        }
+                    ]
+                },
+                "description": "A node object represents zero or more properties of a node in the graph serialized by the JSON-LD document."
+            },
+            "JsonLdContextDefinition": {
+                "type": "object",
+                "properties": {
+                    "@base": {
+                        "$ref": "#/components/schemas/JsonLdKeyword"
+                    },
+                    "@direction": {
+                        "$ref": "#/components/schemas/JsonLdKeyword"
+                    },
+                    "@import": {
+                        "$ref": "#/components/schemas/JsonLdKeyword"
+                    },
+                    "@language": {
+                        "$ref": "#/components/schemas/JsonLdKeyword"
+                    },
+                    "@propagate": {
+                        "$ref": "#/components/schemas/JsonLdKeyword"
+                    },
+                    "@protected": {
+                        "$ref": "#/components/schemas/JsonLdKeyword"
+                    },
+                    "@type": {
+                        "type": "object",
+                        "properties": {
+                            "@container": {
+                                "type": "string",
+                                "const": "@set"
+                            },
+                            "@protected": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            }
+                        },
+                        "required": [
+                            "@container"
+                        ],
+                        "additionalProperties": false
+                    },
+                    "@version": {
+                        "$ref": "#/components/schemas/JsonLdKeyword"
+                    },
+                    "@vocab": {
+                        "$ref": "#/components/schemas/JsonLdKeyword"
+                    }
+                },
+                "additionalProperties": {
+                    "anyOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "$ref": "#/components/schemas/JsonLdExpandedTermDefinition"
+                        }
+                    ]
+                },
+                "description": "A context definition defines a local context in a node object."
+            },
+            "JsonLdKeyword": {
+                "type": "object",
+                "properties": {
+                    "@base": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "@container": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "const": "@list"
+                            },
+                            {
+                                "type": "string",
+                                "const": "@set"
+                            },
+                            {
+                                "$ref": "#/components/schemas/JsonLdContainerType"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string",
+                                            "const": "@list"
+                                        },
+                                        {
+                                            "type": "string",
+                                            "const": "@set"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/JsonLdContainerType"
+                                        }
+                                    ]
+                                }
+                            },
+                            {
+                                "$ref": "#/components/schemas/JsonLdContainerTypeArray"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "@context": {
+                        "anyOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "$ref": "#/components/schemas/JsonLdContextDefinition"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "type": "null"
+                                        },
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/JsonLdContextDefinition"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "@direction": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "enum": [
+                            "ltr",
+                            "rtl",
+                            null
+                        ]
+                    },
+                    "@graph": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/JsonLdValueObject"
+                            },
+                            {
+                                "$ref": "#/components/schemas/JsonLdNodeObject"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "$ref": "#/components/schemas/JsonLdValueObject"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/JsonLdNodeObject"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "@id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        ]
+                    },
+                    "@import": {
+                        "type": "string"
+                    },
+                    "@included": {
+                        "$ref": "#/components/schemas/JsonLdIncludedBlock"
+                    },
+                    "@index": {
+                        "type": "string"
+                    },
+                    "@json": {
+                        "type": "string",
+                        "const": "@json"
+                    },
+                    "@language": {
+                        "type": "string"
+                    },
+                    "@list": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/JsonLdListOrSetItem"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/JsonLdListOrSetItem"
+                                }
+                            }
+                        ]
+                    },
+                    "@nest": {
+                        "type": "object"
+                    },
+                    "@none": {
+                        "type": "string",
+                        "const": "@none"
+                    },
+                    "@prefix": {
+                        "type": "boolean"
+                    },
+                    "@propagate": {
+                        "type": "boolean"
+                    },
+                    "@protected": {
+                        "type": "boolean"
+                    },
+                    "@reverse": {
+                        "type": "string"
+                    },
+                    "@set": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/JsonLdListOrSetItem"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/JsonLdListOrSetItem"
+                                }
+                            }
+                        ]
+                    },
+                    "@type": {
+                        "type": "string"
+                    },
+                    "@value": {
+                        "type": [
+                            "null",
+                            "boolean",
+                            "number",
+                            "string"
+                        ]
+                    },
+                    "@version": {
+                        "type": "string",
+                        "const": "1.1"
+                    },
+                    "@vocab": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "@base",
+                    "@container",
+                    "@context",
+                    "@direction",
+                    "@graph",
+                    "@id",
+                    "@import",
+                    "@included",
+                    "@index",
+                    "@json",
+                    "@language",
+                    "@list",
+                    "@nest",
+                    "@none",
+                    "@prefix",
+                    "@propagate",
+                    "@protected",
+                    "@reverse",
+                    "@set",
+                    "@type",
+                    "@value",
+                    "@version",
+                    "@vocab"
+                ],
+                "additionalProperties": false,
+                "description": "A list of keywords and their types. Only used for internal reference; not an actual interface. Not for export."
+            },
+            "JsonLdContainerType": {
+                "type": "string",
+                "enum": [
+                    "@language",
+                    "@index",
+                    "@id",
+                    "@graph",
+                    "@type"
+                ]
+            },
+            "JsonLdContainerTypeArray": {
+                "anyOf": [
+                    {
+                        "type": "array",
+                        "minItems": 2,
+                        "items": [
+                            {
+                                "type": "string",
+                                "const": "@graph"
+                            },
+                            {
+                                "type": "string",
+                                "const": "@id"
+                            }
+                        ],
+                        "maxItems": 2
+                    },
+                    {
+                        "type": "array",
+                        "minItems": 2,
+                        "items": [
+                            {
+                                "type": "string",
+                                "const": "@id"
+                            },
+                            {
+                                "type": "string",
+                                "const": "@graph"
+                            }
+                        ],
+                        "maxItems": 2
+                    },
+                    {
+                        "type": "array",
+                        "minItems": 3,
+                        "items": [
+                            {
+                                "type": "string",
+                                "const": "@set"
+                            },
+                            {
+                                "type": "string",
+                                "const": "@graph"
+                            },
+                            {
+                                "type": "string",
+                                "const": "@id"
+                            }
+                        ],
+                        "maxItems": 3
+                    },
+                    {
+                        "type": "array",
+                        "minItems": 3,
+                        "items": [
+                            {
+                                "type": "string",
+                                "const": "@set"
+                            },
+                            {
+                                "type": "string",
+                                "const": "@id"
+                            },
+                            {
+                                "type": "string",
+                                "const": "@graph"
+                            }
+                        ],
+                        "maxItems": 3
+                    },
+                    {
+                        "type": "array",
+                        "minItems": 3,
+                        "items": [
+                            {
+                                "type": "string",
+                                "const": "@graph"
+                            },
+                            {
+                                "type": "string",
+                                "const": "@set"
+                            },
+                            {
+                                "type": "string",
+                                "const": "@id"
+                            }
+                        ],
+                        "maxItems": 3
+                    },
+                    {
+                        "type": "array",
+                        "minItems": 3,
+                        "items": [
+                            {
+                                "type": "string",
+                                "const": "@id"
+                            },
+                            {
+                                "type": "string",
+                                "const": "@set"
+                            },
+                            {
+                                "type": "string",
+                                "const": "@graph"
+                            }
+                        ],
+                        "maxItems": 3
+                    },
+                    {
+                        "type": "array",
+                        "minItems": 3,
+                        "items": [
+                            {
+                                "type": "string",
+                                "const": "@graph"
+                            },
+                            {
+                                "type": "string",
+                                "const": "@id"
+                            },
+                            {
+                                "type": "string",
+                                "const": "@set"
+                            }
+                        ],
+                        "maxItems": 3
+                    },
+                    {
+                        "type": "array",
+                        "minItems": 3,
+                        "items": [
+                            {
+                                "type": "string",
+                                "const": "@id"
+                            },
+                            {
+                                "type": "string",
+                                "const": "@graph"
+                            },
+                            {
+                                "type": "string",
+                                "const": "@set"
+                            }
+                        ],
+                        "maxItems": 3
+                    },
+                    {
+                        "type": "array",
+                        "minItems": 2,
+                        "items": [
+                            {
+                                "type": "string",
+                                "const": "@set"
+                            },
+                            {
+                                "$ref": "#/components/schemas/JsonLdContainerType"
+                            }
+                        ],
+                        "maxItems": 2
+                    },
+                    {
+                        "type": "array",
+                        "minItems": 2,
+                        "items": [
+                            {
+                                "$ref": "#/components/schemas/JsonLdContainerType"
+                            },
+                            {
+                                "type": "string",
+                                "const": "@set"
+                            }
+                        ],
+                        "maxItems": 2
+                    }
+                ]
+            },
+            "JsonLdValueObject": {
+                "anyOf": [
+                    {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "@value": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            },
+                            "@language": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            },
+                            "@direction": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            },
+                            "@index": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            },
+                            "@context": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            }
+                        },
+                        "required": [
+                            "@value"
+                        ]
+                    },
+                    {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "@value": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            },
+                            "@type": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            },
+                            "@index": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            },
+                            "@context": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            }
+                        },
+                        "required": [
+                            "@type",
+                            "@value"
+                        ]
+                    },
+                    {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "@value": {
+                                "anyOf": [
+                                    {
+                                        "$ref": "#/components/schemas/JsonLdKeyword"
+                                    },
+                                    {
+                                        "$ref": "#/components/schemas/JsonLdJsonObject"
+                                    },
+                                    {
+                                        "$ref": "#/components/schemas/JsonLdJsonArray"
+                                    }
+                                ]
+                            },
+                            "@type": {
+                                "type": "string",
+                                "const": "@json"
+                            },
+                            "@index": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            },
+                            "@context": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            }
+                        },
+                        "required": [
+                            "@type",
+                            "@value"
+                        ]
+                    }
+                ],
+                "description": "A value object is used to explicitly associate a type or a language with a value to create a typed value or a language-tagged string and possibly associate a base direction."
+            },
+            "JsonLdJsonObject": {
+                "type": "object",
+                "additionalProperties": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/components/schemas/JsonLdJsonValue"
+                        },
+                        {
+                            "not": {}
+                        }
+                    ]
+                }
+            },
+            "JsonLdJsonValue": {
+                "anyOf": [
+                    {
+                        "$ref": "#/components/schemas/JsonLdJsonPrimitive"
+                    },
+                    {
+                        "$ref": "#/components/schemas/JsonLdJsonArray"
+                    },
+                    {
+                        "$ref": "#/components/schemas/JsonLdJsonObject"
+                    }
+                ]
+            },
+            "JsonLdJsonPrimitive": {
+                "type": [
+                    "string",
+                    "number",
+                    "boolean",
+                    "null"
+                ]
+            },
+            "JsonLdJsonArray": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/JsonLdJsonValue"
+                }
+            },
+            "JsonLdIncludedBlock": {
+                "anyOf": [
+                    {
+                        "$ref": "#/components/schemas/JsonLdNodeObject"
+                    },
+                    {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/JsonLdNodeObject"
+                        }
+                    }
+                ],
+                "description": "An included block is used to provide a set of node objects."
+            },
+            "JsonLdListOrSetItem": {
+                "anyOf": [
+                    {
+                        "type": "null"
+                    },
+                    {
+                        "type": "boolean"
+                    },
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "string"
+                    },
+                    {
+                        "$ref": "#/components/schemas/JsonLdNodeObject"
+                    },
+                    {
+                        "$ref": "#/components/schemas/JsonLdValueObject"
+                    }
+                ],
+                "description": "A list or set item can be a null, boolean, number, string, node object, or value object."
+            },
+            "JsonLdExpandedTermDefinition": {
+                "anyOf": [
+                    {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "@id": {
+                                "anyOf": [
+                                    {
+                                        "$ref": "#/components/schemas/JsonLdKeyword"
+                                    },
+                                    {
+                                        "type": "null"
+                                    }
+                                ]
+                            },
+                            "@nest": {
+                                "type": "string"
+                            },
+                            "@container": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            },
+                            "@type": {
+                                "type": "string"
+                            },
+                            "@language": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            },
+                            "@index": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            },
+                            "@context": {
+                                "$ref": "#/components/schemas/JsonLdContextDefinition"
+                            },
+                            "@prefix": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            },
+                            "@propagate": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            },
+                            "@protected": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            }
+                        }
+                    },
+                    {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "@reverse": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            },
+                            "@container": {
+                                "type": [
+                                    "string",
+                                    "null"
+                                ],
+                                "enum": [
+                                    "@set",
+                                    "@index",
+                                    null
+                                ]
+                            },
+                            "@type": {
+                                "type": "string"
+                            },
+                            "@language": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            },
+                            "@index": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            },
+                            "@context": {
+                                "$ref": "#/components/schemas/JsonLdContextDefinition"
+                            },
+                            "@prefix": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            },
+                            "@propagate": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            },
+                            "@protected": {
+                                "$ref": "#/components/schemas/JsonLdKeyword"
+                            }
+                        },
+                        "required": [
+                            "@reverse"
+                        ]
+                    }
+                ],
+                "description": "An expanded term definition is used to describe the mapping between a term and its expanded identifier, as well as other properties of the value associated with the term when it is used as key in a node object."
+            },
+            "JsonLdNodePrimitive": {
+                "anyOf": [
+                    {
+                        "type": "null"
+                    },
+                    {
+                        "type": "boolean"
+                    },
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "string"
+                    },
+                    {
+                        "$ref": "#/components/schemas/JsonLdNodeObject"
+                    },
+                    {
+                        "$ref": "#/components/schemas/JsonLdGraphObject"
+                    },
+                    {
+                        "$ref": "#/components/schemas/JsonLdValueObject"
+                    },
+                    {
+                        "$ref": "#/components/schemas/JsonLdListObject"
+                    },
+                    {
+                        "$ref": "#/components/schemas/JsonLdSetObject"
+                    }
+                ],
+                "description": "A node primitive is a JSON-LD value which is not one of the defined NodeObject properties."
+            },
+            "JsonLdGraphObject": {
+                "type": "object",
+                "properties": {
+                    "@graph": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/JsonLdNodeObject"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/JsonLdNodeObject"
+                                }
+                            }
+                        ]
+                    },
+                    "@index": {
+                        "type": "string"
+                    },
+                    "@id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        ]
+                    },
+                    "@context": {
+                        "anyOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "$ref": "#/components/schemas/JsonLdContextDefinition"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "type": "null"
+                                        },
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/JsonLdContextDefinition"
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                },
+                "required": [
+                    "@graph"
+                ],
+                "additionalProperties": false,
+                "description": "A graph object represents a named graph, which MAY include an explicit graph name."
+            },
+            "JsonLdListObject": {
+                "type": "object",
+                "properties": {
+                    "@list": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/JsonLdListOrSetItem"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/JsonLdListOrSetItem"
+                                }
+                            }
+                        ]
+                    },
+                    "@index": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "@list"
+                ],
+                "additionalProperties": false,
+                "description": "A list represents an ordered set of values."
+            },
+            "JsonLdSetObject": {
+                "type": "object",
+                "properties": {
+                    "@set": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/JsonLdListOrSetItem"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/JsonLdListOrSetItem"
+                                }
+                            }
+                        ]
+                    },
+                    "@index": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "@set"
+                ],
+                "additionalProperties": false,
+                "description": "A set represents an unordered set of values."
+            },
+            "JsonLdLanguageMap": {
+                "type": "object",
+                "additionalProperties": {
+                    "anyOf": [
+                        {
+                            "type": "null"
+                        },
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    ]
+                },
+                "description": "A language map is used to associate a language with a value in a way that allows easy programmatic access."
+            },
+            "JsonLdIndexMap": {
+                "type": "object",
+                "additionalProperties": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/components/schemas/JsonLdIndexMapItem"
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/JsonLdIndexMapItem"
+                            }
+                        }
+                    ]
+                },
+                "description": "An index map allows keys that have no semantic meaning, but should be preserved regardless, to be used in JSON-LD documents."
+            },
+            "JsonLdIndexMapItem": {
+                "anyOf": [
+                    {
+                        "type": "null"
+                    },
+                    {
+                        "type": "boolean"
+                    },
+                    {
+                        "type": "number"
+                    },
+                    {
+                        "type": "string"
+                    },
+                    {
+                        "$ref": "#/components/schemas/JsonLdNodeObject"
+                    },
+                    {
+                        "$ref": "#/components/schemas/JsonLdValueObject"
+                    },
+                    {
+                        "$ref": "#/components/schemas/JsonLdListObject"
+                    },
+                    {
+                        "$ref": "#/components/schemas/JsonLdSetObject"
+                    }
+                ],
+                "description": "The items that can be stored in an index map."
+            },
+            "JsonLdIdMap": {
+                "type": "object",
+                "additionalProperties": {
+                    "$ref": "#/components/schemas/JsonLdNodeObject"
+                },
+                "description": "An id map is used to associate an IRI with a value that allows easy programmatic access."
+            },
+            "JsonLdTypeMap": {
+                "type": "object",
+                "additionalProperties": {
+                    "anyOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "$ref": "#/components/schemas/JsonLdNodeObject"
+                        }
+                    ]
+                },
+                "description": "A type map is used to associate an IRI with a value that allows easy programmatic access."
             },
             "VerifyDepth": {
                 "anyOf": [
@@ -775,104 +1939,379 @@
                 "description": "How deep to verify the signatures."
             },
             "AuditableItemGraphGetResponse": {
-                "type": "object",
-                "properties": {
-                    "vertex": {
-                        "$ref": "#/components/schemas/AuditableItemGraphVertex"
-                    },
-                    "changesets": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/AuditableItemGraphChangeset"
-                        },
-                        "description": "Changesets containing time sliced changes to the vertex."
-                    },
-                    "verified": {
-                        "type": "boolean",
-                        "description": "Whether the vertex has been verified."
-                    },
-                    "verification": {
-                        "type": "array",
-                        "items": {
-                            "type": "object",
-                            "properties": {
-                                "created": {
-                                    "type": "number"
-                                },
-                                "failure": {
-                                    "type": "string"
-                                },
-                                "failureProperties": {
+                "anyOf": [
+                    {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "verified": {
+                                "type": "boolean",
+                                "description": "Whether the vertex has been verified."
+                            },
+                            "verification": {
+                                "type": "array",
+                                "items": {
                                     "type": "object",
-                                    "additionalProperties": {}
+                                    "properties": {
+                                        "created": {
+                                            "type": "number"
+                                        },
+                                        "failure": {
+                                            "type": "string"
+                                        },
+                                        "failureProperties": {
+                                            "type": "object",
+                                            "additionalProperties": {}
+                                        }
+                                    },
+                                    "required": [
+                                        "created"
+                                    ],
+                                    "additionalProperties": false
+                                },
+                                "description": "The verification for the changesets including any failure information."
+                            },
+                            "metadata": {
+                                "$ref": "#/components/schemas/JsonLdNodeObject",
+                                "description": "The metadata to associate with the element as JSON-LD."
+                            },
+                            "id": {
+                                "type": "string",
+                                "description": "The id of the element."
+                            },
+                            "created": {
+                                "type": "number",
+                                "description": "The timestamp of when the element was created."
+                            },
+                            "updated": {
+                                "type": "number",
+                                "description": "The timestamp of when the element was updated."
+                            },
+                            "nodeIdentity": {
+                                "type": "string",
+                                "description": "The identity of the node which controls the vertex."
+                            },
+                            "aliases": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/AuditableItemGraphAlias"
+                                },
+                                "description": "Alternative aliases that can be used to identify the vertex."
+                            },
+                            "resources": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/AuditableItemGraphResource"
+                                },
+                                "description": "The resources attached to the vertex."
+                            },
+                            "edges": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/AuditableItemGraphEdge"
+                                },
+                                "description": "Edges connected to the vertex."
+                            },
+                            "changesets": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/AuditableItemGraphChangeset"
+                                },
+                                "description": "Changesets for the vertex."
+                            }
+                        },
+                        "required": [
+                            "created",
+                            "id"
+                        ]
+                    },
+                    {
+                        "type": "object",
+                        "additionalProperties": {
+                            "anyOf": [
+                                {
+                                    "$ref": "#/components/schemas/JsonLdNodePrimitive"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/JsonLdLanguageMap"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/JsonLdIndexMap"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/JsonLdIncludedBlock"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/JsonLdIdMap"
+                                },
+                                {
+                                    "$ref": "#/components/schemas/JsonLdTypeMap"
+                                },
+                                {
+                                    "type": "array"
+                                }
+                            ]
+                        },
+                        "properties": {
+                            "verified": {
+                                "type": "boolean",
+                                "description": "Whether the vertex has been verified."
+                            },
+                            "verification": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "created": {
+                                            "type": "number"
+                                        },
+                                        "failure": {
+                                            "type": "string"
+                                        },
+                                        "failureProperties": {
+                                            "type": "object",
+                                            "additionalProperties": {}
+                                        }
+                                    },
+                                    "required": [
+                                        "created"
+                                    ],
+                                    "additionalProperties": false
+                                },
+                                "description": "The verification for the changesets including any failure information."
+                            },
+                            "@context": {
+                                "anyOf": [
+                                    {
+                                        "type": "null"
+                                    },
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "$ref": "#/components/schemas/JsonLdContextDefinition"
+                                    },
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "string"
+                                                },
+                                                {
+                                                    "$ref": "#/components/schemas/JsonLdContextDefinition"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            "@id": {
+                                "anyOf": [
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                ]
+                            },
+                            "@included": {
+                                "$ref": "#/components/schemas/JsonLdIncludedBlock"
+                            },
+                            "@graph": {
+                                "anyOf": [
+                                    {
+                                        "$ref": "#/components/schemas/JsonLdNodeObject"
+                                    },
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/JsonLdNodeObject"
+                                        }
+                                    }
+                                ]
+                            },
+                            "@nest": {
+                                "anyOf": [
+                                    {
+                                        "$ref": "#/components/schemas/JsonLdJsonObject"
+                                    },
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/JsonLdJsonObject"
+                                        }
+                                    }
+                                ]
+                            },
+                            "@type": {
+                                "anyOf": [
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                ]
+                            },
+                            "@reverse": {
+                                "type": "object",
+                                "additionalProperties": {
+                                    "type": "string"
                                 }
                             },
-                            "required": [
-                                "created"
-                            ],
-                            "additionalProperties": false
-                        },
-                        "description": "The verification for the changesets including any failure information."
+                            "@index": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    {
+                        "allOf": [
+                            {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/JsonLdNodeObject"
+                                }
+                            },
+                            {
+                                "type": "object",
+                                "additionalProperties": false,
+                                "properties": {
+                                    "verified": {
+                                        "type": "boolean",
+                                        "description": "Whether the vertex has been verified."
+                                    },
+                                    "verification": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "created": {
+                                                    "type": "number"
+                                                },
+                                                "failure": {
+                                                    "type": "string"
+                                                },
+                                                "failureProperties": {
+                                                    "type": "object",
+                                                    "additionalProperties": {}
+                                                }
+                                            },
+                                            "required": [
+                                                "created"
+                                            ],
+                                            "additionalProperties": false
+                                        },
+                                        "description": "The verification for the changesets including any failure information."
+                                    }
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "verified": {
+                                "type": "boolean",
+                                "description": "Whether the vertex has been verified."
+                            },
+                            "verification": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "created": {
+                                            "type": "number"
+                                        },
+                                        "failure": {
+                                            "type": "string"
+                                        },
+                                        "failureProperties": {
+                                            "type": "object",
+                                            "additionalProperties": {}
+                                        }
+                                    },
+                                    "required": [
+                                        "created"
+                                    ],
+                                    "additionalProperties": false
+                                },
+                                "description": "The verification for the changesets including any failure information."
+                            },
+                            "@context": {
+                                "anyOf": [
+                                    {
+                                        "type": "null"
+                                    },
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "$ref": "#/components/schemas/JsonLdContextDefinition"
+                                    },
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "string"
+                                                },
+                                                {
+                                                    "$ref": "#/components/schemas/JsonLdContextDefinition"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            "@graph": {
+                                "anyOf": [
+                                    {
+                                        "$ref": "#/components/schemas/JsonLdValueObject"
+                                    },
+                                    {
+                                        "$ref": "#/components/schemas/JsonLdNodeObject"
+                                    },
+                                    {
+                                        "type": "array",
+                                        "items": {
+                                            "anyOf": [
+                                                {
+                                                    "$ref": "#/components/schemas/JsonLdValueObject"
+                                                },
+                                                {
+                                                    "$ref": "#/components/schemas/JsonLdNodeObject"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
                     }
-                },
-                "required": [
-                    "vertex"
                 ],
-                "additionalProperties": false,
-                "description": "The response body."
-            },
-            "AuditableItemGraphVertex": {
-                "type": "object",
-                "properties": {
-                    "nodeIdentity": {
-                        "type": "string",
-                        "description": "The identity of the node which controls the vertex."
-                    },
-                    "aliases": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/AuditableItemGraphAlias"
-                        },
-                        "description": "Alternative aliases that can be used to identify the vertex."
-                    },
-                    "resources": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/AuditableItemGraphResource"
-                        },
-                        "description": "The resources attached to the vertex."
-                    },
-                    "edges": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/AuditableItemGraphEdge"
-                        },
-                        "description": "Edges connected to the vertex."
-                    },
-                    "id": {
-                        "type": "string",
-                        "description": "The id of the element."
-                    },
-                    "created": {
-                        "type": "number",
-                        "description": "The timestamp of when the element was created."
-                    },
-                    "updated": {
-                        "type": "number",
-                        "description": "The timestamp of when the element was updated."
-                    },
-                    "metadata": {
-                        "description": "The metadata to associate with the element as JSON-LD."
-                    }
-                },
-                "additionalProperties": false
+                "description": "The response body, id accept header is set to application/ld+json the return object is JSON-LD document."
             },
             "AuditableItemGraphAlias": {
                 "type": "object",
                 "additionalProperties": false,
                 "properties": {
                     "metadata": {
-                        "description": "The metadata to associate with the element as JSON-LD."
+                        "$ref": "#/components/schemas/JsonLdNodeObject"
                     },
                     "id": {
                         "type": "string",
@@ -902,7 +2341,7 @@
                 "additionalProperties": false,
                 "properties": {
                     "metadata": {
-                        "description": "The metadata to associate with the element as JSON-LD."
+                        "$ref": "#/components/schemas/JsonLdNodeObject"
                     },
                     "id": {
                         "type": "string",
@@ -931,7 +2370,7 @@
                 "type": "object",
                 "properties": {
                     "metadata": {
-                        "description": "The metadata to associate with the element as JSON-LD."
+                        "$ref": "#/components/schemas/JsonLdNodeObject"
                     },
                     "id": {
                         "type": "string",
@@ -976,7 +2415,7 @@
                     "patches": {
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/PatchOperation"
+                            "$ref": "#/components/schemas/AuditableItemGraphPatchOperation"
                         },
                         "description": "The patches for the integrity at this epoch."
                     },
@@ -998,8 +2437,9 @@
                 "additionalProperties": false,
                 "description": "Interface describing a set of updates to the vertex."
             },
-            "PatchOperation": {
+            "AuditableItemGraphPatchOperation": {
                 "type": "object",
+                "additionalProperties": false,
                 "properties": {
                     "op": {
                         "type": "string",
@@ -1029,14 +2469,13 @@
                     "op",
                     "path"
                 ],
-                "additionalProperties": false,
-                "description": "Interface describing a patch operation to add a property."
+                "description": "The patch operation for JSON diffs."
             },
             "AuditableItemGraphUpdateRequest": {
                 "type": "object",
                 "properties": {
                     "metadata": {
-                        "description": "The metadata to be used in the vertex as JSON-LD."
+                        "$ref": "#/components/schemas/JsonLdNodeObject"
                     },
                     "aliases": {
                         "type": "array",
@@ -1046,7 +2485,9 @@
                                 "id": {
                                     "type": "string"
                                 },
-                                "metadata": {}
+                                "metadata": {
+                                    "$ref": "#/components/schemas/JsonLdNodeObject"
+                                }
                             },
                             "required": [
                                 "id"
@@ -1063,7 +2504,9 @@
                                 "id": {
                                     "type": "string"
                                 },
-                                "metadata": {}
+                                "metadata": {
+                                    "$ref": "#/components/schemas/JsonLdNodeObject"
+                                }
                             },
                             "required": [
                                 "id"
@@ -1083,7 +2526,9 @@
                                 "relationship": {
                                     "type": "string"
                                 },
-                                "metadata": {}
+                                "metadata": {
+                                    "$ref": "#/components/schemas/JsonLdNodeObject"
+                                }
                             },
                             "required": [
                                 "id",

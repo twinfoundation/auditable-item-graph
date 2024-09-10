@@ -1,6 +1,7 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import {
+	AuditableItemGraphTypes,
 	VerifyDepth,
 	type IAuditableItemGraphAlias,
 	type IAuditableItemGraphChangeset,
@@ -22,9 +23,18 @@ import {
 	RandomHelper,
 	StringHelper,
 	Urn,
-	type IPatchOperation
+	Validation,
+	type IPatchOperation,
+	type IValidationFailure
 } from "@gtsc/core";
 import { Blake2b } from "@gtsc/crypto";
+import {
+	JsonLdHelper,
+	JsonLdProcessor,
+	type IJsonLdDocument,
+	type IJsonLdJsonObject,
+	type IJsonLdNodeObject
+} from "@gtsc/data-json-ld";
 import { ComparisonOperator, LogicalOperator, SortDirection } from "@gtsc/entity";
 import {
 	EntityStorageConnectorFactory,
@@ -45,7 +55,7 @@ import {
 	VaultEncryptionType,
 	type IVaultConnector
 } from "@gtsc/vault-models";
-import { Jwt } from "@gtsc/web";
+import { Jwt, MimeTypes } from "@gtsc/web";
 import type { AuditableItemGraphAlias } from "./entities/auditableItemGraphAlias";
 import type { AuditableItemGraphChangeset } from "./entities/auditableItemGraphChangeset";
 import type { AuditableItemGraphEdge } from "./entities/auditableItemGraphEdge";
@@ -176,19 +186,19 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @returns The id of the new graph item.
 	 */
 	public async create(
-		metadata?: unknown,
+		metadata?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[],
 		resources?: {
 			id: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[],
 		edges?: {
 			id: string;
 			relationship: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[],
 		identity?: string,
 		nodeIdentity?: string
@@ -197,6 +207,12 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
 
 		try {
+			if (Is.object(metadata)) {
+				const validationFailures: IValidationFailure[] = [];
+				await JsonLdHelper.validate(metadata, validationFailures);
+				Validation.asValidationError(this.CLASS_NAME, "metadata", validationFailures);
+			}
+
 			const id = Converter.bytesToHex(RandomHelper.generate(32), false);
 
 			const context: IAuditableItemGraphServiceContext = {
@@ -237,6 +253,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @param options.includeDeleted Whether to include deleted/updated aliases, resource, edges, defaults to false.
 	 * @param options.includeChangesets Whether to include the changesets of the vertex, defaults to false.
 	 * @param options.verifySignatureDepth How many signatures to verify, defaults to "none".
+	 * @param responseType The response type to return, defaults to application/json.
 	 * @throws NotFoundError if the vertex is not found.
 	 */
 	public async get(
@@ -245,17 +262,19 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			includeDeleted?: boolean;
 			includeChangesets?: boolean;
 			verifySignatureDepth?: VerifyDepth;
+		},
+		// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
+		responseType?: typeof MimeTypes.Json | typeof MimeTypes.JsonLd
+	): Promise<
+		(IAuditableItemGraphVertex | IJsonLdDocument) & {
+			verified?: boolean;
+			verification?: {
+				created: number;
+				failure?: string;
+				failureProperties?: { [id: string]: unknown };
+			}[];
 		}
-	): Promise<{
-		verified?: boolean;
-		verification?: {
-			created: number;
-			failure?: string;
-			failureProperties?: { [id: string]: unknown };
-		}[];
-		vertex: IAuditableItemGraphVertex;
-		changesets?: IAuditableItemGraphChangeset[];
-	}> {
+	> {
 		Guards.stringValue(this.CLASS_NAME, nameof(id), id);
 
 		const urnParsed = Urn.fromValidString(id);
@@ -275,7 +294,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				throw new NotFoundError(this.CLASS_NAME, "vertexNotFound", id);
 			}
 
-			const vertexModel = this.vertexEntityToModel(vertexEntity);
+			const vertexModel = await this.vertexEntityToModel(vertexEntity);
 
 			const includeChangesets = options?.includeChangesets ?? false;
 			const verifySignatureDepth = options?.verifySignatureDepth ?? "none";
@@ -322,12 +341,33 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				}
 			}
 
-			return {
-				vertex: vertexModel,
-				changesets: includeChangesets ? changesets : undefined,
-				verified: verifySignatureDepth !== VerifyDepth.None ? verified : undefined,
-				verification: verifySignatureDepth !== VerifyDepth.None ? verification : undefined
+			if (includeChangesets) {
+				vertexModel.changesets = changesets;
+			}
+
+			let result: (IAuditableItemGraphVertex | IJsonLdDocument) & {
+				verified?: boolean;
+				verification?: {
+					created: number;
+					failure?: string;
+					failureProperties?: { [id: string]: unknown };
+				}[];
 			};
+
+			if (responseType === MimeTypes.JsonLd) {
+				result = await JsonLdProcessor.compact(this.modelToJsonLd(vertexModel), {
+					"@context": "https://schema.gtsc.io/v2/"
+				});
+			} else {
+				result = vertexModel;
+			}
+
+			if (verifySignatureDepth !== VerifyDepth.None) {
+				result.verified = verified;
+				result.verification = verification;
+			}
+
+			return result;
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "getFailed", undefined, error);
 		}
@@ -346,19 +386,19 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 */
 	public async update(
 		id: string,
-		metadata?: unknown,
+		metadata?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[],
 		resources?: {
 			id: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[],
 		edges?: {
 			id: string;
 			relationship: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[],
 		identity?: string,
 		nodeIdentity?: string
@@ -384,13 +424,19 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				throw new NotFoundError(this.CLASS_NAME, "vertexNotFound", id);
 			}
 
+			if (Is.object(metadata)) {
+				const validationFailures: IValidationFailure[] = [];
+				await JsonLdHelper.validate(metadata, validationFailures);
+				Validation.asValidationError(this.CLASS_NAME, "metadata", validationFailures);
+			}
+
 			const context: IAuditableItemGraphServiceContext = {
 				now: Date.now(),
 				userIdentity: identity,
 				nodeIdentity
 			};
 
-			const vertexModel = this.vertexEntityToModel(vertexEntity);
+			const vertexModel = await this.vertexEntityToModel(vertexEntity);
 			const originalModel = ObjectHelper.clone(vertexModel);
 
 			vertexModel.metadata = metadata;
@@ -552,8 +598,10 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			);
 
 			return {
-				entities: (results.entities as AuditableItemGraphVertex[]).map(e =>
-					this.vertexEntityToModel(e)
+				entities: await Promise.all(
+					(results.entities as AuditableItemGraphVertex[]).map(async e =>
+						this.vertexEntityToModel(e)
+					)
 				),
 				cursor: results.cursor
 			};
@@ -629,7 +677,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @returns The model.
 	 * @internal
 	 */
-	private vertexEntityToModel(vertexEntity: AuditableItemGraphVertex): IAuditableItemGraphVertex {
+	private async vertexEntityToModel(
+		vertexEntity: AuditableItemGraphVertex
+	): Promise<IAuditableItemGraphVertex> {
 		const model: IAuditableItemGraphVertex = {
 			id: vertexEntity.id,
 			created: vertexEntity.created,
@@ -693,7 +743,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		vertexModel: IAuditableItemGraphVertex,
 		aliases?: {
 			id: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[]
 	): Promise<void> {
 		const active = vertexModel.aliases?.filter(a => Is.empty(a.deleted)) ?? [];
@@ -726,11 +776,17 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		vertexModel: IAuditableItemGraphVertex,
 		alias: {
 			id: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}
 	): Promise<void> {
 		Guards.object(this.CLASS_NAME, nameof(alias), alias);
 		Guards.stringValue(this.CLASS_NAME, nameof(alias.id), alias.id);
+
+		if (Is.object(alias.metadata)) {
+			const validationFailures: IValidationFailure[] = [];
+			await JsonLdHelper.validate(alias.metadata, validationFailures);
+			Validation.asValidationError(this.CLASS_NAME, "alias.metadata", validationFailures);
+		}
 
 		// Try to find an existing alias with the same id.
 		const existing = vertexModel.aliases?.find(a => a.id === alias.id);
@@ -765,7 +821,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		vertexModel: IAuditableItemGraphVertex,
 		resources?: {
 			id: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[]
 	): Promise<void> {
 		const active = vertexModel.resources?.filter(r => Is.empty(r.deleted)) ?? [];
@@ -798,11 +854,17 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		vertexModel: IAuditableItemGraphVertex,
 		resource: {
 			id: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}
 	): Promise<void> {
 		Guards.object(this.CLASS_NAME, nameof(resource), resource);
 		Guards.stringValue(this.CLASS_NAME, nameof(resource.id), resource.id);
+
+		if (Is.object(resource.metadata)) {
+			const validationFailures: IValidationFailure[] = [];
+			await JsonLdHelper.validate(resource.metadata, validationFailures);
+			Validation.asValidationError(this.CLASS_NAME, "resource.metadata", validationFailures);
+		}
 
 		// Try to find an existing resource with the same id.
 		const existing = vertexModel.resources?.find(r => r.id === resource.id);
@@ -838,7 +900,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		edges?: {
 			id: string;
 			relationship: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}[]
 	): Promise<void> {
 		const active = vertexModel.edges?.filter(e => Is.empty(e.deleted)) ?? [];
@@ -872,12 +934,18 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		edge: {
 			id: string;
 			relationship: string;
-			metadata?: unknown;
+			metadata?: IJsonLdNodeObject;
 		}
 	): Promise<void> {
 		Guards.object(this.CLASS_NAME, nameof(edge), edge);
 		Guards.stringValue(this.CLASS_NAME, nameof(edge.id), edge.id);
 		Guards.stringValue(this.CLASS_NAME, nameof(edge.relationship), edge.relationship);
+
+		if (Is.object(edge.metadata)) {
+			const validationFailures: IValidationFailure[] = [];
+			await JsonLdHelper.validate(edge.metadata, validationFailures);
+			Validation.asValidationError(this.CLASS_NAME, "edge.metadata", validationFailures);
+		}
 
 		// Try to find an existing edge with the same id.
 		const existing = vertexModel.edges?.find(r => r.id === edge.id);
@@ -1205,5 +1273,125 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		b2b.update(ObjectHelper.toBytes(patches));
 
 		return b2b.digest();
+	}
+
+	/**
+	 * Convert a model to a JSON-LD document.
+	 * @param model The model to convert.
+	 * @returns The JSON-LD document.
+	 * @internal
+	 */
+	private modelToJsonLd(model: IAuditableItemGraphVertex): IJsonLdDocument {
+		const doc: IJsonLdNodeObject = {
+			"@context": AuditableItemGraphTypes.Context,
+			"@type": AuditableItemGraphTypes.Vertex,
+			id: model.id,
+			nodeIdentity: model.nodeIdentity,
+			created: new Date(model.created).toISOString()
+		};
+
+		if (Is.integer(model.updated)) {
+			doc.updated = new Date(model.updated).toISOString();
+		}
+		if (Is.objectValue(model.metadata)) {
+			doc.metadata = model.metadata;
+		}
+
+		if (Is.arrayValue(model.aliases)) {
+			const aliasesJsonld: IJsonLdNodeObject[] = [];
+			for (const alias of model.aliases) {
+				const aliasJsonLd: IJsonLdNodeObject = {
+					"@type": AuditableItemGraphTypes.Alias,
+					id: alias.id,
+					created: new Date(alias.created).toISOString()
+				};
+				if (Is.integer(alias.updated)) {
+					aliasJsonLd.updated = new Date(alias.updated).toISOString();
+				}
+				if (Is.integer(alias.deleted)) {
+					aliasJsonLd.deleted = new Date(alias.deleted).toISOString();
+				}
+				if (Is.objectValue(alias.metadata)) {
+					aliasJsonLd.metadata = alias.metadata;
+				}
+				aliasesJsonld.push(aliasJsonLd);
+			}
+			doc.aliases = aliasesJsonld;
+		}
+
+		if (Is.arrayValue(model.resources)) {
+			const resourcesJsonld: IJsonLdNodeObject[] = [];
+			for (const resource of model.resources) {
+				const resourceJsonLd: IJsonLdNodeObject = {
+					"@type": AuditableItemGraphTypes.Resource,
+					id: resource.id,
+					created: new Date(resource.created).toISOString()
+				};
+				if (Is.integer(resource.updated)) {
+					resourceJsonLd.updated = new Date(resource.updated).toISOString();
+				}
+				if (Is.integer(resource.deleted)) {
+					resourceJsonLd.deleted = new Date(resource.deleted).toISOString();
+				}
+				if (Is.objectValue(resource.metadata)) {
+					resourceJsonLd.metadata = resource.metadata;
+				}
+				resourcesJsonld.push(resourceJsonLd);
+			}
+			doc.resources = resourcesJsonld;
+		}
+
+		if (Is.arrayValue(model.edges)) {
+			const edgesJsonld: IJsonLdNodeObject[] = [];
+			for (const edge of model.edges) {
+				const resourceJsonLd: IJsonLdNodeObject = {
+					"@type": AuditableItemGraphTypes.Edge,
+					id: edge.id,
+					created: new Date(edge.created).toISOString(),
+					relationship: edge.relationship
+				};
+				if (Is.integer(edge.updated)) {
+					resourceJsonLd.updated = new Date(edge.updated).toISOString();
+				}
+				if (Is.integer(edge.deleted)) {
+					resourceJsonLd.deleted = new Date(edge.deleted).toISOString();
+				}
+				if (Is.objectValue(edge.metadata)) {
+					resourceJsonLd.metadata = edge.metadata;
+				}
+				edgesJsonld.push(resourceJsonLd);
+			}
+			doc.edges = edgesJsonld;
+		}
+
+		if (Is.arrayValue(model.changesets)) {
+			const changesetJsonld: IJsonLdNodeObject[] = [];
+			for (const changeset of model.changesets) {
+				const changesetJsonLd: IJsonLdNodeObject = {
+					"@type": AuditableItemGraphTypes.Changeset,
+					hash: changeset.hash,
+					created: new Date(changeset.created).toISOString(),
+					immutableStorageId: changeset.immutableStorageId,
+					userIdentity: changeset.userIdentity
+				};
+				if (Is.arrayValue(changeset.patches)) {
+					const patchesJsonLd: IJsonLdNodeObject[] = [];
+					for (const patch of changeset.patches) {
+						patchesJsonLd.push({
+							"@type": AuditableItemGraphTypes.PatchOperation,
+							patchOperation: patch.op,
+							patchPath: patch.path,
+							patchFrom: patch.from,
+							patchValue: patch.value as IJsonLdJsonObject
+						});
+					}
+					changesetJsonLd.patches = patchesJsonLd;
+				}
+				changesetJsonld.push(changesetJsonLd);
+			}
+			doc.changesets = changesetJsonld;
+		}
+
+		return doc;
 	}
 }

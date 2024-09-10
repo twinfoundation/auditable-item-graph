@@ -1,11 +1,21 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
+import type { MimeTypes } from "@gtsc/web";
 import type { VerifyDepth } from "../verifyDepth";
 
 /**
  * Get an auditable item graph vertex.
  */
 export interface IAuditableItemGraphGetRequest {
+	/**
+	 * The headers which can be used to determine the response data type.
+	 */
+	headers?: {
+		// False positive
+		// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
+		Accept: typeof MimeTypes.Json | typeof MimeTypes.JsonLd;
+	};
+
 	/**
 	 * The parameters from the path.
 	 */

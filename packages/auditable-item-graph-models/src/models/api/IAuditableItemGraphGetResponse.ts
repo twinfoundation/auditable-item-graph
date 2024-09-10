@@ -1,6 +1,7 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import type { IAuditableItemGraphChangeset } from "../IAuditableItemGraphChangeset";
+import type { IJsonLdDocument } from "@gtsc/data-json-ld";
+import type { MimeTypes } from "@gtsc/web";
 import type { IAuditableItemGraphVertex } from "../IAuditableItemGraphVertex";
 
 /**
@@ -8,19 +9,18 @@ import type { IAuditableItemGraphVertex } from "../IAuditableItemGraphVertex";
  */
 export interface IAuditableItemGraphGetResponse {
 	/**
-	 * The response body.
+	 * The headers which can be used to determine the response data type.
 	 */
-	body: {
-		/**
-		 * The vertex data.
-		 */
-		vertex: IAuditableItemGraphVertex;
+	headers?: {
+		// False positive
+		// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
+		"Content-Type": typeof MimeTypes.Json | typeof MimeTypes.JsonLd;
+	};
 
-		/**
-		 * Changesets containing time sliced changes to the vertex.
-		 */
-		changesets?: IAuditableItemGraphChangeset[];
-
+	/**
+	 * The response body, id accept header is set to application/ld+json the return object is JSON-LD document.
+	 */
+	body: (IAuditableItemGraphVertex | IJsonLdDocument) & {
 		/**
 		 * Whether the vertex has been verified.
 		 */

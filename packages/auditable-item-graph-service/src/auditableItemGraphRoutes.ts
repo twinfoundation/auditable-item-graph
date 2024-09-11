@@ -19,7 +19,7 @@ import type {
 } from "@gtsc/auditable-item-graph-models";
 import { ComponentFactory, Guards } from "@gtsc/core";
 import { nameof } from "@gtsc/nameof";
-import { HttpStatusCode, MimeTypes } from "@gtsc/web";
+import { HeaderTypes, HttpStatusCode, MimeTypes } from "@gtsc/web";
 
 /**
  * The source used when communicating about these routes.
@@ -137,7 +137,7 @@ export function generateRestRoutesAuditableItemGraph(
 						response: {
 							statusCode: HttpStatusCode.created,
 							headers: {
-								location: "aig:1234567890"
+								Location: "aig:1234567890"
 							}
 						}
 					}
@@ -205,7 +205,7 @@ export function generateRestRoutesAuditableItemGraph(
 						id: "auditableItemGraphJsonLdGetResponseExample",
 						response: {
 							headers: {
-								"Content-Type": MimeTypes.JsonLd
+								[HeaderTypes.ContentType]: MimeTypes.JsonLd
 							},
 							body: {
 								"@context": "https://schema.gtsc.io/v2/",
@@ -406,7 +406,7 @@ export async function auditableItemGraphCreate(
 	return {
 		statusCode: HttpStatusCode.created,
 		headers: {
-			location: id
+			Location: id
 		}
 	};
 }
@@ -445,7 +445,7 @@ export async function auditableItemGraphGet(
 	let headers;
 	if (request.headers?.Accept === MimeTypes.JsonLd) {
 		headers = {
-			"Content-Type": MimeTypes.JsonLd
+			[HeaderTypes.ContentType]: MimeTypes.JsonLd
 		};
 	}
 

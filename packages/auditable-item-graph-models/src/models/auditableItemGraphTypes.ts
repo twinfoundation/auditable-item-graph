@@ -7,39 +7,44 @@
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const AuditableItemGraphTypes = {
 	/**
+	 * The context uri for the auditable item graph types.
+	 */
+	ContextUri: "https://schema.gtsc.io/aig/",
+
+	/**
 	 * The context root for the auditable item graph types.
 	 */
-	Context: "https://schema.gtsc.io/v2/types.jsonld",
+	ContextJsonld: "https://schema.gtsc.io/aig/types.jsonld",
 
 	/**
 	 * Represents auditable item graph vertex.
 	 */
-	Vertex: "https://schema.gtsc.io/v2/AuditableItemGraphVertex",
+	Vertex: "https://schema.gtsc.io/aig/AuditableItemGraphVertex",
 
 	/**
 	 * Represents auditable item graph alias.
 	 */
-	Alias: "https://schema.gtsc.io/v2/AuditableItemGraphAlias",
+	Alias: "https://schema.gtsc.io/aig/AuditableItemGraphAlias",
 
 	/**
 	 * Represents auditable item graph resource.
 	 */
-	Resource: "https://schema.gtsc.io/v2/AuditableItemGraphResource",
+	Resource: "https://schema.gtsc.io/aig/AuditableItemGraphResource",
 
 	/**
 	 * Represents auditable item graph edge.
 	 */
-	Edge: "https://schema.gtsc.io/v2/AuditableItemGraphEdge",
+	Edge: "https://schema.gtsc.io/aig/AuditableItemGraphEdge",
 
 	/**
 	 * Represents auditable item graph  changeset.
 	 */
-	Changeset: "https://schema.gtsc.io/v2/AuditableItemGraphChangeset",
+	Changeset: "https://schema.gtsc.io/aig/AuditableItemGraphChangeset",
 
 	/**
 	 * Represents patch operation.
 	 */
-	PatchOperation: "https://schema.gtsc.io/v2/AuditableItemGraphPatchOperation"
+	PatchOperation: "https://schema.gtsc.io/aig/AuditableItemGraphPatchOperation"
 } as const;
 
 /**

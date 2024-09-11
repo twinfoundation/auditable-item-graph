@@ -208,7 +208,7 @@ export function generateRestRoutesAuditableItemGraph(
 								[HeaderTypes.ContentType]: MimeTypes.JsonLd
 							},
 							body: {
-								"@context": "https://schema.gtsc.io/v2/",
+								"@context": "https://schema.gtsc.io/aig/",
 								"@type": "vertex",
 								id: "aig:1234567890",
 								created: "2024-08-22T11:55:16.271Z",

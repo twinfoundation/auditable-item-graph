@@ -3087,9 +3087,10 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		const result = await service.get(id, undefined, MimeTypes.JsonLd);
+		console.log(result);
 
 		expect(result).toEqual({
-			"@context": "https://schema.gtsc.io/v2/",
+			"@context": "https://schema.gtsc.io/aig/",
 			"@type": "vertex",
 			aliases: [
 				{
@@ -3519,7 +3520,7 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		expect(result).toEqual({
-			"@context": "https://schema.gtsc.io/v2/",
+			"@context": "https://schema.gtsc.io/aig/",
 			"@type": "vertex",
 			aliases: [
 				{

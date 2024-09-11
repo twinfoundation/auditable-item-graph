@@ -1,5 +1,5 @@
 {
-	"baseUrl": "https://schema.gtsc.io/v2/",
+	"baseUrl": "https://schema.gtsc.io/aig/",
 	"sources": ["./src/models/**/*.ts"],
 	"types": [
 		"IAuditableItemGraphVertex",
@@ -8,5 +8,8 @@
 		"IAuditableItemGraphEdge",
 		"IAuditableItemGraphChangeset",
 		"IAuditableItemGraphPatchOperation"
-	]
+	],
+	"externalReferences": {
+		"IJsonLd(.*)": "https://schema.gtsc.io/json-ld/JsonLd$1"
+	}
 }

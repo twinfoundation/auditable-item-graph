@@ -356,7 +356,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 			if (responseType === MimeTypes.JsonLd) {
 				result = await JsonLdProcessor.compact(this.modelToJsonLd(vertexModel), {
-					"@context": "https://schema.gtsc.io/v2/"
+					"@context": AuditableItemGraphTypes.ContextUri
 				});
 			} else {
 				result = vertexModel;
@@ -1283,7 +1283,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 */
 	private modelToJsonLd(model: IAuditableItemGraphVertex): IJsonLdDocument {
 		const doc: IJsonLdNodeObject = {
-			"@context": AuditableItemGraphTypes.Context,
+			"@context": AuditableItemGraphTypes.ContextJsonld,
 			"@type": AuditableItemGraphTypes.Vertex,
 			id: model.id,
 			nodeIdentity: model.nodeIdentity,

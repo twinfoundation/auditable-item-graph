@@ -20,7 +20,7 @@ The headers which can be used to determine the response data type.
 
 > **body**: IJsonLdDocument \| IAuditableItemGraphVertex & `object`
 
-The response body, id accept header is set to application/ld+json the return object is JSON-LD document.
+The response body, if accept header is set to application/ld+json the return object is JSON-LD document.
 
 #### Type declaration
 

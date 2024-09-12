@@ -18,7 +18,7 @@ export interface IAuditableItemGraphGetResponse {
 	};
 
 	/**
-	 * The response body, id accept header is set to application/ld+json the return object is JSON-LD document.
+	 * The response body, if accept header is set to application/ld+json the return object is JSON-LD document.
 	 */
 	body: (IAuditableItemGraphVertex | IJsonLdDocument) & {
 		/**

@@ -189,6 +189,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		metadata?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
+			format?: string;
 			metadata?: IJsonLdNodeObject;
 		}[],
 		resources?: {
@@ -389,6 +390,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		metadata?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
+			format?: string;
 			metadata?: IJsonLdNodeObject;
 		}[],
 		resources?: {
@@ -632,7 +634,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				const aliasEntity: AuditableItemGraphAlias = {
 					id: aliasModel.id,
 					created: aliasModel.created,
+					updated: aliasModel.updated,
 					deleted: aliasModel.deleted,
+					format: aliasModel.format,
 					metadata: aliasModel.metadata
 				};
 				entity.aliases.push(aliasEntity);
@@ -647,6 +651,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				const resourceEntity: AuditableItemGraphResource = {
 					id: resourceModel.id,
 					created: resourceModel.created,
+					updated: resourceModel.updated,
 					deleted: resourceModel.deleted,
 					metadata: resourceModel.metadata
 				};
@@ -660,6 +665,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				const edgeEntity: AuditableItemGraphEdge = {
 					id: edgeModel.id,
 					created: edgeModel.created,
+					updated: edgeModel.updated,
 					deleted: edgeModel.deleted,
 					relationship: edgeModel.relationship,
 					metadata: edgeModel.metadata
@@ -693,7 +699,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			for (const aliasEntity of vertexEntity.aliases) {
 				const aliasModel: IAuditableItemGraphAlias = {
 					id: aliasEntity.id,
+					format: aliasEntity.format,
 					created: aliasEntity.created,
+					updated: aliasEntity.updated,
 					deleted: aliasEntity.deleted,
 					metadata: aliasEntity.metadata
 				};
@@ -707,6 +715,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				const resourceModel: IAuditableItemGraphResource = {
 					id: resourceEntity.id,
 					created: resourceEntity.created,
+					updated: resourceEntity.updated,
 					deleted: resourceEntity.deleted,
 					metadata: resourceEntity.metadata
 				};
@@ -720,6 +729,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				const edgeModel: IAuditableItemGraphEdge = {
 					id: edgeEntity.id,
 					created: edgeEntity.created,
+					updated: edgeEntity.updated,
 					deleted: edgeEntity.deleted,
 					relationship: edgeEntity.relationship,
 					metadata: edgeEntity.metadata
@@ -743,6 +753,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		vertexModel: IAuditableItemGraphVertex,
 		aliases?: {
 			id: string;
+			format?: string;
 			metadata?: IJsonLdNodeObject;
 		}[]
 	): Promise<void> {
@@ -776,6 +787,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		vertexModel: IAuditableItemGraphVertex,
 		alias: {
 			id: string;
+			format?: string;
 			metadata?: IJsonLdNodeObject;
 		}
 	): Promise<void> {
@@ -797,14 +809,19 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 			const model: IAuditableItemGraphAlias = {
 				id: alias.id,
+				format: alias.format,
 				created: context.now,
 				metadata: alias.metadata
 			};
 
 			vertexModel.aliases.push(model);
-		} else if (!ObjectHelper.equal(existing.metadata, alias.metadata, false)) {
+		} else if (
+			existing.format !== alias.format ||
+			!ObjectHelper.equal(existing.metadata, alias.metadata, false)
+		) {
 			// Existing alias found, update the metadata.
 			existing.updated = context.now;
+			existing.format = alias.format;
 			existing.metadata = alias.metadata;
 		}
 	}
@@ -1305,6 +1322,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 					id: alias.id,
 					created: new Date(alias.created).toISOString()
 				};
+				if (Is.stringValue(alias.format)) {
+					aliasJsonLd.format = alias.format;
+				}
 				if (Is.integer(alias.updated)) {
 					aliasJsonLd.updated = new Date(alias.updated).toISOString();
 				}
@@ -1365,7 +1385,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		}
 
 		if (Is.arrayValue(model.changesets)) {
-			const changesetJsonld: IJsonLdNodeObject[] = [];
+			const changesetsJsonld: IJsonLdNodeObject[] = [];
 			for (const changeset of model.changesets) {
 				const changesetJsonLd: IJsonLdNodeObject = {
 					"@type": AuditableItemGraphTypes.Changeset,
@@ -1387,9 +1407,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 					}
 					changesetJsonLd.patches = patchesJsonLd;
 				}
-				changesetJsonld.push(changesetJsonLd);
+				changesetsJsonld.push(changesetJsonLd);
 			}
-			doc.changesets = changesetJsonld;
+			doc.changesets = changesetsJsonld;
 		}
 
 		return doc;

@@ -30,6 +30,7 @@ export interface IAuditableItemGraphUpdateRequest {
 		 */
 		aliases?: {
 			id: string;
+			format?: string;
 			metadata?: IJsonLdNodeObject;
 		}[];
 

@@ -51,6 +51,7 @@ export class AuditableItemGraphClient
 		metadata?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
+			format?: string;
 			metadata?: IJsonLdNodeObject;
 		}[],
 		resources?: {
@@ -141,6 +142,7 @@ export class AuditableItemGraphClient
 		metadata?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
+			format?: string;
 			metadata?: IJsonLdNodeObject;
 		}[],
 		resources?: {

@@ -425,7 +425,10 @@ describe("AuditableItemGraphService", () => {
 				},
 				published: "2015-01-25T12:34:56Z"
 			},
-			[{ id: "foo123" }, { id: "bar456" }],
+			[
+				{ id: "foo123", format: "type1" },
+				{ id: "bar456", format: "type2" }
+			],
 			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
@@ -448,15 +451,16 @@ describe("AuditableItemGraphService", () => {
 				published: "2015-01-25T12:34:56Z"
 			},
 			aliases: [
-				{ id: "foo123", created: FIRST_TICK },
-				{ id: "bar456", created: FIRST_TICK }
+				{ id: "foo123", format: "type1", created: FIRST_TICK },
+				{ id: "bar456", format: "type2", created: FIRST_TICK }
 			],
 			changesets: [
 				{
-					hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
+					hash: "NstRDrU726YzvJPr4+xOjyAlcnOEOFKR/+bCWntHbOQ=",
 					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 					created: FIRST_TICK,
-					userIdentity: TEST_USER_IDENTITY,
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 					patches: [
 						{
 							op: "add",
@@ -473,8 +477,8 @@ describe("AuditableItemGraphService", () => {
 							op: "add",
 							path: "/aliases",
 							value: [
-								{ id: "foo123", created: FIRST_TICK },
-								{ id: "bar456", created: FIRST_TICK }
+								{ id: "foo123", format: "type1", created: FIRST_TICK },
+								{ id: "bar456", format: "type2", created: FIRST_TICK }
 							]
 						}
 					],
@@ -488,9 +492,11 @@ describe("AuditableItemGraphService", () => {
 		const changeset = changesetStore[0];
 
 		expect(changeset).toEqual({
+			hash: "NstRDrU726YzvJPr4+xOjyAlcnOEOFKR/+bCWntHbOQ=",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
-			userIdentity: TEST_USER_IDENTITY,
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			patches: [
 				{
 					op: "add",
@@ -498,15 +504,8 @@ describe("AuditableItemGraphService", () => {
 					value: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
-						actor: {
-							"@type": "Person",
-							"@id": "acct:person@example.org",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note"
-						},
+						actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
+						object: { "@type": "Note", content: "This is a simple note" },
 						published: "2015-01-25T12:34:56Z"
 					}
 				},
@@ -514,18 +513,11 @@ describe("AuditableItemGraphService", () => {
 					op: "add",
 					path: "/aliases",
 					value: [
-						{
-							id: "foo123",
-							created: FIRST_TICK
-						},
-						{
-							id: "bar456",
-							created: FIRST_TICK
-						}
+						{ id: "foo123", format: "type1", created: FIRST_TICK },
+						{ id: "bar456", format: "type2", created: FIRST_TICK }
 					]
 				}
 			],
-			hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -1456,6 +1448,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "resource1",
 					created: FIRST_TICK,
+					updated: SECOND_TICK,
 					metadata: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
@@ -1467,6 +1460,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "resource2",
 					created: FIRST_TICK,
+					updated: SECOND_TICK,
 					metadata: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
@@ -1876,6 +1870,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "edge1",
 					created: FIRST_TICK,
+					updated: SECOND_TICK,
 					relationship: "frenemy",
 					metadata: {
 						"@context": "https://www.w3.org/ns/activitystreams",
@@ -2269,6 +2264,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "foo123",
 					created: FIRST_TICK,
+					updated: SECOND_TICK,
 					metadata: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
@@ -2280,6 +2276,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "bar456",
 					created: FIRST_TICK,
+					updated: SECOND_TICK,
 					metadata: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
@@ -2293,6 +2290,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "resource1",
 					created: FIRST_TICK,
+					updated: SECOND_TICK,
 					metadata: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
@@ -2304,6 +2302,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "resource2",
 					created: FIRST_TICK,
+					updated: SECOND_TICK,
 					metadata: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
@@ -2317,6 +2316,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "edge1",
 					created: FIRST_TICK,
+					updated: SECOND_TICK,
 					relationship: "friend",
 					metadata: {
 						"@context": "https://www.w3.org/ns/activitystreams",
@@ -2329,6 +2329,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "edge2",
 					created: FIRST_TICK,
+					updated: SECOND_TICK,
 					relationship: "enemy",
 					metadata: {
 						"@context": "https://www.w3.org/ns/activitystreams",
@@ -2845,6 +2846,7 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "foo123",
+					format: "type1",
 					metadata: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
@@ -2862,6 +2864,7 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					id: "bar456",
+					format: "type2",
 					metadata: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
@@ -2975,6 +2978,7 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "foo123",
+					format: "type1",
 					metadata: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
@@ -2992,6 +2996,7 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					id: "bar456",
+					format: "type2",
 					metadata: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
@@ -3087,7 +3092,6 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		const result = await service.get(id, undefined, MimeTypes.JsonLd);
-		console.log(result);
 
 		expect(result).toEqual({
 			"@context": "https://schema.gtsc.io/aig/",
@@ -3096,6 +3100,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					"@type": "alias",
 					created: "2024-08-22T11:55:16.271Z",
+					format: "type1",
 					id: "foo123",
 					metadata: {
 						"@type": "https://www.w3.org/ns/activitystreams#Create",
@@ -3112,11 +3117,13 @@ describe("AuditableItemGraphService", () => {
 							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
 							"@value": "2015-01-25T12:34:56Z"
 						}
-					}
+					},
+					updated: "2024-08-22T11:56:56.272Z"
 				},
 				{
 					"@type": "alias",
 					created: "2024-08-22T11:55:16.271Z",
+					format: "type2",
 					id: "bar456",
 					metadata: {
 						"@type": "https://www.w3.org/ns/activitystreams#Create",
@@ -3133,7 +3140,8 @@ describe("AuditableItemGraphService", () => {
 							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
 							"@value": "2015-01-25T12:34:56Z"
 						}
-					}
+					},
+					updated: "2024-08-22T11:56:56.272Z"
 				}
 			],
 			edges: [
@@ -3157,7 +3165,8 @@ describe("AuditableItemGraphService", () => {
 							"@value": "2015-01-25T12:34:56Z"
 						}
 					},
-					relationship: "friend"
+					relationship: "friend",
+					updated: "2024-08-22T11:56:56.272Z"
 				},
 				{
 					"@type": "edge",
@@ -3179,7 +3188,8 @@ describe("AuditableItemGraphService", () => {
 							"@value": "2015-01-25T12:34:56Z"
 						}
 					},
-					relationship: "enemy"
+					relationship: "enemy",
+					updated: "2024-08-22T11:56:56.272Z"
 				}
 			],
 			resources: [
@@ -3202,7 +3212,8 @@ describe("AuditableItemGraphService", () => {
 							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
 							"@value": "2015-01-25T12:34:56Z"
 						}
-					}
+					},
+					updated: "2024-08-22T11:56:56.272Z"
 				},
 				{
 					"@type": "resource",
@@ -3223,7 +3234,8 @@ describe("AuditableItemGraphService", () => {
 							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
 							"@value": "2015-01-25T12:34:56Z"
 						}
-					}
+					},
+					updated: "2024-08-22T11:56:56.272Z"
 				}
 			],
 			created: "2024-08-22T11:55:16.271Z",
@@ -3244,8 +3256,7 @@ describe("AuditableItemGraphService", () => {
 					"@value": "2015-01-25T12:34:56Z"
 				}
 			},
-			nodeIdentity:
-				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			nodeIdentity: TEST_NODE_IDENTITY,
 			updated: "2024-08-22T11:56:56.272Z"
 		});
 	});
@@ -3542,7 +3553,8 @@ describe("AuditableItemGraphService", () => {
 							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
 							"@value": "2015-01-25T12:34:56Z"
 						}
-					}
+					},
+					updated: "2024-08-22T11:56:56.272Z"
 				},
 				{
 					"@type": "alias",
@@ -3563,7 +3575,8 @@ describe("AuditableItemGraphService", () => {
 							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
 							"@value": "2015-01-25T12:34:56Z"
 						}
-					}
+					},
+					updated: "2024-08-22T11:56:56.272Z"
 				}
 			],
 			changesets: [
@@ -3589,7 +3602,7 @@ describe("AuditableItemGraphService", () => {
 							patchValue: [
 								{
 									id: "foo123",
-									created: 1724327716271,
+									created: FIRST_TICK,
 									metadata: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
@@ -3600,7 +3613,7 @@ describe("AuditableItemGraphService", () => {
 								},
 								{
 									id: "bar456",
-									created: 1724327716271,
+									created: FIRST_TICK,
 									metadata: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
@@ -3618,7 +3631,7 @@ describe("AuditableItemGraphService", () => {
 							patchValue: [
 								{
 									id: "resource1",
-									created: 1724327716271,
+									created: FIRST_TICK,
 									metadata: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
@@ -3629,7 +3642,7 @@ describe("AuditableItemGraphService", () => {
 								},
 								{
 									id: "resource2",
-									created: 1724327716271,
+									created: FIRST_TICK,
 									metadata: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
@@ -3647,7 +3660,7 @@ describe("AuditableItemGraphService", () => {
 							patchValue: [
 								{
 									id: "edge1",
-									created: 1724327716271,
+									created: FIRST_TICK,
 									metadata: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
@@ -3659,7 +3672,7 @@ describe("AuditableItemGraphService", () => {
 								},
 								{
 									id: "edge2",
-									created: 1724327716271,
+									created: FIRST_TICK,
 									metadata: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
@@ -3676,8 +3689,7 @@ describe("AuditableItemGraphService", () => {
 					hash: "jTb9qgSQtXraoLWMpEB8DqHby6amfHbh2rdKu1O/144=",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
-					nodeIdentity:
-						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
+					userIdentity: TEST_USER_IDENTITY
 				},
 				{
 					"@type": "changeset",
@@ -3692,7 +3704,7 @@ describe("AuditableItemGraphService", () => {
 							"@type": "patch",
 							patchOperation: "add",
 							patchPath: "/aliases/0/updated",
-							patchValue: 1724327816272
+							patchValue: SECOND_TICK
 						},
 						{
 							"@type": "patch",
@@ -3704,7 +3716,7 @@ describe("AuditableItemGraphService", () => {
 							"@type": "patch",
 							patchOperation: "add",
 							patchPath: "/aliases/1/updated",
-							patchValue: 1724327816272
+							patchValue: SECOND_TICK
 						},
 						{
 							"@type": "patch",
@@ -3716,7 +3728,7 @@ describe("AuditableItemGraphService", () => {
 							"@type": "patch",
 							patchOperation: "add",
 							patchPath: "/resources/0/updated",
-							patchValue: 1724327816272
+							patchValue: SECOND_TICK
 						},
 						{
 							"@type": "patch",
@@ -3728,7 +3740,7 @@ describe("AuditableItemGraphService", () => {
 							"@type": "patch",
 							patchOperation: "add",
 							patchPath: "/resources/1/updated",
-							patchValue: 1724327816272
+							patchValue: SECOND_TICK
 						},
 						{
 							"@type": "patch",
@@ -3740,7 +3752,7 @@ describe("AuditableItemGraphService", () => {
 							"@type": "patch",
 							patchOperation: "add",
 							patchPath: "/edges/0/updated",
-							patchValue: 1724327816272
+							patchValue: SECOND_TICK
 						},
 						{
 							"@type": "patch",
@@ -3752,7 +3764,7 @@ describe("AuditableItemGraphService", () => {
 							"@type": "patch",
 							patchOperation: "add",
 							patchPath: "/edges/1/updated",
-							patchValue: 1724327816272
+							patchValue: SECOND_TICK
 						},
 						{
 							"@type": "patch",
@@ -3765,8 +3777,7 @@ describe("AuditableItemGraphService", () => {
 					hash: "snnM4wJd36iJyQU3z2RyJNpbJKyFUch/0itVwmBpPOQ=",
 					immutableStorageId:
 						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505",
-					nodeIdentity:
-						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
+					userIdentity: TEST_USER_IDENTITY
 				}
 			],
 			edges: [
@@ -3790,7 +3801,8 @@ describe("AuditableItemGraphService", () => {
 							"@value": "2015-01-25T12:34:56Z"
 						}
 					},
-					relationship: "friend"
+					relationship: "friend",
+					updated: "2024-08-22T11:56:56.272Z"
 				},
 				{
 					"@type": "edge",
@@ -3812,7 +3824,8 @@ describe("AuditableItemGraphService", () => {
 							"@value": "2015-01-25T12:34:56Z"
 						}
 					},
-					relationship: "enemy"
+					relationship: "enemy",
+					updated: "2024-08-22T11:56:56.272Z"
 				}
 			],
 			resources: [
@@ -3835,7 +3848,8 @@ describe("AuditableItemGraphService", () => {
 							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
 							"@value": "2015-01-25T12:34:56Z"
 						}
-					}
+					},
+					updated: "2024-08-22T11:56:56.272Z"
 				},
 				{
 					"@type": "resource",
@@ -3856,7 +3870,8 @@ describe("AuditableItemGraphService", () => {
 							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
 							"@value": "2015-01-25T12:34:56Z"
 						}
-					}
+					},
+					updated: "2024-08-22T11:56:56.272Z"
 				}
 			],
 			created: "2024-08-22T11:55:16.271Z",
@@ -3877,8 +3892,7 @@ describe("AuditableItemGraphService", () => {
 					"@value": "2015-01-25T12:34:56Z"
 				}
 			},
-			nodeIdentity:
-				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			nodeIdentity: TEST_NODE_IDENTITY,
 			updated: "2024-08-22T11:56:56.272Z"
 		});
 	});

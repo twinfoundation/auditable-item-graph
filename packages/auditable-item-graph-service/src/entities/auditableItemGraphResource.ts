@@ -9,16 +9,22 @@ import { entity, property } from "@gtsc/entity";
 @entity()
 export class AuditableItemGraphResource {
 	/**
-	 * The id of the vertex.
+	 * The id of the resource.
 	 */
 	@property({ type: "string", isPrimary: true })
 	public id!: string;
 
 	/**
-	 * The timestamp of when the vertex was created.
+	 * The timestamp of when the resource was created.
 	 */
 	@property({ type: "number" })
 	public created!: number;
+
+	/**
+	 * The timestamp of when the resource was updated.
+	 */
+	@property({ type: "number" })
+	public updated?: number;
 
 	/**
 	 * The timestamp of when the resource was deleted, as we never actually remove items.

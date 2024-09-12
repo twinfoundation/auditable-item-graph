@@ -8,4 +8,9 @@ import type { IAuditableItemGraphMetadataElement } from "./IAuditableItemGraphMe
  */
 export interface IAuditableItemGraphAlias
 	extends IAuditableItemGraphAuditedElement,
-		IAuditableItemGraphMetadataElement {}
+		IAuditableItemGraphMetadataElement {
+	/**
+	 * The format of the id in the alias.
+	 */
+	format?: string;
+}

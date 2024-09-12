@@ -21,6 +21,12 @@ export class AuditableItemGraphEdge {
 	public created!: number;
 
 	/**
+	 * The timestamp of when the edge was updated.
+	 */
+	@property({ type: "number" })
+	public updated?: number;
+
+	/**
 	 * The timestamp of when the edge was deleted, as we never actually remove items.
 	 */
 	@property({ type: "number" })

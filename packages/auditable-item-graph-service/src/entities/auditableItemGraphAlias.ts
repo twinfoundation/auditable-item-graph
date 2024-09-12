@@ -15,10 +15,22 @@ export class AuditableItemGraphAlias {
 	public id!: string;
 
 	/**
+	 * The format of the alias for the vertex.
+	 */
+	@property({ type: "string" })
+	public format?: string;
+
+	/**
 	 * The timestamp of when the alias was created.
 	 */
 	@property({ type: "number" })
 	public created!: number;
+
+	/**
+	 * The timestamp of when the alias was updated.
+	 */
+	@property({ type: "number" })
+	public updated?: number;
 
 	/**
 	 * The timestamp of when the alias was deleted, as we never actually remove items.

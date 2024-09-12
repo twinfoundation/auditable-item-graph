@@ -25,6 +25,7 @@ export interface IAuditableItemGraphComponent extends IComponent {
 		metadata?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
+			format?: string;
 			metadata?: IJsonLdNodeObject;
 		}[],
 		resources?: {
@@ -56,6 +57,7 @@ export interface IAuditableItemGraphComponent extends IComponent {
 		metadata?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
+			format?: string;
 			metadata?: IJsonLdNodeObject;
 		}[],
 		resources?: {

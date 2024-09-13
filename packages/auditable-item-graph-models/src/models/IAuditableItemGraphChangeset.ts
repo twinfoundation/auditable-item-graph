@@ -12,6 +12,11 @@ export interface IAuditableItemGraphChangeset extends IAuditableItemGraphIntegri
 	hash: string;
 
 	/**
+	 * The signature for the changeset.
+	 */
+	signature: string;
+
+	/**
 	 * The immutable storage id containing the signature for the changeset.
 	 */
 	immutableStorageId?: string;

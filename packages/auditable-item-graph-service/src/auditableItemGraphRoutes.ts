@@ -431,6 +431,8 @@ export async function auditableItemGraphGet(
 	);
 	Guards.stringValue(ROUTES_SOURCE, nameof(request.pathParams.id), request.pathParams.id);
 
+	const mimeType = request.headers?.Accept === MimeTypes.JsonLd ? MimeTypes.JsonLd : MimeTypes.Json;
+
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
 	const result = await component.get(
 		request.pathParams.id,
@@ -439,18 +441,13 @@ export async function auditableItemGraphGet(
 			includeChangesets: request.query?.includeChangesets,
 			verifySignatureDepth: request.query?.verifySignatureDepth
 		},
-		request.headers?.Accept
+		mimeType
 	);
 
-	let headers;
-	if (request.headers?.Accept === MimeTypes.JsonLd) {
-		headers = {
-			[HeaderTypes.ContentType]: MimeTypes.JsonLd
-		};
-	}
-
 	return {
-		headers,
+		headers: {
+			[HeaderTypes.ContentType]: mimeType
+		},
 		body: result
 	};
 }

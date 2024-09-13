@@ -39,6 +39,12 @@ export class AuditableItemGraphChangeset {
 	public patches!: AuditableItemGraphPatch[];
 
 	/**
+	 * The signature of the changeset.
+	 */
+	@property({ type: "string" })
+	public signature!: string;
+
+	/**
 	 * The immutable storage id which contains the signature for this changeset.
 	 */
 	@property({ type: "string" })

@@ -16,6 +16,14 @@ The hash for the changeset.
 
 ***
 
+### signature
+
+> **signature**: `string`
+
+The signature for the changeset.
+
+***
+
 ### immutableStorageId?
 
 > `optional` **immutableStorageId**: `string`

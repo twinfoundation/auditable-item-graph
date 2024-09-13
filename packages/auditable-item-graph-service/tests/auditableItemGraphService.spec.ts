@@ -112,6 +112,8 @@ describe("AuditableItemGraphService", () => {
 			created: FIRST_TICK,
 			userIdentity: TEST_USER_IDENTITY,
 			patches: [],
+			signature:
+				"khjWjRusY7cpGQb93waFkgUpzfsI1ynoCVc8JB/jqkxHnSKmPdheW9pDkGkslrVsbE5dGdpwD3wOfemSp8n8Dw==",
 			hash: "5/QKaqyMYylY+/GwpcSHopUw9tSeIK3tYSNNoMuYwjw=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
@@ -190,6 +192,8 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			hash: "Ht6zFJi0yl+MYTKgk+HdZW1PLWjJmSOwOkqrAA1NfVU=",
+			signature:
+				"Upe1JYPqtP0FQ56xYwB5WFlR3CsyQKke55KTRmn0/waQm6/OWCz+HJlfDYR4EuMthR8NHAixrl2iweYLHZ1xAg==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -306,6 +310,8 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			hash: "a6YPG/e5uPE5UujQHMUFBWDRS9hquN0zMx4NYbgFLJU=",
+			signature:
+				"OS1vlNYFDDFm37RQMH0PcLkcCepVgMnb2/8HBdGSyvJkzaIk3acuqoguFi6ByizCduVV7tK4QJ8jNQSJzC4nAw==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -457,10 +463,12 @@ describe("AuditableItemGraphService", () => {
 			changesets: [
 				{
 					hash: "NstRDrU726YzvJPr4+xOjyAlcnOEOFKR/+bCWntHbOQ=",
-					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					signature:
+						"sgAI1NMU7HrzyqnT7FSdGAfEVAzLTSDmH93UHU118xhIK+K+7nlqXpw3igGCifQl7XLdiYHqpCQN2Go0qlGDCg==",
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					created: FIRST_TICK,
-					userIdentity:
-						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+					userIdentity: TEST_USER_IDENTITY,
 					patches: [
 						{
 							op: "add",
@@ -481,9 +489,7 @@ describe("AuditableItemGraphService", () => {
 								{ id: "bar456", format: "type2", created: FIRST_TICK }
 							]
 						}
-					],
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+					]
 				}
 			]
 		});
@@ -493,10 +499,11 @@ describe("AuditableItemGraphService", () => {
 
 		expect(changeset).toEqual({
 			hash: "NstRDrU726YzvJPr4+xOjyAlcnOEOFKR/+bCWntHbOQ=",
+			signature:
+				"sgAI1NMU7HrzyqnT7FSdGAfEVAzLTSDmH93UHU118xhIK+K+7nlqXpw3igGCifQl7XLdiYHqpCQN2Go0qlGDCg==",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
-			userIdentity:
-				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
 					op: "add",
@@ -572,7 +579,10 @@ describe("AuditableItemGraphService", () => {
 			changesets: [
 				{
 					hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
-					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					signature:
+						"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA==",
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					created: FIRST_TICK,
 					userIdentity: TEST_USER_IDENTITY,
 					patches: [
@@ -595,9 +605,7 @@ describe("AuditableItemGraphService", () => {
 								{ id: "bar456", created: FIRST_TICK }
 							]
 						}
-					],
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+					]
 				}
 			],
 			verified: true,
@@ -646,6 +654,8 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
+			signature:
+				"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -722,7 +732,8 @@ describe("AuditableItemGraphService", () => {
 			changesets: [
 				{
 					hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
-					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					signature:
+						"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA==",
 					created: FIRST_TICK,
 					userIdentity: TEST_USER_IDENTITY,
 					patches: [
@@ -796,6 +807,8 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
+			signature:
+				"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -872,7 +885,8 @@ describe("AuditableItemGraphService", () => {
 			changesets: [
 				{
 					hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
-					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					signature:
+						"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA==",
 					created: FIRST_TICK,
 					userIdentity: TEST_USER_IDENTITY,
 					patches: [
@@ -901,7 +915,8 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					hash: "Utd6Kg4vk2814eqbmZwSRE2L7292lfn7rAKskXrJRXo=",
-					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					signature:
+						"SubKHkO1ET+QRzujzvKu5zTEll055+Ctu1o8Y5iJHTV6wnk0UjYC3GB398tjrVjd0wjOfqOdRgFCMgbLV5wNBg==",
 					created: SECOND_TICK,
 					userIdentity: TEST_USER_IDENTITY,
 					patches: [
@@ -957,6 +972,8 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
+			signature:
+				"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -981,6 +998,8 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			hash: "Utd6Kg4vk2814eqbmZwSRE2L7292lfn7rAKskXrJRXo=",
+			signature:
+				"SubKHkO1ET+QRzujzvKu5zTEll055+Ctu1o8Y5iJHTV6wnk0UjYC3GB398tjrVjd0wjOfqOdRgFCMgbLV5wNBg==",
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
@@ -1134,7 +1153,8 @@ describe("AuditableItemGraphService", () => {
 			changesets: [
 				{
 					hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
-					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					signature:
+						"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA==",
 					created: FIRST_TICK,
 					userIdentity: TEST_USER_IDENTITY,
 					patches: [
@@ -1163,7 +1183,8 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					hash: "Og/b7ggB83h+4wq3zDp7FT1DOK+qEIuChFnQV2M6UFw=",
-					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					signature:
+						"qVnHQT1BBzP6d7tYDqBWv40eXTRazEFDr+LkYp19/cAr5J1lSzFz22UTmZ5JdCA0u3P3tkevaslz0uNMJWCyAg==",
 					created: SECOND_TICK,
 					userIdentity: TEST_USER_IDENTITY,
 					patches: [
@@ -1218,6 +1239,8 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
+			signature:
+				"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -1234,6 +1257,8 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			hash: "Og/b7ggB83h+4wq3zDp7FT1DOK+qEIuChFnQV2M6UFw=",
+			signature:
+				"qVnHQT1BBzP6d7tYDqBWv40eXTRazEFDr+LkYp19/cAr5J1lSzFz22UTmZ5JdCA0u3P3tkevaslz0uNMJWCyAg==",
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
@@ -1473,7 +1498,8 @@ describe("AuditableItemGraphService", () => {
 			changesets: [
 				{
 					hash: "Tkc0/RReCBn307kfgUyc2YGqHV+jizsYCySVaYc+4+U=",
-					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					signature:
+						"AOqjzgjhXI8JXMRLV3cXBJJzZ7jJf89vITgsimGOEnN0Xn0W25pokKf47jKlOqrcZlB4Gt6IkSWkmw3KtQU7DQ==",
 					created: FIRST_TICK,
 					userIdentity: TEST_USER_IDENTITY,
 					patches: [
@@ -1530,7 +1556,8 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					hash: "JjtD2ONbYEFNCqgMoFYwjufOdB2e6EwvZMABM8syQ6Q=",
-					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					signature:
+						"xDnUf+WPlPzv7OoAqLwX3Gr2lRgDQ0Ap2yNxiyjsdww/ucdPef0uQSx8Zvaz10KuQGyqYFYuYjs90oP3bdOcAQ==",
 					created: SECOND_TICK,
 					userIdentity: TEST_USER_IDENTITY,
 					patches: [
@@ -1639,6 +1666,8 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			hash: "Tkc0/RReCBn307kfgUyc2YGqHV+jizsYCySVaYc+4+U=",
+			signature:
+				"AOqjzgjhXI8JXMRLV3cXBJJzZ7jJf89vITgsimGOEnN0Xn0W25pokKf47jKlOqrcZlB4Gt6IkSWkmw3KtQU7DQ==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -1675,6 +1704,8 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			hash: "JjtD2ONbYEFNCqgMoFYwjufOdB2e6EwvZMABM8syQ6Q=",
+			signature:
+				"xDnUf+WPlPzv7OoAqLwX3Gr2lRgDQ0Ap2yNxiyjsdww/ucdPef0uQSx8Zvaz10KuQGyqYFYuYjs90oP3bdOcAQ==",
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
@@ -1884,7 +1915,8 @@ describe("AuditableItemGraphService", () => {
 			changesets: [
 				{
 					hash: "r6+XCDXDoVoZfIBtDlORWaWb/eMIietTidH1JPXRdVs=",
-					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					signature:
+						"15NWO1jt1r8YQ5O0HGk/U9DE9Gaf7KzDxL8vw5+puOh8f6tqEsNVikSkpvY9BMGRGp1Bzw+ohn7vwVBN6IA0BQ==",
 					created: FIRST_TICK,
 					userIdentity: TEST_USER_IDENTITY,
 					patches: [
@@ -1912,7 +1944,8 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					hash: "9HOMirKU9l+iZa+b4WPprlNKCdmWBFB0m5fQxjRdzF8=",
-					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					signature:
+						"ilyqMQXLjXq1ZvHvIboUh/mN4uozZ1vOhmKCPr/9HHKfdDk86gUOD/7E2fhcOvlg+jjAVhu64Nx8xGYQzhOQAg==",
 					created: SECOND_TICK,
 					userIdentity: TEST_USER_IDENTITY,
 					patches: [
@@ -1936,7 +1969,8 @@ describe("AuditableItemGraphService", () => {
 
 		expect(changesetStore[0]).toEqual({
 			hash: "r6+XCDXDoVoZfIBtDlORWaWb/eMIietTidH1JPXRdVs=",
-			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+			signature:
+				"15NWO1jt1r8YQ5O0HGk/U9DE9Gaf7KzDxL8vw5+puOh8f6tqEsNVikSkpvY9BMGRGp1Bzw+ohn7vwVBN6IA0BQ==",
 			created: FIRST_TICK,
 			userIdentity: TEST_USER_IDENTITY,
 			patches: [
@@ -1959,12 +1993,15 @@ describe("AuditableItemGraphService", () => {
 					]
 				}
 			],
+			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
 
 		expect(changesetStore[1]).toEqual({
 			hash: "9HOMirKU9l+iZa+b4WPprlNKCdmWBFB0m5fQxjRdzF8=",
+			signature:
+				"ilyqMQXLjXq1ZvHvIboUh/mN4uozZ1vOhmKCPr/9HHKfdDk86gUOD/7E2fhcOvlg+jjAVhu64Nx8xGYQzhOQAg==",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: SECOND_TICK,
 			userIdentity: TEST_USER_IDENTITY,
@@ -2343,7 +2380,8 @@ describe("AuditableItemGraphService", () => {
 			changesets: [
 				{
 					hash: "jTb9qgSQtXraoLWMpEB8DqHby6amfHbh2rdKu1O/144=",
-					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					signature:
+						"623KrKM43+giT9gpq12YewVrY2Cn2qGkHFubvQDyamHnpowgur2aK5QHwunM1NmxzKc8v2QbAxHf9hQQq2TPAg==",
 					created: FIRST_TICK,
 					userIdentity: TEST_USER_IDENTITY,
 					patches: [
@@ -2450,7 +2488,8 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					hash: "snnM4wJd36iJyQU3z2RyJNpbJKyFUch/0itVwmBpPOQ=",
-					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					signature:
+						"ZIPvcuMyzIX/2VsymzuigdSoC1lbGqHO3jj/rm9w1eCWo6vTeyLIxy/k5x0/hMf1Ls4l9o+ELt5jN/ITAFSrDA==",
 					created: SECOND_TICK,
 					userIdentity: TEST_USER_IDENTITY,
 					patches: [
@@ -2504,6 +2543,8 @@ describe("AuditableItemGraphService", () => {
 
 		expect(changesetStore[0]).toEqual({
 			hash: "jTb9qgSQtXraoLWMpEB8DqHby6amfHbh2rdKu1O/144=",
+			signature:
+				"623KrKM43+giT9gpq12YewVrY2Cn2qGkHFubvQDyamHnpowgur2aK5QHwunM1NmxzKc8v2QbAxHf9hQQq2TPAg==",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			userIdentity: TEST_USER_IDENTITY,
@@ -2612,6 +2653,8 @@ describe("AuditableItemGraphService", () => {
 
 		expect(changesetStore[1]).toEqual({
 			hash: "snnM4wJd36iJyQU3z2RyJNpbJKyFUch/0itVwmBpPOQ=",
+			signature:
+				"ZIPvcuMyzIX/2VsymzuigdSoC1lbGqHO3jj/rm9w1eCWo6vTeyLIxy/k5x0/hMf1Ls4l9o+ELt5jN/ITAFSrDA==",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: SECOND_TICK,
 			userIdentity: TEST_USER_IDENTITY,
@@ -3687,6 +3730,8 @@ describe("AuditableItemGraphService", () => {
 					],
 					created: "2024-08-22T11:55:16.271Z",
 					hash: "jTb9qgSQtXraoLWMpEB8DqHby6amfHbh2rdKu1O/144=",
+					signature:
+						"623KrKM43+giT9gpq12YewVrY2Cn2qGkHFubvQDyamHnpowgur2aK5QHwunM1NmxzKc8v2QbAxHf9hQQq2TPAg==",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					userIdentity: TEST_USER_IDENTITY
@@ -3775,6 +3820,8 @@ describe("AuditableItemGraphService", () => {
 					],
 					created: "2024-08-22T11:56:56.272Z",
 					hash: "snnM4wJd36iJyQU3z2RyJNpbJKyFUch/0itVwmBpPOQ=",
+					signature:
+						"ZIPvcuMyzIX/2VsymzuigdSoC1lbGqHO3jj/rm9w1eCWo6vTeyLIxy/k5x0/hMf1Ls4l9o+ELt5jN/ITAFSrDA==",
 					immutableStorageId:
 						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505",
 					userIdentity: TEST_USER_IDENTITY
@@ -3930,7 +3977,8 @@ describe("AuditableItemGraphService", () => {
 			changesets: [
 				{
 					hash: "Ht6zFJi0yl+MYTKgk+HdZW1PLWjJmSOwOkqrAA1NfVU=",
-					vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+					signature:
+						"Upe1JYPqtP0FQ56xYwB5WFlR3CsyQKke55KTRmn0/waQm6/OWCz+HJlfDYR4EuMthR8NHAixrl2iweYLHZ1xAg==",
 					created: FIRST_TICK,
 					userIdentity: TEST_USER_IDENTITY,
 					patches: [
@@ -3972,16 +4020,20 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		const results = await service.query({ id: "0" });
-		expect(results.entities).toEqual([
-			{
-				id: "0404040404040404040404040404040404040404040404040404040404040404",
-				created: SECOND_TICK
-			},
-			{
-				id: "0101010101010101010101010101010101010101010101010101010101010101",
-				created: FIRST_TICK
-			}
-		]);
+		expect(results).toEqual({
+			entities: [
+				{
+					id: "0404040404040404040404040404040404040404040404040404040404040404",
+					created: SECOND_TICK,
+					updated: SECOND_TICK
+				},
+				{
+					id: "0101010101010101010101010101010101010101010101010101010101010101",
+					created: FIRST_TICK,
+					updated: FIRST_TICK
+				}
+			]
+		});
 	});
 
 	test("Can query for a vertex by alias", async () => {
@@ -4004,36 +4056,28 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		const results = await service.query({ id: "foo" });
-		expect(results.entities).toEqual([
-			{
-				id: "0404040404040404040404040404040404040404040404040404040404040404",
-				created: SECOND_TICK,
-				aliases: [
-					{
-						id: "foo456",
-						created: SECOND_TICK
-					},
-					{
-						id: "bar456",
-						created: SECOND_TICK
-					}
-				]
-			},
-			{
-				id: "0101010101010101010101010101010101010101010101010101010101010101",
-				created: FIRST_TICK,
-				aliases: [
-					{
-						id: "foo123",
-						created: FIRST_TICK
-					},
-					{
-						id: "bar123",
-						created: FIRST_TICK
-					}
-				]
-			}
-		]);
+		expect(results).toEqual({
+			entities: [
+				{
+					id: "0404040404040404040404040404040404040404040404040404040404040404",
+					created: SECOND_TICK,
+					updated: SECOND_TICK,
+					aliases: [
+						{ id: "foo456", created: SECOND_TICK },
+						{ id: "bar456", created: SECOND_TICK }
+					]
+				},
+				{
+					id: "0101010101010101010101010101010101010101010101010101010101010101",
+					created: FIRST_TICK,
+					updated: FIRST_TICK,
+					aliases: [
+						{ id: "foo123", created: FIRST_TICK },
+						{ id: "bar123", created: FIRST_TICK }
+					]
+				}
+			]
+		});
 	});
 
 	test("Can query for a vertex by id or alias", async () => {
@@ -4056,22 +4100,21 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		const results = await service.query({ id: "4" });
-		expect(results.entities).toEqual([
-			{
-				id: "0404040404040404040404040404040404040404040404040404040404040404",
-				created: SECOND_TICK
-			},
-			{
-				id: "0101010101010101010101010101010101010101010101010101010101010101",
-				created: FIRST_TICK,
-				aliases: [
-					{
-						id: "foo4",
-						created: FIRST_TICK
-					}
-				]
-			}
-		]);
+		expect(results).toEqual({
+			entities: [
+				{
+					id: "0404040404040404040404040404040404040404040404040404040404040404",
+					created: SECOND_TICK,
+					updated: SECOND_TICK
+				},
+				{
+					id: "0101010101010101010101010101010101010101010101010101010101010101",
+					created: FIRST_TICK,
+					updated: FIRST_TICK,
+					aliases: [{ id: "foo4", created: FIRST_TICK }]
+				}
+			]
+		});
 	});
 
 	test("Can query for a vertex by mode id", async () => {
@@ -4094,12 +4137,15 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		const results = await service.query({ id: "4", idMode: "id" });
-		expect(results.entities).toEqual([
-			{
-				id: "0404040404040404040404040404040404040404040404040404040404040404",
-				created: SECOND_TICK
-			}
-		]);
+		expect(results).toEqual({
+			entities: [
+				{
+					id: "0404040404040404040404040404040404040404040404040404040404040404",
+					created: SECOND_TICK,
+					updated: SECOND_TICK
+				}
+			]
+		});
 	});
 
 	test("Can query for a vertex by mode alias", async () => {
@@ -4122,18 +4168,21 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		const results = await service.query({ id: "4", idMode: "alias" });
-		expect(results.entities).toEqual([
-			{
-				id: "0101010101010101010101010101010101010101010101010101010101010101",
-				created: FIRST_TICK,
-				aliases: [
-					{
-						id: "foo4",
-						created: FIRST_TICK
-					}
-				]
-			}
-		]);
+		expect(results).toEqual({
+			entities: [
+				{
+					id: "0101010101010101010101010101010101010101010101010101010101010101",
+					created: FIRST_TICK,
+					updated: FIRST_TICK,
+					aliases: [
+						{
+							id: "foo4",
+							created: FIRST_TICK
+						}
+					]
+				}
+			]
+		});
 	});
 
 	test("Can create a vertex with some metadata and a valid schema", async () => {
@@ -4184,6 +4233,8 @@ describe("AuditableItemGraphService", () => {
 
 		expect(changeset).toEqual({
 			hash: "+b1f6l+JkK6vJYOmk84EExH5mxV1lqY5QJ/L+D7UWsk=",
+			signature:
+				"Jgvd1FjWd0VsQdkkqzxaByLkkCCDVuQtDEtskD6o3ZhxZfDx5towOGbYtHc8vz9cj8/v8NED+iBVFSjtHgugCQ==",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			created: FIRST_TICK,
 			userIdentity: TEST_USER_IDENTITY,

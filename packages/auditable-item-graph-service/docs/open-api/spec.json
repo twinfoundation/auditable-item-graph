@@ -1331,6 +1331,10 @@
                         "type": "string",
                         "description": "The hash for the changeset."
                     },
+                    "signature": {
+                        "type": "string",
+                        "description": "The signature for the changeset."
+                    },
                     "immutableStorageId": {
                         "type": "string",
                         "description": "The immutable storage id containing the signature for the changeset."
@@ -1340,6 +1344,7 @@
                     "created",
                     "hash",
                     "patches",
+                    "signature",
                     "userIdentity"
                 ],
                 "additionalProperties": false,

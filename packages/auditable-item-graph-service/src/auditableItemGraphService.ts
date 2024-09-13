@@ -553,7 +553,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		cursor?: string;
 	}> {
 		try {
-			const propertiesToReturn = properties ?? ["id", "created", "aliases", "metadata"];
+			const propertiesToReturn = properties ?? ["id", "created", "updated", "aliases", "metadata"];
 			const conditions = [];
 			const orderProperty = orderBy ?? "created";
 			const orderDirection = orderByDirection ?? SortDirection.Descending;
@@ -737,6 +737,32 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				model.edges.push(edgeModel);
 			}
 		}
+
+		return model;
+	}
+
+	/**
+	 * Map the changeset entity to a model.
+	 * @param changesetEntity The changeset entity.
+	 * @returns The model.
+	 * @internal
+	 */
+	private changesetEntityToModel(
+		changesetEntity: AuditableItemGraphChangeset
+	): IAuditableItemGraphChangeset {
+		const model: IAuditableItemGraphChangeset = {
+			hash: changesetEntity.hash,
+			signature: changesetEntity.signature,
+			immutableStorageId: changesetEntity.immutableStorageId,
+			created: changesetEntity.created,
+			userIdentity: changesetEntity.userIdentity,
+			patches: changesetEntity.patches.map(p => ({
+				op: p.op,
+				path: p.path,
+				from: p.from,
+				value: p.value
+			}))
+		};
 
 		return model;
 	}
@@ -1079,6 +1105,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			// Link the immutable storage id to the changeset
 			await this._changesetStorage.set({
 				hash: Converter.bytesToBase64(changeSetHash),
+				signature: Converter.bytesToBase64(signature),
 				vertexId: updatedModel.id,
 				created: context.now,
 				userIdentity: context.userIdentity,
@@ -1143,7 +1170,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			if (Is.arrayValue(storedChangesets)) {
 				for (let i = 0; i < storedChangesets.length; i++) {
 					const storedChangeset = storedChangesets[i];
-					changesets.push(storedChangeset);
+					changesets.push(this.changesetEntityToModel(storedChangeset));
 
 					const verify: {
 						created: number;
@@ -1176,13 +1203,15 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 						let integrityNodeIdentity: string | undefined;
 						let integrityUserIdentity: string | undefined;
 
-						// Create the signature for the local changeset
-						const changesetSignature = await this._vaultConnector.sign(
+						const signatureVerified = await this._vaultConnector.verify(
 							`${vertex.nodeIdentity}/${this._vaultKeyId}`,
-							verifyHash
+							verifyHash,
+							Converter.base64ToBytes(storedChangeset.signature)
 						);
 
-						if (Is.stringValue(storedChangeset.immutableStorageId)) {
+						if (!signatureVerified) {
+							verify.failure = "invalidChangesetSignature";
+						} else if (Is.stringValue(storedChangeset.immutableStorageId)) {
 							// Get the vc from the immutable data store
 							const verifiableCredentialBytes = await this._integrityImmutableStorage.get(
 								storedChangeset.immutableStorageId
@@ -1211,8 +1240,8 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 								integrityNodeIdentity = DocumentHelper.parse(decodedJwt.header?.kid ?? "").id;
 
 								// Does the immutable signature match the local one we calculated
-								if (credentialData.signature !== Converter.bytesToBase64(changesetSignature)) {
-									verify.failure = "invalidChangesetSignature";
+								if (credentialData.signature !== storedChangeset.signature) {
+									verify.failure = "immutableChangesetSignature";
 								} else if (Is.stringValue(credentialData.integrity)) {
 									const decrypted = await this._vaultConnector.decrypt(
 										`${vertex.nodeIdentity}/${this._vaultKeyId}`,
@@ -1390,6 +1419,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				const changesetJsonLd: IJsonLdNodeObject = {
 					"@type": AuditableItemGraphTypes.Changeset,
 					hash: changeset.hash,
+					signature: changeset.signature,
 					created: new Date(changeset.created).toISOString(),
 					immutableStorageId: changeset.immutableStorageId,
 					userIdentity: changeset.userIdentity

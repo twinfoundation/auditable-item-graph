@@ -53,3 +53,9 @@ Represents auditable item graph  changeset.
 > `readonly` **PatchOperation**: `"https://schema.gtsc.io/aig/AuditableItemGraphPatchOperation"` = `"https://schema.gtsc.io/aig/AuditableItemGraphPatchOperation"`
 
 Represents patch operation.
+
+### Credential
+
+> `readonly` **Credential**: `"https://schema.gtsc.io/aig/AuditableItemGraphPatchCredential"` = `"https://schema.gtsc.io/aig/AuditableItemGraphPatchCredential"`
+
+Represents the immutable credential payload.

@@ -12,11 +12,11 @@ export interface IAuditableItemGraphServiceConfig {
 	vaultKeyId?: string;
 
 	/**
-	 * Enable immutable integrity checking by storing the changes encrypted in immutable storage.
+	 * Enable immutable diffs by storing the changes encrypted in immutable storage.
 	 * This will incur additional costs and should only be enabled if you require immutable integrity checking.
 	 * @default false
 	 */
-	enableIntegrityCheck?: boolean;
+	enableImmutableDiffs?: boolean;
 
 	/**
 	 * The assertion method id to use for the graph.

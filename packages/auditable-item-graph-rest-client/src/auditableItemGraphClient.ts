@@ -11,6 +11,7 @@ import type {
 	IAuditableItemGraphListResponse,
 	IAuditableItemGraphUpdateRequest,
 	IAuditableItemGraphVertex,
+	JsonReturnType,
 	VerifyDepth
 } from "@gtsc/auditable-item-graph-models";
 import { Guards, NotSupportedError } from "@gtsc/core";
@@ -91,17 +92,16 @@ export class AuditableItemGraphClient
 	 * @param responseType The response type to return, defaults to application/json.
 	 * @throws NotFoundError if the vertex is not found.
 	 */
-	public async get(
+	public async get<T extends "json" | "jsonld" = "json">(
 		id: string,
 		options?: {
 			includeDeleted?: boolean;
 			includeChangesets?: boolean;
 			verifySignatureDepth?: VerifyDepth;
 		},
-		// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
-		responseType?: typeof MimeTypes.Json | typeof MimeTypes.JsonLd
+		responseType?: T
 	): Promise<
-		(IAuditableItemGraphVertex | IJsonLdDocument) & {
+		JsonReturnType<T, IAuditableItemGraphVertex, IJsonLdDocument> & {
 			verified?: boolean;
 			verification?: {
 				created: number;
@@ -117,7 +117,7 @@ export class AuditableItemGraphClient
 			IAuditableItemGraphGetResponse
 		>("/:id", "GET", {
 			headers: {
-				Accept: responseType ?? MimeTypes.Json
+				Accept: responseType === "json" ? MimeTypes.Json : MimeTypes.JsonLd
 			},
 			pathParams: {
 				id
@@ -125,7 +125,14 @@ export class AuditableItemGraphClient
 			query: options
 		});
 
-		return response.body;
+		return response.body as JsonReturnType<T, IAuditableItemGraphVertex, IJsonLdDocument> & {
+			verified?: boolean;
+			verification?: {
+				created: number;
+				failure?: string;
+				failureProperties?: { [id: string]: unknown };
+			}[];
+		};
 	}
 
 	/**
@@ -190,9 +197,10 @@ export class AuditableItemGraphClient
 	 * @param properties The properties to return, if not provided defaults to id, created, aliases and metadata.
 	 * @param cursor The cursor to request the next page of entities.
 	 * @param pageSize The maximum number of entities in a page.
+	 * @param responseType The response type to return, defaults to application/json.
 	 * @returns The entities, which can be partial if a limited keys list was provided.
 	 */
-	public async query(
+	public async query<T extends "json" | "jsonld" = "json">(
 		options?: {
 			id?: string;
 			idMode?: "id" | "alias" | "both";
@@ -201,12 +209,13 @@ export class AuditableItemGraphClient
 		orderByDirection?: SortDirection,
 		properties?: (keyof IAuditableItemGraphVertex)[],
 		cursor?: string,
-		pageSize?: number
+		pageSize?: number,
+		responseType?: T
 	): Promise<{
 		/**
 		 * The entities, which can be partial if a limited keys list was provided.
 		 */
-		entities: Partial<IAuditableItemGraphVertex>[];
+		entities: JsonReturnType<T, Partial<IAuditableItemGraphVertex>[], IJsonLdDocument[]>;
 		/**
 		 * An optional cursor, when defined can be used to call find to get more entities.
 		 */
@@ -216,6 +225,9 @@ export class AuditableItemGraphClient
 			IAuditableItemGraphListRequest,
 			IAuditableItemGraphListResponse
 		>("/", "GET", {
+			headers: {
+				Accept: responseType === "json" ? MimeTypes.Json : MimeTypes.JsonLd
+			},
 			query: {
 				id: options?.id,
 				idMode: options?.idMode,
@@ -227,6 +239,15 @@ export class AuditableItemGraphClient
 			}
 		});
 
-		return response.body;
+		return response.body as {
+			/**
+			 * The entities, which can be partial if a limited keys list was provided.
+			 */
+			entities: JsonReturnType<T, Partial<IAuditableItemGraphVertex>[], IJsonLdDocument[]>;
+			/**
+			 * An optional cursor, when defined can be used to call find to get more entities.
+			 */
+			cursor?: string;
+		};
 	}
 }

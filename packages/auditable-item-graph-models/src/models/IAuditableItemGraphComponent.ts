@@ -3,9 +3,13 @@
 import type { IComponent } from "@gtsc/core";
 import type { IJsonLdDocument, IJsonLdNodeObject } from "@gtsc/data-json-ld";
 import type { SortDirection } from "@gtsc/entity";
-import type { MimeTypes } from "@gtsc/web";
 import type { IAuditableItemGraphVertex } from "./IAuditableItemGraphVertex";
 import type { VerifyDepth } from "./verifyDepth";
+
+/**
+ * The return type based on the response type.
+ */
+export type JsonReturnType<T, U, V> = T extends "json" ? U : V;
 
 /**
  * Interface describing an auditable item graph contract.
@@ -17,7 +21,7 @@ export interface IAuditableItemGraphComponent extends IComponent {
 	 * @param aliases Alternative aliases that can be used to identify the vertex.
 	 * @param resources The resources attached to the vertex.
 	 * @param edges The edges connected to the vertex.
-	 * @param identity The identity to create the auditable item graph operation with.
+	 * @param userIdentity The identity to create the auditable item graph operation with.
 	 * @param nodeIdentity The node identity to use for vault operations.
 	 * @returns The id of the new graph item.
 	 */
@@ -37,7 +41,7 @@ export interface IAuditableItemGraphComponent extends IComponent {
 			relationship: string;
 			metadata?: IJsonLdNodeObject;
 		}[],
-		identity?: string,
+		userIdentity?: string,
 		nodeIdentity?: string
 	): Promise<string>;
 
@@ -48,7 +52,7 @@ export interface IAuditableItemGraphComponent extends IComponent {
 	 * @param aliases Alternative aliases that can be used to identify the vertex.
 	 * @param resources The resources attached to the vertex.
 	 * @param edges The edges connected to the vertex.
-	 * @param identity The identity to create the auditable item graph operation with.
+	 * @param userIdentity The identity to create the auditable item graph operation with.
 	 * @param nodeIdentity The node identity to use for vault operations.
 	 * @returns Nothing.
 	 */
@@ -69,7 +73,7 @@ export interface IAuditableItemGraphComponent extends IComponent {
 			relationship: string;
 			metadata?: IJsonLdNodeObject;
 		}[],
-		identity?: string,
+		userIdentity?: string,
 		nodeIdentity?: string
 	): Promise<void>;
 
@@ -84,17 +88,16 @@ export interface IAuditableItemGraphComponent extends IComponent {
 	 * @returns The vertex if found.
 	 * @throws NotFoundError if the vertex is not found.
 	 */
-	get(
+	get<T extends "json" | "jsonld" = "json">(
 		id: string,
 		options?: {
 			includeDeleted?: boolean;
 			includeChangesets?: boolean;
 			verifySignatureDepth?: VerifyDepth;
 		},
-		// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
-		responseType?: typeof MimeTypes.Json | typeof MimeTypes.JsonLd
+		responseType?: T
 	): Promise<
-		(IAuditableItemGraphVertex | IJsonLdDocument) & {
+		JsonReturnType<T, IAuditableItemGraphVertex, IJsonLdDocument> & {
 			verified?: boolean;
 			verification?: {
 				created: number;
@@ -123,9 +126,10 @@ export interface IAuditableItemGraphComponent extends IComponent {
 	 * @param properties The properties to return, if not provided defaults to id, created, aliases and metadata.
 	 * @param cursor The cursor to request the next page of entities.
 	 * @param pageSize The maximum number of entities in a page.
+	 * @param responseType The response type to return, defaults to application/json.
 	 * @returns The entities, which can be partial if a limited keys list was provided.
 	 */
-	query(
+	query<T extends "json" | "jsonld" = "json">(
 		options?: {
 			id?: string;
 			idMode?: "id" | "alias" | "both";
@@ -134,12 +138,13 @@ export interface IAuditableItemGraphComponent extends IComponent {
 		orderByDirection?: SortDirection,
 		properties?: (keyof IAuditableItemGraphVertex)[],
 		cursor?: string,
-		pageSize?: number
+		pageSize?: number,
+		responseType?: T
 	): Promise<{
 		/**
 		 * The entities, which can be partial if a limited keys list was provided.
 		 */
-		entities: Partial<IAuditableItemGraphVertex>[];
+		entities: JsonReturnType<T, Partial<IAuditableItemGraphVertex>[], IJsonLdDocument[]>;
 		/**
 		 * An optional cursor, when defined can be used to call find to get more entities.
 		 */

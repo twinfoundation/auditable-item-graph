@@ -5,6 +5,7 @@ import type { JSONSchema7 } from "json-schema";
 import { AuditableItemGraphTypes } from "../models/auditableItemGraphTypes";
 import AuditableItemGraphAliasSchema from "../schemas/AuditableItemGraphAlias.json";
 import AuditableItemGraphChangesetSchema from "../schemas/AuditableItemGraphChangeset.json";
+import AuditableItemGraphCredentialSchema from "../schemas/AuditableItemGraphCredential.json";
 import AuditableItemGraphEdgeSchema from "../schemas/AuditableItemGraphEdge.json";
 import AuditableItemGraphPatchOperationSchema from "../schemas/AuditableItemGraphPatchOperation.json";
 import AuditableItemGraphResourceSchema from "../schemas/AuditableItemGraphResource.json";
@@ -47,6 +48,11 @@ export class AuditableItemGraphDataTypes {
 			type: AuditableItemGraphTypes.PatchOperation,
 			defaultValue: {},
 			jsonSchema: async () => AuditableItemGraphPatchOperationSchema as JSONSchema7
+		}));
+		DataTypeHandlerFactory.register(AuditableItemGraphTypes.Credential, () => ({
+			type: AuditableItemGraphTypes.Credential,
+			defaultValue: {},
+			jsonSchema: async () => AuditableItemGraphCredentialSchema as JSONSchema7
 		}));
 	}
 }

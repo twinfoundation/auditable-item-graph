@@ -11,7 +11,6 @@ import {
 } from "@gtsc/immutable-storage-connector-entity-storage";
 import { ImmutableStorageConnectorFactory } from "@gtsc/immutable-storage-models";
 import { nameof } from "@gtsc/nameof";
-import { MimeTypes } from "@gtsc/web";
 import {
 	decodeJwtToIntegrity,
 	setupTestEnv,
@@ -78,12 +77,12 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can create an instance", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		expect(service).toBeDefined();
 	});
 
 	test("Can create a vertex with no properties", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		const id = await service.create(
 			undefined,
 			undefined,
@@ -126,17 +125,17 @@ describe("AuditableItemGraphService", () => {
 		);
 		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
 
-		const { signature, integrity } = await decodeJwtToIntegrity(immutableStore[0].data);
+		const immutableIntegrity = await decodeJwtToIntegrity(immutableStore[0].data);
 
-		expect(signature).toEqual(
+		expect(immutableIntegrity.signature).toEqual(
 			"khjWjRusY7cpGQb93waFkgUpzfsI1ynoCVc8JB/jqkxHnSKmPdheW9pDkGkslrVsbE5dGdpwD3wOfemSp8n8Dw=="
 		);
-		expect(integrity.userIdentity).toEqual(TEST_USER_IDENTITY);
-		expect(integrity.patches).toEqual([]);
+		expect(immutableIntegrity.userIdentity).toEqual(TEST_USER_IDENTITY);
+		expect(immutableIntegrity.integrity.patches).toEqual([]);
 	});
 
 	test("Can create a vertex with an alias", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		const id = await service.create(
 			undefined,
 			[{ id: "foo123" }, { id: "bar456" }],
@@ -205,14 +204,15 @@ describe("AuditableItemGraphService", () => {
 		);
 		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
 
-		const { signature, integrity } = await decodeJwtToIntegrity(immutableStore[0].data);
+		const immutableIntegrity = await decodeJwtToIntegrity(immutableStore[0].data);
 
-		expect(signature).toEqual(
+		expect(immutableIntegrity.signature).toEqual(
 			"Upe1JYPqtP0FQ56xYwB5WFlR3CsyQKke55KTRmn0/waQm6/OWCz+HJlfDYR4EuMthR8NHAixrl2iweYLHZ1xAg=="
 		);
+		expect(immutableIntegrity.created).toEqual(FIRST_TICK);
+		expect(immutableIntegrity.userIdentity).toEqual(TEST_USER_IDENTITY);
 
-		expect(integrity).toEqual({
-			created: FIRST_TICK,
+		expect(immutableIntegrity.integrity).toEqual({
 			patches: [
 				{
 					op: "add",
@@ -228,13 +228,12 @@ describe("AuditableItemGraphService", () => {
 						}
 					]
 				}
-			],
-			userIdentity: TEST_USER_IDENTITY
+			]
 		});
 	});
 
 	test("Can create a vertex with some metadata", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
@@ -323,14 +322,14 @@ describe("AuditableItemGraphService", () => {
 		);
 		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
 
-		const { signature, integrity } = await decodeJwtToIntegrity(immutableStore[0].data);
+		const immutableIntegrity = await decodeJwtToIntegrity(immutableStore[0].data);
 
-		expect(signature).toEqual(
+		expect(immutableIntegrity.signature).toEqual(
 			"OS1vlNYFDDFm37RQMH0PcLkcCepVgMnb2/8HBdGSyvJkzaIk3acuqoguFi6ByizCduVV7tK4QJ8jNQSJzC4nAw=="
 		);
-
-		expect(integrity).toEqual({
-			created: FIRST_TICK,
+		expect(immutableIntegrity.created).toEqual(FIRST_TICK);
+		expect(immutableIntegrity.userIdentity).toEqual(TEST_USER_IDENTITY);
+		expect(immutableIntegrity.integrity).toEqual({
 			patches: [
 				{
 					op: "add",
@@ -350,13 +349,12 @@ describe("AuditableItemGraphService", () => {
 						published: "2015-01-25T12:34:56Z"
 					}
 				}
-			],
-			userIdentity: TEST_USER_IDENTITY
+			]
 		});
 	});
 
 	test("Can get a vertex", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
@@ -415,7 +413,7 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can get a vertex include changesets", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
@@ -531,7 +529,7 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can get a vertex include changesets and verify current signature", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
@@ -662,7 +660,7 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can create and update with no changes and verify", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
@@ -815,7 +813,7 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can create and update and verify aliases", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
@@ -1011,13 +1009,13 @@ describe("AuditableItemGraphService", () => {
 		);
 		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
 
-		let credentialSignature = await decodeJwtToIntegrity(immutableStore[0].data);
-		expect(credentialSignature.signature).toEqual(
+		let immutableIntegrity = await decodeJwtToIntegrity(immutableStore[0].data);
+		expect(immutableIntegrity.signature).toEqual(
 			"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA=="
 		);
-
-		expect(credentialSignature.integrity).toEqual({
-			created: FIRST_TICK,
+		expect(immutableIntegrity.created).toEqual(FIRST_TICK);
+		expect(immutableIntegrity.userIdentity).toEqual(TEST_USER_IDENTITY);
+		expect(immutableIntegrity.integrity).toEqual({
 			patches: [
 				{
 					op: "add",
@@ -1051,17 +1049,16 @@ describe("AuditableItemGraphService", () => {
 						}
 					]
 				}
-			],
-			userIdentity: TEST_USER_IDENTITY
+			]
 		});
 
-		credentialSignature = await decodeJwtToIntegrity(immutableStore[1].data);
-		expect(credentialSignature.signature).toEqual(
+		immutableIntegrity = await decodeJwtToIntegrity(immutableStore[1].data);
+		expect(immutableIntegrity.signature).toEqual(
 			"SubKHkO1ET+QRzujzvKu5zTEll055+Ctu1o8Y5iJHTV6wnk0UjYC3GB398tjrVjd0wjOfqOdRgFCMgbLV5wNBg=="
 		);
+		expect(immutableIntegrity.created).toEqual(SECOND_TICK);
 
-		expect(credentialSignature.integrity).toEqual({
-			created: SECOND_TICK,
+		expect(immutableIntegrity.integrity).toEqual({
 			patches: [
 				{
 					op: "add",
@@ -1076,13 +1073,12 @@ describe("AuditableItemGraphService", () => {
 						created: SECOND_TICK
 					}
 				}
-			],
-			userIdentity: TEST_USER_IDENTITY
+			]
 		});
 	});
 
 	test("Can create and update and verify aliases and metadata", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
@@ -1269,13 +1265,13 @@ describe("AuditableItemGraphService", () => {
 		);
 		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
 
-		let credentialSignature = await decodeJwtToIntegrity(immutableStore[0].data);
-		expect(credentialSignature.signature).toEqual(
+		let immutableIntegrity = await decodeJwtToIntegrity(immutableStore[0].data);
+		expect(immutableIntegrity.signature).toEqual(
 			"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA=="
 		);
+		expect(immutableIntegrity.created).toEqual(FIRST_TICK);
 
-		expect(credentialSignature.integrity).toEqual({
-			created: FIRST_TICK,
+		expect(immutableIntegrity.integrity).toEqual({
 			patches: [
 				{
 					op: "add",
@@ -1309,30 +1305,27 @@ describe("AuditableItemGraphService", () => {
 						}
 					]
 				}
-			],
-			userIdentity: TEST_USER_IDENTITY
+			]
 		});
 
-		credentialSignature = await decodeJwtToIntegrity(immutableStore[1].data);
-		expect(credentialSignature.signature).toEqual(
+		immutableIntegrity = await decodeJwtToIntegrity(immutableStore[1].data);
+		expect(immutableIntegrity.signature).toEqual(
 			"qVnHQT1BBzP6d7tYDqBWv40eXTRazEFDr+LkYp19/cAr5J1lSzFz22UTmZ5JdCA0u3P3tkevaslz0uNMJWCyAg=="
 		);
 
-		expect(credentialSignature.integrity).toEqual({
-			created: SECOND_TICK,
+		expect(immutableIntegrity.integrity).toEqual({
 			patches: [
 				{
 					op: "replace",
 					path: "/metadata/object/content",
 					value: "This is a simple note 2"
 				}
-			],
-			userIdentity: TEST_USER_IDENTITY
+			]
 		});
 	});
 
 	test("Can create and update and verify aliases, metadata and resources", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
@@ -1722,7 +1715,6 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		expect(credentialSignature.integrity).toEqual({
-			created: FIRST_TICK,
 			patches: [
 				{
 					op: "add",
@@ -1798,8 +1790,7 @@ describe("AuditableItemGraphService", () => {
 						}
 					]
 				}
-			],
-			userIdentity: TEST_USER_IDENTITY
+			]
 		});
 
 		credentialSignature = await decodeJwtToIntegrity(immutableStore[1].data);
@@ -1808,7 +1799,6 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		expect(credentialSignature.integrity).toEqual({
-			created: SECOND_TICK,
 			patches: [
 				{ op: "replace", path: "/metadata/object/content", value: "This is a simple note 2" },
 				{ op: "add", path: "/resources/0/updated", value: SECOND_TICK },
@@ -1823,13 +1813,12 @@ describe("AuditableItemGraphService", () => {
 					path: "/resources/1/metadata/object/content",
 					value: "This is a simple note resource 11"
 				}
-			],
-			userIdentity: TEST_USER_IDENTITY
+			]
 		});
 	});
 
 	test("Can create and update and verify edges", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		const id = await service.create(
 			undefined,
 			undefined,
@@ -2020,7 +2009,7 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can create and update and verify aliases, metadata, resources and edges", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
@@ -2715,7 +2704,6 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		expect(credentialSignature.integrity).toEqual({
-			created: FIRST_TICK,
 			patches: [
 				{
 					op: "add",
@@ -2814,8 +2802,7 @@ describe("AuditableItemGraphService", () => {
 						}
 					]
 				}
-			],
-			userIdentity: TEST_USER_IDENTITY
+			]
 		});
 
 		credentialSignature = await decodeJwtToIntegrity(immutableStore[1].data);
@@ -2825,7 +2812,6 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		expect(credentialSignature.integrity).toEqual({
-			created: SECOND_TICK,
 			patches: [
 				{ op: "replace", path: "/metadata/object/content", value: "This is a simple note 2" },
 				{ op: "add", path: "/aliases/0/updated", value: SECOND_TICK },
@@ -2864,13 +2850,12 @@ describe("AuditableItemGraphService", () => {
 					path: "/edges/1/metadata/object/content",
 					value: "This is a simple note edge 20"
 				}
-			],
-			userIdentity: TEST_USER_IDENTITY
+			]
 		});
 	});
 
 	test("Can get an updated vertex as JSON-LD", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
@@ -3134,7 +3119,7 @@ describe("AuditableItemGraphService", () => {
 			TEST_NODE_IDENTITY
 		);
 
-		const result = await service.get(id, undefined, MimeTypes.JsonLd);
+		const result = await service.get(id, undefined, "jsonld");
 
 		expect(result).toEqual({
 			"@context": "https://schema.gtsc.io/aig/",
@@ -3305,7 +3290,7 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can get an updated vertex as JSON-LD with changeset", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
@@ -3570,7 +3555,7 @@ describe("AuditableItemGraphService", () => {
 			{
 				includeChangesets: true
 			},
-			MimeTypes.JsonLd
+			"jsonld"
 		);
 
 		expect(result).toEqual({
@@ -3945,7 +3930,7 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can remove the immutable storage for a vertex", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		const id = await service.create(
 			undefined,
 			[{ id: "foo123" }, { id: "bar456" }],
@@ -4001,7 +3986,7 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can query for a vertex by id", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		await service.create(
 			undefined,
 			undefined,
@@ -4037,7 +4022,7 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can query for a vertex by alias", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		await service.create(
 			undefined,
 			[{ id: "foo123" }, { id: "bar123" }],
@@ -4081,7 +4066,7 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can query for a vertex by id or alias", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		await service.create(
 			undefined,
 			[{ id: "foo4" }],
@@ -4118,7 +4103,7 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can query for a vertex by mode id", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		await service.create(
 			undefined,
 			[{ id: "foo4" }],
@@ -4149,7 +4134,7 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can query for a vertex by mode alias", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		await service.create(
 			undefined,
 			[{ id: "foo4" }],
@@ -4186,7 +4171,7 @@ describe("AuditableItemGraphService", () => {
 	});
 
 	test("Can create a vertex with some metadata and a valid schema", async () => {
-		const service = new AuditableItemGraphService({ config: { enableIntegrityCheck: true } });
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 
 		const id = await service.create(
 			{
@@ -4262,14 +4247,13 @@ describe("AuditableItemGraphService", () => {
 		);
 		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
 
-		const { signature, integrity } = await decodeJwtToIntegrity(immutableStore[0].data);
+		const immutableIntegrity = await decodeJwtToIntegrity(immutableStore[0].data);
 
-		expect(signature).toEqual(
+		expect(immutableIntegrity.signature).toEqual(
 			"Jgvd1FjWd0VsQdkkqzxaByLkkCCDVuQtDEtskD6o3ZhxZfDx5towOGbYtHc8vz9cj8/v8NED+iBVFSjtHgugCQ=="
 		);
 
-		expect(integrity).toEqual({
-			created: FIRST_TICK,
+		expect(immutableIntegrity.integrity).toEqual({
 			patches: [
 				{
 					op: "add",
@@ -4282,8 +4266,7 @@ describe("AuditableItemGraphService", () => {
 						published: "2015-01-25T12:34:56Z"
 					}
 				}
-			],
-			userIdentity: TEST_USER_IDENTITY
+			]
 		});
 	});
 });

@@ -14,7 +14,6 @@ export * from "./models/IAuditableItemGraphChangeset";
 export * from "./models/IAuditableItemGraphComponent";
 export * from "./models/IAuditableItemGraphCredential";
 export * from "./models/IAuditableItemGraphEdge";
-export * from "./models/IAuditableItemGraphIntegrity";
 export * from "./models/IAuditableItemGraphPatchOperation";
 export * from "./models/IAuditableItemGraphResource";
 export * from "./models/IAuditableItemGraphVertex";

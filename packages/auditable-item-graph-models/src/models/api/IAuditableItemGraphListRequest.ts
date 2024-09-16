@@ -1,11 +1,21 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import type { SortDirection } from "@gtsc/entity";
+import type { MimeTypes } from "@gtsc/web";
 
 /**
  * Get the a list of the vertices with matching ids or aliases.
  */
 export interface IAuditableItemGraphListRequest {
+	/**
+	 * The headers which can be used to determine the response data type.
+	 */
+	headers?: {
+		// False positive
+		// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
+		Accept: typeof MimeTypes.Json | typeof MimeTypes.JsonLd;
+	};
+
 	/**
 	 * The query parameters.
 	 */

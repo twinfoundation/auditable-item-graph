@@ -44,7 +44,12 @@ export const AuditableItemGraphTypes = {
 	/**
 	 * Represents patch operation.
 	 */
-	PatchOperation: "https://schema.gtsc.io/aig/AuditableItemGraphPatchOperation"
+	PatchOperation: "https://schema.gtsc.io/aig/AuditableItemGraphPatchOperation",
+
+	/**
+	 * Represents the immutable credential payload.
+	 */
+	Credential: "https://schema.gtsc.io/aig/AuditableItemGraphPatchCredential"
 } as const;
 
 /**

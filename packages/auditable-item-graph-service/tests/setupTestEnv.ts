@@ -3,7 +3,7 @@
 import path from "node:path";
 import type {
 	IAuditableItemGraphCredential,
-	IAuditableItemGraphIntegrity
+	IAuditableItemGraphPatchOperation
 } from "@gtsc/auditable-item-graph-models";
 import { Converter, Is, RandomHelper } from "@gtsc/core";
 import { Bip39 } from "@gtsc/crypto";
@@ -100,8 +100,13 @@ export async function setupTestEnv(): Promise<void> {
  * @returns The integrity data.
  */
 export async function decodeJwtToIntegrity(immutableStore: string): Promise<{
+	created: number;
+	userIdentity: string;
+	hash: string;
 	signature: string;
-	integrity: IAuditableItemGraphIntegrity;
+	integrity: {
+		patches: IAuditableItemGraphPatchOperation[];
+	};
 }> {
 	const vcJwt = Converter.bytesToUtf8(Converter.base64ToBytes(immutableStore));
 	const decodedJwt = await Jwt.decode<
@@ -110,7 +115,12 @@ export async function decodeJwtToIntegrity(immutableStore: string): Promise<{
 	>(vcJwt);
 	const credentialData = Is.arrayValue(decodedJwt.payload?.vc?.credentialSubject)
 		? decodedJwt.payload?.vc?.credentialSubject[0]
-		: decodedJwt.payload?.vc?.credentialSubject ?? { signature: "" };
+		: decodedJwt.payload?.vc?.credentialSubject ?? {
+				created: 0,
+				userIdentity: "",
+				hash: "",
+				signature: ""
+			};
 
 	const integrityBytes = await TEST_VAULT_CONNECTOR.decrypt(
 		TEST_VAULT_KEY,
@@ -119,7 +129,10 @@ export async function decodeJwtToIntegrity(immutableStore: string): Promise<{
 	);
 
 	return {
+		created: credentialData.created,
+		userIdentity: credentialData.userIdentity,
+		hash: credentialData.hash,
 		signature: credentialData.signature,
-		integrity: JSON.parse(Converter.bytesToUtf8(integrityBytes)) as IAuditableItemGraphIntegrity
+		integrity: JSON.parse(Converter.bytesToUtf8(integrityBytes))
 	};
 }

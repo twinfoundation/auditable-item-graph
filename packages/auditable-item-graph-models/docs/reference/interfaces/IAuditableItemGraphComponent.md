@@ -94,7 +94,7 @@ Nothing.
 
 ### get()
 
-> **get**\<`T`\>(`id`, `options`?, `responseType`?): `Promise`\<[`JsonReturnType`](../type-aliases/JsonReturnType.md)\<`T`, [`IAuditableItemGraphVertex`](IAuditableItemGraphVertex.md), `IJsonLdDocument`\> & `object`\>
+> **get**\<`T`\>(`id`, `options`?, `responseType`?): `Promise`\<[`JsonReturnType`](../type-aliases/JsonReturnType.md)\<`T`, [`IAuditableItemGraphVertex`](IAuditableItemGraphVertex.md) & `object`, `IJsonLdDocument`\>\>
 
 Get a graph vertex.
 
@@ -130,7 +130,7 @@ The response type to return, defaults to application/json.
 
 #### Returns
 
-`Promise`\<[`JsonReturnType`](../type-aliases/JsonReturnType.md)\<`T`, [`IAuditableItemGraphVertex`](IAuditableItemGraphVertex.md), `IJsonLdDocument`\> & `object`\>
+`Promise`\<[`JsonReturnType`](../type-aliases/JsonReturnType.md)\<`T`, [`IAuditableItemGraphVertex`](IAuditableItemGraphVertex.md) & `object`, `IJsonLdDocument`\>\>
 
 The vertex if found.
 
@@ -150,7 +150,7 @@ Remove the immutable storage for an item.
 
 • **id**: `string`
 
-The id of the vertex to get.
+The id of the vertex to remove the storage from.
 
 • **nodeIdentity?**: `string`
 
@@ -170,7 +170,7 @@ NotFoundError if the vertex is not found.
 
 ### query()
 
-> **query**\<`T`\>(`options`?, `orderBy`?, `orderByDirection`?, `properties`?, `cursor`?, `pageSize`?, `responseType`?): `Promise`\<`object`\>
+> **query**\<`T`\>(`options`?, `orderBy`?, `orderByDirection`?, `properties`?, `cursor`?, `pageSize`?, `responseType`?): `Promise`\<[`JsonReturnType`](../type-aliases/JsonReturnType.md)\<`T`, `object`, `IJsonLdDocument`\>\>
 
 Query the graph for vertices.
 
@@ -218,18 +218,6 @@ The response type to return, defaults to application/json.
 
 #### Returns
 
-`Promise`\<`object`\>
+`Promise`\<[`JsonReturnType`](../type-aliases/JsonReturnType.md)\<`T`, `object`, `IJsonLdDocument`\>\>
 
 The entities, which can be partial if a limited keys list was provided.
-
-##### entities
-
-> **entities**: [`JsonReturnType`](../type-aliases/JsonReturnType.md)\<`T`, `Partial`\<[`IAuditableItemGraphVertex`](IAuditableItemGraphVertex.md)\>[], `IJsonLdDocument`[]\>
-
-The entities, which can be partial if a limited keys list was provided.
-
-##### cursor?
-
-> `optional` **cursor**: `string`
-
-An optional cursor, when defined can be used to call find to get more entities.

@@ -11,8 +11,6 @@ export interface IAuditableItemGraphGetRequest {
 	 * The headers which can be used to determine the response data type.
 	 */
 	headers?: {
-		// False positive
-		// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
 		Accept: typeof MimeTypes.Json | typeof MimeTypes.JsonLd;
 	};
 

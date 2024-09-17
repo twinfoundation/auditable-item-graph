@@ -28,7 +28,7 @@ The vault connector type, defaults to "vault".
 
 The entity storage for vertices, defaults to "auditable-item-graph-vertex".
 
-• **options.integrityImmutableStorageType?**: `string`
+• **options.immutableStorageType?**: `string`
 
 The immutable storage for audit trail, defaults to "auditable-item-graph".
 
@@ -116,7 +116,7 @@ The id of the new graph item.
 
 ### get()
 
-> **get**\<`T`\>(`id`, `options`?, `responseType`?): `Promise`\<`JsonReturnType`\<`T`, `IAuditableItemGraphVertex`, `IJsonLdDocument`\> & `object`\>
+> **get**\<`T`\>(`id`, `options`?, `responseType`?): `Promise`\<`JsonReturnType`\<`T`, `IAuditableItemGraphVertex` & `object`, `IJsonLdDocument`\>\>
 
 Get a graph vertex.
 
@@ -152,7 +152,7 @@ The response type to return, defaults to application/json.
 
 #### Returns
 
-`Promise`\<`JsonReturnType`\<`T`, `IAuditableItemGraphVertex`, `IJsonLdDocument`\> & `object`\>
+`Promise`\<`JsonReturnType`\<`T`, `IAuditableItemGraphVertex` & `object`, `IJsonLdDocument`\>\>
 
 The vertex if found.
 
@@ -248,7 +248,7 @@ NotFoundError if the vertex is not found.
 
 ### query()
 
-> **query**\<`T`\>(`options`?, `orderBy`?, `orderByDirection`?, `properties`?, `cursor`?, `pageSize`?, `responseType`?): `Promise`\<`object`\>
+> **query**\<`T`\>(`options`?, `orderBy`?, `orderByDirection`?, `properties`?, `cursor`?, `pageSize`?, `responseType`?): `Promise`\<`JsonReturnType`\<`T`, `object`, `IJsonLdDocument`\>\>
 
 Query the graph for vertices.
 
@@ -296,21 +296,9 @@ The response type to return, defaults to application/json.
 
 #### Returns
 
-`Promise`\<`object`\>
+`Promise`\<`JsonReturnType`\<`T`, `object`, `IJsonLdDocument`\>\>
 
 The entities, which can be partial if a limited keys list was provided.
-
-##### entities
-
-> **entities**: `JsonReturnType`\<`T`, `Partial`\<`IAuditableItemGraphVertex`\>[], `IJsonLdDocument`[]\>
-
-The entities, which can be partial if a limited keys list was provided.
-
-##### cursor?
-
-> `optional` **cursor**: `string`
-
-An optional cursor, when defined can be used to call find to get more entities.
 
 #### Implementation of
 

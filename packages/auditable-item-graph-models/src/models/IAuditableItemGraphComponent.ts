@@ -3,6 +3,7 @@
 import type { IComponent } from "@gtsc/core";
 import type { IJsonLdDocument, IJsonLdNodeObject } from "@gtsc/data-json-ld";
 import type { SortDirection } from "@gtsc/entity";
+import type { IAuditableItemGraphVerification } from "./IAuditableItemGraphVerification";
 import type { IAuditableItemGraphVertex } from "./IAuditableItemGraphVertex";
 import type { VerifyDepth } from "./verifyDepth";
 
@@ -97,19 +98,19 @@ export interface IAuditableItemGraphComponent extends IComponent {
 		},
 		responseType?: T
 	): Promise<
-		JsonReturnType<T, IAuditableItemGraphVertex, IJsonLdDocument> & {
-			verified?: boolean;
-			verification?: {
-				created: number;
-				failure?: string;
-				failureProperties?: { [id: string]: unknown };
-			}[];
-		}
+		JsonReturnType<
+			T,
+			IAuditableItemGraphVertex & {
+				verified?: boolean;
+				changesetsVerification?: IAuditableItemGraphVerification[];
+			},
+			IJsonLdDocument
+		>
 	>;
 
 	/**
 	 * Remove the immutable storage for an item.
-	 * @param id The id of the vertex to get.
+	 * @param id The id of the vertex to remove the storage from.
 	 * @param nodeIdentity The node identity to use for vault operations.
 	 * @returns Nothing.
 	 * @throws NotFoundError if the vertex is not found.
@@ -140,14 +141,20 @@ export interface IAuditableItemGraphComponent extends IComponent {
 		cursor?: string,
 		pageSize?: number,
 		responseType?: T
-	): Promise<{
-		/**
-		 * The entities, which can be partial if a limited keys list was provided.
-		 */
-		entities: JsonReturnType<T, Partial<IAuditableItemGraphVertex>[], IJsonLdDocument[]>;
-		/**
-		 * An optional cursor, when defined can be used to call find to get more entities.
-		 */
-		cursor?: string;
-	}>;
+	): Promise<
+		JsonReturnType<
+			T,
+			{
+				/**
+				 * The entities, which can be partial if a limited keys list was provided.
+				 */
+				entities: Partial<IAuditableItemGraphVertex>[];
+				/**
+				 * An optional cursor, when defined can be used to call find to get more entities.
+				 */
+				cursor?: string;
+			},
+			IJsonLdDocument
+		>
+	>;
 }

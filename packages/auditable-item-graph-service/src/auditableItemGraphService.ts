@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0.
 import {
 	AuditableItemGraphTypes,
+	AuditableItemGraphVerificationState,
 	VerifyDepth,
 	type IAuditableItemGraphAlias,
 	type IAuditableItemGraphChangeset,
@@ -10,6 +11,7 @@ import {
 	type IAuditableItemGraphEdge,
 	type IAuditableItemGraphPatchOperation,
 	type IAuditableItemGraphResource,
+	type IAuditableItemGraphVerification,
 	type IAuditableItemGraphVertex,
 	type JsonReturnType
 } from "@gtsc/auditable-item-graph-models";
@@ -107,7 +109,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * The immutable storage for the integrity data.
 	 * @internal
 	 */
-	private readonly _integrityImmutableStorage: IImmutableStorageConnector;
+	private readonly _immutableStorage: IImmutableStorageConnector;
 
 	/**
 	 * The identity connector for generating verifiable credentials.
@@ -140,13 +142,13 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @param options.vaultConnectorType The vault connector type, defaults to "vault".
 	 * @param options.vertexEntityStorageType The entity storage for vertices, defaults to "auditable-item-graph-vertex".
 	 * @param options.changesetEntityStorageType The entity storage for changesets, defaults to "auditable-item-graph-changeset".
-	 * @param options.integrityImmutableStorageType The immutable storage for audit trail, defaults to "auditable-item-graph".
+	 * @param options.immutableStorageType The immutable storage for audit trail, defaults to "auditable-item-graph".
 	 * @param options.identityConnectorType The identity connector type, defaults to "identity".
 	 */
 	constructor(options?: {
 		vaultConnectorType?: string;
 		vertexEntityStorageType?: string;
-		integrityImmutableStorageType?: string;
+		immutableStorageType?: string;
 		changesetEntityStorageType?: string;
 		identityConnectorType?: string;
 		config?: IAuditableItemGraphServiceConfig;
@@ -162,8 +164,8 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				StringHelper.kebabCase(nameof<AuditableItemGraphChangeset>())
 		);
 
-		this._integrityImmutableStorage = ImmutableStorageConnectorFactory.get(
-			options?.integrityImmutableStorageType ?? "auditable-item-graph"
+		this._immutableStorage = ImmutableStorageConnectorFactory.get(
+			options?.immutableStorageType ?? "auditable-item-graph"
 		);
 
 		this._identityConnector = IdentityConnectorFactory.get(
@@ -267,14 +269,14 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		},
 		responseType?: T
 	): Promise<
-		JsonReturnType<T, IAuditableItemGraphVertex, IJsonLdDocument> & {
-			verified?: boolean;
-			verification?: {
-				created: number;
-				failure?: string;
-				failureProperties?: { [id: string]: unknown };
-			}[];
-		}
+		JsonReturnType<
+			T,
+			IAuditableItemGraphVertex & {
+				verified?: boolean;
+				changesetsVerification?: IAuditableItemGraphVerification[];
+			},
+			IJsonLdDocument
+		>
 	> {
 		Guards.stringValue(this.CLASS_NAME, nameof(id), id);
 
@@ -301,13 +303,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			const verifySignatureDepth = options?.verifySignatureDepth ?? "none";
 
 			let verified: boolean | undefined;
-			let verification:
-				| {
-						created: number;
-						failure?: string;
-						failureProperties?: { [id: string]: unknown };
-				  }[]
-				| undefined;
+			let changesetsVerification: IAuditableItemGraphVerification[] | undefined;
 			let changesets: IAuditableItemGraphChangeset[] | undefined;
 
 			if (
@@ -317,7 +313,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			) {
 				const verifyResult = await this.verifyChangesets(vertexModel, verifySignatureDepth);
 				verified = verifyResult.verified;
-				verification = verifyResult.verification;
+				changesetsVerification = verifyResult.changesetsVerification;
 				changesets = verifyResult.changesets;
 			}
 
@@ -346,33 +342,37 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				vertexModel.changesets = changesets;
 			}
 
-			let result: JsonReturnType<T, IAuditableItemGraphVertex, IJsonLdDocument> & {
-				verified?: boolean;
-				verification?: {
-					created: number;
-					failure?: string;
-					failureProperties?: { [id: string]: unknown };
-				}[];
-			};
-
 			if (responseType === "jsonld") {
-				result = (await JsonLdProcessor.compact(this.modelToJsonLd(vertexModel), {
+				const vertexJsonLd = this.modelToJsonLd(vertexModel);
+				if (verifySignatureDepth !== VerifyDepth.None) {
+					vertexJsonLd.verified = verified;
+					vertexJsonLd.changesetsVerification = (changesetsVerification ?? []).map(v =>
+						this.modelVerificationToJsonLd(v)
+					);
+				}
+
+				const compacted = await JsonLdProcessor.compact(vertexJsonLd, {
 					"@context": AuditableItemGraphTypes.ContextUri
-				})) as JsonReturnType<T, IAuditableItemGraphVertex, IJsonLdDocument> & {
-					verified?: boolean;
-					verification?: {
-						created: number;
-						failure?: string;
-						failureProperties?: { [id: string]: unknown };
-					}[];
-				};
-			} else {
-				result = vertexModel;
+				});
+
+				return compacted as JsonReturnType<
+					T,
+					IAuditableItemGraphVertex & {
+						verified?: boolean;
+						changesetsVerification?: IAuditableItemGraphVerification[];
+					},
+					IJsonLdDocument
+				>;
 			}
+
+			const result: JsonReturnType<T, IAuditableItemGraphVertex, IJsonLdDocument> & {
+				verified?: boolean;
+				changesetsVerification?: IAuditableItemGraphVerification[];
+			} = vertexModel;
 
 			if (verifySignatureDepth !== VerifyDepth.None) {
 				result.verified = verified;
-				result.verification = verification;
+				result.changesetsVerification = changesetsVerification;
 			}
 
 			return result;
@@ -513,10 +513,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 				for (const changeset of changesetsResult.entities) {
 					if (Is.stringValue(changeset.immutableStorageId)) {
-						await this._integrityImmutableStorage.remove(
-							nodeIdentity,
-							changeset.immutableStorageId
-						);
+						await this._immutableStorage.remove(nodeIdentity, changeset.immutableStorageId);
 						delete changeset.immutableStorageId;
 						await this._changesetStorage.set(changeset as AuditableItemGraphChangeset);
 					}
@@ -551,16 +548,22 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		cursor?: string,
 		pageSize?: number,
 		responseType?: T
-	): Promise<{
-		/**
-		 * The entities, which can be partial if a limited keys list was provided.
-		 */
-		entities: JsonReturnType<T, Partial<IAuditableItemGraphVertex>[], IJsonLdDocument[]>;
-		/**
-		 * An optional cursor, when defined can be used to call find to get more entities.
-		 */
-		cursor?: string;
-	}> {
+	): Promise<
+		JsonReturnType<
+			T,
+			{
+				/**
+				 * The entities, which can be partial if a limited keys list was provided.
+				 */
+				entities: Partial<IAuditableItemGraphVertex>[];
+				/**
+				 * An optional cursor, when defined can be used to call find to get more entities.
+				 */
+				cursor?: string;
+			},
+			IJsonLdDocument
+		>
+	> {
 		try {
 			const propertiesToReturn = properties ?? ["id", "created", "updated", "aliases", "metadata"];
 			const conditions = [];
@@ -608,29 +611,43 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				pageSize
 			);
 
-			let models: IAuditableItemGraphVertex[] | IJsonLdDocument[] = results.entities.map(e =>
+			const models: IAuditableItemGraphVertex[] | IJsonLdDocument[] = results.entities.map(e =>
 				this.vertexEntityToModel(e as AuditableItemGraphVertex)
 			);
 
 			if (responseType === "jsonld") {
-				const jsonLdDocuments = models.map(m => this.modelToJsonLd(m));
-				models = await Promise.all(
-					jsonLdDocuments.map(async d =>
-						JsonLdProcessor.compact(d, {
-							"@context": AuditableItemGraphTypes.ContextUri
-						})
-					)
-				);
+				const jsonLdEntities = models.map(m => this.modelToJsonLd(m));
+
+				const jsonDocument: IJsonLdNodeObject = {
+					"@context": AuditableItemGraphTypes.ContextUri,
+					"@graph": jsonLdEntities,
+					cursor: results.cursor
+				};
+
+				const compacted = await JsonLdProcessor.compact(jsonDocument, {
+					"@context": AuditableItemGraphTypes.ContextUri
+				});
+				return compacted as JsonReturnType<
+					T,
+					{
+						entities: Partial<IAuditableItemGraphVertex>[];
+						cursor?: string;
+					},
+					IJsonLdDocument
+				>;
 			}
 
 			return {
-				entities: models as JsonReturnType<
-					T,
-					Partial<IAuditableItemGraphVertex>[],
-					IJsonLdDocument[]
-				>,
+				entities: models,
 				cursor: results.cursor
-			};
+			} as JsonReturnType<
+				T,
+				{
+					entities: Partial<IAuditableItemGraphVertex>[];
+					cursor?: string;
+				},
+				IJsonLdDocument
+			>;
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "queryingFailed", undefined, error);
 		}
@@ -1113,13 +1130,13 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			const verifiableCredential = await this._identityConnector.createVerifiableCredential(
 				context.nodeIdentity,
 				`${context.nodeIdentity}#${this._assertionMethodId}`,
-				undefined,
+				new Urn(AuditableItemGraphService.NAMESPACE, originalModel.id).toString(),
 				AuditableItemGraphTypes.Credential,
 				credentialData
 			);
 
 			// Store the verifiable credential immutably
-			const immutableStorageId = await this._integrityImmutableStorage.store(
+			const immutableStorageId = await this._immutableStorage.store(
 				context.nodeIdentity,
 				Converter.utf8ToBytes(verifiableCredential.jwt)
 			);
@@ -1153,19 +1170,11 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		verifySignatureDepth: VerifyDepth
 	): Promise<{
 		verified?: boolean;
-		verification?: {
-			created: number;
-			failure?: string;
-			failureProperties?: { [id: string]: unknown };
-		}[];
+		changesetsVerification?: IAuditableItemGraphVerification[];
 		changesets?: IAuditableItemGraphChangeset[];
 	}> {
 		let verified: boolean = true;
-		const verification: {
-			created: number;
-			failure?: string;
-			failureProperties?: { [id: string]: unknown };
-		}[] = [];
+		const changesetsVerification: IAuditableItemGraphVerification[] = [];
 		const changesets: IAuditableItemGraphChangeset[] = [];
 
 		let changesetsResult;
@@ -1194,27 +1203,24 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 					const storedChangeset = storedChangesets[i];
 					changesets.push(this.changesetEntityToModel(storedChangeset));
 
-					const verify: {
-						created: number;
-						failure?: string;
-						failureProperties?: { [id: string]: unknown };
-					} = {
-						created: storedChangeset.created
+					const verify: IAuditableItemGraphVerification = {
+						state: AuditableItemGraphVerificationState.Ok,
+						epoch: storedChangeset.created
 					};
 
-					verification.push(verify);
+					changesetsVerification.push(verify);
 
-					const verifyHash = this.calculateChangesetHash(
+					const calculatedHash = this.calculateChangesetHash(
 						storedChangeset.created,
 						storedChangeset.userIdentity,
 						storedChangeset.patches,
 						lastHash
 					);
 
-					lastHash = verifyHash;
+					lastHash = calculatedHash;
 
-					if (Converter.bytesToBase64(verifyHash) !== storedChangeset.hash) {
-						verify.failure = "invalidChangesetHash";
+					if (Converter.bytesToBase64(calculatedHash) !== storedChangeset.hash) {
+						verify.state = AuditableItemGraphVerificationState.HashMismatch;
 					} else if (
 						verifySignatureDepth === VerifyDepth.All ||
 						(verifySignatureDepth === VerifyDepth.Current &&
@@ -1227,15 +1233,15 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 						const signatureVerified = await this._vaultConnector.verify(
 							`${vertex.nodeIdentity}/${this._vaultKeyId}`,
-							verifyHash,
+							calculatedHash,
 							Converter.base64ToBytes(storedChangeset.signature)
 						);
 
 						if (!signatureVerified) {
-							verify.failure = "invalidChangesetSignature";
+							verify.state = AuditableItemGraphVerificationState.SignatureNotVerified;
 						} else if (Is.stringValue(storedChangeset.immutableStorageId)) {
 							// Get the vc from the immutable data store
-							const verifiableCredentialBytes = await this._integrityImmutableStorage.get(
+							const verifiableCredentialBytes = await this._immutableStorage.get(
 								storedChangeset.immutableStorageId
 							);
 							const verifiableCredentialJwt = Converter.bytesToUtf8(verifiableCredentialBytes);
@@ -1248,7 +1254,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 								);
 
 							if (verificationResult.revoked) {
-								verify.failure = "changesetCredentialRevoked";
+								verify.state = AuditableItemGraphVerificationState.CredentialRevoked;
 							} else {
 								// Credential is not revoked so check the signature
 								const credentialData = Is.array(
@@ -1265,9 +1271,12 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 								immutableNodeIdentity = DocumentHelper.parse(decodedJwt.header?.kid ?? "").id;
 								immutableUserIdentity = credentialData.userIdentity;
 
-								// Does the immutable signature match the local one we calculated
-								if (credentialData.signature !== storedChangeset.signature) {
-									verify.failure = "immutableChangesetSignature";
+								if (credentialData.hash !== storedChangeset.hash) {
+									// Does the immutable hash match the local one we calculated
+									verify.state = AuditableItemGraphVerificationState.ImmutableHashMismatch;
+								} else if (credentialData.signature !== storedChangeset.signature) {
+									// Does the immutable signature match the local one we calculated
+									verify.state = AuditableItemGraphVerificationState.ImmutableSignatureMismatch;
 								} else if (Is.stringValue(credentialData.integrity)) {
 									const decrypted = await this._vaultConnector.decrypt(
 										`${vertex.nodeIdentity}/${this._vaultKeyId}`,
@@ -1280,7 +1289,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 										patches: storedChangeset.patches
 									};
 									if (canonical !== JsonHelper.canonicalize(calculatedIntegrity)) {
-										verify.failure = "invalidChangesetCanonical";
+										verify.state = AuditableItemGraphVerificationState.IntegrityDataMismatch;
 									}
 									const immutableIntegrity: { patches: IAuditableItemGraphPatchOperation[] } =
 										JSON.parse(canonical);
@@ -1290,14 +1299,11 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 						}
 
 						// If there was a failure add some additional information
-						if (Is.stringValue(verify.failure)) {
-							verify.failureProperties = {
-								hash: storedChangeset.hash,
-								epoch: storedChangeset.created,
-								integrityPatches: immutablePatches,
-								integrityNodeIdentity: immutableNodeIdentity,
-								integrityUserIdentity: immutableUserIdentity
-							};
+						if (verify.state !== AuditableItemGraphVerificationState.Ok) {
+							verify.hash = storedChangeset.hash;
+							verify.integrityPatches = immutablePatches;
+							verify.integrityNodeIdentity = immutableNodeIdentity;
+							verify.integrityUserIdentity = immutableUserIdentity;
 							verified = false;
 						}
 					}
@@ -1307,7 +1313,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 		return {
 			verified,
-			verification,
+			changesetsVerification,
 			changesets
 		};
 	}
@@ -1351,8 +1357,8 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @returns The JSON-LD document.
 	 * @internal
 	 */
-	private modelToJsonLd(model: IAuditableItemGraphVertex): IJsonLdDocument {
-		const doc: IJsonLdNodeObject = {
+	private modelToJsonLd(model: IAuditableItemGraphVertex): IJsonLdNodeObject {
+		const nodeObject: IJsonLdNodeObject = {
 			"@context": AuditableItemGraphTypes.ContextJsonld,
 			"@type": AuditableItemGraphTypes.Vertex,
 			id: model.id,
@@ -1361,10 +1367,10 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		};
 
 		if (Is.integer(model.updated)) {
-			doc.updated = new Date(model.updated).toISOString();
+			nodeObject.updated = new Date(model.updated).toISOString();
 		}
 		if (Is.objectValue(model.metadata)) {
-			doc.metadata = model.metadata;
+			nodeObject.metadata = model.metadata;
 		}
 
 		if (Is.arrayValue(model.aliases)) {
@@ -1389,7 +1395,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				}
 				aliasesJsonld.push(aliasJsonLd);
 			}
-			doc.aliases = aliasesJsonld;
+			nodeObject.aliases = aliasesJsonld;
 		}
 
 		if (Is.arrayValue(model.resources)) {
@@ -1411,7 +1417,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				}
 				resourcesJsonld.push(resourceJsonLd);
 			}
-			doc.resources = resourcesJsonld;
+			nodeObject.resources = resourcesJsonld;
 		}
 
 		if (Is.arrayValue(model.edges)) {
@@ -1434,7 +1440,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				}
 				edgesJsonld.push(resourceJsonLd);
 			}
-			doc.edges = edgesJsonld;
+			nodeObject.edges = edgesJsonld;
 		}
 
 		if (Is.arrayValue(model.changesets)) {
@@ -1463,9 +1469,25 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				}
 				changesetsJsonld.push(changesetJsonLd);
 			}
-			doc.changesets = changesetsJsonld;
+			nodeObject.changesets = changesetsJsonld;
 		}
 
-		return doc;
+		return nodeObject;
+	}
+
+	/**
+	 * Convert a model for verification to a JSON-LD document.
+	 * @param model The model to convert.
+	 * @returns The JSON-LD document.
+	 * @internal
+	 */
+	private modelVerificationToJsonLd(model: IAuditableItemGraphVerification): IJsonLdNodeObject {
+		const nodeObject: IJsonLdNodeObject = {
+			"@context": AuditableItemGraphTypes.ContextJsonld,
+			"@type": AuditableItemGraphTypes.Verification,
+			...model
+		};
+
+		return nodeObject;
 	}
 }

@@ -354,7 +354,7 @@ export function generateRestRoutesAuditableItemGraph(
 				type: nameof<IAuditableItemGraphListResponse>(),
 				examples: [
 					{
-						id: "auditableItemGraphGetResponseExample",
+						id: "auditableItemGraphListResponseExample",
 						response: {
 							body: {
 								entities: [
@@ -369,6 +369,43 @@ export function generateRestRoutesAuditableItemGraph(
 									}
 								],
 								cursor: "1"
+							}
+						}
+					}
+				]
+			},
+			{
+				type: nameof<IAuditableItemGraphListResponse>(),
+				mimeType: MimeTypes.JsonLd,
+				examples: [
+					{
+						id: "auditableItemGraphJsonLdListResponseExample",
+						response: {
+							headers: {
+								[HeaderTypes.ContentType]: MimeTypes.JsonLd
+							},
+							body: {
+								"@context": "https://schema.gtsc.io/aig/",
+								"@graph": [
+									{
+										"@type": "vertex",
+										id: "aig:1234567890",
+										created: "2024-08-22T11:55:16.271Z",
+										updated: "2024-08-22T11:55:16.271Z",
+										metadata: {
+											"@context": "http://schema.org/",
+											"@type": "Note",
+											content: "This is a simple note"
+										},
+										aliases: [
+											{
+												"@type": "alias",
+												created: "2024-08-22T11:55:16.271Z",
+												id: "tst:1234567890"
+											}
+										]
+									}
+								]
 							}
 						}
 					}

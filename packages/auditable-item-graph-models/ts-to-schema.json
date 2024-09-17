@@ -8,7 +8,9 @@
 		"IAuditableItemGraphEdge",
 		"IAuditableItemGraphChangeset",
 		"IAuditableItemGraphPatchOperation",
-		"IAuditableItemGraphCredential"
+		"IAuditableItemGraphCredential",
+		"IAuditableItemGraphVerification",
+		"AuditableItemGraphVerificationState"
 	],
 	"externalReferences": {
 		"IJsonLd(.*)": "https://schema.gtsc.io/json-ld/JsonLd$1"

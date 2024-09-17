@@ -59,3 +59,15 @@ Represents patch operation.
 > `readonly` **Credential**: `"https://schema.gtsc.io/aig/AuditableItemGraphPatchCredential"` = `"https://schema.gtsc.io/aig/AuditableItemGraphPatchCredential"`
 
 Represents the immutable credential payload.
+
+### Verification
+
+> `readonly` **Verification**: `"https://schema.gtsc.io/aig/AuditableItemGraphVerification"` = `"https://schema.gtsc.io/aig/AuditableItemGraphVerification"`
+
+Represents auditable item stream verification.
+
+### VerificationState
+
+> `readonly` **VerificationState**: `"https://schema.gtsc.io/aig/AuditableItemGraphVerificationState"` = `"https://schema.gtsc.io/aig/AuditableItemGraphVerificationState"`
+
+Represents auditable item stream verification state.

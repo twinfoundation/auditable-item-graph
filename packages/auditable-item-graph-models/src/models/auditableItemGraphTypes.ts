@@ -49,7 +49,17 @@ export const AuditableItemGraphTypes = {
 	/**
 	 * Represents the immutable credential payload.
 	 */
-	Credential: "https://schema.gtsc.io/aig/AuditableItemGraphPatchCredential"
+	Credential: "https://schema.gtsc.io/aig/AuditableItemGraphPatchCredential",
+
+	/**
+	 * Represents auditable item stream verification.
+	 */
+	Verification: "https://schema.gtsc.io/aig/AuditableItemGraphVerification",
+
+	/**
+	 * Represents auditable item stream verification state.
+	 */
+	VerificationState: "https://schema.gtsc.io/aig/AuditableItemGraphVerificationState"
 } as const;
 
 /**

@@ -607,7 +607,7 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			verified: true,
-			verification: [{ created: FIRST_TICK }]
+			changesetsVerification: [{ state: "ok", epoch: FIRST_TICK }]
 		});
 
 		const changesetStore = changesetStorage.getStore();
@@ -656,6 +656,141 @@ describe("AuditableItemGraphService", () => {
 				"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+		});
+	});
+
+	test("Can get a vertex include changesets and verify current signature as JSON-LD", async () => {
+		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
+		const id = await service.create(
+			{
+				"@context": "https://www.w3.org/ns/activitystreams",
+				"@type": "Create",
+				actor: {
+					"@type": "Person",
+					"@id": "acct:person@example.org",
+					name: "Person"
+				},
+				object: {
+					"@type": "Note",
+					content: "This is a simple note"
+				},
+				published: "2015-01-25T12:34:56Z"
+			},
+			[
+				{ id: "foo123", format: "type1" },
+				{ id: "bar456", format: "type2" }
+			],
+			undefined,
+			undefined,
+			TEST_USER_IDENTITY,
+			TEST_NODE_IDENTITY
+		);
+		expect(id.startsWith("aig:")).toEqual(true);
+
+		const result = await service.get(
+			id,
+			{
+				includeChangesets: true,
+				verifySignatureDepth: VerifyDepth.Current
+			},
+			"jsonld"
+		);
+
+		expect(result).toEqual({
+			"@context": "https://schema.gtsc.io/aig/",
+			"@type": "vertex",
+			aliases: [
+				{
+					"@type": "alias",
+					created: "2024-08-22T11:55:16.271Z",
+					id: "foo123",
+					format: "type1"
+				},
+				{
+					"@type": "alias",
+					created: "2024-08-22T11:55:16.271Z",
+					id: "bar456",
+					format: "type2"
+				}
+			],
+			changesets: [
+				{
+					"@type": "changeset",
+					patches: [
+						{
+							"@type": "patch",
+							patchOperation: "add",
+							patchPath: "/metadata",
+							patchValue: {
+								"@context": "https://www.w3.org/ns/activitystreams",
+								"@type": "Create",
+								actor: {
+									"@type": "Person",
+									"@id": "acct:person@example.org",
+									name: "Person"
+								},
+								object: {
+									"@type": "Note",
+									content: "This is a simple note"
+								},
+								published: "2015-01-25T12:34:56Z"
+							}
+						},
+						{
+							"@type": "patch",
+							patchOperation: "add",
+							patchPath: "/aliases",
+							patchValue: [
+								{
+									id: "foo123",
+									format: "type1",
+									created: FIRST_TICK
+								},
+								{
+									id: "bar456",
+									format: "type2",
+									created: FIRST_TICK
+								}
+							]
+						}
+					],
+					created: "2024-08-22T11:55:16.271Z",
+					hash: "NstRDrU726YzvJPr4+xOjyAlcnOEOFKR/+bCWntHbOQ=",
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
+					signature:
+						"sgAI1NMU7HrzyqnT7FSdGAfEVAzLTSDmH93UHU118xhIK+K+7nlqXpw3igGCifQl7XLdiYHqpCQN2Go0qlGDCg==",
+					userIdentity: TEST_USER_IDENTITY
+				}
+			],
+			changesetsVerification: [
+				{
+					"@type": "verification",
+					epoch: FIRST_TICK,
+					state: "ok"
+				}
+			],
+			created: "2024-08-22T11:55:16.271Z",
+			id: "0101010101010101010101010101010101010101010101010101010101010101",
+			metadata: {
+				"@type": "https://www.w3.org/ns/activitystreams#Create",
+				"https://www.w3.org/ns/activitystreams#actor": {
+					"@id": "acct:person@example.org",
+					"@type": "https://www.w3.org/ns/activitystreams#Person",
+					"https://www.w3.org/ns/activitystreams#name": "Person"
+				},
+				"https://www.w3.org/ns/activitystreams#object": {
+					"@type": "https://www.w3.org/ns/activitystreams#Note",
+					"https://www.w3.org/ns/activitystreams#content": "This is a simple note"
+				},
+				"https://www.w3.org/ns/activitystreams#published": {
+					"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
+					"@value": "2015-01-25T12:34:56Z"
+				}
+			},
+			nodeIdentity: TEST_NODE_IDENTITY,
+			updated: "2024-08-22T11:55:16.271Z",
+			verified: true
 		});
 	});
 
@@ -760,7 +895,7 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			verified: true,
-			verification: [{ created: FIRST_TICK }]
+			changesetsVerification: [{ state: "ok", epoch: FIRST_TICK }]
 		});
 
 		const changesetStore = changesetStorage.getStore();
@@ -926,7 +1061,10 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			verified: true,
-			verification: [{ created: FIRST_TICK }, { created: SECOND_TICK }]
+			changesetsVerification: [
+				{ state: "ok", epoch: FIRST_TICK },
+				{ state: "ok", epoch: SECOND_TICK }
+			]
 		});
 
 		const changesetStore = changesetStorage.getStore();
@@ -1191,7 +1329,10 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			verified: true,
-			verification: [{ created: FIRST_TICK }, { created: SECOND_TICK }]
+			changesetsVerification: [
+				{ state: "ok", epoch: FIRST_TICK },
+				{ state: "ok", epoch: SECOND_TICK }
+			]
 		});
 
 		const changesetStore = changesetStorage.getStore();
@@ -1573,7 +1714,10 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			verified: true,
-			verification: [{ created: FIRST_TICK }, { created: SECOND_TICK }]
+			changesetsVerification: [
+				{ state: "ok", epoch: FIRST_TICK },
+				{ state: "ok", epoch: SECOND_TICK }
+			]
 		});
 
 		const changesetStore = changesetStorage.getStore();
@@ -1951,7 +2095,10 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			verified: true,
-			verification: [{ created: FIRST_TICK }, { created: SECOND_TICK }]
+			changesetsVerification: [
+				{ state: "ok", epoch: FIRST_TICK },
+				{ state: "ok", epoch: SECOND_TICK }
+			]
 		});
 
 		const changesetStore = changesetStorage.getStore();
@@ -2525,7 +2672,10 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			verified: true,
-			verification: [{ created: FIRST_TICK }, { created: SECOND_TICK }]
+			changesetsVerification: [
+				{ state: "ok", epoch: FIRST_TICK },
+				{ state: "ok", epoch: SECOND_TICK }
+			]
 		});
 
 		const changesetStore = changesetStorage.getStore();
@@ -3119,7 +3269,7 @@ describe("AuditableItemGraphService", () => {
 			TEST_NODE_IDENTITY
 		);
 
-		const result = await service.get(id, undefined, "jsonld");
+		const result = await service.get(id, { verifySignatureDepth: VerifyDepth.All }, "jsonld");
 
 		expect(result).toEqual({
 			"@context": "https://schema.gtsc.io/aig/",
@@ -3285,7 +3435,20 @@ describe("AuditableItemGraphService", () => {
 				}
 			},
 			nodeIdentity: TEST_NODE_IDENTITY,
-			updated: "2024-08-22T11:56:56.272Z"
+			updated: "2024-08-22T11:56:56.272Z",
+			verified: true,
+			changesetsVerification: [
+				{
+					"@type": "verification",
+					epoch: FIRST_TICK,
+					state: "ok"
+				},
+				{
+					"@type": "verification",
+					epoch: SECOND_TICK,
+					state: "ok"
+				}
+			]
 		});
 	});
 
@@ -3979,7 +4142,7 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			verified: true,
-			verification: [{ created: FIRST_TICK }]
+			changesetsVerification: [{ state: "ok", epoch: FIRST_TICK }]
 		});
 
 		expect(immutableStore.length).toEqual(0);

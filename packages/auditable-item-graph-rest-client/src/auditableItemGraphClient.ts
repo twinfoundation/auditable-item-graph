@@ -10,6 +10,7 @@ import type {
 	IAuditableItemGraphListRequest,
 	IAuditableItemGraphListResponse,
 	IAuditableItemGraphUpdateRequest,
+	IAuditableItemGraphVerification,
 	IAuditableItemGraphVertex,
 	JsonReturnType,
 	VerifyDepth
@@ -101,14 +102,14 @@ export class AuditableItemGraphClient
 		},
 		responseType?: T
 	): Promise<
-		JsonReturnType<T, IAuditableItemGraphVertex, IJsonLdDocument> & {
-			verified?: boolean;
-			verification?: {
-				created: number;
-				failure?: string;
-				failureProperties?: { [id: string]: unknown };
-			}[];
-		}
+		JsonReturnType<
+			T,
+			IAuditableItemGraphVertex & {
+				verified?: boolean;
+				changesetsVerification?: IAuditableItemGraphVerification[];
+			},
+			IJsonLdDocument
+		>
 	> {
 		Guards.stringValue(this.CLASS_NAME, nameof(id), id);
 
@@ -122,17 +123,21 @@ export class AuditableItemGraphClient
 			pathParams: {
 				id
 			},
-			query: options
+			query: {
+				includeDeleted: options?.includeDeleted,
+				includeChangesets: options?.includeChangesets,
+				verifySignatureDepth: options?.verifySignatureDepth
+			}
 		});
 
-		return response.body as JsonReturnType<T, IAuditableItemGraphVertex, IJsonLdDocument> & {
-			verified?: boolean;
-			verification?: {
-				created: number;
-				failure?: string;
-				failureProperties?: { [id: string]: unknown };
-			}[];
-		};
+		return response.body as JsonReturnType<
+			T,
+			IAuditableItemGraphVertex & {
+				verified?: boolean;
+				changesetsVerification?: IAuditableItemGraphVerification[];
+			},
+			IJsonLdDocument
+		>;
 	}
 
 	/**
@@ -182,6 +187,7 @@ export class AuditableItemGraphClient
 	 * @param id The id of the vertex to get.
 	 * @returns Nothing.
 	 * @throws NotFoundError if the vertex is not found.
+	 * @internal
 	 */
 	public async removeImmutable(id: string): Promise<void> {
 		throw new NotSupportedError(this.CLASS_NAME, "removeImmutable");
@@ -211,16 +217,22 @@ export class AuditableItemGraphClient
 		cursor?: string,
 		pageSize?: number,
 		responseType?: T
-	): Promise<{
-		/**
-		 * The entities, which can be partial if a limited keys list was provided.
-		 */
-		entities: JsonReturnType<T, Partial<IAuditableItemGraphVertex>[], IJsonLdDocument[]>;
-		/**
-		 * An optional cursor, when defined can be used to call find to get more entities.
-		 */
-		cursor?: string;
-	}> {
+	): Promise<
+		JsonReturnType<
+			T,
+			{
+				/**
+				 * The entities, which can be partial if a limited keys list was provided.
+				 */
+				entities: Partial<IAuditableItemGraphVertex>[];
+				/**
+				 * An optional cursor, when defined can be used to call find to get more entities.
+				 */
+				cursor?: string;
+			},
+			IJsonLdDocument
+		>
+	> {
 		const response = await this.fetch<
 			IAuditableItemGraphListRequest,
 			IAuditableItemGraphListResponse
@@ -239,15 +251,13 @@ export class AuditableItemGraphClient
 			}
 		});
 
-		return response.body as {
-			/**
-			 * The entities, which can be partial if a limited keys list was provided.
-			 */
-			entities: JsonReturnType<T, Partial<IAuditableItemGraphVertex>[], IJsonLdDocument[]>;
-			/**
-			 * An optional cursor, when defined can be used to call find to get more entities.
-			 */
-			cursor?: string;
-		};
+		return response.body as JsonReturnType<
+			T,
+			{
+				entities: Partial<IAuditableItemGraphVertex>[];
+				cursor?: string;
+			},
+			IJsonLdDocument
+		>;
 	}
 }

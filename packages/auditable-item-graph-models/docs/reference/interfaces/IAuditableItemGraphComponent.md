@@ -98,7 +98,7 @@ Nothing.
 
 Get a graph vertex.
 
-#### Type parameters
+#### Type Parameters
 
 • **T** *extends* `"json"` \| `"jsonld"` = `"json"`
 
@@ -174,7 +174,7 @@ NotFoundError if the vertex is not found.
 
 Query the graph for vertices.
 
-#### Type parameters
+#### Type Parameters
 
 • **T** *extends* `"json"` \| `"jsonld"` = `"json"`
 

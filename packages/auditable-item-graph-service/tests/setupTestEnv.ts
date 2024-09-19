@@ -4,27 +4,27 @@ import path from "node:path";
 import type {
 	IAuditableItemGraphCredential,
 	IAuditableItemGraphPatchOperation
-} from "@gtsc/auditable-item-graph-models";
-import { Converter, Is, RandomHelper } from "@gtsc/core";
-import { Bip39 } from "@gtsc/crypto";
-import { MemoryEntityStorageConnector } from "@gtsc/entity-storage-connector-memory";
-import { EntityStorageConnectorFactory } from "@gtsc/entity-storage-models";
+} from "@twin.org/auditable-item-graph-models";
+import { Converter, Is, RandomHelper } from "@twin.org/core";
+import { Bip39 } from "@twin.org/crypto";
+import { MemoryEntityStorageConnector } from "@twin.org/entity-storage-connector-memory";
+import { EntityStorageConnectorFactory } from "@twin.org/entity-storage-models";
 import {
 	EntityStorageIdentityConnector,
 	type IdentityDocument,
 	initSchema as initSchemaIdentity
-} from "@gtsc/identity-connector-entity-storage";
-import { IdentityConnectorFactory } from "@gtsc/identity-models";
-import { nameof } from "@gtsc/nameof";
-import type { IDidVerifiableCredential } from "@gtsc/standards-w3c-did";
+} from "@twin.org/identity-connector-entity-storage";
+import { IdentityConnectorFactory } from "@twin.org/identity-models";
+import { nameof } from "@twin.org/nameof";
+import type { IDidVerifiableCredential } from "@twin.org/standards-w3c-did";
 import {
 	EntityStorageVaultConnector,
 	type VaultKey,
 	type VaultSecret,
 	initSchema as initSchemaVault
-} from "@gtsc/vault-connector-entity-storage";
-import { VaultConnectorFactory, VaultEncryptionType, VaultKeyType } from "@gtsc/vault-models";
-import { type IJwtHeader, type IJwtPayload, Jwt } from "@gtsc/web";
+} from "@twin.org/vault-connector-entity-storage";
+import { VaultConnectorFactory, VaultEncryptionType, VaultKeyType } from "@twin.org/vault-models";
+import { type IJwtHeader, type IJwtPayload, Jwt } from "@twin.org/web";
 import * as dotenv from "dotenv";
 
 console.debug("Setting up test environment from .env and .env.dev files");
@@ -115,12 +115,12 @@ export async function decodeJwtToIntegrity(immutableStore: string): Promise<{
 	>(vcJwt);
 	const credentialData = Is.arrayValue(decodedJwt.payload?.vc?.credentialSubject)
 		? decodedJwt.payload?.vc?.credentialSubject[0]
-		: decodedJwt.payload?.vc?.credentialSubject ?? {
+		: (decodedJwt.payload?.vc?.credentialSubject ?? {
 				created: 0,
 				userIdentity: "",
 				hash: "",
 				signature: ""
-			};
+			});
 
 	const integrityBytes = await TEST_VAULT_CONNECTOR.decrypt(
 		TEST_VAULT_KEY,

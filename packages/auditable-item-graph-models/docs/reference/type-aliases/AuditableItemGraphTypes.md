@@ -1,4 +1,4 @@
-# Type alias: AuditableItemGraphTypes
+# Type Alias: AuditableItemGraphTypes
 
 > **AuditableItemGraphTypes**: *typeof* [`AuditableItemGraphTypes`](../variables/AuditableItemGraphTypes.md)\[keyof *typeof* [`AuditableItemGraphTypes`](../variables/AuditableItemGraphTypes.md)\]
 

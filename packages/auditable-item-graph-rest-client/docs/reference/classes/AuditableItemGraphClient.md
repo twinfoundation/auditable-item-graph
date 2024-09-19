@@ -88,7 +88,7 @@ The id of the new graph item.
 
 Get a graph vertex.
 
-#### Type parameters
+#### Type Parameters
 
 • **T** *extends* `"json"` \| `"jsonld"` = `"json"`
 
@@ -124,13 +124,13 @@ The response type to return, defaults to application/json.
 
 The vertex if found.
 
-#### Implementation of
-
-`IAuditableItemGraphComponent.get`
-
 #### Throws
 
 NotFoundError if the vertex is not found.
+
+#### Implementation of
+
+`IAuditableItemGraphComponent.get`
 
 ***
 
@@ -180,7 +180,7 @@ Nothing.
 
 Query the graph for vertices.
 
-#### Type parameters
+#### Type Parameters
 
 • **T** *extends* `"json"` \| `"jsonld"` = `"json"`
 

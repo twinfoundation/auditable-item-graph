@@ -1,4 +1,4 @@
-# Type alias: VerifyDepth
+# Type Alias: VerifyDepth
 
 > **VerifyDepth**: *typeof* [`VerifyDepth`](../variables/VerifyDepth.md)\[keyof *typeof* [`VerifyDepth`](../variables/VerifyDepth.md)\]
 

@@ -1,4 +1,4 @@
-# @gtsc/auditable-item-graph-service
+# @twin.org/auditable-item-graph-service
 
 ## Classes
 

@@ -6,7 +6,7 @@ import type {
 	INoContentResponse,
 	IRestRoute,
 	ITag
-} from "@gtsc/api-models";
+} from "@twin.org/api-models";
 import type {
 	IAuditableItemGraphComponent,
 	IAuditableItemGraphCreateRequest,
@@ -16,10 +16,10 @@ import type {
 	IAuditableItemGraphListResponse,
 	IAuditableItemGraphUpdateRequest,
 	IAuditableItemGraphVertex
-} from "@gtsc/auditable-item-graph-models";
-import { ComponentFactory, Guards } from "@gtsc/core";
-import { nameof } from "@gtsc/nameof";
-import { HeaderTypes, HttpStatusCode, MimeTypes } from "@gtsc/web";
+} from "@twin.org/auditable-item-graph-models";
+import { ComponentFactory, Guards } from "@twin.org/core";
+import { nameof } from "@twin.org/nameof";
+import { HeaderTypes, HttpStatusCode, MimeTypes } from "@twin.org/web";
 
 /**
  * The source used when communicating about these routes.
@@ -208,7 +208,7 @@ export function generateRestRoutesAuditableItemGraph(
 								[HeaderTypes.ContentType]: MimeTypes.JsonLd
 							},
 							body: {
-								"@context": "https://schema.gtsc.io/aig/",
+								"@context": "https://schema.twindev.org/aig/",
 								"@type": "vertex",
 								id: "aig:1234567890",
 								created: "2024-08-22T11:55:16.271Z",
@@ -385,7 +385,7 @@ export function generateRestRoutesAuditableItemGraph(
 								[HeaderTypes.ContentType]: MimeTypes.JsonLd
 							},
 							body: {
-								"@context": "https://schema.gtsc.io/aig/",
+								"@context": "https://schema.twindev.org/aig/",
 								"@graph": [
 									{
 										"@type": "vertex",

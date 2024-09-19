@@ -9,57 +9,57 @@ export const AuditableItemGraphTypes = {
 	/**
 	 * The context uri for the auditable item graph types.
 	 */
-	ContextUri: "https://schema.gtsc.io/aig/",
+	ContextUri: "https://schema.twindev.org/aig/",
 
 	/**
 	 * The context root for the auditable item graph types.
 	 */
-	ContextJsonld: "https://schema.gtsc.io/aig/types.jsonld",
+	ContextJsonld: "https://schema.twindev.org/aig/types.jsonld",
 
 	/**
 	 * Represents auditable item graph vertex.
 	 */
-	Vertex: "https://schema.gtsc.io/aig/AuditableItemGraphVertex",
+	Vertex: "https://schema.twindev.org/aig/AuditableItemGraphVertex",
 
 	/**
 	 * Represents auditable item graph alias.
 	 */
-	Alias: "https://schema.gtsc.io/aig/AuditableItemGraphAlias",
+	Alias: "https://schema.twindev.org/aig/AuditableItemGraphAlias",
 
 	/**
 	 * Represents auditable item graph resource.
 	 */
-	Resource: "https://schema.gtsc.io/aig/AuditableItemGraphResource",
+	Resource: "https://schema.twindev.org/aig/AuditableItemGraphResource",
 
 	/**
 	 * Represents auditable item graph edge.
 	 */
-	Edge: "https://schema.gtsc.io/aig/AuditableItemGraphEdge",
+	Edge: "https://schema.twindev.org/aig/AuditableItemGraphEdge",
 
 	/**
 	 * Represents auditable item graph  changeset.
 	 */
-	Changeset: "https://schema.gtsc.io/aig/AuditableItemGraphChangeset",
+	Changeset: "https://schema.twindev.org/aig/AuditableItemGraphChangeset",
 
 	/**
 	 * Represents patch operation.
 	 */
-	PatchOperation: "https://schema.gtsc.io/aig/AuditableItemGraphPatchOperation",
+	PatchOperation: "https://schema.twindev.org/aig/AuditableItemGraphPatchOperation",
 
 	/**
 	 * Represents the immutable credential payload.
 	 */
-	Credential: "https://schema.gtsc.io/aig/AuditableItemGraphPatchCredential",
+	Credential: "https://schema.twindev.org/aig/AuditableItemGraphPatchCredential",
 
 	/**
 	 * Represents auditable item stream verification.
 	 */
-	Verification: "https://schema.gtsc.io/aig/AuditableItemGraphVerification",
+	Verification: "https://schema.twindev.org/aig/AuditableItemGraphVerification",
 
 	/**
 	 * Represents auditable item stream verification state.
 	 */
-	VerificationState: "https://schema.gtsc.io/aig/AuditableItemGraphVerificationState"
+	VerificationState: "https://schema.twindev.org/aig/AuditableItemGraphVerificationState"
 } as const;
 
 /**

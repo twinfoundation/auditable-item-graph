@@ -1,8 +1,8 @@
 {
     "openapi": "3.1.0",
     "info": {
-        "title": "Global Trade and Supply Chain - Test Endpoints",
-        "description": "REST API for Global Trade and Supply Chain - Test Endpoints.",
+        "title": "TWIN - Test Endpoints",
+        "description": "REST API for TWIN - Test Endpoints.",
         "version": "1.0.0",
         "license": {
             "name": "Apache 2.0 License",
@@ -39,7 +39,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "https://schema.gtsc.io/aig/AuditableItemGraphCreateRequest"
+                                "$ref": "https://schema.twindev.org/aig/AuditableItemGraphCreateRequest"
                             },
                             "examples": {
                                 "auditableItemGraphCreateRequestExample": {
@@ -282,7 +282,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "https://schema.gtsc.io/aig/AuditableItemGraphListResponse"
+                                    "$ref": "https://schema.twindev.org/aig/AuditableItemGraphListResponse"
                                 },
                                 "examples": {
                                     "auditableItemGraphListResponseExample": {
@@ -305,12 +305,12 @@
                             },
                             "application/ld+json": {
                                 "schema": {
-                                    "$ref": "https://schema.gtsc.io/aig/AuditableItemGraphListResponse"
+                                    "$ref": "https://schema.twindev.org/aig/AuditableItemGraphListResponse"
                                 },
                                 "examples": {
                                     "auditableItemGraphJsonLdListResponseExample": {
                                         "value": {
-                                            "@context": "https://schema.gtsc.io/aig/",
+                                            "@context": "https://schema.twindev.org/aig/",
                                             "@graph": [
                                                 {
                                                     "@type": "vertex",
@@ -473,7 +473,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "https://schema.gtsc.io/aig/AuditableItemGraphGetResponse"
+                                    "$ref": "https://schema.twindev.org/aig/AuditableItemGraphGetResponse"
                                 },
                                 "examples": {
                                     "auditableItemGraphGetResponseExample": {
@@ -498,12 +498,12 @@
                             },
                             "application/ld+json": {
                                 "schema": {
-                                    "$ref": "https://schema.gtsc.io/aig/AuditableItemGraphGetResponse"
+                                    "$ref": "https://schema.twindev.org/aig/AuditableItemGraphGetResponse"
                                 },
                                 "examples": {
                                     "auditableItemGraphJsonLdGetResponseExample": {
                                         "value": {
-                                            "@context": "https://schema.gtsc.io/aig/",
+                                            "@context": "https://schema.twindev.org/aig/",
                                             "@type": "vertex",
                                             "id": "aig:1234567890",
                                             "created": "2024-08-22T11:55:16.271Z",
@@ -623,7 +623,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "https://schema.gtsc.io/aig/AuditableItemGraphUpdateRequest"
+                                "$ref": "https://schema.twindev.org/aig/AuditableItemGraphUpdateRequest"
                             },
                             "examples": {
                                 "auditableItemGraphUpdateRequestExample": {
@@ -766,7 +766,7 @@
                 "type": "object",
                 "properties": {
                     "metadata": {
-                        "$ref": "https://schema.gtsc.io/json-ld/JsonLdNodeObject"
+                        "$ref": "https://schema.twindev.org/json-ld/JsonLdNodeObject"
                     },
                     "aliases": {
                         "type": "array",
@@ -780,7 +780,7 @@
                                     "type": "string"
                                 },
                                 "metadata": {
-                                    "$ref": "https://schema.gtsc.io/json-ld/JsonLdNodeObject"
+                                    "$ref": "https://schema.twindev.org/json-ld/JsonLdNodeObject"
                                 }
                             },
                             "required": [
@@ -799,7 +799,7 @@
                                     "type": "string"
                                 },
                                 "metadata": {
-                                    "$ref": "https://schema.gtsc.io/json-ld/JsonLdNodeObject"
+                                    "$ref": "https://schema.twindev.org/json-ld/JsonLdNodeObject"
                                 }
                             },
                             "required": [
@@ -821,7 +821,7 @@
                                     "type": "string"
                                 },
                                 "metadata": {
-                                    "$ref": "https://schema.gtsc.io/json-ld/JsonLdNodeObject"
+                                    "$ref": "https://schema.twindev.org/json-ld/JsonLdNodeObject"
                                 }
                             },
                             "required": [
@@ -839,7 +839,7 @@
             "AuditableItemGraphGetResponse": {
                 "anyOf": [
                     {
-                        "$ref": "https://schema.gtsc.io/json-ld/JsonLdDocument"
+                        "$ref": "https://schema.twindev.org/json-ld/JsonLdDocument"
                     },
                     {
                         "type": "object",
@@ -852,12 +852,12 @@
                             "changesetsVerification": {
                                 "type": "array",
                                 "items": {
-                                    "$ref": "https://schema.gtsc.io/aig/AuditableItemGraphVerification"
+                                    "$ref": "https://schema.twindev.org/aig/AuditableItemGraphVerification"
                                 },
                                 "description": "The verification for the changesets including any failure information."
                             },
                             "metadata": {
-                                "$ref": "https://schema.gtsc.io/json-ld/JsonLdNodeObject",
+                                "$ref": "https://schema.twindev.org/json-ld/JsonLdNodeObject",
                                 "description": "The metadata to associate with the element as JSON-LD."
                             },
                             "id": {
@@ -879,28 +879,28 @@
                             "aliases": {
                                 "type": "array",
                                 "items": {
-                                    "$ref": "https://schema.gtsc.io/aig/AuditableItemGraphAlias"
+                                    "$ref": "https://schema.twindev.org/aig/AuditableItemGraphAlias"
                                 },
                                 "description": "Alternative aliases that can be used to identify the vertex."
                             },
                             "resources": {
                                 "type": "array",
                                 "items": {
-                                    "$ref": "https://schema.gtsc.io/aig/AuditableItemGraphResource"
+                                    "$ref": "https://schema.twindev.org/aig/AuditableItemGraphResource"
                                 },
                                 "description": "The resources attached to the vertex."
                             },
                             "edges": {
                                 "type": "array",
                                 "items": {
-                                    "$ref": "https://schema.gtsc.io/aig/AuditableItemGraphEdge"
+                                    "$ref": "https://schema.twindev.org/aig/AuditableItemGraphEdge"
                                 },
                                 "description": "Edges connected to the vertex."
                             },
                             "changesets": {
                                 "type": "array",
                                 "items": {
-                                    "$ref": "https://schema.gtsc.io/aig/AuditableItemGraphChangeset"
+                                    "$ref": "https://schema.twindev.org/aig/AuditableItemGraphChangeset"
                                 },
                                 "description": "Changesets for the vertex."
                             }
@@ -916,7 +916,7 @@
             "AuditableItemGraphListResponse": {
                 "anyOf": [
                     {
-                        "$ref": "https://schema.gtsc.io/json-ld/JsonLdDocument"
+                        "$ref": "https://schema.twindev.org/json-ld/JsonLdDocument"
                     },
                     {
                         "type": "object",
@@ -924,7 +924,7 @@
                             "entities": {
                                 "type": "array",
                                 "items": {
-                                    "$ref": "https://schema.gtsc.io/aig/AuditableItemGraphVertex"
+                                    "$ref": "https://schema.twindev.org/aig/AuditableItemGraphVertex"
                                 },
                                 "description": "The entities, which can be partial if a limited keys list was provided."
                             },
@@ -942,7 +942,7 @@
                 "type": "object",
                 "properties": {
                     "metadata": {
-                        "$ref": "https://schema.gtsc.io/json-ld/JsonLdNodeObject"
+                        "$ref": "https://schema.twindev.org/json-ld/JsonLdNodeObject"
                     },
                     "aliases": {
                         "type": "array",
@@ -956,7 +956,7 @@
                                     "type": "string"
                                 },
                                 "metadata": {
-                                    "$ref": "https://schema.gtsc.io/json-ld/JsonLdNodeObject"
+                                    "$ref": "https://schema.twindev.org/json-ld/JsonLdNodeObject"
                                 }
                             },
                             "required": [
@@ -975,7 +975,7 @@
                                     "type": "string"
                                 },
                                 "metadata": {
-                                    "$ref": "https://schema.gtsc.io/json-ld/JsonLdNodeObject"
+                                    "$ref": "https://schema.twindev.org/json-ld/JsonLdNodeObject"
                                 }
                             },
                             "required": [
@@ -997,7 +997,7 @@
                                     "type": "string"
                                 },
                                 "metadata": {
-                                    "$ref": "https://schema.gtsc.io/json-ld/JsonLdNodeObject"
+                                    "$ref": "https://schema.twindev.org/json-ld/JsonLdNodeObject"
                                 }
                             },
                             "required": [

@@ -1,4 +1,4 @@
-# @gtsc/auditable-item-graph-rest-client
+# @twin.org/auditable-item-graph-rest-client
 
 ## Classes
 

@@ -14,7 +14,7 @@ import {
 	type IAuditableItemGraphVerification,
 	type IAuditableItemGraphVertex,
 	type JsonReturnType
-} from "@gtsc/auditable-item-graph-models";
+} from "@twin.org/auditable-item-graph-models";
 import {
 	Converter,
 	GeneralError,
@@ -29,36 +29,36 @@ import {
 	Validation,
 	type IPatchOperation,
 	type IValidationFailure
-} from "@gtsc/core";
-import { Blake2b } from "@gtsc/crypto";
+} from "@twin.org/core";
+import { Blake2b } from "@twin.org/crypto";
 import {
 	JsonLdHelper,
 	JsonLdProcessor,
 	type IJsonLdDocument,
 	type IJsonLdJsonObject,
 	type IJsonLdNodeObject
-} from "@gtsc/data-json-ld";
-import { ComparisonOperator, LogicalOperator, SortDirection } from "@gtsc/entity";
+} from "@twin.org/data-json-ld";
+import { ComparisonOperator, LogicalOperator, SortDirection } from "@twin.org/entity";
 import {
 	EntityStorageConnectorFactory,
 	type IEntityStorageConnector
-} from "@gtsc/entity-storage-models";
+} from "@twin.org/entity-storage-models";
 import {
 	DocumentHelper,
 	IdentityConnectorFactory,
 	type IIdentityConnector
-} from "@gtsc/identity-models";
+} from "@twin.org/identity-models";
 import {
 	ImmutableStorageConnectorFactory,
 	type IImmutableStorageConnector
-} from "@gtsc/immutable-storage-models";
-import { nameof } from "@gtsc/nameof";
+} from "@twin.org/immutable-storage-models";
+import { nameof } from "@twin.org/nameof";
 import {
 	VaultConnectorFactory,
 	VaultEncryptionType,
 	type IVaultConnector
-} from "@gtsc/vault-models";
-import { Jwt } from "@gtsc/web";
+} from "@twin.org/vault-models";
+import { Jwt } from "@twin.org/web";
 import type { AuditableItemGraphAlias } from "./entities/auditableItemGraphAlias";
 import type { AuditableItemGraphChangeset } from "./entities/auditableItemGraphChangeset";
 import type { AuditableItemGraphEdge } from "./entities/auditableItemGraphEdge";
@@ -1261,12 +1261,12 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 									verificationResult.verifiableCredential?.credentialSubject
 								)
 									? verificationResult.verifiableCredential?.credentialSubject[0]
-									: verificationResult.verifiableCredential?.credentialSubject ?? {
+									: (verificationResult.verifiableCredential?.credentialSubject ?? {
 											created: 0,
 											userIdentity: "",
 											signature: "",
 											hash: ""
-										};
+										});
 
 								immutableNodeIdentity = DocumentHelper.parse(decodedJwt.header?.kid ?? "").id;
 								immutableUserIdentity = credentialData.userIdentity;

@@ -1,16 +1,17 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import { VerifyDepth } from "@gtsc/auditable-item-graph-models";
-import { RandomHelper } from "@gtsc/core";
-import { MemoryEntityStorageConnector } from "@gtsc/entity-storage-connector-memory";
-import { EntityStorageConnectorFactory } from "@gtsc/entity-storage-models";
+import { VerifyDepth } from "@twin.org/auditable-item-graph-models";
+import { RandomHelper } from "@twin.org/core";
+import { JsonLdProcessor } from "@twin.org/data-json-ld";
+import { MemoryEntityStorageConnector } from "@twin.org/entity-storage-connector-memory";
+import { EntityStorageConnectorFactory } from "@twin.org/entity-storage-models";
 import {
 	EntityStorageImmutableStorageConnector,
 	type ImmutableItem,
 	initSchema as initSchemaImmutableStorage
-} from "@gtsc/immutable-storage-connector-entity-storage";
-import { ImmutableStorageConnectorFactory } from "@gtsc/immutable-storage-models";
-import { nameof } from "@gtsc/nameof";
+} from "@twin.org/immutable-storage-connector-entity-storage";
+import { ImmutableStorageConnectorFactory } from "@twin.org/immutable-storage-models";
+import { nameof } from "@twin.org/nameof";
 import {
 	decodeJwtToIntegrity,
 	setupTestEnv,
@@ -35,6 +36,12 @@ describe("AuditableItemGraphService", () => {
 
 		initSchema();
 		initSchemaImmutableStorage();
+
+		// TODO: Remove this when the schema url is updated
+		JsonLdProcessor.addRedirect(
+			/https:\/\/schema.twindev.org\/aig\//,
+			"https://schema.gtsc.io/aig/types.jsonld"
+		);
 	});
 
 	beforeEach(async () => {
@@ -687,6 +694,18 @@ describe("AuditableItemGraphService", () => {
 		);
 		expect(id.startsWith("aig:")).toEqual(true);
 
+		try {
+			await service.get(
+				id,
+				{
+					includeChangesets: true,
+					verifySignatureDepth: VerifyDepth.Current
+				},
+				"jsonld"
+			);
+		} catch (err) {
+			console.error(err);
+		}
 		const result = await service.get(
 			id,
 			{
@@ -697,7 +716,7 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		expect(result).toEqual({
-			"@context": "https://schema.gtsc.io/aig/",
+			"@context": "https://schema.twindev.org/aig/",
 			"@type": "vertex",
 			aliases: [
 				{
@@ -3272,7 +3291,7 @@ describe("AuditableItemGraphService", () => {
 		const result = await service.get(id, { verifySignatureDepth: VerifyDepth.All }, "jsonld");
 
 		expect(result).toEqual({
-			"@context": "https://schema.gtsc.io/aig/",
+			"@context": "https://schema.twindev.org/aig/",
 			"@type": "vertex",
 			aliases: [
 				{
@@ -3722,7 +3741,7 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		expect(result).toEqual({
-			"@context": "https://schema.gtsc.io/aig/",
+			"@context": "https://schema.twindev.org/aig/",
 			"@type": "vertex",
 			aliases: [
 				{

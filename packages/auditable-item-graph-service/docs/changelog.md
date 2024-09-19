@@ -1,5 +1,5 @@
-# @gtsc/auditable-item-graph-service - Changelog
+# @twin.org/auditable-item-graph-service - Changelog
 
-## v0.0.3
+## v0.0.1-next.3
 
 - Initial Release

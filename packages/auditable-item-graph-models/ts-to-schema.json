@@ -1,5 +1,5 @@
 {
-	"baseUrl": "https://schema.gtsc.io/aig/",
+	"baseUrl": "https://schema.twindev.org/aig/",
 	"sources": ["./src/models/**/*.ts"],
 	"types": [
 		"IAuditableItemGraphVertex",
@@ -13,6 +13,6 @@
 		"AuditableItemGraphVerificationState"
 	],
 	"externalReferences": {
-		"IJsonLd(.*)": "https://schema.gtsc.io/json-ld/JsonLd$1"
+		"IJsonLd(.*)": "https://schema.twindev.org/json-ld/JsonLd$1"
 	}
 }

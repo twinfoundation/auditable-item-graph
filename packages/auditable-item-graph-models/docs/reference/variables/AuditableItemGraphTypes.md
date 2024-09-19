@@ -8,66 +8,66 @@ The types of auditable item graph data.
 
 ### ContextUri
 
-> `readonly` **ContextUri**: `"https://schema.gtsc.io/aig/"` = `"https://schema.gtsc.io/aig/"`
+> `readonly` **ContextUri**: `"https://schema.twindev.org/aig/"` = `"https://schema.twindev.org/aig/"`
 
 The context uri for the auditable item graph types.
 
 ### ContextJsonld
 
-> `readonly` **ContextJsonld**: `"https://schema.gtsc.io/aig/types.jsonld"` = `"https://schema.gtsc.io/aig/types.jsonld"`
+> `readonly` **ContextJsonld**: `"https://schema.twindev.org/aig/types.jsonld"` = `"https://schema.twindev.org/aig/types.jsonld"`
 
 The context root for the auditable item graph types.
 
 ### Vertex
 
-> `readonly` **Vertex**: `"https://schema.gtsc.io/aig/AuditableItemGraphVertex"` = `"https://schema.gtsc.io/aig/AuditableItemGraphVertex"`
+> `readonly` **Vertex**: `"https://schema.twindev.org/aig/AuditableItemGraphVertex"` = `"https://schema.twindev.org/aig/AuditableItemGraphVertex"`
 
 Represents auditable item graph vertex.
 
 ### Alias
 
-> `readonly` **Alias**: `"https://schema.gtsc.io/aig/AuditableItemGraphAlias"` = `"https://schema.gtsc.io/aig/AuditableItemGraphAlias"`
+> `readonly` **Alias**: `"https://schema.twindev.org/aig/AuditableItemGraphAlias"` = `"https://schema.twindev.org/aig/AuditableItemGraphAlias"`
 
 Represents auditable item graph alias.
 
 ### Resource
 
-> `readonly` **Resource**: `"https://schema.gtsc.io/aig/AuditableItemGraphResource"` = `"https://schema.gtsc.io/aig/AuditableItemGraphResource"`
+> `readonly` **Resource**: `"https://schema.twindev.org/aig/AuditableItemGraphResource"` = `"https://schema.twindev.org/aig/AuditableItemGraphResource"`
 
 Represents auditable item graph resource.
 
 ### Edge
 
-> `readonly` **Edge**: `"https://schema.gtsc.io/aig/AuditableItemGraphEdge"` = `"https://schema.gtsc.io/aig/AuditableItemGraphEdge"`
+> `readonly` **Edge**: `"https://schema.twindev.org/aig/AuditableItemGraphEdge"` = `"https://schema.twindev.org/aig/AuditableItemGraphEdge"`
 
 Represents auditable item graph edge.
 
 ### Changeset
 
-> `readonly` **Changeset**: `"https://schema.gtsc.io/aig/AuditableItemGraphChangeset"` = `"https://schema.gtsc.io/aig/AuditableItemGraphChangeset"`
+> `readonly` **Changeset**: `"https://schema.twindev.org/aig/AuditableItemGraphChangeset"` = `"https://schema.twindev.org/aig/AuditableItemGraphChangeset"`
 
 Represents auditable item graph  changeset.
 
 ### PatchOperation
 
-> `readonly` **PatchOperation**: `"https://schema.gtsc.io/aig/AuditableItemGraphPatchOperation"` = `"https://schema.gtsc.io/aig/AuditableItemGraphPatchOperation"`
+> `readonly` **PatchOperation**: `"https://schema.twindev.org/aig/AuditableItemGraphPatchOperation"` = `"https://schema.twindev.org/aig/AuditableItemGraphPatchOperation"`
 
 Represents patch operation.
 
 ### Credential
 
-> `readonly` **Credential**: `"https://schema.gtsc.io/aig/AuditableItemGraphPatchCredential"` = `"https://schema.gtsc.io/aig/AuditableItemGraphPatchCredential"`
+> `readonly` **Credential**: `"https://schema.twindev.org/aig/AuditableItemGraphPatchCredential"` = `"https://schema.twindev.org/aig/AuditableItemGraphPatchCredential"`
 
 Represents the immutable credential payload.
 
 ### Verification
 
-> `readonly` **Verification**: `"https://schema.gtsc.io/aig/AuditableItemGraphVerification"` = `"https://schema.gtsc.io/aig/AuditableItemGraphVerification"`
+> `readonly` **Verification**: `"https://schema.twindev.org/aig/AuditableItemGraphVerification"` = `"https://schema.twindev.org/aig/AuditableItemGraphVerification"`
 
 Represents auditable item stream verification.
 
 ### VerificationState
 
-> `readonly` **VerificationState**: `"https://schema.gtsc.io/aig/AuditableItemGraphVerificationState"` = `"https://schema.gtsc.io/aig/AuditableItemGraphVerificationState"`
+> `readonly` **VerificationState**: `"https://schema.twindev.org/aig/AuditableItemGraphVerificationState"` = `"https://schema.twindev.org/aig/AuditableItemGraphVerificationState"`
 
 Represents auditable item stream verification state.

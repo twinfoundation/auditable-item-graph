@@ -52,7 +52,7 @@ The configuration for the connector.
 
 ### NAMESPACE
 
-> `static` `readonly` **NAMESPACE**: `string` = `"aig"`
+> `readonly` `static` **NAMESPACE**: `string` = `"aig"`
 
 The namespace for the service.
 
@@ -120,7 +120,7 @@ The id of the new graph item.
 
 Get a graph vertex.
 
-#### Type parameters
+#### Type Parameters
 
 • **T** *extends* `"json"` \| `"jsonld"` = `"json"`
 
@@ -156,13 +156,13 @@ The response type to return, defaults to application/json.
 
 The vertex if found.
 
-#### Implementation of
-
-`IAuditableItemGraphComponent.get`
-
 #### Throws
 
 NotFoundError if the vertex is not found.
+
+#### Implementation of
+
+`IAuditableItemGraphComponent.get`
 
 ***
 
@@ -236,13 +236,13 @@ The node identity to use for vault operations.
 
 Nothing.
 
-#### Implementation of
-
-`IAuditableItemGraphComponent.removeImmutable`
-
 #### Throws
 
 NotFoundError if the vertex is not found.
+
+#### Implementation of
+
+`IAuditableItemGraphComponent.removeImmutable`
 
 ***
 
@@ -252,7 +252,7 @@ NotFoundError if the vertex is not found.
 
 Query the graph for vertices.
 
-#### Type parameters
+#### Type Parameters
 
 • **T** *extends* `"json"` \| `"jsonld"` = `"json"`
 

@@ -1,7 +1,7 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import type { SortDirection } from "@gtsc/entity";
-import type { MimeTypes } from "@gtsc/web";
+import type { SortDirection } from "@twin.org/entity";
+import type { MimeTypes } from "@twin.org/web";
 
 /**
  * Get the a list of the vertices with matching ids or aliases.

@@ -1,6 +1,6 @@
-# GTSC Auditable Item Graph
+# TWIN Auditable Item Graph
 
-This mono-repository contains the packages to use with auditable item graph in GTSC applications.
+This mono-repository contains the packages to use with auditable item graph in TWIN applications.
 
 ## Packages
 

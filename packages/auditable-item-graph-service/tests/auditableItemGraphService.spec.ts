@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0.
 import { VerifyDepth } from "@twin.org/auditable-item-graph-models";
 import { RandomHelper } from "@twin.org/core";
-import { JsonLdProcessor } from "@twin.org/data-json-ld";
 import { MemoryEntityStorageConnector } from "@twin.org/entity-storage-connector-memory";
 import { EntityStorageConnectorFactory } from "@twin.org/entity-storage-models";
 import {

@@ -36,12 +36,6 @@ describe("AuditableItemGraphService", () => {
 
 		initSchema();
 		initSchemaImmutableStorage();
-
-		// TODO: Remove this when the schema url is updated
-		JsonLdProcessor.addRedirect(
-			/https:\/\/schema.twindev.org\/aig\//,
-			"https://schema.gtsc.io/aig/types.jsonld"
-		);
 	});
 
 	beforeEach(async () => {

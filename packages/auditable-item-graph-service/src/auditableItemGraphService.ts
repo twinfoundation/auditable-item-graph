@@ -38,6 +38,7 @@ import {
 	type IJsonLdJsonObject,
 	type IJsonLdNodeObject
 } from "@twin.org/data-json-ld";
+import { SchemaOrgDataTypes, SchemaOrgTypes } from "@twin.org/data-schema-org";
 import { ComparisonOperator, LogicalOperator, SortDirection } from "@twin.org/entity";
 import {
 	EntityStorageConnectorFactory,
@@ -176,6 +177,8 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		this._vaultKeyId = this._config.vaultKeyId ?? "auditable-item-graph";
 		this._assertionMethodId = this._config.assertionMethodId ?? "auditable-item-graph";
 		this._enableIntegrityCheck = this._config.enableImmutableDiffs ?? false;
+
+		SchemaOrgDataTypes.registerRedirects();
 	}
 
 	/**
@@ -351,9 +354,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 					);
 				}
 
-				const compacted = await JsonLdProcessor.compact(vertexJsonLd, {
-					"@context": AuditableItemGraphTypes.ContextUri
-				});
+				const compacted = await JsonLdProcessor.compact(vertexJsonLd);
 
 				return compacted as JsonReturnType<
 					T,
@@ -619,14 +620,12 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				const jsonLdEntities = models.map(m => this.modelToJsonLd(m));
 
 				const jsonDocument: IJsonLdNodeObject = {
-					"@context": AuditableItemGraphTypes.ContextUri,
+					"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
 					"@graph": jsonLdEntities,
 					cursor: results.cursor
 				};
 
-				const compacted = await JsonLdProcessor.compact(jsonDocument, {
-					"@context": AuditableItemGraphTypes.ContextUri
-				});
+				const compacted = await JsonLdProcessor.compact(jsonDocument);
 				return compacted as JsonReturnType<
 					T,
 					{
@@ -1359,15 +1358,15 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 */
 	private modelToJsonLd(model: IAuditableItemGraphVertex): IJsonLdNodeObject {
 		const nodeObject: IJsonLdNodeObject = {
-			"@context": AuditableItemGraphTypes.ContextJsonld,
+			"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
 			"@type": AuditableItemGraphTypes.Vertex,
 			id: model.id,
 			nodeIdentity: model.nodeIdentity,
-			created: new Date(model.created).toISOString()
+			dateCreated: new Date(model.created).toISOString()
 		};
 
 		if (Is.integer(model.updated)) {
-			nodeObject.updated = new Date(model.updated).toISOString();
+			nodeObject.dateModified = new Date(model.updated).toISOString();
 		}
 		if (Is.objectValue(model.metadata)) {
 			nodeObject.metadata = model.metadata;
@@ -1379,16 +1378,16 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				const aliasJsonLd: IJsonLdNodeObject = {
 					"@type": AuditableItemGraphTypes.Alias,
 					id: alias.id,
-					created: new Date(alias.created).toISOString()
+					dateCreated: new Date(alias.created).toISOString()
 				};
 				if (Is.stringValue(alias.format)) {
 					aliasJsonLd.format = alias.format;
 				}
 				if (Is.integer(alias.updated)) {
-					aliasJsonLd.updated = new Date(alias.updated).toISOString();
+					aliasJsonLd.dateModified = new Date(alias.updated).toISOString();
 				}
 				if (Is.integer(alias.deleted)) {
-					aliasJsonLd.deleted = new Date(alias.deleted).toISOString();
+					aliasJsonLd.dateDeleted = new Date(alias.deleted).toISOString();
 				}
 				if (Is.objectValue(alias.metadata)) {
 					aliasJsonLd.metadata = alias.metadata;
@@ -1404,13 +1403,13 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				const resourceJsonLd: IJsonLdNodeObject = {
 					"@type": AuditableItemGraphTypes.Resource,
 					id: resource.id,
-					created: new Date(resource.created).toISOString()
+					dateCreated: new Date(resource.created).toISOString()
 				};
 				if (Is.integer(resource.updated)) {
-					resourceJsonLd.updated = new Date(resource.updated).toISOString();
+					resourceJsonLd.dateModified = new Date(resource.updated).toISOString();
 				}
 				if (Is.integer(resource.deleted)) {
-					resourceJsonLd.deleted = new Date(resource.deleted).toISOString();
+					resourceJsonLd.dateDeleted = new Date(resource.deleted).toISOString();
 				}
 				if (Is.objectValue(resource.metadata)) {
 					resourceJsonLd.metadata = resource.metadata;
@@ -1426,14 +1425,14 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				const resourceJsonLd: IJsonLdNodeObject = {
 					"@type": AuditableItemGraphTypes.Edge,
 					id: edge.id,
-					created: new Date(edge.created).toISOString(),
-					relationship: edge.relationship
+					dateCreated: new Date(edge.created).toISOString(),
+					edgeRelationship: edge.relationship
 				};
 				if (Is.integer(edge.updated)) {
-					resourceJsonLd.updated = new Date(edge.updated).toISOString();
+					resourceJsonLd.dateModified = new Date(edge.updated).toISOString();
 				}
 				if (Is.integer(edge.deleted)) {
-					resourceJsonLd.deleted = new Date(edge.deleted).toISOString();
+					resourceJsonLd.dateDeleted = new Date(edge.deleted).toISOString();
 				}
 				if (Is.objectValue(edge.metadata)) {
 					resourceJsonLd.metadata = edge.metadata;
@@ -1450,7 +1449,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 					"@type": AuditableItemGraphTypes.Changeset,
 					hash: changeset.hash,
 					signature: changeset.signature,
-					created: new Date(changeset.created).toISOString(),
+					dateCreated: new Date(changeset.created).toISOString(),
 					immutableStorageId: changeset.immutableStorageId,
 					userIdentity: changeset.userIdentity
 				};
@@ -1483,7 +1482,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 */
 	private modelVerificationToJsonLd(model: IAuditableItemGraphVerification): IJsonLdNodeObject {
 		const nodeObject: IJsonLdNodeObject = {
-			"@context": AuditableItemGraphTypes.ContextJsonld,
+			"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
 			"@type": AuditableItemGraphTypes.Verification,
 			...model
 		};

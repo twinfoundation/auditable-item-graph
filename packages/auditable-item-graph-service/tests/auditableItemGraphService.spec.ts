@@ -687,18 +687,6 @@ describe("AuditableItemGraphService", () => {
 		);
 		expect(id.startsWith("aig:")).toEqual(true);
 
-		try {
-			await service.get(
-				id,
-				{
-					includeChangesets: true,
-					verifySignatureDepth: VerifyDepth.Current
-				},
-				"jsonld"
-			);
-		} catch (err) {
-			console.error(err);
-		}
 		const result = await service.get(
 			id,
 			{
@@ -709,28 +697,39 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		expect(result).toEqual({
-			"@context": "https://schema.twindev.org/aig/",
-			"@type": "vertex",
+			"@context": [
+				"https://schema.twindev.org/aig/",
+				"https://schema.org/",
+				"https://www.w3.org/ns/activitystreams"
+			],
+			id: "0101010101010101010101010101010101010101010101010101010101010101",
+			type: "Vertex",
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateModified: "2024-08-22T11:55:16.271Z",
 			aliases: [
 				{
-					"@type": "alias",
-					created: "2024-08-22T11:55:16.271Z",
 					id: "foo123",
+					type: "Alias",
+					dateCreated: "2024-08-22T11:55:16.271Z",
 					format: "type1"
 				},
 				{
-					"@type": "alias",
-					created: "2024-08-22T11:55:16.271Z",
 					id: "bar456",
+					type: "Alias",
+					dateCreated: "2024-08-22T11:55:16.271Z",
 					format: "type2"
 				}
 			],
 			changesets: [
 				{
-					"@type": "changeset",
+					type: "Changeset",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					hash: "NstRDrU726YzvJPr4+xOjyAlcnOEOFKR/+bCWntHbOQ=",
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					patches: [
 						{
-							"@type": "patch",
+							type: "Patch",
 							patchOperation: "add",
 							patchPath: "/metadata",
 							patchValue: {
@@ -749,27 +748,23 @@ describe("AuditableItemGraphService", () => {
 							}
 						},
 						{
-							"@type": "patch",
+							type: "Patch",
 							patchOperation: "add",
 							patchPath: "/aliases",
 							patchValue: [
 								{
 									id: "foo123",
 									format: "type1",
-									created: FIRST_TICK
+									created: 1724327716271
 								},
 								{
 									id: "bar456",
 									format: "type2",
-									created: FIRST_TICK
+									created: 1724327716271
 								}
 							]
 						}
 					],
-					created: "2024-08-22T11:55:16.271Z",
-					hash: "NstRDrU726YzvJPr4+xOjyAlcnOEOFKR/+bCWntHbOQ=",
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					signature:
 						"sgAI1NMU7HrzyqnT7FSdGAfEVAzLTSDmH93UHU118xhIK+K+7nlqXpw3igGCifQl7XLdiYHqpCQN2Go0qlGDCg==",
 					userIdentity: TEST_USER_IDENTITY
@@ -777,31 +772,26 @@ describe("AuditableItemGraphService", () => {
 			],
 			changesetsVerification: [
 				{
-					"@type": "verification",
-					epoch: FIRST_TICK,
+					type: "Verification",
+					epoch: 1724327716271,
 					state: "ok"
 				}
 			],
-			created: "2024-08-22T11:55:16.271Z",
-			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			metadata: {
-				"@type": "https://www.w3.org/ns/activitystreams#Create",
-				"https://www.w3.org/ns/activitystreams#actor": {
-					"@id": "acct:person@example.org",
-					"@type": "https://www.w3.org/ns/activitystreams#Person",
-					"https://www.w3.org/ns/activitystreams#name": "Person"
+				type: "Create",
+				actor: {
+					id: "acct:person@example.org",
+					type: "Person",
+					name: "Person"
 				},
-				"https://www.w3.org/ns/activitystreams#object": {
-					"@type": "https://www.w3.org/ns/activitystreams#Note",
-					"https://www.w3.org/ns/activitystreams#content": "This is a simple note"
+				object: {
+					type: "Note",
+					content: "This is a simple note"
 				},
-				"https://www.w3.org/ns/activitystreams#published": {
-					"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-					"@value": "2015-01-25T12:34:56Z"
-				}
+				published: "2015-01-25T12:34:56Z"
 			},
-			nodeIdentity: TEST_NODE_IDENTITY,
-			updated: "2024-08-22T11:55:16.271Z",
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			verified: true
 		});
 	});
@@ -3284,183 +3274,167 @@ describe("AuditableItemGraphService", () => {
 		const result = await service.get(id, { verifySignatureDepth: VerifyDepth.All }, "jsonld");
 
 		expect(result).toEqual({
-			"@context": "https://schema.twindev.org/aig/",
-			"@type": "vertex",
+			"@context": [
+				"https://schema.twindev.org/aig/",
+				"https://schema.org/",
+				"https://www.w3.org/ns/activitystreams"
+			],
+			id: "0101010101010101010101010101010101010101010101010101010101010101",
+			type: "Vertex",
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateModified: "2024-08-22T11:56:56.272Z",
 			aliases: [
 				{
-					"@type": "alias",
-					created: "2024-08-22T11:55:16.271Z",
-					format: "type1",
 					id: "foo123",
+					type: "Alias",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
+					format: "type1",
 					metadata: {
-						"@type": "https://www.w3.org/ns/activitystreams#Create",
-						"https://www.w3.org/ns/activitystreams#actor": {
-							"@id": "acct:person@example.org",
-							"@type": "https://www.w3.org/ns/activitystreams#Person",
-							"https://www.w3.org/ns/activitystreams#name": "Person"
+						type: "Create",
+						actor: {
+							id: "acct:person@example.org",
+							type: "Person",
+							name: "Person"
 						},
-						"https://www.w3.org/ns/activitystreams#object": {
-							"@type": "https://www.w3.org/ns/activitystreams#Note",
-							"https://www.w3.org/ns/activitystreams#content": "This is a simple note alias 10"
+						object: {
+							type: "Note",
+							content: "This is a simple note alias 10"
 						},
-						"https://www.w3.org/ns/activitystreams#published": {
-							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-							"@value": "2015-01-25T12:34:56Z"
-						}
-					},
-					updated: "2024-08-22T11:56:56.272Z"
+						published: "2015-01-25T12:34:56Z"
+					}
 				},
 				{
-					"@type": "alias",
-					created: "2024-08-22T11:55:16.271Z",
-					format: "type2",
 					id: "bar456",
+					type: "Alias",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
+					format: "type2",
 					metadata: {
-						"@type": "https://www.w3.org/ns/activitystreams#Create",
-						"https://www.w3.org/ns/activitystreams#actor": {
-							"@id": "acct:person@example.org",
-							"@type": "https://www.w3.org/ns/activitystreams#Person",
-							"https://www.w3.org/ns/activitystreams#name": "Person"
+						type: "Create",
+						actor: {
+							id: "acct:person@example.org",
+							type: "Person",
+							name: "Person"
 						},
-						"https://www.w3.org/ns/activitystreams#object": {
-							"@type": "https://www.w3.org/ns/activitystreams#Note",
-							"https://www.w3.org/ns/activitystreams#content": "This is a simple note alias 20"
+						object: {
+							type: "Note",
+							content: "This is a simple note alias 20"
 						},
-						"https://www.w3.org/ns/activitystreams#published": {
-							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-							"@value": "2015-01-25T12:34:56Z"
-						}
-					},
-					updated: "2024-08-22T11:56:56.272Z"
+						published: "2015-01-25T12:34:56Z"
+					}
+				}
+			],
+			changesetsVerification: [
+				{
+					type: "Verification",
+					epoch: 1724327716271,
+					state: "ok"
+				},
+				{
+					type: "Verification",
+					epoch: 1724327816272,
+					state: "ok"
 				}
 			],
 			edges: [
 				{
-					"@type": "edge",
-					created: "2024-08-22T11:55:16.271Z",
 					id: "edge1",
+					type: "Edge",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
 					metadata: {
-						"@type": "https://www.w3.org/ns/activitystreams#Create",
-						"https://www.w3.org/ns/activitystreams#actor": {
-							"@id": "acct:person@example.org",
-							"@type": "https://www.w3.org/ns/activitystreams#Person",
-							"https://www.w3.org/ns/activitystreams#name": "Person"
+						type: "Create",
+						actor: {
+							id: "acct:person@example.org",
+							type: "Person",
+							name: "Person"
 						},
-						"https://www.w3.org/ns/activitystreams#object": {
-							"@type": "https://www.w3.org/ns/activitystreams#Note",
-							"https://www.w3.org/ns/activitystreams#content": "This is a simple note edge 10"
+						object: {
+							type: "Note",
+							content: "This is a simple note edge 10"
 						},
-						"https://www.w3.org/ns/activitystreams#published": {
-							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-							"@value": "2015-01-25T12:34:56Z"
-						}
+						published: "2015-01-25T12:34:56Z"
 					},
-					relationship: "friend",
-					updated: "2024-08-22T11:56:56.272Z"
+					edgeRelationship: "friend"
 				},
 				{
-					"@type": "edge",
-					created: "2024-08-22T11:55:16.271Z",
 					id: "edge2",
+					type: "Edge",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
 					metadata: {
-						"@type": "https://www.w3.org/ns/activitystreams#Create",
-						"https://www.w3.org/ns/activitystreams#actor": {
-							"@id": "acct:person@example.org",
-							"@type": "https://www.w3.org/ns/activitystreams#Person",
-							"https://www.w3.org/ns/activitystreams#name": "Person"
+						type: "Create",
+						actor: {
+							id: "acct:person@example.org",
+							type: "Person",
+							name: "Person"
 						},
-						"https://www.w3.org/ns/activitystreams#object": {
-							"@type": "https://www.w3.org/ns/activitystreams#Note",
-							"https://www.w3.org/ns/activitystreams#content": "This is a simple note edge 20"
+						object: {
+							type: "Note",
+							content: "This is a simple note edge 20"
 						},
-						"https://www.w3.org/ns/activitystreams#published": {
-							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-							"@value": "2015-01-25T12:34:56Z"
-						}
+						published: "2015-01-25T12:34:56Z"
 					},
-					relationship: "enemy",
-					updated: "2024-08-22T11:56:56.272Z"
+					edgeRelationship: "enemy"
 				}
 			],
+			metadata: {
+				type: "Create",
+				actor: {
+					id: "acct:person@example.org",
+					type: "Person",
+					name: "Person"
+				},
+				object: {
+					type: "Note",
+					content: "This is a simple note 2"
+				},
+				published: "2015-01-25T12:34:56Z"
+			},
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			resources: [
 				{
-					"@type": "resource",
-					created: "2024-08-22T11:55:16.271Z",
 					id: "resource1",
+					type: "Resource",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
 					metadata: {
-						"@type": "https://www.w3.org/ns/activitystreams#Create",
-						"https://www.w3.org/ns/activitystreams#actor": {
-							"@id": "acct:person@example.org",
-							"@type": "https://www.w3.org/ns/activitystreams#Person",
-							"https://www.w3.org/ns/activitystreams#name": "Person"
+						type: "Create",
+						actor: {
+							id: "acct:person@example.org",
+							type: "Person",
+							name: "Person"
 						},
-						"https://www.w3.org/ns/activitystreams#object": {
-							"@type": "https://www.w3.org/ns/activitystreams#Note",
-							"https://www.w3.org/ns/activitystreams#content": "This is a simple note resource 10"
+						object: {
+							type: "Note",
+							content: "This is a simple note resource 10"
 						},
-						"https://www.w3.org/ns/activitystreams#published": {
-							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-							"@value": "2015-01-25T12:34:56Z"
-						}
-					},
-					updated: "2024-08-22T11:56:56.272Z"
+						published: "2015-01-25T12:34:56Z"
+					}
 				},
 				{
-					"@type": "resource",
-					created: "2024-08-22T11:55:16.271Z",
 					id: "resource2",
+					type: "Resource",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
 					metadata: {
-						"@type": "https://www.w3.org/ns/activitystreams#Create",
-						"https://www.w3.org/ns/activitystreams#actor": {
-							"@id": "acct:person@example.org",
-							"@type": "https://www.w3.org/ns/activitystreams#Person",
-							"https://www.w3.org/ns/activitystreams#name": "Person"
+						type: "Create",
+						actor: {
+							id: "acct:person@example.org",
+							type: "Person",
+							name: "Person"
 						},
-						"https://www.w3.org/ns/activitystreams#object": {
-							"@type": "https://www.w3.org/ns/activitystreams#Note",
-							"https://www.w3.org/ns/activitystreams#content": "This is a simple note resource 20"
+						object: {
+							type: "Note",
+							content: "This is a simple note resource 20"
 						},
-						"https://www.w3.org/ns/activitystreams#published": {
-							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-							"@value": "2015-01-25T12:34:56Z"
-						}
-					},
-					updated: "2024-08-22T11:56:56.272Z"
+						published: "2015-01-25T12:34:56Z"
+					}
 				}
 			],
-			created: "2024-08-22T11:55:16.271Z",
-			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			metadata: {
-				"@type": "https://www.w3.org/ns/activitystreams#Create",
-				"https://www.w3.org/ns/activitystreams#actor": {
-					"@id": "acct:person@example.org",
-					"@type": "https://www.w3.org/ns/activitystreams#Person",
-					"https://www.w3.org/ns/activitystreams#name": "Person"
-				},
-				"https://www.w3.org/ns/activitystreams#object": {
-					"@type": "https://www.w3.org/ns/activitystreams#Note",
-					"https://www.w3.org/ns/activitystreams#content": "This is a simple note 2"
-				},
-				"https://www.w3.org/ns/activitystreams#published": {
-					"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-					"@value": "2015-01-25T12:34:56Z"
-				}
-			},
-			nodeIdentity: TEST_NODE_IDENTITY,
-			updated: "2024-08-22T11:56:56.272Z",
-			verified: true,
-			changesetsVerification: [
-				{
-					"@type": "verification",
-					epoch: FIRST_TICK,
-					state: "ok"
-				},
-				{
-					"@type": "verification",
-					epoch: SECOND_TICK,
-					state: "ok"
-				}
-			]
+			verified: true
 		});
 	});
 
@@ -3734,60 +3708,51 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		expect(result).toEqual({
-			"@context": "https://schema.twindev.org/aig/",
-			"@type": "vertex",
+			"@context": [
+				"https://schema.twindev.org/aig/",
+				"https://schema.org/",
+				"https://www.w3.org/ns/activitystreams"
+			],
+			id: "0101010101010101010101010101010101010101010101010101010101010101",
+			type: "Vertex",
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateModified: "2024-08-22T11:56:56.272Z",
 			aliases: [
 				{
-					"@type": "alias",
-					created: "2024-08-22T11:55:16.271Z",
 					id: "foo123",
+					type: "Alias",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
 					metadata: {
-						"@type": "https://www.w3.org/ns/activitystreams#Create",
-						"https://www.w3.org/ns/activitystreams#actor": {
-							"@id": "acct:person@example.org",
-							"@type": "https://www.w3.org/ns/activitystreams#Person",
-							"https://www.w3.org/ns/activitystreams#name": "Person"
-						},
-						"https://www.w3.org/ns/activitystreams#object": {
-							"@type": "https://www.w3.org/ns/activitystreams#Note",
-							"https://www.w3.org/ns/activitystreams#content": "This is a simple note alias 10"
-						},
-						"https://www.w3.org/ns/activitystreams#published": {
-							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-							"@value": "2015-01-25T12:34:56Z"
-						}
-					},
-					updated: "2024-08-22T11:56:56.272Z"
+						type: "Create",
+						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+						object: { type: "Note", content: "This is a simple note alias 10" },
+						published: "2015-01-25T12:34:56Z"
+					}
 				},
 				{
-					"@type": "alias",
-					created: "2024-08-22T11:55:16.271Z",
 					id: "bar456",
+					type: "Alias",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
 					metadata: {
-						"@type": "https://www.w3.org/ns/activitystreams#Create",
-						"https://www.w3.org/ns/activitystreams#actor": {
-							"@id": "acct:person@example.org",
-							"@type": "https://www.w3.org/ns/activitystreams#Person",
-							"https://www.w3.org/ns/activitystreams#name": "Person"
-						},
-						"https://www.w3.org/ns/activitystreams#object": {
-							"@type": "https://www.w3.org/ns/activitystreams#Note",
-							"https://www.w3.org/ns/activitystreams#content": "This is a simple note alias 20"
-						},
-						"https://www.w3.org/ns/activitystreams#published": {
-							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-							"@value": "2015-01-25T12:34:56Z"
-						}
-					},
-					updated: "2024-08-22T11:56:56.272Z"
+						type: "Create",
+						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+						object: { type: "Note", content: "This is a simple note alias 20" },
+						published: "2015-01-25T12:34:56Z"
+					}
 				}
 			],
 			changesets: [
 				{
-					"@type": "changeset",
+					type: "Changeset",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					hash: "jTb9qgSQtXraoLWMpEB8DqHby6amfHbh2rdKu1O/144=",
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					patches: [
 						{
-							"@type": "patch",
+							type: "Patch",
 							patchOperation: "add",
 							patchPath: "/metadata",
 							patchValue: {
@@ -3799,13 +3764,13 @@ describe("AuditableItemGraphService", () => {
 							}
 						},
 						{
-							"@type": "patch",
+							type: "Patch",
 							patchOperation: "add",
 							patchPath: "/aliases",
 							patchValue: [
 								{
 									id: "foo123",
-									created: FIRST_TICK,
+									created: 1724327716271,
 									metadata: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
@@ -3816,7 +3781,7 @@ describe("AuditableItemGraphService", () => {
 								},
 								{
 									id: "bar456",
-									created: FIRST_TICK,
+									created: 1724327716271,
 									metadata: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
@@ -3828,13 +3793,13 @@ describe("AuditableItemGraphService", () => {
 							]
 						},
 						{
-							"@type": "patch",
+							type: "Patch",
 							patchOperation: "add",
 							patchPath: "/resources",
 							patchValue: [
 								{
 									id: "resource1",
-									created: FIRST_TICK,
+									created: 1724327716271,
 									metadata: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
@@ -3845,7 +3810,7 @@ describe("AuditableItemGraphService", () => {
 								},
 								{
 									id: "resource2",
-									created: FIRST_TICK,
+									created: 1724327716271,
 									metadata: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
@@ -3857,13 +3822,13 @@ describe("AuditableItemGraphService", () => {
 							]
 						},
 						{
-							"@type": "patch",
+							type: "Patch",
 							patchOperation: "add",
 							patchPath: "/edges",
 							patchValue: [
 								{
 									id: "edge1",
-									created: FIRST_TICK,
+									created: 1724327716271,
 									metadata: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
@@ -3875,7 +3840,7 @@ describe("AuditableItemGraphService", () => {
 								},
 								{
 									id: "edge2",
-									created: FIRST_TICK,
+									created: 1724327716271,
 									metadata: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
@@ -3888,219 +3853,163 @@ describe("AuditableItemGraphService", () => {
 							]
 						}
 					],
-					created: "2024-08-22T11:55:16.271Z",
-					hash: "jTb9qgSQtXraoLWMpEB8DqHby6amfHbh2rdKu1O/144=",
 					signature:
 						"623KrKM43+giT9gpq12YewVrY2Cn2qGkHFubvQDyamHnpowgur2aK5QHwunM1NmxzKc8v2QbAxHf9hQQq2TPAg==",
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					userIdentity: TEST_USER_IDENTITY
 				},
 				{
-					"@type": "changeset",
+					type: "Changeset",
+					dateCreated: "2024-08-22T11:56:56.272Z",
+					hash: "snnM4wJd36iJyQU3z2RyJNpbJKyFUch/0itVwmBpPOQ=",
+					immutableStorageId:
+						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505",
 					patches: [
 						{
-							"@type": "patch",
+							type: "Patch",
 							patchOperation: "replace",
 							patchPath: "/metadata/object/content",
 							patchValue: "This is a simple note 2"
 						},
 						{
-							"@type": "patch",
+							type: "Patch",
 							patchOperation: "add",
 							patchPath: "/aliases/0/updated",
-							patchValue: SECOND_TICK
+							patchValue: 1724327816272
 						},
 						{
-							"@type": "patch",
+							type: "Patch",
 							patchOperation: "replace",
 							patchPath: "/aliases/0/metadata/object/content",
 							patchValue: "This is a simple note alias 10"
 						},
 						{
-							"@type": "patch",
+							type: "Patch",
 							patchOperation: "add",
 							patchPath: "/aliases/1/updated",
-							patchValue: SECOND_TICK
+							patchValue: 1724327816272
 						},
 						{
-							"@type": "patch",
+							type: "Patch",
 							patchOperation: "replace",
 							patchPath: "/aliases/1/metadata/object/content",
 							patchValue: "This is a simple note alias 20"
 						},
 						{
-							"@type": "patch",
+							type: "Patch",
 							patchOperation: "add",
 							patchPath: "/resources/0/updated",
-							patchValue: SECOND_TICK
+							patchValue: 1724327816272
 						},
 						{
-							"@type": "patch",
+							type: "Patch",
 							patchOperation: "replace",
 							patchPath: "/resources/0/metadata/object/content",
 							patchValue: "This is a simple note resource 10"
 						},
 						{
-							"@type": "patch",
+							type: "Patch",
 							patchOperation: "add",
 							patchPath: "/resources/1/updated",
-							patchValue: SECOND_TICK
+							patchValue: 1724327816272
 						},
 						{
-							"@type": "patch",
+							type: "Patch",
 							patchOperation: "replace",
 							patchPath: "/resources/1/metadata/object/content",
 							patchValue: "This is a simple note resource 20"
 						},
 						{
-							"@type": "patch",
+							type: "Patch",
 							patchOperation: "add",
 							patchPath: "/edges/0/updated",
-							patchValue: SECOND_TICK
+							patchValue: 1724327816272
 						},
 						{
-							"@type": "patch",
+							type: "Patch",
 							patchOperation: "replace",
 							patchPath: "/edges/0/metadata/object/content",
 							patchValue: "This is a simple note edge 10"
 						},
 						{
-							"@type": "patch",
+							type: "Patch",
 							patchOperation: "add",
 							patchPath: "/edges/1/updated",
-							patchValue: SECOND_TICK
+							patchValue: 1724327816272
 						},
 						{
-							"@type": "patch",
+							type: "Patch",
 							patchOperation: "replace",
 							patchPath: "/edges/1/metadata/object/content",
 							patchValue: "This is a simple note edge 20"
 						}
 					],
-					created: "2024-08-22T11:56:56.272Z",
-					hash: "snnM4wJd36iJyQU3z2RyJNpbJKyFUch/0itVwmBpPOQ=",
 					signature:
 						"ZIPvcuMyzIX/2VsymzuigdSoC1lbGqHO3jj/rm9w1eCWo6vTeyLIxy/k5x0/hMf1Ls4l9o+ELt5jN/ITAFSrDA==",
-					immutableStorageId:
-						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505",
 					userIdentity: TEST_USER_IDENTITY
 				}
 			],
 			edges: [
 				{
-					"@type": "edge",
-					created: "2024-08-22T11:55:16.271Z",
 					id: "edge1",
+					type: "Edge",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
 					metadata: {
-						"@type": "https://www.w3.org/ns/activitystreams#Create",
-						"https://www.w3.org/ns/activitystreams#actor": {
-							"@id": "acct:person@example.org",
-							"@type": "https://www.w3.org/ns/activitystreams#Person",
-							"https://www.w3.org/ns/activitystreams#name": "Person"
-						},
-						"https://www.w3.org/ns/activitystreams#object": {
-							"@type": "https://www.w3.org/ns/activitystreams#Note",
-							"https://www.w3.org/ns/activitystreams#content": "This is a simple note edge 10"
-						},
-						"https://www.w3.org/ns/activitystreams#published": {
-							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-							"@value": "2015-01-25T12:34:56Z"
-						}
+						type: "Create",
+						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+						object: { type: "Note", content: "This is a simple note edge 10" },
+						published: "2015-01-25T12:34:56Z"
 					},
-					relationship: "friend",
-					updated: "2024-08-22T11:56:56.272Z"
+					edgeRelationship: "friend"
 				},
 				{
-					"@type": "edge",
-					created: "2024-08-22T11:55:16.271Z",
 					id: "edge2",
+					type: "Edge",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
 					metadata: {
-						"@type": "https://www.w3.org/ns/activitystreams#Create",
-						"https://www.w3.org/ns/activitystreams#actor": {
-							"@id": "acct:person@example.org",
-							"@type": "https://www.w3.org/ns/activitystreams#Person",
-							"https://www.w3.org/ns/activitystreams#name": "Person"
-						},
-						"https://www.w3.org/ns/activitystreams#object": {
-							"@type": "https://www.w3.org/ns/activitystreams#Note",
-							"https://www.w3.org/ns/activitystreams#content": "This is a simple note edge 20"
-						},
-						"https://www.w3.org/ns/activitystreams#published": {
-							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-							"@value": "2015-01-25T12:34:56Z"
-						}
+						type: "Create",
+						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+						object: { type: "Note", content: "This is a simple note edge 20" },
+						published: "2015-01-25T12:34:56Z"
 					},
-					relationship: "enemy",
-					updated: "2024-08-22T11:56:56.272Z"
+					edgeRelationship: "enemy"
 				}
 			],
+			metadata: {
+				type: "Create",
+				actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+				object: { type: "Note", content: "This is a simple note 2" },
+				published: "2015-01-25T12:34:56Z"
+			},
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			resources: [
 				{
-					"@type": "resource",
-					created: "2024-08-22T11:55:16.271Z",
 					id: "resource1",
+					type: "Resource",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
 					metadata: {
-						"@type": "https://www.w3.org/ns/activitystreams#Create",
-						"https://www.w3.org/ns/activitystreams#actor": {
-							"@id": "acct:person@example.org",
-							"@type": "https://www.w3.org/ns/activitystreams#Person",
-							"https://www.w3.org/ns/activitystreams#name": "Person"
-						},
-						"https://www.w3.org/ns/activitystreams#object": {
-							"@type": "https://www.w3.org/ns/activitystreams#Note",
-							"https://www.w3.org/ns/activitystreams#content": "This is a simple note resource 10"
-						},
-						"https://www.w3.org/ns/activitystreams#published": {
-							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-							"@value": "2015-01-25T12:34:56Z"
-						}
-					},
-					updated: "2024-08-22T11:56:56.272Z"
+						type: "Create",
+						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+						object: { type: "Note", content: "This is a simple note resource 10" },
+						published: "2015-01-25T12:34:56Z"
+					}
 				},
 				{
-					"@type": "resource",
-					created: "2024-08-22T11:55:16.271Z",
 					id: "resource2",
+					type: "Resource",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
 					metadata: {
-						"@type": "https://www.w3.org/ns/activitystreams#Create",
-						"https://www.w3.org/ns/activitystreams#actor": {
-							"@id": "acct:person@example.org",
-							"@type": "https://www.w3.org/ns/activitystreams#Person",
-							"https://www.w3.org/ns/activitystreams#name": "Person"
-						},
-						"https://www.w3.org/ns/activitystreams#object": {
-							"@type": "https://www.w3.org/ns/activitystreams#Note",
-							"https://www.w3.org/ns/activitystreams#content": "This is a simple note resource 20"
-						},
-						"https://www.w3.org/ns/activitystreams#published": {
-							"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-							"@value": "2015-01-25T12:34:56Z"
-						}
-					},
-					updated: "2024-08-22T11:56:56.272Z"
+						type: "Create",
+						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+						object: { type: "Note", content: "This is a simple note resource 20" },
+						published: "2015-01-25T12:34:56Z"
+					}
 				}
-			],
-			created: "2024-08-22T11:55:16.271Z",
-			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			metadata: {
-				"@type": "https://www.w3.org/ns/activitystreams#Create",
-				"https://www.w3.org/ns/activitystreams#actor": {
-					"@id": "acct:person@example.org",
-					"@type": "https://www.w3.org/ns/activitystreams#Person",
-					"https://www.w3.org/ns/activitystreams#name": "Person"
-				},
-				"https://www.w3.org/ns/activitystreams#object": {
-					"@type": "https://www.w3.org/ns/activitystreams#Note",
-					"https://www.w3.org/ns/activitystreams#content": "This is a simple note 2"
-				},
-				"https://www.w3.org/ns/activitystreams#published": {
-					"@type": "http://www.w3.org/2001/XMLSchema#dateTime",
-					"@value": "2015-01-25T12:34:56Z"
-				}
-			},
-			nodeIdentity: TEST_NODE_IDENTITY,
-			updated: "2024-08-22T11:56:56.272Z"
+			]
 		});
 	});
 

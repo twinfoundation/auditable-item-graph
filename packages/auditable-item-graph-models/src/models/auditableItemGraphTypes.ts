@@ -7,14 +7,9 @@
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const AuditableItemGraphTypes = {
 	/**
-	 * The context uri for the auditable item graph types.
-	 */
-	ContextUri: "https://schema.twindev.org/aig/",
-
-	/**
 	 * The context root for the auditable item graph types.
 	 */
-	ContextJsonld: "https://schema.twindev.org/aig/types.jsonld",
+	ContextRoot: "https://schema.twindev.org/aig/",
 
 	/**
 	 * Represents auditable item graph vertex.

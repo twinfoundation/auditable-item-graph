@@ -1104,7 +1104,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			);
 
 			// Create the data for the verifiable credential
-			const credentialData: IAuditableItemGraphCredential = {
+			const credentialData: IAuditableItemGraphCredential & IJsonLdNodeObject = {
+				"@context": AuditableItemGraphTypes.ContextRoot,
+				type: AuditableItemGraphTypes.Credential,
 				created: context.now,
 				userIdentity: context.userIdentity,
 				signature: Converter.bytesToBase64(signature),
@@ -1130,7 +1132,6 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				context.nodeIdentity,
 				`${context.nodeIdentity}#${this._assertionMethodId}`,
 				new Urn(AuditableItemGraphService.NAMESPACE, originalModel.id).toString(),
-				AuditableItemGraphTypes.Credential,
 				credentialData
 			);
 
@@ -1247,10 +1248,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 							const decodedJwt = await Jwt.decode(verifiableCredentialJwt);
 
 							// Verify the credential
-							const verificationResult =
-								await this._identityConnector.checkVerifiableCredential<IAuditableItemGraphCredential>(
-									verifiableCredentialJwt
-								);
+							const verificationResult = await this._identityConnector.checkVerifiableCredential<
+								IAuditableItemGraphCredential & IJsonLdNodeObject
+							>(verifiableCredentialJwt);
 
 							if (verificationResult.revoked) {
 								verify.state = AuditableItemGraphVerificationState.CredentialRevoked;

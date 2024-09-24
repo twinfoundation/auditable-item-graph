@@ -12,7 +12,7 @@
 		}
 	],
 	"externalReferences": {
-		"IJsonLd(.*?)": "https://schema.twindev.org/json-ld/JsonLd$1",
-		"I?AuditableItemGraph(.*?)(?<!Request|Response)": "https://schema.twindev.org/aig/AuditableItemGraph$1"
+		"JsonLd(.*?)": "https://schema.twindev.org/json-ld/JsonLd$1",
+		"AuditableItemGraph(.*?)": "https://schema.twindev.org/aig/AuditableItemGraph$1"
 	}
 }

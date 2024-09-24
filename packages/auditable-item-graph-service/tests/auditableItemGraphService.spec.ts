@@ -729,7 +729,7 @@ describe("AuditableItemGraphService", () => {
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					patches: [
 						{
-							type: "Patch",
+							type: "PatchOperation",
 							patchOperation: "add",
 							patchPath: "/metadata",
 							patchValue: {
@@ -748,7 +748,7 @@ describe("AuditableItemGraphService", () => {
 							}
 						},
 						{
-							type: "Patch",
+							type: "PatchOperation",
 							patchOperation: "add",
 							patchPath: "/aliases",
 							patchValue: [
@@ -3752,7 +3752,7 @@ describe("AuditableItemGraphService", () => {
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					patches: [
 						{
-							type: "Patch",
+							type: "PatchOperation",
 							patchOperation: "add",
 							patchPath: "/metadata",
 							patchValue: {
@@ -3764,7 +3764,7 @@ describe("AuditableItemGraphService", () => {
 							}
 						},
 						{
-							type: "Patch",
+							type: "PatchOperation",
 							patchOperation: "add",
 							patchPath: "/aliases",
 							patchValue: [
@@ -3793,7 +3793,7 @@ describe("AuditableItemGraphService", () => {
 							]
 						},
 						{
-							type: "Patch",
+							type: "PatchOperation",
 							patchOperation: "add",
 							patchPath: "/resources",
 							patchValue: [
@@ -3822,7 +3822,7 @@ describe("AuditableItemGraphService", () => {
 							]
 						},
 						{
-							type: "Patch",
+							type: "PatchOperation",
 							patchOperation: "add",
 							patchPath: "/edges",
 							patchValue: [
@@ -3865,79 +3865,79 @@ describe("AuditableItemGraphService", () => {
 						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505",
 					patches: [
 						{
-							type: "Patch",
+							type: "PatchOperation",
 							patchOperation: "replace",
 							patchPath: "/metadata/object/content",
 							patchValue: "This is a simple note 2"
 						},
 						{
-							type: "Patch",
+							type: "PatchOperation",
 							patchOperation: "add",
 							patchPath: "/aliases/0/updated",
 							patchValue: 1724327816272
 						},
 						{
-							type: "Patch",
+							type: "PatchOperation",
 							patchOperation: "replace",
 							patchPath: "/aliases/0/metadata/object/content",
 							patchValue: "This is a simple note alias 10"
 						},
 						{
-							type: "Patch",
+							type: "PatchOperation",
 							patchOperation: "add",
 							patchPath: "/aliases/1/updated",
 							patchValue: 1724327816272
 						},
 						{
-							type: "Patch",
+							type: "PatchOperation",
 							patchOperation: "replace",
 							patchPath: "/aliases/1/metadata/object/content",
 							patchValue: "This is a simple note alias 20"
 						},
 						{
-							type: "Patch",
+							type: "PatchOperation",
 							patchOperation: "add",
 							patchPath: "/resources/0/updated",
 							patchValue: 1724327816272
 						},
 						{
-							type: "Patch",
+							type: "PatchOperation",
 							patchOperation: "replace",
 							patchPath: "/resources/0/metadata/object/content",
 							patchValue: "This is a simple note resource 10"
 						},
 						{
-							type: "Patch",
+							type: "PatchOperation",
 							patchOperation: "add",
 							patchPath: "/resources/1/updated",
 							patchValue: 1724327816272
 						},
 						{
-							type: "Patch",
+							type: "PatchOperation",
 							patchOperation: "replace",
 							patchPath: "/resources/1/metadata/object/content",
 							patchValue: "This is a simple note resource 20"
 						},
 						{
-							type: "Patch",
+							type: "PatchOperation",
 							patchOperation: "add",
 							patchPath: "/edges/0/updated",
 							patchValue: 1724327816272
 						},
 						{
-							type: "Patch",
+							type: "PatchOperation",
 							patchOperation: "replace",
 							patchPath: "/edges/0/metadata/object/content",
 							patchValue: "This is a simple note edge 10"
 						},
 						{
-							type: "Patch",
+							type: "PatchOperation",
 							patchOperation: "add",
 							patchPath: "/edges/1/updated",
 							patchValue: 1724327816272
 						},
 						{
-							type: "Patch",
+							type: "PatchOperation",
 							patchOperation: "replace",
 							patchPath: "/edges/1/metadata/object/content",
 							patchValue: "This is a simple note edge 20"

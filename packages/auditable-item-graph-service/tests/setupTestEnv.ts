@@ -7,6 +7,7 @@ import type {
 } from "@twin.org/auditable-item-graph-models";
 import { Converter, Is, RandomHelper } from "@twin.org/core";
 import { Bip39 } from "@twin.org/crypto";
+import type { IJsonLdNodeObject } from "@twin.org/data-json-ld";
 import { MemoryEntityStorageConnector } from "@twin.org/entity-storage-connector-memory";
 import { EntityStorageConnectorFactory } from "@twin.org/entity-storage-models";
 import {
@@ -111,7 +112,9 @@ export async function decodeJwtToIntegrity(immutableStore: string): Promise<{
 	const vcJwt = Converter.bytesToUtf8(Converter.base64ToBytes(immutableStore));
 	const decodedJwt = await Jwt.decode<
 		IJwtHeader,
-		IJwtPayload & { vc: IDidVerifiableCredential<IAuditableItemGraphCredential> }
+		IJwtPayload & {
+			vc: IDidVerifiableCredential<IAuditableItemGraphCredential & IJsonLdNodeObject>;
+		}
 	>(vcJwt);
 	const credentialData = Is.arrayValue(decodedJwt.payload?.vc?.credentialSubject)
 		? decodedJwt.payload?.vc?.credentialSubject[0]
@@ -122,17 +125,21 @@ export async function decodeJwtToIntegrity(immutableStore: string): Promise<{
 				signature: ""
 			});
 
-	const integrityBytes = await TEST_VAULT_CONNECTOR.decrypt(
-		TEST_VAULT_KEY,
-		VaultEncryptionType.ChaCha20Poly1305,
-		Converter.base64ToBytes(credentialData.integrity ?? "")
-	);
+	let integrityJson;
+	if (Is.stringValue(credentialData.integrity)) {
+		const integrityBytes = await TEST_VAULT_CONNECTOR.decrypt(
+			TEST_VAULT_KEY,
+			VaultEncryptionType.ChaCha20Poly1305,
+			Converter.base64ToBytes(credentialData.integrity)
+		);
+		integrityJson = JSON.parse(Converter.bytesToUtf8(integrityBytes));
+	}
 
 	return {
 		created: credentialData.created,
 		userIdentity: credentialData.userIdentity,
 		hash: credentialData.hash,
 		signature: credentialData.signature,
-		integrity: JSON.parse(Converter.bytesToUtf8(integrityBytes))
+		integrity: integrityJson
 	};
 }

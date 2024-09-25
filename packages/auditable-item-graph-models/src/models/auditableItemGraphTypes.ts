@@ -14,47 +14,52 @@ export const AuditableItemGraphTypes = {
 	/**
 	 * Represents auditable item graph vertex.
 	 */
-	Vertex: "https://schema.twindev.org/aig/AuditableItemGraphVertex",
+	Vertex: "AuditableItemGraphVertex",
 
 	/**
 	 * Represents auditable item graph alias.
 	 */
-	Alias: "https://schema.twindev.org/aig/AuditableItemGraphAlias",
+	Alias: "AuditableItemGraphAlias",
 
 	/**
 	 * Represents auditable item graph resource.
 	 */
-	Resource: "https://schema.twindev.org/aig/AuditableItemGraphResource",
+	Resource: "AuditableItemGraphResource",
 
 	/**
 	 * Represents auditable item graph edge.
 	 */
-	Edge: "https://schema.twindev.org/aig/AuditableItemGraphEdge",
+	Edge: "AuditableItemGraphEdge",
 
 	/**
 	 * Represents auditable item graph  changeset.
 	 */
-	Changeset: "https://schema.twindev.org/aig/AuditableItemGraphChangeset",
+	Changeset: "AuditableItemGraphChangeset",
 
 	/**
 	 * Represents patch operation.
 	 */
-	PatchOperation: "https://schema.twindev.org/aig/AuditableItemGraphPatchOperation",
+	PatchOperation: "AuditableItemGraphPatchOperation",
 
 	/**
 	 * Represents the immutable credential payload.
 	 */
-	Credential: "https://schema.twindev.org/aig/AuditableItemGraphPatchCredential",
+	Credential: "AuditableItemGraphPatchCredential",
 
 	/**
 	 * Represents auditable item stream verification.
 	 */
-	Verification: "https://schema.twindev.org/aig/AuditableItemGraphVerification",
+	Verification: "AuditableItemGraphVerification",
 
 	/**
 	 * Represents auditable item stream verification state.
 	 */
-	VerificationState: "https://schema.twindev.org/aig/AuditableItemGraphVerificationState"
+	VerificationState: "AuditableItemGraphVerificationState",
+
+	/**
+	 * Represents auditable item stream vertex list.
+	 */
+	VertexList: "AuditableItemGraphVertexList"
 } as const;
 
 /**

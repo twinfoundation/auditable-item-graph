@@ -15,26 +15,26 @@ export class AuditableItemGraphResource {
 	public id!: string;
 
 	/**
-	 * The timestamp of when the resource was created.
+	 * The date/time of when the resource was created.
 	 */
-	@property({ type: "number" })
-	public created!: number;
+	@property({ type: "string", format: "date-time" })
+	public dateCreated!: string;
 
 	/**
-	 * The timestamp of when the resource was updated.
+	 * The date/time of when the resource was last modified.
 	 */
-	@property({ type: "number" })
-	public updated?: number;
+	@property({ type: "string", format: "date-time" })
+	public dateModified?: string;
 
 	/**
 	 * The timestamp of when the resource was deleted, as we never actually remove items.
 	 */
-	@property({ type: "number" })
-	public deleted?: number;
+	@property({ type: "string", format: "date-time" })
+	public dateDeleted?: string;
 
 	/**
-	 * Metadata to associate with the resource as JSON-LD.
+	 * Object to associate with the resource as JSON-LD.
 	 */
 	@property({ type: "object", itemTypeRef: JsonLdTypes.NodeObject })
-	public metadata?: IJsonLdNodeObject;
+	public resourceObject?: IJsonLdNodeObject;
 }

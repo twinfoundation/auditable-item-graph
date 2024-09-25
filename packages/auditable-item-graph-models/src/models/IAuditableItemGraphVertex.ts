@@ -1,22 +1,40 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
+import type { IJsonLdNodeObject } from "@twin.org/data-json-ld";
+import type { AuditableItemGraphTypes } from "./auditableItemGraphTypes";
 import type { IAuditableItemGraphAlias } from "./IAuditableItemGraphAlias";
 import type { IAuditableItemGraphAuditedElement } from "./IAuditableItemGraphAuditedElement";
 import type { IAuditableItemGraphChangeset } from "./IAuditableItemGraphChangeset";
 import type { IAuditableItemGraphEdge } from "./IAuditableItemGraphEdge";
-import type { IAuditableItemGraphMetadataElement } from "./IAuditableItemGraphMetadataElement";
 import type { IAuditableItemGraphResource } from "./IAuditableItemGraphResource";
+import type { IAuditableItemGraphVerification } from "./IAuditableItemGraphVerification";
 
 /**
  * Interface describing an auditable item graph vertex.
  */
 export interface IAuditableItemGraphVertex
-	extends Omit<IAuditableItemGraphAuditedElement, "deleted">,
-		IAuditableItemGraphMetadataElement {
+	extends Omit<IAuditableItemGraphAuditedElement, "deleted"> {
+	/**
+	 * JSON-LD Context.
+	 */
+	"@context":
+		| typeof AuditableItemGraphTypes.ContextRoot
+		| [typeof AuditableItemGraphTypes.ContextRoot, ...string[]];
+
+	/**
+	 * JSON-LD Type.
+	 */
+	type: typeof AuditableItemGraphTypes.Vertex;
+
 	/**
 	 * The identity of the node which controls the vertex.
 	 */
 	nodeIdentity?: string;
+
+	/**
+	 * The JSON-LD object for the vertex.
+	 */
+	vertexObject?: IJsonLdNodeObject;
 
 	/**
 	 * Alternative aliases that can be used to identify the vertex.
@@ -37,4 +55,14 @@ export interface IAuditableItemGraphVertex
 	 * Changesets for the vertex.
 	 */
 	changesets?: IAuditableItemGraphChangeset[];
+
+	/**
+	 * Is the vertex verified, will only be populated when verification is requested.
+	 */
+	verified?: boolean;
+
+	/**
+	 * The verification state of the changesets, will only be populated when changesets are requested.
+	 */
+	changesetsVerification?: IAuditableItemGraphVerification[];
 }

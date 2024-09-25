@@ -11,17 +11,17 @@ export interface IAuditableItemGraphCreateRequest {
 	 */
 	body?: {
 		/**
-		 * The metadata to be used in the vertex as JSON-LD.
+		 * The object to be used in the vertex as JSON-LD.
 		 */
-		metadata?: IJsonLdNodeObject;
+		vertexObject?: IJsonLdNodeObject;
 
 		/**
 		 * Alternative aliases that can be used to identify the vertex.
 		 */
 		aliases?: {
 			id: string;
-			format?: string;
-			metadata?: IJsonLdNodeObject;
+			aliasFormat?: string;
+			aliasObject?: IJsonLdNodeObject;
 		}[];
 
 		/**
@@ -29,7 +29,7 @@ export interface IAuditableItemGraphCreateRequest {
 		 */
 		resources?: {
 			id: string;
-			metadata?: IJsonLdNodeObject;
+			resourceObject?: IJsonLdNodeObject;
 		}[];
 
 		/**
@@ -37,8 +37,8 @@ export interface IAuditableItemGraphCreateRequest {
 		 */
 		edges?: {
 			id: string;
-			relationship: string;
-			metadata?: IJsonLdNodeObject;
+			edgeRelationship: string;
+			edgeObject?: IJsonLdNodeObject;
 		}[];
 	};
 }

@@ -13,7 +13,7 @@ import {
 	type IAuditableItemGraphResource,
 	type IAuditableItemGraphVerification,
 	type IAuditableItemGraphVertex,
-	type JsonReturnType
+	type IAuditableItemGraphVertexList
 } from "@twin.org/auditable-item-graph-models";
 import {
 	Converter,
@@ -31,13 +31,7 @@ import {
 	type IValidationFailure
 } from "@twin.org/core";
 import { Blake2b } from "@twin.org/crypto";
-import {
-	JsonLdHelper,
-	JsonLdProcessor,
-	type IJsonLdDocument,
-	type IJsonLdJsonObject,
-	type IJsonLdNodeObject
-} from "@twin.org/data-json-ld";
+import { JsonLdHelper, JsonLdProcessor, type IJsonLdNodeObject } from "@twin.org/data-json-ld";
 import { SchemaOrgDataTypes, SchemaOrgTypes } from "@twin.org/data-schema-org";
 import { ComparisonOperator, LogicalOperator, SortDirection } from "@twin.org/entity";
 import {
@@ -183,7 +177,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 	/**
 	 * Create a new graph vertex.
-	 * @param metadata The metadata for the vertex as JSON-LD.
+	 * @param vertexObject The object for the vertex as JSON-LD.
 	 * @param aliases Alternative aliases that can be used to identify the vertex.
 	 * @param resources The resources attached to the vertex.
 	 * @param edges The edges connected to the vertex.
@@ -192,20 +186,20 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @returns The id of the new graph item.
 	 */
 	public async create(
-		metadata?: IJsonLdNodeObject,
+		vertexObject?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
-			format?: string;
-			metadata?: IJsonLdNodeObject;
+			aliasFormat?: string;
+			aliasObject?: IJsonLdNodeObject;
 		}[],
 		resources?: {
 			id: string;
-			metadata?: IJsonLdNodeObject;
+			resourceObject?: IJsonLdNodeObject;
 		}[],
 		edges?: {
 			id: string;
-			relationship: string;
-			metadata?: IJsonLdNodeObject;
+			edgeRelationship: string;
+			edgeObject?: IJsonLdNodeObject;
 		}[],
 		userIdentity?: string,
 		nodeIdentity?: string
@@ -214,37 +208,44 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
 
 		try {
-			if (Is.object(metadata)) {
+			if (Is.object(vertexObject)) {
 				const validationFailures: IValidationFailure[] = [];
-				await JsonLdHelper.validate(metadata, validationFailures);
-				Validation.asValidationError(this.CLASS_NAME, "metadata", validationFailures);
+				await JsonLdHelper.validate(vertexObject, validationFailures);
+				Validation.asValidationError(this.CLASS_NAME, nameof(vertexObject), validationFailures);
 			}
 
 			const id = Converter.bytesToHex(RandomHelper.generate(32), false);
 
 			const context: IAuditableItemGraphServiceContext = {
-				now: Date.now(),
+				now: new Date(Date.now()).toISOString(),
 				userIdentity,
 				nodeIdentity
 			};
 
-			const vertexModel: IAuditableItemGraphVertex = {
+			const vertex: AuditableItemGraphVertex = {
 				id,
 				nodeIdentity,
-				created: context.now,
-				updated: context.now
+				dateCreated: context.now,
+				dateModified: context.now
 			};
-			const originalModel = ObjectHelper.clone(vertexModel);
+			const originalEntity = ObjectHelper.clone(vertex);
 
-			vertexModel.metadata = metadata;
+			vertex.vertexObject = vertexObject;
 
-			await this.updateAliasList(context, vertexModel, aliases);
-			await this.updateResourceList(context, vertexModel, resources);
-			await this.updateEdgeList(context, vertexModel, edges);
+			await this.updateAliasList(context, vertex, aliases);
+			await this.updateResourceList(context, vertex, resources);
+			await this.updateEdgeList(context, vertex, edges);
 
-			await this.addChangeset(context, originalModel, vertexModel);
+			delete originalEntity.aliasIndex;
+			await this.addChangeset(context, originalEntity, vertex);
 
-			await this._vertexStorage.set(this.vertexModelToEntity(vertexModel));
+			await this._vertexStorage.set({
+				...vertex,
+				aliasIndex: vertex.aliases
+					?.map(a => a.id)
+					.join("||")
+					.toLowerCase()
+			});
 
 			return new Urn(AuditableItemGraphService.NAMESPACE, id).toString();
 		} catch (error) {
@@ -260,27 +261,16 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @param options.includeDeleted Whether to include deleted/updated aliases, resource, edges, defaults to false.
 	 * @param options.includeChangesets Whether to include the changesets of the vertex, defaults to false.
 	 * @param options.verifySignatureDepth How many signatures to verify, defaults to "none".
-	 * @param responseType The response type to return, defaults to application/json.
 	 * @throws NotFoundError if the vertex is not found.
 	 */
-	public async get<T extends "json" | "jsonld" = "json">(
+	public async get(
 		id: string,
 		options?: {
 			includeDeleted?: boolean;
 			includeChangesets?: boolean;
 			verifySignatureDepth?: VerifyDepth;
-		},
-		responseType?: T
-	): Promise<
-		JsonReturnType<
-			T,
-			IAuditableItemGraphVertex & {
-				verified?: boolean;
-				changesetsVerification?: IAuditableItemGraphVerification[];
-			},
-			IJsonLdDocument
-		>
-	> {
+		}
+	): Promise<IAuditableItemGraphVertex> {
 		Guards.stringValue(this.CLASS_NAME, nameof(id), id);
 
 		const urnParsed = Urn.fromValidString(id);
@@ -322,19 +312,19 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 			if (!(options?.includeDeleted ?? false)) {
 				if (Is.arrayValue(vertexModel.aliases)) {
-					vertexModel.aliases = vertexModel.aliases.filter(a => Is.undefined(a.deleted));
+					vertexModel.aliases = vertexModel.aliases.filter(a => Is.undefined(a.dateDeleted));
 					if (vertexModel.aliases.length === 0) {
 						delete vertexModel.aliases;
 					}
 				}
 				if (Is.arrayValue(vertexModel.resources)) {
-					vertexModel.resources = vertexModel.resources.filter(r => Is.undefined(r.deleted));
+					vertexModel.resources = vertexModel.resources.filter(r => Is.undefined(r.dateDeleted));
 					if (vertexModel.resources.length === 0) {
 						delete vertexModel.resources;
 					}
 				}
 				if (Is.arrayValue(vertexModel.edges)) {
-					vertexModel.edges = vertexModel.edges.filter(r => Is.undefined(r.deleted));
+					vertexModel.edges = vertexModel.edges.filter(r => Is.undefined(r.dateDeleted));
 					if (vertexModel.edges.length === 0) {
 						delete vertexModel.edges;
 					}
@@ -345,38 +335,13 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				vertexModel.changesets = changesets;
 			}
 
-			if (responseType === "jsonld") {
-				const vertexJsonLd = this.modelToJsonLd(vertexModel);
-				if (verifySignatureDepth !== VerifyDepth.None) {
-					vertexJsonLd.verified = verified;
-					vertexJsonLd.changesetsVerification = (changesetsVerification ?? []).map(v =>
-						this.modelVerificationToJsonLd(v)
-					);
-				}
-
-				const compacted = await JsonLdProcessor.compact(vertexJsonLd);
-
-				return compacted as JsonReturnType<
-					T,
-					IAuditableItemGraphVertex & {
-						verified?: boolean;
-						changesetsVerification?: IAuditableItemGraphVerification[];
-					},
-					IJsonLdDocument
-				>;
-			}
-
-			const result: JsonReturnType<T, IAuditableItemGraphVertex, IJsonLdDocument> & {
-				verified?: boolean;
-				changesetsVerification?: IAuditableItemGraphVerification[];
-			} = vertexModel;
-
 			if (verifySignatureDepth !== VerifyDepth.None) {
-				result.verified = verified;
-				result.changesetsVerification = changesetsVerification;
+				vertexModel.verified = verified;
+				vertexModel.changesetsVerification = changesetsVerification;
 			}
 
-			return result;
+			const compacted = await JsonLdProcessor.compact(vertexModel);
+			return compacted as IAuditableItemGraphVertex;
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "getFailed", undefined, error);
 		}
@@ -385,7 +350,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	/**
 	 * Update a graph vertex.
 	 * @param id The id of the vertex to update.
-	 * @param metadata The metadata for the vertex.
+	 * @param vertexObject The object for the vertex.
 	 * @param aliases Alternative aliases that can be used to identify the vertex.
 	 * @param resources The resources attached to the vertex.
 	 * @param edges The edges connected to the vertex.
@@ -395,20 +360,20 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 */
 	public async update(
 		id: string,
-		metadata?: IJsonLdNodeObject,
+		vertexObject?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
-			format?: string;
-			metadata?: IJsonLdNodeObject;
+			aliasFormat?: string;
+			aliasObject?: IJsonLdNodeObject;
 		}[],
 		resources?: {
 			id: string;
-			metadata?: IJsonLdNodeObject;
+			resourceObject?: IJsonLdNodeObject;
 		}[],
 		edges?: {
 			id: string;
-			relationship: string;
-			metadata?: IJsonLdNodeObject;
+			edgeRelationship: string;
+			edgeObject?: IJsonLdNodeObject;
 		}[],
 		userIdentity?: string,
 		nodeIdentity?: string
@@ -434,32 +399,39 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				throw new NotFoundError(this.CLASS_NAME, "vertexNotFound", id);
 			}
 
-			if (Is.object(metadata)) {
+			if (Is.object(vertexObject)) {
 				const validationFailures: IValidationFailure[] = [];
-				await JsonLdHelper.validate(metadata, validationFailures);
-				Validation.asValidationError(this.CLASS_NAME, "metadata", validationFailures);
+				await JsonLdHelper.validate(vertexObject, validationFailures);
+				Validation.asValidationError(this.CLASS_NAME, nameof(vertexObject), validationFailures);
 			}
 
 			const context: IAuditableItemGraphServiceContext = {
-				now: Date.now(),
+				now: new Date(Date.now()).toISOString(),
 				userIdentity,
 				nodeIdentity
 			};
 
-			const vertexModel = this.vertexEntityToModel(vertexEntity);
-			const originalModel = ObjectHelper.clone(vertexModel);
+			delete vertexEntity.aliasIndex;
+			const originalEntity = ObjectHelper.clone(vertexEntity);
+			const newEntity = ObjectHelper.clone(vertexEntity);
 
-			vertexModel.metadata = metadata;
+			newEntity.vertexObject = vertexObject;
 
-			await this.updateAliasList(context, vertexModel, aliases);
-			await this.updateResourceList(context, vertexModel, resources);
-			await this.updateEdgeList(context, vertexModel, edges);
+			await this.updateAliasList(context, newEntity, aliases);
+			await this.updateResourceList(context, newEntity, resources);
+			await this.updateEdgeList(context, newEntity, edges);
 
-			const changes = await this.addChangeset(context, originalModel, vertexModel);
+			const changes = await this.addChangeset(context, originalEntity, newEntity);
 
 			if (changes) {
-				vertexModel.updated = context.now;
-				await this._vertexStorage.set(this.vertexModelToEntity(vertexModel));
+				newEntity.dateModified = context.now;
+				await this._vertexStorage.set({
+					...newEntity,
+					aliasIndex: newEntity.aliases
+						?.map(a => a.id)
+						.join("||")
+						.toLowerCase()
+				});
 			}
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "updateFailed", undefined, error);
@@ -504,7 +476,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 					},
 					[
 						{
-							property: "created",
+							property: "dateCreated",
 							sortDirection: SortDirection.Ascending
 						}
 					],
@@ -532,43 +504,32 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @param options.idMode Look in id, alias or both, defaults to both.
 	 * @param orderBy The order for the results, defaults to created.
 	 * @param orderByDirection The direction for the order, defaults to desc.
-	 * @param properties The properties to return, if not provided defaults to id, created, aliases and metadata.
+	 * @param properties The properties to return, if not provided defaults to id, created, aliases and object.
 	 * @param cursor The cursor to request the next page of entities.
 	 * @param pageSize The maximum number of entities in a page.
-	 * @param responseType The response type to return, defaults to application/json.
 	 * @returns The entities, which can be partial if a limited keys list was provided.
 	 */
-	public async query<T extends "json" | "jsonld" = "json">(
+	public async query(
 		options?: {
 			id?: string;
 			idMode?: "id" | "alias" | "both";
 		},
-		orderBy?: "created" | "updated",
+		orderBy?: keyof Pick<IAuditableItemGraphVertex, "dateCreated" | "dateModified">,
 		orderByDirection?: SortDirection,
 		properties?: (keyof IAuditableItemGraphVertex)[],
 		cursor?: string,
-		pageSize?: number,
-		responseType?: T
-	): Promise<
-		JsonReturnType<
-			T,
-			{
-				/**
-				 * The entities, which can be partial if a limited keys list was provided.
-				 */
-				entities: Partial<IAuditableItemGraphVertex>[];
-				/**
-				 * An optional cursor, when defined can be used to call find to get more entities.
-				 */
-				cursor?: string;
-			},
-			IJsonLdDocument
-		>
-	> {
+		pageSize?: number
+	): Promise<IAuditableItemGraphVertexList> {
 		try {
-			const propertiesToReturn = properties ?? ["id", "created", "updated", "aliases", "metadata"];
+			const propertiesToReturn: (keyof IAuditableItemGraphVertex)[] = properties ?? [
+				"id",
+				"dateCreated",
+				"dateModified",
+				"aliases",
+				"vertexObject"
+			];
 			const conditions = [];
-			const orderProperty = orderBy ?? "created";
+			const orderProperty = orderBy ?? "dateCreated";
 			const orderDirection = orderByDirection ?? SortDirection.Descending;
 
 			const idOrAlias = options?.id;
@@ -612,109 +573,22 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				pageSize
 			);
 
-			const models: IAuditableItemGraphVertex[] | IJsonLdDocument[] = results.entities.map(e =>
+			const models: IAuditableItemGraphVertex[] = results.entities.map(e =>
 				this.vertexEntityToModel(e as AuditableItemGraphVertex)
 			);
 
-			if (responseType === "jsonld") {
-				const jsonLdEntities = models.map(m => this.modelToJsonLd(m));
-
-				const jsonDocument: IJsonLdNodeObject = {
-					"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
-					"@graph": jsonLdEntities,
-					cursor: results.cursor
-				};
-
-				const compacted = await JsonLdProcessor.compact(jsonDocument);
-				return compacted as JsonReturnType<
-					T,
-					{
-						entities: Partial<IAuditableItemGraphVertex>[];
-						cursor?: string;
-					},
-					IJsonLdDocument
-				>;
-			}
-
-			return {
-				entities: models,
+			const vertexList: IAuditableItemGraphVertexList = {
+				"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+				type: AuditableItemGraphTypes.VertexList,
+				vertices: models,
 				cursor: results.cursor
-			} as JsonReturnType<
-				T,
-				{
-					entities: Partial<IAuditableItemGraphVertex>[];
-					cursor?: string;
-				},
-				IJsonLdDocument
-			>;
+			};
+
+			const compacted = await JsonLdProcessor.compact(vertexList);
+			return compacted as IAuditableItemGraphVertexList;
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "queryingFailed", undefined, error);
 		}
-	}
-
-	/**
-	 * Map the vertex model to an entity.
-	 * @param vertexModel The vertex model.
-	 * @returns The entity.
-	 * @internal
-	 */
-	private vertexModelToEntity(vertexModel: IAuditableItemGraphVertex): AuditableItemGraphVertex {
-		const entity: AuditableItemGraphVertex = {
-			id: vertexModel.id,
-			created: vertexModel.created,
-			updated: vertexModel.updated,
-			nodeIdentity: vertexModel.nodeIdentity,
-			metadata: vertexModel.metadata
-		};
-
-		if (Is.arrayValue(vertexModel.aliases)) {
-			const aliasIndex = [];
-			entity.aliases ??= [];
-			for (const aliasModel of vertexModel.aliases) {
-				const aliasEntity: AuditableItemGraphAlias = {
-					id: aliasModel.id,
-					created: aliasModel.created,
-					updated: aliasModel.updated,
-					deleted: aliasModel.deleted,
-					format: aliasModel.format,
-					metadata: aliasModel.metadata
-				};
-				entity.aliases.push(aliasEntity);
-				aliasIndex.push(aliasModel.id);
-			}
-			entity.aliasIndex = aliasIndex.join("||").toLowerCase();
-		}
-
-		if (Is.arrayValue(vertexModel.resources)) {
-			entity.resources ??= [];
-			for (const resourceModel of vertexModel.resources) {
-				const resourceEntity: AuditableItemGraphResource = {
-					id: resourceModel.id,
-					created: resourceModel.created,
-					updated: resourceModel.updated,
-					deleted: resourceModel.deleted,
-					metadata: resourceModel.metadata
-				};
-				entity.resources.push(resourceEntity);
-			}
-		}
-
-		if (Is.arrayValue(vertexModel.edges)) {
-			entity.edges ??= [];
-			for (const edgeModel of vertexModel.edges) {
-				const edgeEntity: AuditableItemGraphEdge = {
-					id: edgeModel.id,
-					created: edgeModel.created,
-					updated: edgeModel.updated,
-					deleted: edgeModel.deleted,
-					relationship: edgeModel.relationship,
-					metadata: edgeModel.metadata
-				};
-				entity.edges.push(edgeEntity);
-			}
-		}
-
-		return entity;
 	}
 
 	/**
@@ -725,23 +599,27 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 */
 	private vertexEntityToModel(vertexEntity: AuditableItemGraphVertex): IAuditableItemGraphVertex {
 		const model: IAuditableItemGraphVertex = {
+			"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+			type: AuditableItemGraphTypes.Vertex,
 			id: vertexEntity.id,
-			created: vertexEntity.created,
-			updated: vertexEntity.updated,
+			dateCreated: vertexEntity.dateCreated,
+			dateModified: vertexEntity.dateModified,
 			nodeIdentity: vertexEntity.nodeIdentity,
-			metadata: vertexEntity.metadata
+			vertexObject: vertexEntity.vertexObject
 		};
 
 		if (Is.arrayValue(vertexEntity.aliases)) {
 			model.aliases ??= [];
 			for (const aliasEntity of vertexEntity.aliases) {
 				const aliasModel: IAuditableItemGraphAlias = {
+					"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+					type: AuditableItemGraphTypes.Alias,
 					id: aliasEntity.id,
-					format: aliasEntity.format,
-					created: aliasEntity.created,
-					updated: aliasEntity.updated,
-					deleted: aliasEntity.deleted,
-					metadata: aliasEntity.metadata
+					aliasFormat: aliasEntity.aliasFormat,
+					dateCreated: aliasEntity.dateCreated,
+					dateModified: aliasEntity.dateModified,
+					dateDeleted: aliasEntity.dateDeleted,
+					aliasObject: aliasEntity.aliasObject
 				};
 				model.aliases.push(aliasModel);
 			}
@@ -751,11 +629,13 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			model.resources ??= [];
 			for (const resourceEntity of vertexEntity.resources) {
 				const resourceModel: IAuditableItemGraphResource = {
+					"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+					type: AuditableItemGraphTypes.Resource,
 					id: resourceEntity.id,
-					created: resourceEntity.created,
-					updated: resourceEntity.updated,
-					deleted: resourceEntity.deleted,
-					metadata: resourceEntity.metadata
+					dateCreated: resourceEntity.dateCreated,
+					dateModified: resourceEntity.dateModified,
+					dateDeleted: resourceEntity.dateDeleted,
+					resourceObject: resourceEntity.resourceObject
 				};
 				model.resources.push(resourceModel);
 			}
@@ -765,12 +645,14 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			model.edges ??= [];
 			for (const edgeEntity of vertexEntity.edges) {
 				const edgeModel: IAuditableItemGraphEdge = {
+					"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+					type: AuditableItemGraphTypes.Edge,
 					id: edgeEntity.id,
-					created: edgeEntity.created,
-					updated: edgeEntity.updated,
-					deleted: edgeEntity.deleted,
-					relationship: edgeEntity.relationship,
-					metadata: edgeEntity.metadata
+					dateCreated: edgeEntity.dateCreated,
+					dateModified: edgeEntity.dateModified,
+					dateDeleted: edgeEntity.dateDeleted,
+					edgeRelationship: edgeEntity.edgeRelationship,
+					edgeObject: edgeEntity.edgeObject
 				};
 				model.edges.push(edgeModel);
 			}
@@ -789,16 +671,20 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		changesetEntity: AuditableItemGraphChangeset
 	): IAuditableItemGraphChangeset {
 		const model: IAuditableItemGraphChangeset = {
+			"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+			type: AuditableItemGraphTypes.Changeset,
 			hash: changesetEntity.hash,
 			signature: changesetEntity.signature,
 			immutableStorageId: changesetEntity.immutableStorageId,
-			created: changesetEntity.created,
+			dateCreated: changesetEntity.dateCreated,
 			userIdentity: changesetEntity.userIdentity,
 			patches: changesetEntity.patches.map(p => ({
-				op: p.op,
-				path: p.path,
-				from: p.from,
-				value: p.value
+				"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+				type: AuditableItemGraphTypes.PatchOperation,
+				patchOperation: p.op,
+				patchPath: p.path,
+				patchFrom: p.from,
+				patchValue: p.value
 			}))
 		};
 
@@ -808,275 +694,280 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	/**
 	 * Update the aliases of a vertex model.
 	 * @param context The context for the operation.
-	 * @param vertexModel The vertex model.
+	 * @param vertex The vertex.
 	 * @param aliases The aliases to update.
 	 * @internal
 	 */
 	private async updateAliasList(
 		context: IAuditableItemGraphServiceContext,
-		vertexModel: IAuditableItemGraphVertex,
+		vertex: AuditableItemGraphVertex,
 		aliases?: {
 			id: string;
-			format?: string;
-			metadata?: IJsonLdNodeObject;
+			aliasFormat?: string;
+			aliasObject?: IJsonLdNodeObject;
 		}[]
 	): Promise<void> {
-		const active = vertexModel.aliases?.filter(a => Is.empty(a.deleted)) ?? [];
+		const active = vertex.aliases?.filter(a => Is.empty(a.dateDeleted)) ?? [];
 
 		// The active aliases that are not in the update list should be marked as deleted.
 		if (Is.arrayValue(active)) {
 			for (const alias of active) {
 				if (!aliases?.find(a => a.id === alias.id)) {
-					alias.deleted = context.now;
+					alias.dateDeleted = context.now;
 				}
 			}
 		}
 
 		if (Is.arrayValue(aliases)) {
 			for (const alias of aliases) {
-				await this.updateAlias(context, vertexModel, alias);
+				await this.updateAlias(context, vertex, alias);
 			}
 		}
 	}
 
 	/**
-	 * Update an alias in the vertex model.
+	 * Update an alias in the vertex.
 	 * @param context The context for the operation.
-	 * @param vertexModel The vertex model.
+	 * @param vertex The vertex.
 	 * @param alias The alias.
 	 * @internal
 	 */
 	private async updateAlias(
 		context: IAuditableItemGraphServiceContext,
-		vertexModel: IAuditableItemGraphVertex,
+		vertex: AuditableItemGraphVertex,
 		alias: {
 			id: string;
-			format?: string;
-			metadata?: IJsonLdNodeObject;
+			aliasFormat?: string;
+			aliasObject?: IJsonLdNodeObject;
 		}
 	): Promise<void> {
 		Guards.object(this.CLASS_NAME, nameof(alias), alias);
 		Guards.stringValue(this.CLASS_NAME, nameof(alias.id), alias.id);
 
-		if (Is.object(alias.metadata)) {
+		if (Is.object(alias.aliasObject)) {
 			const validationFailures: IValidationFailure[] = [];
-			await JsonLdHelper.validate(alias.metadata, validationFailures);
-			Validation.asValidationError(this.CLASS_NAME, "alias.metadata", validationFailures);
+			await JsonLdHelper.validate(alias.aliasObject, validationFailures);
+			Validation.asValidationError(this.CLASS_NAME, nameof(alias.aliasObject), validationFailures);
 		}
 
 		// Try to find an existing alias with the same id.
-		const existing = vertexModel.aliases?.find(a => a.id === alias.id);
+		const existing = vertex.aliases?.find(a => a.id === alias.id);
 
-		if (Is.empty(existing) || existing?.deleted) {
+		if (Is.empty(existing) || !Is.empty(existing?.dateDeleted)) {
 			// Did not find a matching item, or found one which is deleted.
-			vertexModel.aliases ??= [];
+			vertex.aliases ??= [];
 
-			const model: IAuditableItemGraphAlias = {
+			const model: AuditableItemGraphAlias = {
 				id: alias.id,
-				format: alias.format,
-				created: context.now,
-				metadata: alias.metadata
+				aliasFormat: alias.aliasFormat,
+				dateCreated: context.now,
+				aliasObject: alias.aliasObject
 			};
 
-			vertexModel.aliases.push(model);
+			vertex.aliases.push(model);
 		} else if (
-			existing.format !== alias.format ||
-			!ObjectHelper.equal(existing.metadata, alias.metadata, false)
+			existing.aliasFormat !== alias.aliasFormat ||
+			!ObjectHelper.equal(existing.aliasObject, alias.aliasObject, false)
 		) {
-			// Existing alias found, update the metadata.
-			existing.updated = context.now;
-			existing.format = alias.format;
-			existing.metadata = alias.metadata;
+			// Existing alias found, update the aliasObject.
+			existing.dateModified = context.now;
+			existing.aliasFormat = alias.aliasFormat;
+			existing.aliasObject = alias.aliasObject;
 		}
 	}
 
 	/**
-	 * Update the resources of a vertex model.
+	 * Update the resources of a vertex.
 	 * @param context The context for the operation.
-	 * @param vertexModel The vertex model.
+	 * @param vertex The vertex.
 	 * @param resources The resources to update.
 	 * @internal
 	 */
 	private async updateResourceList(
 		context: IAuditableItemGraphServiceContext,
-		vertexModel: IAuditableItemGraphVertex,
+		vertex: AuditableItemGraphVertex,
 		resources?: {
 			id: string;
-			metadata?: IJsonLdNodeObject;
+			resourceObject?: IJsonLdNodeObject;
 		}[]
 	): Promise<void> {
-		const active = vertexModel.resources?.filter(r => Is.empty(r.deleted)) ?? [];
+		const active = vertex.resources?.filter(r => Is.empty(r.dateDeleted)) ?? [];
 
 		// The active resources that are not in the update list should be marked as deleted.
 		if (Is.arrayValue(active)) {
 			for (const resource of active) {
 				if (!resources?.find(a => a.id === resource.id)) {
-					resource.deleted = context.now;
+					resource.dateDeleted = context.now;
 				}
 			}
 		}
 
 		if (Is.arrayValue(resources)) {
 			for (const resource of resources) {
-				await this.updateResource(context, vertexModel, resource);
+				await this.updateResource(context, vertex, resource);
 			}
 		}
 	}
 
 	/**
-	 * Add a resource to the vertex model.
+	 * Add a resource to the vertex.
 	 * @param context The context for the operation.
-	 * @param vertexModel The vertex model.
+	 * @param vertex The vertex.
 	 * @param resource The resource.
 	 * @internal
 	 */
 	private async updateResource(
 		context: IAuditableItemGraphServiceContext,
-		vertexModel: IAuditableItemGraphVertex,
+		vertex: AuditableItemGraphVertex,
 		resource: {
 			id: string;
-			metadata?: IJsonLdNodeObject;
+			resourceObject?: IJsonLdNodeObject;
 		}
 	): Promise<void> {
 		Guards.object(this.CLASS_NAME, nameof(resource), resource);
 		Guards.stringValue(this.CLASS_NAME, nameof(resource.id), resource.id);
 
-		if (Is.object(resource.metadata)) {
+		if (Is.object(resource.resourceObject)) {
 			const validationFailures: IValidationFailure[] = [];
-			await JsonLdHelper.validate(resource.metadata, validationFailures);
-			Validation.asValidationError(this.CLASS_NAME, "resource.metadata", validationFailures);
+			await JsonLdHelper.validate(resource.resourceObject, validationFailures);
+			Validation.asValidationError(
+				this.CLASS_NAME,
+				nameof(resource.resourceObject),
+				validationFailures
+			);
 		}
 
 		// Try to find an existing resource with the same id.
-		const existing = vertexModel.resources?.find(r => r.id === resource.id);
+		const existing = vertex.resources?.find(r => r.id === resource.id);
 
-		if (Is.empty(existing) || existing?.deleted) {
+		if (Is.empty(existing) || !Is.empty(existing?.dateDeleted)) {
 			// Did not find a matching item, or found one which is deleted.
-			vertexModel.resources ??= [];
+			vertex.resources ??= [];
 
-			const model: IAuditableItemGraphResource = {
+			const model: AuditableItemGraphResource = {
 				id: resource.id,
-				created: context.now,
-				metadata: resource.metadata
+				dateCreated: context.now,
+				resourceObject: resource.resourceObject
 			};
 
-			vertexModel.resources.push(model);
-		} else if (!ObjectHelper.equal(existing.metadata, resource.metadata, false)) {
-			// Existing resource found, update the metadata.
-			existing.updated = context.now;
-			existing.metadata = resource.metadata;
+			vertex.resources.push(model);
+		} else if (!ObjectHelper.equal(existing.resourceObject, resource.resourceObject, false)) {
+			// Existing resource found, update the resourceObject.
+			existing.dateModified = context.now;
+			existing.resourceObject = resource.resourceObject;
 		}
 	}
 
 	/**
-	 * Update the edges of a vertex model.
+	 * Update the edges of a vertex.
 	 * @param context The context for the operation.
-	 * @param vertexModel The vertex model.
+	 * @param vertex The vertex.
 	 * @param edges The edges to update.
 	 * @internal
 	 */
 	private async updateEdgeList(
 		context: IAuditableItemGraphServiceContext,
-		vertexModel: IAuditableItemGraphVertex,
+		vertex: AuditableItemGraphVertex,
 		edges?: {
 			id: string;
-			relationship: string;
-			metadata?: IJsonLdNodeObject;
+			edgeRelationship: string;
+			edgeObject?: IJsonLdNodeObject;
 		}[]
 	): Promise<void> {
-		const active = vertexModel.edges?.filter(e => Is.empty(e.deleted)) ?? [];
+		const active = vertex.edges?.filter(e => Is.empty(e.dateDeleted)) ?? [];
 
 		// The active edges that are not in the update list should be marked as deleted.
 		if (Is.arrayValue(active)) {
 			for (const edge of active) {
 				if (!edges?.find(a => a.id === edge.id)) {
-					edge.deleted = context.now;
+					edge.dateDeleted = context.now;
 				}
 			}
 		}
 
 		if (Is.arrayValue(edges)) {
 			for (const edge of edges) {
-				await this.updateEdge(context, vertexModel, edge);
+				await this.updateEdge(context, vertex, edge);
 			}
 		}
 	}
 
 	/**
-	 * Add an edge to the vertex model.
+	 * Add an edge to the vertex.
 	 * @param context The context for the operation.
-	 * @param vertexModel The vertex model.
+	 * @param vertex The vertex.
 	 * @param edge The edge.
 	 * @internal
 	 */
 	private async updateEdge(
 		context: IAuditableItemGraphServiceContext,
-		vertexModel: IAuditableItemGraphVertex,
+		vertex: AuditableItemGraphVertex,
 		edge: {
 			id: string;
-			relationship: string;
-			metadata?: IJsonLdNodeObject;
+			edgeRelationship: string;
+			edgeObject?: IJsonLdNodeObject;
 		}
 	): Promise<void> {
 		Guards.object(this.CLASS_NAME, nameof(edge), edge);
 		Guards.stringValue(this.CLASS_NAME, nameof(edge.id), edge.id);
-		Guards.stringValue(this.CLASS_NAME, nameof(edge.relationship), edge.relationship);
+		Guards.stringValue(this.CLASS_NAME, nameof(edge.edgeRelationship), edge.edgeRelationship);
 
-		if (Is.object(edge.metadata)) {
+		if (Is.object(edge.edgeObject)) {
 			const validationFailures: IValidationFailure[] = [];
-			await JsonLdHelper.validate(edge.metadata, validationFailures);
-			Validation.asValidationError(this.CLASS_NAME, "edge.metadata", validationFailures);
+			await JsonLdHelper.validate(edge.edgeObject, validationFailures);
+			Validation.asValidationError(this.CLASS_NAME, nameof(edge.edgeObject), validationFailures);
 		}
 
 		// Try to find an existing edge with the same id.
-		const existing = vertexModel.edges?.find(r => r.id === edge.id);
+		const existing = vertex.edges?.find(r => r.id === edge.id);
 
-		if (Is.empty(existing) || existing?.deleted) {
+		if (Is.empty(existing) || !Is.empty(existing?.dateDeleted)) {
 			// Did not find a matching item, or found one which is deleted.
-			vertexModel.edges ??= [];
+			vertex.edges ??= [];
 
-			const model: IAuditableItemGraphEdge = {
+			const model: AuditableItemGraphEdge = {
 				id: edge.id,
-				created: context.now,
-				metadata: edge.metadata,
-				relationship: edge.relationship
+				dateCreated: context.now,
+				edgeObject: edge.edgeObject,
+				edgeRelationship: edge.edgeRelationship
 			};
 
-			vertexModel.edges.push(model);
+			vertex.edges.push(model);
 		} else if (
-			existing.relationship !== edge.relationship ||
-			!ObjectHelper.equal(existing.metadata, edge.metadata, false)
+			existing.edgeRelationship !== edge.edgeRelationship ||
+			!ObjectHelper.equal(existing.edgeObject, edge.edgeObject, false)
 		) {
-			// Existing resource found, update the metadata.
-			existing.updated = context.now;
-			existing.relationship = edge.relationship;
-			existing.metadata = edge.metadata;
+			// Existing resource found, update the edgeObject.
+			existing.dateModified = context.now;
+			existing.edgeRelationship = edge.edgeRelationship;
+			existing.edgeObject = edge.edgeObject;
 		}
 	}
 
 	/**
 	 * Add a changeset to the vertex and generate the associated verifications.
 	 * @param context The context for the operation.
-	 * @param vertex The vertex model.
+	 * @param original The original vertex.
+	 * @param updated The updated vertex.
 	 * @returns True if there were changes.
 	 * @internal
 	 */
 	private async addChangeset(
 		context: IAuditableItemGraphServiceContext,
-		originalModel: IAuditableItemGraphVertex,
-		updatedModel: IAuditableItemGraphVertex
+		original: AuditableItemGraphVertex,
+		updated: AuditableItemGraphVertex
 	): Promise<boolean> {
-		const patches = JsonHelper.diff(originalModel, updatedModel);
+		const patches = JsonHelper.diff(original, updated);
 
 		const lastChangesetResult = await this._changesetStorage.query(
 			{
 				property: "vertexId",
-				value: originalModel.id,
+				value: original.id,
 				comparison: ComparisonOperator.Equals
 			},
 			[
 				{
-					property: "created",
+					property: "dateCreated",
 					sortDirection: SortDirection.Descending
 				}
 			],
@@ -1104,10 +995,10 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			);
 
 			// Create the data for the verifiable credential
-			const credentialData: IAuditableItemGraphCredential & IJsonLdNodeObject = {
-				"@context": AuditableItemGraphTypes.ContextRoot,
+			const credentialData: IAuditableItemGraphCredential = {
+				"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
 				type: AuditableItemGraphTypes.Credential,
-				created: context.now,
+				dateCreated: context.now,
 				userIdentity: context.userIdentity,
 				signature: Converter.bytesToBase64(signature),
 				hash: Converter.bytesToBase64(changeSetHash)
@@ -1131,7 +1022,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			const verifiableCredential = await this._identityConnector.createVerifiableCredential(
 				context.nodeIdentity,
 				`${context.nodeIdentity}#${this._assertionMethodId}`,
-				new Urn(AuditableItemGraphService.NAMESPACE, originalModel.id).toString(),
+				new Urn(AuditableItemGraphService.NAMESPACE, original.id).toString(),
 				credentialData
 			);
 
@@ -1145,8 +1036,8 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			await this._changesetStorage.set({
 				hash: credentialData.hash,
 				signature: credentialData.signature,
-				vertexId: updatedModel.id,
-				created: context.now,
+				vertexId: updated.id,
+				dateCreated: context.now,
 				userIdentity: context.userIdentity,
 				patches,
 				immutableStorageId
@@ -1189,7 +1080,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				},
 				[
 					{
-						property: "created",
+						property: "dateCreated",
 						sortDirection: SortDirection.Ascending
 					}
 				],
@@ -1204,14 +1095,16 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 					changesets.push(this.changesetEntityToModel(storedChangeset));
 
 					const verify: IAuditableItemGraphVerification = {
+						"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+						type: AuditableItemGraphTypes.Verification,
 						state: AuditableItemGraphVerificationState.Ok,
-						epoch: storedChangeset.created
+						dateCreated: storedChangeset.dateCreated
 					};
 
 					changesetsVerification.push(verify);
 
 					const calculatedHash = this.calculateChangesetHash(
-						storedChangeset.created,
+						storedChangeset.dateCreated,
 						storedChangeset.userIdentity,
 						storedChangeset.patches,
 						lastHash
@@ -1248,9 +1141,10 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 							const decodedJwt = await Jwt.decode(verifiableCredentialJwt);
 
 							// Verify the credential
-							const verificationResult = await this._identityConnector.checkVerifiableCredential<
-								IAuditableItemGraphCredential & IJsonLdNodeObject
-							>(verifiableCredentialJwt);
+							const verificationResult =
+								await this._identityConnector.checkVerifiableCredential<IAuditableItemGraphCredential>(
+									verifiableCredentialJwt
+								);
 
 							if (verificationResult.revoked) {
 								verify.state = AuditableItemGraphVerificationState.CredentialRevoked;
@@ -1261,7 +1155,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 								)
 									? verificationResult.verifiableCredential?.credentialSubject[0]
 									: (verificationResult.verifiableCredential?.credentialSubject ?? {
-											created: 0,
+											"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+											type: AuditableItemGraphTypes.Credential,
+											dateCreated: "",
 											userIdentity: "",
 											signature: "",
 											hash: ""
@@ -1292,17 +1188,24 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 									}
 									const immutableIntegrity: { patches: IAuditableItemGraphPatchOperation[] } =
 										JSON.parse(canonical);
-									immutablePatches = immutableIntegrity.patches;
+									immutablePatches = immutableIntegrity.patches.map(p => ({
+										op: p.patchOperation,
+										from: p.patchFrom,
+										path: p.patchPath,
+										value: p.patchValue
+									}));
 								}
 							}
 						}
 
 						// If there was a failure add some additional information
 						if (verify.state !== AuditableItemGraphVerificationState.Ok) {
-							verify.hash = storedChangeset.hash;
-							verify.integrityPatches = immutablePatches;
-							verify.integrityNodeIdentity = immutableNodeIdentity;
-							verify.integrityUserIdentity = immutableUserIdentity;
+							verify.stateProperties = {
+								hash: storedChangeset.hash,
+								integrityPatches: immutablePatches,
+								integrityNodeIdentity: immutableNodeIdentity,
+								integrityUserIdentity: immutableUserIdentity
+							};
 							verified = false;
 						}
 					}
@@ -1327,7 +1230,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @internal
 	 */
 	private calculateChangesetHash(
-		now: number,
+		now: string,
 		userIdentity: string,
 		patches: IPatchOperation[],
 		lastHash: Uint8Array | undefined
@@ -1341,152 +1244,12 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		}
 
 		// Add the epoch and the identity in to the signature
-		b2b.update(Converter.utf8ToBytes(now.toString()));
+		b2b.update(Converter.utf8ToBytes(now));
 		b2b.update(Converter.utf8ToBytes(userIdentity));
 
 		// Add the patch operations to the hash.
 		b2b.update(ObjectHelper.toBytes(patches));
 
 		return b2b.digest();
-	}
-
-	/**
-	 * Convert a model to a JSON-LD document.
-	 * @param model The model to convert.
-	 * @returns The JSON-LD document.
-	 * @internal
-	 */
-	private modelToJsonLd(model: IAuditableItemGraphVertex): IJsonLdNodeObject {
-		const nodeObject: IJsonLdNodeObject = {
-			"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
-			"@type": AuditableItemGraphTypes.Vertex,
-			id: model.id,
-			nodeIdentity: model.nodeIdentity,
-			dateCreated: new Date(model.created).toISOString()
-		};
-
-		if (Is.integer(model.updated)) {
-			nodeObject.dateModified = new Date(model.updated).toISOString();
-		}
-		if (Is.objectValue(model.metadata)) {
-			nodeObject.metadata = model.metadata;
-		}
-
-		if (Is.arrayValue(model.aliases)) {
-			const aliasesJsonld: IJsonLdNodeObject[] = [];
-			for (const alias of model.aliases) {
-				const aliasJsonLd: IJsonLdNodeObject = {
-					"@type": AuditableItemGraphTypes.Alias,
-					id: alias.id,
-					dateCreated: new Date(alias.created).toISOString()
-				};
-				if (Is.stringValue(alias.format)) {
-					aliasJsonLd.format = alias.format;
-				}
-				if (Is.integer(alias.updated)) {
-					aliasJsonLd.dateModified = new Date(alias.updated).toISOString();
-				}
-				if (Is.integer(alias.deleted)) {
-					aliasJsonLd.dateDeleted = new Date(alias.deleted).toISOString();
-				}
-				if (Is.objectValue(alias.metadata)) {
-					aliasJsonLd.metadata = alias.metadata;
-				}
-				aliasesJsonld.push(aliasJsonLd);
-			}
-			nodeObject.aliases = aliasesJsonld;
-		}
-
-		if (Is.arrayValue(model.resources)) {
-			const resourcesJsonld: IJsonLdNodeObject[] = [];
-			for (const resource of model.resources) {
-				const resourceJsonLd: IJsonLdNodeObject = {
-					"@type": AuditableItemGraphTypes.Resource,
-					id: resource.id,
-					dateCreated: new Date(resource.created).toISOString()
-				};
-				if (Is.integer(resource.updated)) {
-					resourceJsonLd.dateModified = new Date(resource.updated).toISOString();
-				}
-				if (Is.integer(resource.deleted)) {
-					resourceJsonLd.dateDeleted = new Date(resource.deleted).toISOString();
-				}
-				if (Is.objectValue(resource.metadata)) {
-					resourceJsonLd.metadata = resource.metadata;
-				}
-				resourcesJsonld.push(resourceJsonLd);
-			}
-			nodeObject.resources = resourcesJsonld;
-		}
-
-		if (Is.arrayValue(model.edges)) {
-			const edgesJsonld: IJsonLdNodeObject[] = [];
-			for (const edge of model.edges) {
-				const resourceJsonLd: IJsonLdNodeObject = {
-					"@type": AuditableItemGraphTypes.Edge,
-					id: edge.id,
-					dateCreated: new Date(edge.created).toISOString(),
-					edgeRelationship: edge.relationship
-				};
-				if (Is.integer(edge.updated)) {
-					resourceJsonLd.dateModified = new Date(edge.updated).toISOString();
-				}
-				if (Is.integer(edge.deleted)) {
-					resourceJsonLd.dateDeleted = new Date(edge.deleted).toISOString();
-				}
-				if (Is.objectValue(edge.metadata)) {
-					resourceJsonLd.metadata = edge.metadata;
-				}
-				edgesJsonld.push(resourceJsonLd);
-			}
-			nodeObject.edges = edgesJsonld;
-		}
-
-		if (Is.arrayValue(model.changesets)) {
-			const changesetsJsonld: IJsonLdNodeObject[] = [];
-			for (const changeset of model.changesets) {
-				const changesetJsonLd: IJsonLdNodeObject = {
-					"@type": AuditableItemGraphTypes.Changeset,
-					hash: changeset.hash,
-					signature: changeset.signature,
-					dateCreated: new Date(changeset.created).toISOString(),
-					immutableStorageId: changeset.immutableStorageId,
-					userIdentity: changeset.userIdentity
-				};
-				if (Is.arrayValue(changeset.patches)) {
-					const patchesJsonLd: IJsonLdNodeObject[] = [];
-					for (const patch of changeset.patches) {
-						patchesJsonLd.push({
-							"@type": AuditableItemGraphTypes.PatchOperation,
-							patchOperation: patch.op,
-							patchPath: patch.path,
-							patchFrom: patch.from,
-							patchValue: patch.value as IJsonLdJsonObject
-						});
-					}
-					changesetJsonLd.patches = patchesJsonLd;
-				}
-				changesetsJsonld.push(changesetJsonLd);
-			}
-			nodeObject.changesets = changesetsJsonld;
-		}
-
-		return nodeObject;
-	}
-
-	/**
-	 * Convert a model for verification to a JSON-LD document.
-	 * @param model The model to convert.
-	 * @returns The JSON-LD document.
-	 * @internal
-	 */
-	private modelVerificationToJsonLd(model: IAuditableItemGraphVerification): IJsonLdNodeObject {
-		const nodeObject: IJsonLdNodeObject = {
-			"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
-			"@type": AuditableItemGraphTypes.Verification,
-			...model
-		};
-
-		return nodeObject;
 	}
 }

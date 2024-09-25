@@ -21,8 +21,8 @@
 	"ignoreRegExpList": [
 		"/from\\s+(['\"]).*\\1/",
 		"/eslint-disable.*/",
-		"/tst1.*/",
-		"/^```(.|\\s)*?```\\s*$/gm",
-		"eyJraWQ.*"
+		"/^```shell[\\s\\S]*?```$/gm",
+		"/^```json[\\s\\S]*?```$/gm",
+		"/tst1.*/"
 	]
 }

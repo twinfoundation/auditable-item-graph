@@ -1,7 +1,8 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import { VerifyDepth } from "@twin.org/auditable-item-graph-models";
+import { AuditableItemGraphTypes, VerifyDepth } from "@twin.org/auditable-item-graph-models";
 import { RandomHelper } from "@twin.org/core";
+import { SchemaOrgTypes } from "@twin.org/data-schema-org";
 import { MemoryEntityStorageConnector } from "@twin.org/entity-storage-connector-memory";
 import { EntityStorageConnectorFactory } from "@twin.org/entity-storage-models";
 import {
@@ -98,8 +99,8 @@ describe("AuditableItemGraphService", () => {
 
 		expect(vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
-			updated: FIRST_TICK,
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY
 		});
 
@@ -108,12 +109,12 @@ describe("AuditableItemGraphService", () => {
 
 		expect(changeset).toEqual({
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
+			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity: TEST_USER_IDENTITY,
 			patches: [],
 			signature:
-				"khjWjRusY7cpGQb93waFkgUpzfsI1ynoCVc8JB/jqkxHnSKmPdheW9pDkGkslrVsbE5dGdpwD3wOfemSp8n8Dw==",
-			hash: "5/QKaqyMYylY+/GwpcSHopUw9tSeIK3tYSNNoMuYwjw=",
+				"Gn8flHdNYQkt7/rVBffUep6whXAHq6ZGVV7jc9x+51gGr7o9ZPn7iEKefZcHGlMc4fSIDtf3SBNtIsDX8rP1Dg==",
+			hash: "NfIGMY96nSnVWu8DXZVtnd+hOP1xu6UGkgEFdwup8YY=",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -126,12 +127,17 @@ describe("AuditableItemGraphService", () => {
 		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
 
 		const immutableIntegrity = await decodeJwtToIntegrity(immutableStore[0].data);
-
-		expect(immutableIntegrity.signature).toEqual(
-			"khjWjRusY7cpGQb93waFkgUpzfsI1ynoCVc8JB/jqkxHnSKmPdheW9pDkGkslrVsbE5dGdpwD3wOfemSp8n8Dw=="
-		);
-		expect(immutableIntegrity.userIdentity).toEqual(TEST_USER_IDENTITY);
-		expect(immutableIntegrity.integrity.patches).toEqual([]);
+		expect(immutableIntegrity).toEqual({
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			hash: "NfIGMY96nSnVWu8DXZVtnd+hOP1xu6UGkgEFdwup8YY=",
+			signature:
+				"Gn8flHdNYQkt7/rVBffUep6whXAHq6ZGVV7jc9x+51gGr7o9ZPn7iEKefZcHGlMc4fSIDtf3SBNtIsDX8rP1Dg==",
+			integrity: {
+				patches: []
+			}
+		});
 	});
 
 	test("Can create a vertex with an alias", async () => {
@@ -151,18 +157,18 @@ describe("AuditableItemGraphService", () => {
 
 		expect(vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
-			updated: FIRST_TICK,
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
 			aliasIndex: "foo123||bar456",
 			aliases: [
 				{
 					id: "foo123",
-					created: FIRST_TICK
+					dateCreated: "2024-08-22T11:55:16.271Z"
 				},
 				{
 					id: "bar456",
-					created: FIRST_TICK
+					dateCreated: "2024-08-22T11:55:16.271Z"
 				}
 			]
 		});
@@ -172,7 +178,7 @@ describe("AuditableItemGraphService", () => {
 
 		expect(changeset).toEqual({
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
+			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
@@ -181,18 +187,18 @@ describe("AuditableItemGraphService", () => {
 					value: [
 						{
 							id: "foo123",
-							created: FIRST_TICK
+							dateCreated: "2024-08-22T11:55:16.271Z"
 						},
 						{
 							id: "bar456",
-							created: FIRST_TICK
+							dateCreated: "2024-08-22T11:55:16.271Z"
 						}
 					]
 				}
 			],
-			hash: "Ht6zFJi0yl+MYTKgk+HdZW1PLWjJmSOwOkqrAA1NfVU=",
+			hash: "orN0KaNwyaMN/eNCasa5gVdxASLAboEUruNIjKjiVCk=",
 			signature:
-				"Upe1JYPqtP0FQ56xYwB5WFlR3CsyQKke55KTRmn0/waQm6/OWCz+HJlfDYR4EuMthR8NHAixrl2iweYLHZ1xAg==",
+				"/PSzLQIctmWsOnOy5sOVPS/+HuYxcylJHXm6g+yMOn6CBnjVQAiG1g3eQhnvZnd+/85w5Z35Ml592KTaGBqkAw==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -206,33 +212,29 @@ describe("AuditableItemGraphService", () => {
 
 		const immutableIntegrity = await decodeJwtToIntegrity(immutableStore[0].data);
 
-		expect(immutableIntegrity.signature).toEqual(
-			"Upe1JYPqtP0FQ56xYwB5WFlR3CsyQKke55KTRmn0/waQm6/OWCz+HJlfDYR4EuMthR8NHAixrl2iweYLHZ1xAg=="
-		);
-		expect(immutableIntegrity.created).toEqual(FIRST_TICK);
-		expect(immutableIntegrity.userIdentity).toEqual(TEST_USER_IDENTITY);
-
-		expect(immutableIntegrity.integrity).toEqual({
-			patches: [
-				{
-					op: "add",
-					path: "/aliases",
-					value: [
-						{
-							id: "foo123",
-							created: FIRST_TICK
-						},
-						{
-							id: "bar456",
-							created: FIRST_TICK
-						}
-					]
-				}
-			]
+		expect(immutableIntegrity).toEqual({
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			hash: "orN0KaNwyaMN/eNCasa5gVdxASLAboEUruNIjKjiVCk=",
+			signature:
+				"/PSzLQIctmWsOnOy5sOVPS/+HuYxcylJHXm6g+yMOn6CBnjVQAiG1g3eQhnvZnd+/85w5Z35Ml592KTaGBqkAw==",
+			integrity: {
+				patches: [
+					{
+						op: "add",
+						path: "/aliases",
+						value: [
+							{ dateCreated: "2024-08-22T11:55:16.271Z", id: "foo123" },
+							{ dateCreated: "2024-08-22T11:55:16.271Z", id: "bar456" }
+						]
+					}
+				]
+			}
 		});
 	});
 
-	test("Can create a vertex with some metadata", async () => {
+	test("Can create a vertex with object", async () => {
 		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		const id = await service.create(
 			{
@@ -262,10 +264,10 @@ describe("AuditableItemGraphService", () => {
 
 		expect(vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
-			updated: FIRST_TICK,
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
-			metadata: {
+			vertexObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
 				"@type": "Create",
 				actor: {
@@ -286,12 +288,12 @@ describe("AuditableItemGraphService", () => {
 
 		expect(changeset).toEqual({
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
+			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
 					op: "add",
-					path: "/metadata",
+					path: "/vertexObject",
 					value: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
@@ -308,9 +310,9 @@ describe("AuditableItemGraphService", () => {
 					}
 				}
 			],
-			hash: "a6YPG/e5uPE5UujQHMUFBWDRS9hquN0zMx4NYbgFLJU=",
+			hash: "wEBP4FkJ2I6MdhRPiD2xP38ONGj9NWuNvDEx/kxLZzY=",
 			signature:
-				"OS1vlNYFDDFm37RQMH0PcLkcCepVgMnb2/8HBdGSyvJkzaIk3acuqoguFi6ByizCduVV7tK4QJ8jNQSJzC4nAw==",
+				"hzFrZIDKZhq+oLhCPSNR5bD85cy66S/Dt/gjwLb2hn+3mX5ehjq6KtJWwZmXCBMIdKSSy7Vl+Ant8zPN3rKgCw==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -324,32 +326,28 @@ describe("AuditableItemGraphService", () => {
 
 		const immutableIntegrity = await decodeJwtToIntegrity(immutableStore[0].data);
 
-		expect(immutableIntegrity.signature).toEqual(
-			"OS1vlNYFDDFm37RQMH0PcLkcCepVgMnb2/8HBdGSyvJkzaIk3acuqoguFi6ByizCduVV7tK4QJ8jNQSJzC4nAw=="
-		);
-		expect(immutableIntegrity.created).toEqual(FIRST_TICK);
-		expect(immutableIntegrity.userIdentity).toEqual(TEST_USER_IDENTITY);
-		expect(immutableIntegrity.integrity).toEqual({
-			patches: [
-				{
-					op: "add",
-					path: "/metadata",
-					value: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@type": "Person",
-							"@id": "acct:person@example.org",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note"
-						},
-						published: "2015-01-25T12:34:56Z"
+		expect(immutableIntegrity).toEqual({
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			hash: "wEBP4FkJ2I6MdhRPiD2xP38ONGj9NWuNvDEx/kxLZzY=",
+			signature:
+				"hzFrZIDKZhq+oLhCPSNR5bD85cy66S/Dt/gjwLb2hn+3mX5ehjq6KtJWwZmXCBMIdKSSy7Vl+Ant8zPN3rKgCw==",
+			integrity: {
+				patches: [
+					{
+						op: "add",
+						path: "/vertexObject",
+						value: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							"@type": "Create",
+							actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+							object: { "@type": "Note", content: "This is a simple note" },
+							published: "2015-01-25T12:34:56Z"
+						}
 					}
-				}
-			]
+				]
+			}
 		});
 	});
 
@@ -381,32 +379,39 @@ describe("AuditableItemGraphService", () => {
 		const result = await service.get(id);
 
 		expect(result).toEqual({
+			"@context": [
+				AuditableItemGraphTypes.ContextRoot,
+				SchemaOrgTypes.ContextRoot,
+				"https://www.w3.org/ns/activitystreams"
+			],
+			type: AuditableItemGraphTypes.Vertex,
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
-			updated: FIRST_TICK,
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
-			metadata: {
-				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
+			vertexObject: {
+				type: "Create",
 				actor: {
-					"@type": "Person",
-					"@id": "acct:person@example.org",
+					type: "Person",
+					id: "acct:person@example.org",
 					name: "Person"
 				},
 				object: {
-					"@type": "Note",
+					type: "Note",
 					content: "This is a simple note"
 				},
 				published: "2015-01-25T12:34:56Z"
 			},
 			aliases: [
 				{
+					type: AuditableItemGraphTypes.Alias,
 					id: "foo123",
-					created: FIRST_TICK
+					dateCreated: "2024-08-22T11:55:16.271Z"
 				},
 				{
+					type: AuditableItemGraphTypes.Alias,
 					id: "bar456",
-					created: FIRST_TICK
+					dateCreated: "2024-08-22T11:55:16.271Z"
 				}
 			]
 		});
@@ -430,8 +435,8 @@ describe("AuditableItemGraphService", () => {
 				published: "2015-01-25T12:34:56Z"
 			},
 			[
-				{ id: "foo123", format: "type1" },
-				{ id: "bar456", format: "type2" }
+				{ id: "foo123", aliasFormat: "type1" },
+				{ id: "bar456", aliasFormat: "type2" }
 			],
 			undefined,
 			undefined,
@@ -443,35 +448,52 @@ describe("AuditableItemGraphService", () => {
 		const result = await service.get(id, { includeChangesets: true });
 
 		expect(result).toEqual({
+			"@context": [
+				AuditableItemGraphTypes.ContextRoot,
+				SchemaOrgTypes.ContextRoot,
+				"https://www.w3.org/ns/activitystreams"
+			],
+			type: AuditableItemGraphTypes.Vertex,
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
-			updated: FIRST_TICK,
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
-			metadata: {
-				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
-				actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
-				object: { "@type": "Note", content: "This is a simple note" },
+			vertexObject: {
+				type: "Create",
+				actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
+				object: { type: "Note", content: "This is a simple note" },
 				published: "2015-01-25T12:34:56Z"
 			},
 			aliases: [
-				{ id: "foo123", format: "type1", created: FIRST_TICK },
-				{ id: "bar456", format: "type2", created: FIRST_TICK }
+				{
+					type: AuditableItemGraphTypes.Alias,
+					id: "foo123",
+					aliasFormat: "type1",
+					dateCreated: "2024-08-22T11:55:16.271Z"
+				},
+				{
+					type: AuditableItemGraphTypes.Alias,
+					id: "bar456",
+					aliasFormat: "type2",
+					dateCreated: "2024-08-22T11:55:16.271Z"
+				}
 			],
 			changesets: [
 				{
-					hash: "NstRDrU726YzvJPr4+xOjyAlcnOEOFKR/+bCWntHbOQ=",
+					type: AuditableItemGraphTypes.Changeset,
+					hash: "qWUiywE1B5T6Dbxoiv9tyXg/LuPBS/b8rOdWhd6tEF0=",
 					signature:
-						"sgAI1NMU7HrzyqnT7FSdGAfEVAzLTSDmH93UHU118xhIK+K+7nlqXpw3igGCifQl7XLdiYHqpCQN2Go0qlGDCg==",
+						"MNknwnf0eAPgEBnf8Vvr4qetOZc9Ph0fwu9uYa/eno7Uy76p9ED1zif6ns+VwOEga9M+2MKn+oy91ljZR/0nAQ==",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
-					created: FIRST_TICK,
+					dateCreated: "2024-08-22T11:55:16.271Z",
 					userIdentity: TEST_USER_IDENTITY,
 					patches: [
 						{
-							op: "add",
-							path: "/metadata",
-							value: {
+							type: AuditableItemGraphTypes.PatchOperation,
+							patchOperation: "add",
+							patchPath: "/vertexObject",
+							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								"@type": "Create",
 								actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
@@ -480,11 +502,12 @@ describe("AuditableItemGraphService", () => {
 							}
 						},
 						{
-							op: "add",
-							path: "/aliases",
-							value: [
-								{ id: "foo123", format: "type1", created: FIRST_TICK },
-								{ id: "bar456", format: "type2", created: FIRST_TICK }
+							type: AuditableItemGraphTypes.PatchOperation,
+							patchOperation: "add",
+							patchPath: "/aliases",
+							patchValue: [
+								{ id: "foo123", aliasFormat: "type1", dateCreated: "2024-08-22T11:55:16.271Z" },
+								{ id: "bar456", aliasFormat: "type2", dateCreated: "2024-08-22T11:55:16.271Z" }
 							]
 						}
 					]
@@ -496,16 +519,16 @@ describe("AuditableItemGraphService", () => {
 		const changeset = changesetStore[0];
 
 		expect(changeset).toEqual({
-			hash: "NstRDrU726YzvJPr4+xOjyAlcnOEOFKR/+bCWntHbOQ=",
+			hash: "qWUiywE1B5T6Dbxoiv9tyXg/LuPBS/b8rOdWhd6tEF0=",
 			signature:
-				"sgAI1NMU7HrzyqnT7FSdGAfEVAzLTSDmH93UHU118xhIK+K+7nlqXpw3igGCifQl7XLdiYHqpCQN2Go0qlGDCg==",
+				"MNknwnf0eAPgEBnf8Vvr4qetOZc9Ph0fwu9uYa/eno7Uy76p9ED1zif6ns+VwOEga9M+2MKn+oy91ljZR/0nAQ==",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
+			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
 					op: "add",
-					path: "/metadata",
+					path: "/vertexObject",
 					value: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
@@ -518,8 +541,8 @@ describe("AuditableItemGraphService", () => {
 					op: "add",
 					path: "/aliases",
 					value: [
-						{ id: "foo123", format: "type1", created: FIRST_TICK },
-						{ id: "bar456", format: "type2", created: FIRST_TICK }
+						{ id: "foo123", aliasFormat: "type1", dateCreated: "2024-08-22T11:55:16.271Z" },
+						{ id: "bar456", aliasFormat: "type2", dateCreated: "2024-08-22T11:55:16.271Z" }
 					]
 				}
 			],
@@ -559,35 +582,42 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result).toEqual({
+			"@context": [
+				AuditableItemGraphTypes.ContextRoot,
+				SchemaOrgTypes.ContextRoot,
+				"https://www.w3.org/ns/activitystreams"
+			],
+			type: AuditableItemGraphTypes.Vertex,
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
-			updated: FIRST_TICK,
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
-			metadata: {
-				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
-				actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
-				object: { "@type": "Note", content: "This is a simple note" },
+			vertexObject: {
+				type: "Create",
+				actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
+				object: { type: "Note", content: "This is a simple note" },
 				published: "2015-01-25T12:34:56Z"
 			},
 			aliases: [
-				{ id: "foo123", created: FIRST_TICK },
-				{ id: "bar456", created: FIRST_TICK }
+				{ type: "AuditableItemGraphAlias", id: "foo123", dateCreated: "2024-08-22T11:55:16.271Z" },
+				{ type: "AuditableItemGraphAlias", id: "bar456", dateCreated: "2024-08-22T11:55:16.271Z" }
 			],
 			changesets: [
 				{
-					hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
+					type: "AuditableItemGraphChangeset",
+					hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
 					signature:
-						"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA==",
+						"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
-					created: FIRST_TICK,
+					dateCreated: "2024-08-22T11:55:16.271Z",
 					userIdentity: TEST_USER_IDENTITY,
 					patches: [
 						{
-							op: "add",
-							path: "/metadata",
-							value: {
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/vertexObject",
+							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								"@type": "Create",
 								actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
@@ -596,18 +626,25 @@ describe("AuditableItemGraphService", () => {
 							}
 						},
 						{
-							op: "add",
-							path: "/aliases",
-							value: [
-								{ id: "foo123", created: FIRST_TICK },
-								{ id: "bar456", created: FIRST_TICK }
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/aliases",
+							patchValue: [
+								{ id: "foo123", dateCreated: "2024-08-22T11:55:16.271Z" },
+								{ id: "bar456", dateCreated: "2024-08-22T11:55:16.271Z" }
 							]
 						}
 					]
 				}
 			],
 			verified: true,
-			changesetsVerification: [{ state: "ok", epoch: FIRST_TICK }]
+			changesetsVerification: [
+				{
+					type: "AuditableItemGraphVerification",
+					state: "ok",
+					dateCreated: "2024-08-22T11:55:16.271Z"
+				}
+			]
 		});
 
 		const changesetStore = changesetStorage.getStore();
@@ -615,12 +652,12 @@ describe("AuditableItemGraphService", () => {
 
 		expect(changeset).toEqual({
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
+			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
 					op: "add",
-					path: "/metadata",
+					path: "/vertexObject",
 					value: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
@@ -642,157 +679,20 @@ describe("AuditableItemGraphService", () => {
 					value: [
 						{
 							id: "foo123",
-							created: FIRST_TICK
+							dateCreated: "2024-08-22T11:55:16.271Z"
 						},
 						{
 							id: "bar456",
-							created: FIRST_TICK
+							dateCreated: "2024-08-22T11:55:16.271Z"
 						}
 					]
 				}
 			],
-			hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
+			hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
 			signature:
-				"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA==",
+				"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
-		});
-	});
-
-	test("Can get a vertex include changesets and verify current signature as JSON-LD", async () => {
-		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
-		const id = await service.create(
-			{
-				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
-				actor: {
-					"@type": "Person",
-					"@id": "acct:person@example.org",
-					name: "Person"
-				},
-				object: {
-					"@type": "Note",
-					content: "This is a simple note"
-				},
-				published: "2015-01-25T12:34:56Z"
-			},
-			[
-				{ id: "foo123", format: "type1" },
-				{ id: "bar456", format: "type2" }
-			],
-			undefined,
-			undefined,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
-		expect(id.startsWith("aig:")).toEqual(true);
-
-		const result = await service.get(
-			id,
-			{
-				includeChangesets: true,
-				verifySignatureDepth: VerifyDepth.Current
-			},
-			"jsonld"
-		);
-
-		expect(result).toEqual({
-			"@context": [
-				"https://schema.twindev.org/aig/",
-				"https://schema.org/",
-				"https://www.w3.org/ns/activitystreams"
-			],
-			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			type: "Vertex",
-			dateCreated: "2024-08-22T11:55:16.271Z",
-			dateModified: "2024-08-22T11:55:16.271Z",
-			aliases: [
-				{
-					id: "foo123",
-					type: "Alias",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					format: "type1"
-				},
-				{
-					id: "bar456",
-					type: "Alias",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					format: "type2"
-				}
-			],
-			changesets: [
-				{
-					type: "Changeset",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					hash: "NstRDrU726YzvJPr4+xOjyAlcnOEOFKR/+bCWntHbOQ=",
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
-					patches: [
-						{
-							type: "PatchOperation",
-							patchOperation: "add",
-							patchPath: "/metadata",
-							patchValue: {
-								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: {
-									"@type": "Person",
-									"@id": "acct:person@example.org",
-									name: "Person"
-								},
-								object: {
-									"@type": "Note",
-									content: "This is a simple note"
-								},
-								published: "2015-01-25T12:34:56Z"
-							}
-						},
-						{
-							type: "PatchOperation",
-							patchOperation: "add",
-							patchPath: "/aliases",
-							patchValue: [
-								{
-									id: "foo123",
-									format: "type1",
-									created: 1724327716271
-								},
-								{
-									id: "bar456",
-									format: "type2",
-									created: 1724327716271
-								}
-							]
-						}
-					],
-					signature:
-						"sgAI1NMU7HrzyqnT7FSdGAfEVAzLTSDmH93UHU118xhIK+K+7nlqXpw3igGCifQl7XLdiYHqpCQN2Go0qlGDCg==",
-					userIdentity: TEST_USER_IDENTITY
-				}
-			],
-			changesetsVerification: [
-				{
-					type: "Verification",
-					epoch: 1724327716271,
-					state: "ok"
-				}
-			],
-			metadata: {
-				type: "Create",
-				actor: {
-					id: "acct:person@example.org",
-					type: "Person",
-					name: "Person"
-				},
-				object: {
-					type: "Note",
-					content: "This is a simple note"
-				},
-				published: "2015-01-25T12:34:56Z"
-			},
-			nodeIdentity:
-				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
-			verified: true
 		});
 	});
 
@@ -849,33 +749,32 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result).toEqual({
+			"@context": [
+				"https://schema.twindev.org/aig/",
+				"https://schema.org/",
+				"https://www.w3.org/ns/activitystreams"
+			],
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
-			updated: FIRST_TICK,
-			nodeIdentity: TEST_NODE_IDENTITY,
-			metadata: {
-				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
-				actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
-				object: { "@type": "Note", content: "This is a simple note" },
-				published: "2015-01-25T12:34:56Z"
-			},
+			type: "AuditableItemGraphVertex",
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateModified: "2024-08-22T11:55:16.271Z",
 			aliases: [
-				{ id: "foo123", created: FIRST_TICK },
-				{ id: "bar456", created: FIRST_TICK }
+				{ id: "foo123", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" },
+				{ id: "bar456", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" }
 			],
 			changesets: [
 				{
-					hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
-					signature:
-						"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA==",
-					created: FIRST_TICK,
-					userIdentity: TEST_USER_IDENTITY,
+					type: "AuditableItemGraphChangeset",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					patches: [
 						{
-							op: "add",
-							path: "/metadata",
-							value: {
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/vertexObject",
+							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								"@type": "Create",
 								actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
@@ -884,45 +783,59 @@ describe("AuditableItemGraphService", () => {
 							}
 						},
 						{
-							op: "add",
-							path: "/aliases",
-							value: [
-								{ id: "foo123", created: FIRST_TICK },
-								{ id: "bar456", created: FIRST_TICK }
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/aliases",
+							patchValue: [
+								{ id: "foo123", dateCreated: "2024-08-22T11:55:16.271Z" },
+								{ id: "bar456", dateCreated: "2024-08-22T11:55:16.271Z" }
 							]
 						}
 					],
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+					signature:
+						"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				}
 			],
+			changesetsVerification: [
+				{
+					type: "AuditableItemGraphVerification",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					state: "ok"
+				}
+			],
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			verified: true,
-			changesetsVerification: [{ state: "ok", epoch: FIRST_TICK }]
+			vertexObject: {
+				type: "Create",
+				actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+				object: { type: "Note", content: "This is a simple note" },
+				published: "2015-01-25T12:34:56Z"
+			}
 		});
 
 		const changesetStore = changesetStorage.getStore();
 		const changeset = changesetStore[0];
 
 		expect(changeset).toEqual({
+			hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
+			signature:
+				"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
-			userIdentity: TEST_USER_IDENTITY,
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			patches: [
 				{
 					op: "add",
-					path: "/metadata",
+					path: "/vertexObject",
 					value: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
-						actor: {
-							"@type": "Person",
-							"@id": "acct:person@example.org",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note"
-						},
+						actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
+						object: { "@type": "Note", content: "This is a simple note" },
 						published: "2015-01-25T12:34:56Z"
 					}
 				},
@@ -930,20 +843,11 @@ describe("AuditableItemGraphService", () => {
 					op: "add",
 					path: "/aliases",
 					value: [
-						{
-							id: "foo123",
-							created: FIRST_TICK
-						},
-						{
-							id: "bar456",
-							created: FIRST_TICK
-						}
+						{ id: "foo123", dateCreated: "2024-08-22T11:55:16.271Z" },
+						{ id: "bar456", dateCreated: "2024-08-22T11:55:16.271Z" }
 					]
 				}
 			],
-			hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
-			signature:
-				"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -998,37 +902,43 @@ describe("AuditableItemGraphService", () => {
 
 		const result = await service.get(id, {
 			includeChangesets: true,
+			includeDeleted: true,
 			verifySignatureDepth: VerifyDepth.All
 		});
 
 		expect(result).toEqual({
+			"@context": [
+				"https://schema.twindev.org/aig/",
+				"https://schema.org/",
+				"https://www.w3.org/ns/activitystreams"
+			],
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
-			updated: SECOND_TICK,
-			nodeIdentity: TEST_NODE_IDENTITY,
-			metadata: {
-				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
-				actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
-				object: { "@type": "Note", content: "This is a simple note" },
-				published: "2015-01-25T12:34:56Z"
-			},
+			type: "AuditableItemGraphVertex",
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateModified: "2024-08-22T11:56:56.272Z",
 			aliases: [
-				{ id: "bar456", created: FIRST_TICK },
-				{ id: "foo321", created: SECOND_TICK }
+				{
+					type: "AuditableItemGraphAlias",
+					id: "foo123",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateDeleted: "2024-08-22T11:56:56.272Z"
+				},
+				{ type: "AuditableItemGraphAlias", id: "bar456", dateCreated: "2024-08-22T11:55:16.271Z" },
+				{ type: "AuditableItemGraphAlias", id: "foo321", dateCreated: "2024-08-22T11:56:56.272Z" }
 			],
 			changesets: [
 				{
-					hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
-					signature:
-						"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA==",
-					created: FIRST_TICK,
-					userIdentity: TEST_USER_IDENTITY,
+					type: "AuditableItemGraphChangeset",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					patches: [
 						{
-							op: "add",
-							path: "/metadata",
-							value: {
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/vertexObject",
+							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								"@type": "Create",
 								actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
@@ -1037,48 +947,79 @@ describe("AuditableItemGraphService", () => {
 							}
 						},
 						{
-							op: "add",
-							path: "/aliases",
-							value: [
-								{ id: "foo123", created: FIRST_TICK },
-								{ id: "bar456", created: FIRST_TICK }
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/aliases",
+							patchValue: [
+								{ id: "foo123", dateCreated: "2024-08-22T11:55:16.271Z" },
+								{ id: "bar456", dateCreated: "2024-08-22T11:55:16.271Z" }
 							]
 						}
 					],
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+					signature:
+						"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				},
 				{
-					hash: "Utd6Kg4vk2814eqbmZwSRE2L7292lfn7rAKskXrJRXo=",
-					signature:
-						"SubKHkO1ET+QRzujzvKu5zTEll055+Ctu1o8Y5iJHTV6wnk0UjYC3GB398tjrVjd0wjOfqOdRgFCMgbLV5wNBg==",
-					created: SECOND_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					patches: [
-						{ op: "add", path: "/aliases/0/deleted", value: SECOND_TICK },
-						{ op: "add", path: "/aliases/-", value: { id: "foo321", created: SECOND_TICK } }
-					],
+					type: "AuditableItemGraphChangeset",
+					dateCreated: "2024-08-22T11:56:56.272Z",
+					hash: "26iW3Ft5v2WE2Wy24JSC2vCqshTU9FVESMj6tJ/Y8Hg=",
 					immutableStorageId:
-						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
+						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505",
+					patches: [
+						{
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/aliases/0/dateDeleted",
+							patchValue: "2024-08-22T11:56:56.272Z"
+						},
+						{
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/aliases/-",
+							patchValue: { id: "foo321", dateCreated: "2024-08-22T11:56:56.272Z" }
+						}
+					],
+					signature:
+						"F9OqIVVmUmPQTT63k4IDLjIPO+uFRIJ/+f1biRN1m0dP6SnN+kYADvhyh73gmms/CVfJxw14HfcEmow7dHfcCQ==",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				}
 			],
-			verified: true,
 			changesetsVerification: [
-				{ state: "ok", epoch: FIRST_TICK },
-				{ state: "ok", epoch: SECOND_TICK }
-			]
+				{
+					type: "AuditableItemGraphVerification",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					state: "ok"
+				},
+				{
+					type: "AuditableItemGraphVerification",
+					dateCreated: "2024-08-22T11:56:56.272Z",
+					state: "ok"
+				}
+			],
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			verified: true,
+			vertexObject: {
+				type: "Create",
+				actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+				object: { type: "Note", content: "This is a simple note" },
+				published: "2015-01-25T12:34:56Z"
+			}
 		});
 
 		const changesetStore = changesetStorage.getStore();
 
 		expect(changesetStore[0]).toEqual({
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
+			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
 					op: "add",
-					path: "/metadata",
+					path: "/vertexObject",
 					value: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
@@ -1100,44 +1041,44 @@ describe("AuditableItemGraphService", () => {
 					value: [
 						{
 							id: "foo123",
-							created: FIRST_TICK
+							dateCreated: "2024-08-22T11:55:16.271Z"
 						},
 						{
 							id: "bar456",
-							created: FIRST_TICK
+							dateCreated: "2024-08-22T11:55:16.271Z"
 						}
 					]
 				}
 			],
-			hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
+			hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
 			signature:
-				"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA==",
+				"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
 
 		expect(changesetStore[1]).toEqual({
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: SECOND_TICK,
+			dateCreated: "2024-08-22T11:56:56.272Z",
 			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
 					op: "add",
-					path: "/aliases/0/deleted",
-					value: SECOND_TICK
+					path: "/aliases/0/dateDeleted",
+					value: "2024-08-22T11:56:56.272Z"
 				},
 				{
 					op: "add",
 					path: "/aliases/-",
 					value: {
 						id: "foo321",
-						created: SECOND_TICK
+						dateCreated: "2024-08-22T11:56:56.272Z"
 					}
 				}
 			],
-			hash: "Utd6Kg4vk2814eqbmZwSRE2L7292lfn7rAKskXrJRXo=",
+			hash: "26iW3Ft5v2WE2Wy24JSC2vCqshTU9FVESMj6tJ/Y8Hg=",
 			signature:
-				"SubKHkO1ET+QRzujzvKu5zTEll055+Ctu1o8Y5iJHTV6wnk0UjYC3GB398tjrVjd0wjOfqOdRgFCMgbLV5wNBg==",
+				"F9OqIVVmUmPQTT63k4IDLjIPO+uFRIJ/+f1biRN1m0dP6SnN+kYADvhyh73gmms/CVfJxw14HfcEmow7dHfcCQ==",
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
@@ -1150,74 +1091,82 @@ describe("AuditableItemGraphService", () => {
 		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
 
 		let immutableIntegrity = await decodeJwtToIntegrity(immutableStore[0].data);
-		expect(immutableIntegrity.signature).toEqual(
-			"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA=="
-		);
-		expect(immutableIntegrity.created).toEqual(FIRST_TICK);
-		expect(immutableIntegrity.userIdentity).toEqual(TEST_USER_IDENTITY);
-		expect(immutableIntegrity.integrity).toEqual({
-			patches: [
-				{
-					op: "add",
-					path: "/metadata",
-					value: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@type": "Person",
-							"@id": "acct:person@example.org",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					op: "add",
-					path: "/aliases",
-					value: [
-						{
-							id: "foo123",
-							created: FIRST_TICK
-						},
-						{
-							id: "bar456",
-							created: FIRST_TICK
+
+		expect(immutableIntegrity).toEqual({
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
+			signature:
+				"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
+			integrity: {
+				patches: [
+					{
+						op: "add",
+						path: "/vertexObject",
+						value: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							"@type": "Create",
+							actor: {
+								"@id": "acct:person@example.org",
+								"@type": "Person",
+								name: "Person"
+							},
+							object: {
+								"@type": "Note",
+								content: "This is a simple note"
+							},
+							published: "2015-01-25T12:34:56Z"
 						}
-					]
-				}
-			]
+					},
+					{
+						op: "add",
+						path: "/aliases",
+						value: [
+							{
+								dateCreated: "2024-08-22T11:55:16.271Z",
+								id: "foo123"
+							},
+							{
+								dateCreated: "2024-08-22T11:55:16.271Z",
+								id: "bar456"
+							}
+						]
+					}
+				]
+			}
 		});
 
 		immutableIntegrity = await decodeJwtToIntegrity(immutableStore[1].data);
-		expect(immutableIntegrity.signature).toEqual(
-			"SubKHkO1ET+QRzujzvKu5zTEll055+Ctu1o8Y5iJHTV6wnk0UjYC3GB398tjrVjd0wjOfqOdRgFCMgbLV5wNBg=="
-		);
-		expect(immutableIntegrity.created).toEqual(SECOND_TICK);
 
-		expect(immutableIntegrity.integrity).toEqual({
-			patches: [
-				{
-					op: "add",
-					path: "/aliases/0/deleted",
-					value: SECOND_TICK
-				},
-				{
-					op: "add",
-					path: "/aliases/-",
-					value: {
-						id: "foo321",
-						created: SECOND_TICK
+		expect(immutableIntegrity).toEqual({
+			dateCreated: "2024-08-22T11:56:56.272Z",
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			hash: "26iW3Ft5v2WE2Wy24JSC2vCqshTU9FVESMj6tJ/Y8Hg=",
+			signature:
+				"F9OqIVVmUmPQTT63k4IDLjIPO+uFRIJ/+f1biRN1m0dP6SnN+kYADvhyh73gmms/CVfJxw14HfcEmow7dHfcCQ==",
+			integrity: {
+				patches: [
+					{
+						op: "add",
+						path: "/aliases/0/dateDeleted",
+						value: "2024-08-22T11:56:56.272Z"
+					},
+					{
+						op: "add",
+						path: "/aliases/-",
+						value: {
+							dateCreated: "2024-08-22T11:56:56.272Z",
+							id: "foo321"
+						}
 					}
-				}
-			]
+				]
+			}
 		});
 	});
 
-	test("Can create and update and verify aliases and metadata", async () => {
+	test("Can create and update and verify aliases and object", async () => {
 		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		const id = await service.create(
 			{
@@ -1271,82 +1220,135 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result).toEqual({
+			"@context": [
+				"https://schema.twindev.org/aig/",
+				"https://schema.org/",
+				"https://www.w3.org/ns/activitystreams"
+			],
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
-			updated: SECOND_TICK,
-			nodeIdentity: TEST_NODE_IDENTITY,
-			metadata: {
-				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
-				actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
-				object: { "@type": "Note", content: "This is a simple note 2" },
-				published: "2015-01-25T12:34:56Z"
-			},
+			type: "AuditableItemGraphVertex",
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateModified: "2024-08-22T11:56:56.272Z",
 			aliases: [
-				{ id: "foo123", created: FIRST_TICK },
-				{ id: "bar456", created: FIRST_TICK }
+				{
+					id: "foo123",
+					type: "AuditableItemGraphAlias",
+					dateCreated: "2024-08-22T11:55:16.271Z"
+				},
+				{
+					id: "bar456",
+					type: "AuditableItemGraphAlias",
+					dateCreated: "2024-08-22T11:55:16.271Z"
+				}
 			],
 			changesets: [
 				{
-					hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
-					signature:
-						"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA==",
-					created: FIRST_TICK,
-					userIdentity: TEST_USER_IDENTITY,
+					type: "AuditableItemGraphChangeset",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					patches: [
 						{
-							op: "add",
-							path: "/metadata",
-							value: {
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/vertexObject",
+							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								"@type": "Create",
-								actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple note" },
+								actor: {
+									"@type": "Person",
+									"@id": "acct:person@example.org",
+									name: "Person"
+								},
+								object: {
+									"@type": "Note",
+									content: "This is a simple note"
+								},
 								published: "2015-01-25T12:34:56Z"
 							}
 						},
 						{
-							op: "add",
-							path: "/aliases",
-							value: [
-								{ id: "foo123", created: FIRST_TICK },
-								{ id: "bar456", created: FIRST_TICK }
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/aliases",
+							patchValue: [
+								{
+									id: "foo123",
+									dateCreated: "2024-08-22T11:55:16.271Z"
+								},
+								{
+									id: "bar456",
+									dateCreated: "2024-08-22T11:55:16.271Z"
+								}
 							]
 						}
 					],
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+					signature:
+						"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				},
 				{
-					hash: "Og/b7ggB83h+4wq3zDp7FT1DOK+qEIuChFnQV2M6UFw=",
-					signature:
-						"qVnHQT1BBzP6d7tYDqBWv40eXTRazEFDr+LkYp19/cAr5J1lSzFz22UTmZ5JdCA0u3P3tkevaslz0uNMJWCyAg==",
-					created: SECOND_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					patches: [
-						{ op: "replace", path: "/metadata/object/content", value: "This is a simple note 2" }
-					],
+					type: "AuditableItemGraphChangeset",
+					dateCreated: "2024-08-22T11:56:56.272Z",
+					hash: "6BCo+A3a6R1OhFpkxXoOIL9sCnmg902ldjh/pmOHMw8=",
 					immutableStorageId:
-						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
+						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505",
+					patches: [
+						{
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "replace",
+							patchPath: "/vertexObject/object/content",
+							patchValue: "This is a simple note 2"
+						}
+					],
+					signature:
+						"pm9EFgtyOMfQQRiHIfZDm5Vr27AYEQOz6BDFFArwl75PYbPjGuYexORTMh7neCM6Wl7tzznjPkZkWmxQgx0MDA==",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				}
 			],
-			verified: true,
 			changesetsVerification: [
-				{ state: "ok", epoch: FIRST_TICK },
-				{ state: "ok", epoch: SECOND_TICK }
-			]
+				{
+					type: "AuditableItemGraphVerification",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					state: "ok"
+				},
+				{
+					type: "AuditableItemGraphVerification",
+					dateCreated: "2024-08-22T11:56:56.272Z",
+					state: "ok"
+				}
+			],
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			verified: true,
+			vertexObject: {
+				type: "Create",
+				actor: {
+					id: "acct:person@example.org",
+					type: "Person",
+					name: "Person"
+				},
+				object: {
+					type: "Note",
+					content: "This is a simple note 2"
+				},
+				published: "2015-01-25T12:34:56Z"
+			}
 		});
 
 		const changesetStore = changesetStorage.getStore();
 
 		expect(changesetStore[0]).toEqual({
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
+			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
 					op: "add",
-					path: "/metadata",
+					path: "/vertexObject",
 					value: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
@@ -1368,36 +1370,36 @@ describe("AuditableItemGraphService", () => {
 					value: [
 						{
 							id: "foo123",
-							created: FIRST_TICK
+							dateCreated: "2024-08-22T11:55:16.271Z"
 						},
 						{
 							id: "bar456",
-							created: FIRST_TICK
+							dateCreated: "2024-08-22T11:55:16.271Z"
 						}
 					]
 				}
 			],
-			hash: "0VMHDaEAIuetBJi6nlnUAbqsWnFPmeSxC9+0fAu42pA=",
+			hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
 			signature:
-				"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA==",
+				"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
 
 		expect(changesetStore[1]).toEqual({
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: SECOND_TICK,
+			dateCreated: "2024-08-22T11:56:56.272Z",
 			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
 					op: "replace",
-					path: "/metadata/object/content",
+					path: "/vertexObject/object/content",
 					value: "This is a simple note 2"
 				}
 			],
-			hash: "Og/b7ggB83h+4wq3zDp7FT1DOK+qEIuChFnQV2M6UFw=",
+			hash: "6BCo+A3a6R1OhFpkxXoOIL9sCnmg902ldjh/pmOHMw8=",
 			signature:
-				"qVnHQT1BBzP6d7tYDqBWv40eXTRazEFDr+LkYp19/cAr5J1lSzFz22UTmZ5JdCA0u3P3tkevaslz0uNMJWCyAg==",
+				"pm9EFgtyOMfQQRiHIfZDm5Vr27AYEQOz6BDFFArwl75PYbPjGuYexORTMh7neCM6Wl7tzznjPkZkWmxQgx0MDA==",
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
@@ -1408,66 +1410,55 @@ describe("AuditableItemGraphService", () => {
 		);
 		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
 
-		let immutableIntegrity = await decodeJwtToIntegrity(immutableStore[0].data);
-		expect(immutableIntegrity.signature).toEqual(
-			"/e90MHyLbkkvPvcG3HhjVo4rN/O+x3FcgRZZ2Q79vjoHFqFw1MntrolcCsDPvPuY7SABxrxrHBPYPbVaG8plBA=="
-		);
-		expect(immutableIntegrity.created).toEqual(FIRST_TICK);
+		const immutableIntegrity = await decodeJwtToIntegrity(immutableStore[0].data);
 
-		expect(immutableIntegrity.integrity).toEqual({
-			patches: [
-				{
-					op: "add",
-					path: "/metadata",
-					value: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@type": "Person",
-							"@id": "acct:person@example.org",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					op: "add",
-					path: "/aliases",
-					value: [
-						{
-							id: "foo123",
-							created: FIRST_TICK
-						},
-						{
-							id: "bar456",
-							created: FIRST_TICK
+		expect(immutableIntegrity).toEqual({
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
+			signature:
+				"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
+			integrity: {
+				patches: [
+					{
+						op: "add",
+						path: "/vertexObject",
+						value: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							"@type": "Create",
+							actor: {
+								"@id": "acct:person@example.org",
+								"@type": "Person",
+								name: "Person"
+							},
+							object: {
+								"@type": "Note",
+								content: "This is a simple note"
+							},
+							published: "2015-01-25T12:34:56Z"
 						}
-					]
-				}
-			]
-		});
-
-		immutableIntegrity = await decodeJwtToIntegrity(immutableStore[1].data);
-		expect(immutableIntegrity.signature).toEqual(
-			"qVnHQT1BBzP6d7tYDqBWv40eXTRazEFDr+LkYp19/cAr5J1lSzFz22UTmZ5JdCA0u3P3tkevaslz0uNMJWCyAg=="
-		);
-
-		expect(immutableIntegrity.integrity).toEqual({
-			patches: [
-				{
-					op: "replace",
-					path: "/metadata/object/content",
-					value: "This is a simple note 2"
-				}
-			]
+					},
+					{
+						op: "add",
+						path: "/aliases",
+						value: [
+							{
+								dateCreated: "2024-08-22T11:55:16.271Z",
+								id: "foo123"
+							},
+							{
+								dateCreated: "2024-08-22T11:55:16.271Z",
+								id: "bar456"
+							}
+						]
+					}
+				]
+			}
 		});
 	});
 
-	test("Can create and update and verify aliases, metadata and resources", async () => {
+	test("Can create and update and verify aliases and object", async () => {
 		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		const id = await service.create(
 			{
@@ -1488,7 +1479,7 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "resource1",
-					metadata: {
+					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
 						actor: {
@@ -1505,7 +1496,7 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					id: "resource2",
-					metadata: {
+					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
 						actor: {
@@ -1546,7 +1537,7 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "resource1",
-					metadata: {
+					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
 						actor: {
@@ -1563,7 +1554,7 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					id: "resource2",
-					metadata: {
+					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
 						actor: {
@@ -1590,148 +1581,242 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result).toEqual({
-			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
-			updated: SECOND_TICK,
-			nodeIdentity: TEST_NODE_IDENTITY,
-			metadata: {
-				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
-				actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
-				object: { "@type": "Note", content: "This is a simple note 2" },
-				published: "2015-01-25T12:34:56Z"
-			},
-			aliases: [
-				{ id: "foo123", created: FIRST_TICK },
-				{ id: "bar456", created: FIRST_TICK }
+			"@context": [
+				"https://schema.twindev.org/aig/",
+				"https://schema.org/",
+				"https://www.w3.org/ns/activitystreams"
 			],
-			resources: [
+			id: "0101010101010101010101010101010101010101010101010101010101010101",
+			type: "AuditableItemGraphVertex",
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateModified: "2024-08-22T11:56:56.272Z",
+			aliases: [
 				{
-					id: "resource1",
-					created: FIRST_TICK,
-					updated: SECOND_TICK,
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
-						object: { "@type": "Note", content: "This is a simple note resource 10" },
-						published: "2015-01-25T12:34:56Z"
-					}
+					id: "foo123",
+					type: "AuditableItemGraphAlias",
+					dateCreated: "2024-08-22T11:55:16.271Z"
 				},
 				{
-					id: "resource2",
-					created: FIRST_TICK,
-					updated: SECOND_TICK,
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
-						object: { "@type": "Note", content: "This is a simple note resource 11" },
-						published: "2015-01-25T12:34:56Z"
-					}
+					id: "bar456",
+					type: "AuditableItemGraphAlias",
+					dateCreated: "2024-08-22T11:55:16.271Z"
 				}
 			],
 			changesets: [
 				{
-					hash: "Tkc0/RReCBn307kfgUyc2YGqHV+jizsYCySVaYc+4+U=",
-					signature:
-						"AOqjzgjhXI8JXMRLV3cXBJJzZ7jJf89vITgsimGOEnN0Xn0W25pokKf47jKlOqrcZlB4Gt6IkSWkmw3KtQU7DQ==",
-					created: FIRST_TICK,
-					userIdentity: TEST_USER_IDENTITY,
+					type: "AuditableItemGraphChangeset",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					hash: "Hv748kaW/EVY3QuF5zxdi/4VAkUUk5U2BHGeD63CKm8=",
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					patches: [
 						{
-							op: "add",
-							path: "/metadata",
-							value: {
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/vertexObject",
+							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								"@type": "Create",
-								actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple note" },
+								actor: {
+									"@type": "Person",
+									"@id": "acct:person@example.org",
+									name: "Person"
+								},
+								object: {
+									"@type": "Note",
+									content: "This is a simple note"
+								},
 								published: "2015-01-25T12:34:56Z"
 							}
 						},
 						{
-							op: "add",
-							path: "/aliases",
-							value: [
-								{ id: "foo123", created: FIRST_TICK },
-								{ id: "bar456", created: FIRST_TICK }
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/aliases",
+							patchValue: [
+								{
+									id: "foo123",
+									dateCreated: "2024-08-22T11:55:16.271Z"
+								},
+								{
+									id: "bar456",
+									dateCreated: "2024-08-22T11:55:16.271Z"
+								}
 							]
 						},
 						{
-							op: "add",
-							path: "/resources",
-							value: [
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/resources",
+							patchValue: [
 								{
 									id: "resource1",
-									created: FIRST_TICK,
-									metadata: {
+									dateCreated: "2024-08-22T11:55:16.271Z",
+									resourceObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
-										actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
-										object: { "@type": "Note", content: "This is a simple note resource" },
+										actor: {
+											"@type": "Person",
+											"@id": "acct:person@example.org",
+											name: "Person"
+										},
+										object: {
+											"@type": "Note",
+											content: "This is a simple note resource"
+										},
 										published: "2015-01-25T12:34:56Z"
 									}
 								},
 								{
 									id: "resource2",
-									created: FIRST_TICK,
-									metadata: {
+									dateCreated: "2024-08-22T11:55:16.271Z",
+									resourceObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
-										actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
-										object: { "@type": "Note", content: "This is a simple note resource 2" },
+										actor: {
+											"@type": "Person",
+											"@id": "acct:person@example.org",
+											name: "Person"
+										},
+										object: {
+											"@type": "Note",
+											content: "This is a simple note resource 2"
+										},
 										published: "2015-01-25T12:34:56Z"
 									}
 								}
 							]
 						}
 					],
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+					signature:
+						"19NArjoMrT+cMO7b45DyUBnm3bA1C5amxYHu1D4qX1zqva5lBqUTixtsGkIXtqiG4vh6E2+2VexGswWSiRwyDw==",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				},
 				{
-					hash: "JjtD2ONbYEFNCqgMoFYwjufOdB2e6EwvZMABM8syQ6Q=",
-					signature:
-						"xDnUf+WPlPzv7OoAqLwX3Gr2lRgDQ0Ap2yNxiyjsdww/ucdPef0uQSx8Zvaz10KuQGyqYFYuYjs90oP3bdOcAQ==",
-					created: SECOND_TICK,
-					userIdentity: TEST_USER_IDENTITY,
+					type: "AuditableItemGraphChangeset",
+					dateCreated: "2024-08-22T11:56:56.272Z",
+					hash: "+UC7WV6Br1LkX2oL9QkXbLlB47vWLhFu3IHH0Zu+Ybo=",
+					immutableStorageId:
+						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505",
 					patches: [
-						{ op: "replace", path: "/metadata/object/content", value: "This is a simple note 2" },
-						{ op: "add", path: "/resources/0/updated", value: SECOND_TICK },
 						{
-							op: "replace",
-							path: "/resources/0/metadata/object/content",
-							value: "This is a simple note resource 10"
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "replace",
+							patchPath: "/vertexObject/object/content",
+							patchValue: "This is a simple note 2"
 						},
-						{ op: "add", path: "/resources/1/updated", value: SECOND_TICK },
 						{
-							op: "replace",
-							path: "/resources/1/metadata/object/content",
-							value: "This is a simple note resource 11"
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/resources/0/dateModified",
+							patchValue: "2024-08-22T11:56:56.272Z"
+						},
+						{
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "replace",
+							patchPath: "/resources/0/resourceObject/object/content",
+							patchValue: "This is a simple note resource 10"
+						},
+						{
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/resources/1/dateModified",
+							patchValue: "2024-08-22T11:56:56.272Z"
+						},
+						{
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "replace",
+							patchPath: "/resources/1/resourceObject/object/content",
+							patchValue: "This is a simple note resource 11"
 						}
 					],
-					immutableStorageId:
-						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
+					signature:
+						"fa18gqnSJlw5bPdCAqRxnvw3o2O1xlXVvDyOX0uxYXapAvzUrsyiOwc0VMeR6gVBm0Mu/6Y47cKlaThgnf7BBw==",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
+				}
+			],
+			changesetsVerification: [
+				{
+					type: "AuditableItemGraphVerification",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					state: "ok"
+				},
+				{
+					type: "AuditableItemGraphVerification",
+					dateCreated: "2024-08-22T11:56:56.272Z",
+					state: "ok"
+				}
+			],
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			resources: [
+				{
+					id: "resource1",
+					type: "AuditableItemGraphResource",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
+					resourceObject: {
+						type: "Create",
+						actor: {
+							id: "acct:person@example.org",
+							type: "Person",
+							name: "Person"
+						},
+						object: {
+							type: "Note",
+							content: "This is a simple note resource 10"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
+				},
+				{
+					id: "resource2",
+					type: "AuditableItemGraphResource",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
+					resourceObject: {
+						type: "Create",
+						actor: {
+							id: "acct:person@example.org",
+							type: "Person",
+							name: "Person"
+						},
+						object: {
+							type: "Note",
+							content: "This is a simple note resource 11"
+						},
+						published: "2015-01-25T12:34:56Z"
+					}
 				}
 			],
 			verified: true,
-			changesetsVerification: [
-				{ state: "ok", epoch: FIRST_TICK },
-				{ state: "ok", epoch: SECOND_TICK }
-			]
+			vertexObject: {
+				type: "Create",
+				actor: {
+					id: "acct:person@example.org",
+					type: "Person",
+					name: "Person"
+				},
+				object: {
+					type: "Note",
+					content: "This is a simple note 2"
+				},
+				published: "2015-01-25T12:34:56Z"
+			}
 		});
 
 		const changesetStore = changesetStorage.getStore();
 
 		expect(changesetStore[0]).toEqual({
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
+			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
 					op: "add",
-					path: "/metadata",
+					path: "/vertexObject",
 					value: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
@@ -1753,11 +1838,11 @@ describe("AuditableItemGraphService", () => {
 					value: [
 						{
 							id: "foo123",
-							created: FIRST_TICK
+							dateCreated: "2024-08-22T11:55:16.271Z"
 						},
 						{
 							id: "bar456",
-							created: FIRST_TICK
+							dateCreated: "2024-08-22T11:55:16.271Z"
 						}
 					]
 				},
@@ -1767,8 +1852,8 @@ describe("AuditableItemGraphService", () => {
 					value: [
 						{
 							id: "resource1",
-							created: FIRST_TICK,
-							metadata: {
+							dateCreated: "2024-08-22T11:55:16.271Z",
+							resourceObject: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								"@type": "Create",
 								actor: {
@@ -1785,8 +1870,8 @@ describe("AuditableItemGraphService", () => {
 						},
 						{
 							id: "resource2",
-							created: FIRST_TICK,
-							metadata: {
+							dateCreated: "2024-08-22T11:55:16.271Z",
+							resourceObject: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								"@type": "Create",
 								actor: {
@@ -1804,47 +1889,47 @@ describe("AuditableItemGraphService", () => {
 					]
 				}
 			],
-			hash: "Tkc0/RReCBn307kfgUyc2YGqHV+jizsYCySVaYc+4+U=",
+			hash: "Hv748kaW/EVY3QuF5zxdi/4VAkUUk5U2BHGeD63CKm8=",
 			signature:
-				"AOqjzgjhXI8JXMRLV3cXBJJzZ7jJf89vITgsimGOEnN0Xn0W25pokKf47jKlOqrcZlB4Gt6IkSWkmw3KtQU7DQ==",
+				"19NArjoMrT+cMO7b45DyUBnm3bA1C5amxYHu1D4qX1zqva5lBqUTixtsGkIXtqiG4vh6E2+2VexGswWSiRwyDw==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
 
 		expect(changesetStore[1]).toEqual({
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: SECOND_TICK,
+			dateCreated: "2024-08-22T11:56:56.272Z",
 			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
 					op: "replace",
-					path: "/metadata/object/content",
+					path: "/vertexObject/object/content",
 					value: "This is a simple note 2"
 				},
 				{
 					op: "add",
-					path: "/resources/0/updated",
-					value: SECOND_TICK
+					path: "/resources/0/dateModified",
+					value: "2024-08-22T11:56:56.272Z"
 				},
 				{
 					op: "replace",
-					path: "/resources/0/metadata/object/content",
+					path: "/resources/0/resourceObject/object/content",
 					value: "This is a simple note resource 10"
 				},
 				{
 					op: "add",
-					path: "/resources/1/updated",
-					value: SECOND_TICK
+					path: "/resources/1/dateModified",
+					value: "2024-08-22T11:56:56.272Z"
 				},
 				{
 					op: "replace",
-					path: "/resources/1/metadata/object/content",
+					path: "/resources/1/resourceObject/object/content",
 					value: "This is a simple note resource 11"
 				}
 			],
-			hash: "JjtD2ONbYEFNCqgMoFYwjufOdB2e6EwvZMABM8syQ6Q=",
+			hash: "+UC7WV6Br1LkX2oL9QkXbLlB47vWLhFu3IHH0Zu+Ybo=",
 			signature:
-				"xDnUf+WPlPzv7OoAqLwX3Gr2lRgDQ0Ap2yNxiyjsdww/ucdPef0uQSx8Zvaz10KuQGyqYFYuYjs90oP3bdOcAQ==",
+				"fa18gqnSJlw5bPdCAqRxnvw3o2O1xlXVvDyOX0uxYXapAvzUrsyiOwc0VMeR6gVBm0Mu/6Y47cKlaThgnf7BBw==",
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
@@ -1855,111 +1940,132 @@ describe("AuditableItemGraphService", () => {
 		);
 		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
 
-		let credentialSignature = await decodeJwtToIntegrity(immutableStore[0].data);
-		expect(credentialSignature.signature).toEqual(
-			"AOqjzgjhXI8JXMRLV3cXBJJzZ7jJf89vITgsimGOEnN0Xn0W25pokKf47jKlOqrcZlB4Gt6IkSWkmw3KtQU7DQ=="
-		);
+		let immutableIntegrity = await decodeJwtToIntegrity(immutableStore[0].data);
 
-		expect(credentialSignature.integrity).toEqual({
-			patches: [
-				{
-					op: "add",
-					path: "/metadata",
-					value: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note"
-						},
-						published: "2015-01-25T12:34:56Z"
+		expect(immutableIntegrity).toEqual({
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			hash: "Hv748kaW/EVY3QuF5zxdi/4VAkUUk5U2BHGeD63CKm8=",
+			signature:
+				"19NArjoMrT+cMO7b45DyUBnm3bA1C5amxYHu1D4qX1zqva5lBqUTixtsGkIXtqiG4vh6E2+2VexGswWSiRwyDw==",
+			integrity: {
+				patches: [
+					{
+						op: "add",
+						path: "/vertexObject",
+						value: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							"@type": "Create",
+							actor: {
+								"@id": "acct:person@example.org",
+								"@type": "Person",
+								name: "Person"
+							},
+							object: {
+								"@type": "Note",
+								content: "This is a simple note"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
+					},
+					{
+						op: "add",
+						path: "/aliases",
+						value: [
+							{
+								dateCreated: "2024-08-22T11:55:16.271Z",
+								id: "foo123"
+							},
+							{
+								dateCreated: "2024-08-22T11:55:16.271Z",
+								id: "bar456"
+							}
+						]
+					},
+					{
+						op: "add",
+						path: "/resources",
+						value: [
+							{
+								dateCreated: "2024-08-22T11:55:16.271Z",
+								id: "resource1",
+								resourceObject: {
+									"@context": "https://www.w3.org/ns/activitystreams",
+									"@type": "Create",
+									actor: {
+										"@id": "acct:person@example.org",
+										"@type": "Person",
+										name: "Person"
+									},
+									object: {
+										"@type": "Note",
+										content: "This is a simple note resource"
+									},
+									published: "2015-01-25T12:34:56Z"
+								}
+							},
+							{
+								dateCreated: "2024-08-22T11:55:16.271Z",
+								id: "resource2",
+								resourceObject: {
+									"@context": "https://www.w3.org/ns/activitystreams",
+									"@type": "Create",
+									actor: {
+										"@id": "acct:person@example.org",
+										"@type": "Person",
+										name: "Person"
+									},
+									object: {
+										"@type": "Note",
+										content: "This is a simple note resource 2"
+									},
+									published: "2015-01-25T12:34:56Z"
+								}
+							}
+						]
 					}
-				},
-				{
-					op: "add",
-					path: "/aliases",
-					value: [
-						{
-							created: FIRST_TICK,
-							id: "foo123"
-						},
-						{
-							created: FIRST_TICK,
-							id: "bar456"
-						}
-					]
-				},
-				{
-					op: "add",
-					path: "/resources",
-					value: [
-						{
-							created: FIRST_TICK,
-							id: "resource1",
-							metadata: {
-								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: {
-									"@id": "acct:person@example.org",
-									"@type": "Person",
-									name: "Person"
-								},
-								object: {
-									"@type": "Note",
-									content: "This is a simple note resource"
-								},
-								published: "2015-01-25T12:34:56Z"
-							}
-						},
-						{
-							created: FIRST_TICK,
-							id: "resource2",
-							metadata: {
-								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: {
-									"@id": "acct:person@example.org",
-									"@type": "Person",
-									name: "Person"
-								},
-								object: {
-									"@type": "Note",
-									content: "This is a simple note resource 2"
-								},
-								published: "2015-01-25T12:34:56Z"
-							}
-						}
-					]
-				}
-			]
+				]
+			}
 		});
 
-		credentialSignature = await decodeJwtToIntegrity(immutableStore[1].data);
-		expect(credentialSignature.signature).toEqual(
-			"xDnUf+WPlPzv7OoAqLwX3Gr2lRgDQ0Ap2yNxiyjsdww/ucdPef0uQSx8Zvaz10KuQGyqYFYuYjs90oP3bdOcAQ=="
-		);
-
-		expect(credentialSignature.integrity).toEqual({
-			patches: [
-				{ op: "replace", path: "/metadata/object/content", value: "This is a simple note 2" },
-				{ op: "add", path: "/resources/0/updated", value: SECOND_TICK },
-				{
-					op: "replace",
-					path: "/resources/0/metadata/object/content",
-					value: "This is a simple note resource 10"
-				},
-				{ op: "add", path: "/resources/1/updated", value: SECOND_TICK },
-				{
-					op: "replace",
-					path: "/resources/1/metadata/object/content",
-					value: "This is a simple note resource 11"
-				}
-			]
+		immutableIntegrity = await decodeJwtToIntegrity(immutableStore[1].data);
+		expect(immutableIntegrity).toEqual({
+			dateCreated: "2024-08-22T11:56:56.272Z",
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			hash: "+UC7WV6Br1LkX2oL9QkXbLlB47vWLhFu3IHH0Zu+Ybo=",
+			signature:
+				"fa18gqnSJlw5bPdCAqRxnvw3o2O1xlXVvDyOX0uxYXapAvzUrsyiOwc0VMeR6gVBm0Mu/6Y47cKlaThgnf7BBw==",
+			integrity: {
+				patches: [
+					{
+						op: "replace",
+						path: "/vertexObject/object/content",
+						value: "This is a simple note 2"
+					},
+					{
+						op: "add",
+						path: "/resources/0/dateModified",
+						value: "2024-08-22T11:56:56.272Z"
+					},
+					{
+						op: "replace",
+						path: "/resources/0/resourceObject/object/content",
+						value: "This is a simple note resource 10"
+					},
+					{
+						op: "add",
+						path: "/resources/1/dateModified",
+						value: "2024-08-22T11:56:56.272Z"
+					},
+					{
+						op: "replace",
+						path: "/resources/1/resourceObject/object/content",
+						value: "This is a simple note resource 11"
+					}
+				]
+			}
 		});
 	});
 
@@ -1972,8 +2078,8 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "edge1",
-					relationship: "friend",
-					metadata: {
+					edgeRelationship: "friend",
+					edgeObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
 						actor: {
@@ -2001,8 +2107,8 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "edge1",
-					relationship: "frenemy",
-					metadata: {
+					edgeRelationship: "frenemy",
+					edgeObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
 						actor: {
@@ -2028,89 +2134,120 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result).toEqual({
+			"@context": [
+				"https://schema.twindev.org/aig/",
+				"https://schema.org/",
+				"https://www.w3.org/ns/activitystreams"
+			],
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
-			updated: SECOND_TICK,
-			nodeIdentity: TEST_NODE_IDENTITY,
+			type: "AuditableItemGraphVertex",
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateModified: "2024-08-22T11:56:56.272Z",
+			changesets: [
+				{
+					type: "AuditableItemGraphChangeset",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					hash: "sOrnVuZYfyU3rKgZcnU6pTb5iOR7pNdJkPX5NIjh+jw=",
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
+					patches: [
+						{
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/edges",
+							patchValue: {
+								id: "edge1",
+								dateCreated: "2024-08-22T11:55:16.271Z",
+								edgeObject: {
+									"@context": "https://www.w3.org/ns/activitystreams",
+									"@type": "Create",
+									actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+									object: { "@type": "Note", content: "This is a simple note" },
+									published: "2015-01-25T12:34:56Z"
+								},
+								edgeRelationship: "friend"
+							}
+						}
+					],
+					signature:
+						"RQ+LD5ts30gGfDRB+z36uCwaS8xYmac6p6Uz2i3+P83zvRsz+Rcj7k6iZZrj+8V2WJ8b1nwah5o4OhfGJBvzBw==",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
+				},
+				{
+					type: "AuditableItemGraphChangeset",
+					dateCreated: "2024-08-22T11:56:56.272Z",
+					hash: "HNBBORsq/qTRTZpblLg8Qss9cRImhE5tFQTbx+E1YVQ=",
+					immutableStorageId:
+						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505",
+					patches: [
+						{
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/edges/0/dateModified",
+							patchValue: "2024-08-22T11:56:56.272Z"
+						},
+						{
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "replace",
+							patchPath: "/edges/0/edgeObject/object/content",
+							patchValue: "This is a simple note 2"
+						},
+						{
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "replace",
+							patchPath: "/edges/0/edgeRelationship",
+							patchValue: "frenemy"
+						}
+					],
+					signature:
+						"iiDUQ7myX0PsfU4lWVndCcP0jpBvVlvvbPTyyl3FIweKAd8efW6JMPRGHRBHYz20omaVExoiz1KMRZbKHCmUCg==",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
+				}
+			],
+			changesetsVerification: [
+				{
+					type: "AuditableItemGraphVerification",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					state: "ok"
+				},
+				{
+					type: "AuditableItemGraphVerification",
+					dateCreated: "2024-08-22T11:56:56.272Z",
+					state: "ok"
+				}
+			],
 			edges: [
 				{
 					id: "edge1",
-					created: FIRST_TICK,
-					updated: SECOND_TICK,
-					relationship: "frenemy",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-						object: { "@type": "Note", content: "This is a simple note 2" },
+					type: "AuditableItemGraphEdge",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
+					edgeObject: {
+						type: "Create",
+						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+						object: { type: "Note", content: "This is a simple note 2" },
 						published: "2015-01-25T12:34:56Z"
-					}
+					},
+					edgeRelationship: "frenemy"
 				}
 			],
-			changesets: [
-				{
-					hash: "r6+XCDXDoVoZfIBtDlORWaWb/eMIietTidH1JPXRdVs=",
-					signature:
-						"15NWO1jt1r8YQ5O0HGk/U9DE9Gaf7KzDxL8vw5+puOh8f6tqEsNVikSkpvY9BMGRGp1Bzw+ohn7vwVBN6IA0BQ==",
-					created: FIRST_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					patches: [
-						{
-							op: "add",
-							path: "/edges",
-							value: [
-								{
-									id: "edge1",
-									created: FIRST_TICK,
-									metadata: {
-										"@context": "https://www.w3.org/ns/activitystreams",
-										"@type": "Create",
-										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-										object: { "@type": "Note", content: "This is a simple note" },
-										published: "2015-01-25T12:34:56Z"
-									},
-									relationship: "friend"
-								}
-							]
-						}
-					],
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
-				},
-				{
-					hash: "9HOMirKU9l+iZa+b4WPprlNKCdmWBFB0m5fQxjRdzF8=",
-					signature:
-						"ilyqMQXLjXq1ZvHvIboUh/mN4uozZ1vOhmKCPr/9HHKfdDk86gUOD/7E2fhcOvlg+jjAVhu64Nx8xGYQzhOQAg==",
-					created: SECOND_TICK,
-					userIdentity: TEST_USER_IDENTITY,
-					patches: [
-						{ op: "add", path: "/edges/0/updated", value: SECOND_TICK },
-						{ op: "replace", path: "/edges/0/relationship", value: "frenemy" },
-						{
-							op: "replace",
-							path: "/edges/0/metadata/object/content",
-							value: "This is a simple note 2"
-						}
-					],
-					immutableStorageId:
-						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
-				}
-			],
-			verified: true,
-			changesetsVerification: [
-				{ state: "ok", epoch: FIRST_TICK },
-				{ state: "ok", epoch: SECOND_TICK }
-			]
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			verified: true
 		});
 
 		const changesetStore = changesetStorage.getStore();
 
 		expect(changesetStore[0]).toEqual({
-			hash: "r6+XCDXDoVoZfIBtDlORWaWb/eMIietTidH1JPXRdVs=",
+			hash: "sOrnVuZYfyU3rKgZcnU6pTb5iOR7pNdJkPX5NIjh+jw=",
 			signature:
-				"15NWO1jt1r8YQ5O0HGk/U9DE9Gaf7KzDxL8vw5+puOh8f6tqEsNVikSkpvY9BMGRGp1Bzw+ohn7vwVBN6IA0BQ==",
-			created: FIRST_TICK,
-			userIdentity: TEST_USER_IDENTITY,
+				"RQ+LD5ts30gGfDRB+z36uCwaS8xYmac6p6Uz2i3+P83zvRsz+Rcj7k6iZZrj+8V2WJ8b1nwah5o4OhfGJBvzBw==",
+			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			patches: [
 				{
 					op: "add",
@@ -2118,46 +2255,52 @@ describe("AuditableItemGraphService", () => {
 					value: [
 						{
 							id: "edge1",
-							created: FIRST_TICK,
-							metadata: {
+							dateCreated: "2024-08-22T11:55:16.271Z",
+							edgeObject: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								"@type": "Create",
-								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple note" },
+								actor: {
+									"@id": "acct:person@example.org",
+									"@type": "Person",
+									name: "Person"
+								},
+								object: {
+									"@type": "Note",
+									content: "This is a simple note"
+								},
 								published: "2015-01-25T12:34:56Z"
 							},
-							relationship: "friend"
+							edgeRelationship: "friend"
 						}
 					]
 				}
 			],
-			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
 
 		expect(changesetStore[1]).toEqual({
-			hash: "9HOMirKU9l+iZa+b4WPprlNKCdmWBFB0m5fQxjRdzF8=",
+			hash: "HNBBORsq/qTRTZpblLg8Qss9cRImhE5tFQTbx+E1YVQ=",
 			signature:
-				"ilyqMQXLjXq1ZvHvIboUh/mN4uozZ1vOhmKCPr/9HHKfdDk86gUOD/7E2fhcOvlg+jjAVhu64Nx8xGYQzhOQAg==",
+				"iiDUQ7myX0PsfU4lWVndCcP0jpBvVlvvbPTyyl3FIweKAd8efW6JMPRGHRBHYz20omaVExoiz1KMRZbKHCmUCg==",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: SECOND_TICK,
+			dateCreated: "2024-08-22T11:56:56.272Z",
 			userIdentity: TEST_USER_IDENTITY,
 			patches: [
-				{ op: "add", path: "/edges/0/updated", value: SECOND_TICK },
-				{ op: "replace", path: "/edges/0/relationship", value: "frenemy" },
+				{ op: "add", path: "/edges/0/dateModified", value: "2024-08-22T11:56:56.272Z" },
 				{
 					op: "replace",
-					path: "/edges/0/metadata/object/content",
+					path: "/edges/0/edgeObject/object/content",
 					value: "This is a simple note 2"
-				}
+				},
+				{ op: "replace", path: "/edges/0/edgeRelationship", value: "frenemy" }
 			],
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
 	});
 
-	test("Can create and update and verify aliases, metadata, resources and edges", async () => {
+	test("Can create and update and verify aliases, object, resources and edges", async () => {
 		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 		const id = await service.create(
 			{
@@ -2177,7 +2320,7 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "foo123",
-					metadata: {
+					aliasObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
 						actor: {
@@ -2194,7 +2337,7 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					id: "bar456",
-					metadata: {
+					aliasObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
 						actor: {
@@ -2213,7 +2356,7 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "resource1",
-					metadata: {
+					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
 						actor: {
@@ -2230,7 +2373,7 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					id: "resource2",
-					metadata: {
+					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
 						actor: {
@@ -2249,8 +2392,8 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "edge1",
-					relationship: "friend",
-					metadata: {
+					edgeRelationship: "friend",
+					edgeObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
 						actor: {
@@ -2267,8 +2410,8 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					id: "edge2",
-					relationship: "enemy",
-					metadata: {
+					edgeRelationship: "enemy",
+					edgeObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
 						actor: {
@@ -2307,7 +2450,7 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "foo123",
-					metadata: {
+					aliasObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
 						actor: {
@@ -2324,7 +2467,7 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					id: "bar456",
-					metadata: {
+					aliasObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
 						actor: {
@@ -2343,7 +2486,7 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "resource1",
-					metadata: {
+					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
 						actor: {
@@ -2360,7 +2503,7 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					id: "resource2",
-					metadata: {
+					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
 						actor: {
@@ -2379,8 +2522,8 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "edge1",
-					relationship: "friend",
-					metadata: {
+					edgeRelationship: "friend",
+					edgeObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
 						actor: {
@@ -2397,8 +2540,8 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					id: "edge2",
-					relationship: "enemy",
-					metadata: {
+					edgeRelationship: "enemy",
+					edgeObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
 						actor: {
@@ -2424,109 +2567,54 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result).toEqual({
+			"@context": [
+				"https://schema.twindev.org/aig/",
+				"https://schema.org/",
+				"https://www.w3.org/ns/activitystreams"
+			],
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
-			updated: SECOND_TICK,
-			nodeIdentity: TEST_NODE_IDENTITY,
-			metadata: {
-				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
-				actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-				object: { "@type": "Note", content: "This is a simple note 2" },
-				published: "2015-01-25T12:34:56Z"
-			},
+			type: "AuditableItemGraphVertex",
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateModified: "2024-08-22T11:56:56.272Z",
 			aliases: [
 				{
 					id: "foo123",
-					created: FIRST_TICK,
-					updated: SECOND_TICK,
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-						object: { "@type": "Note", content: "This is a simple note alias 10" },
+					type: "AuditableItemGraphAlias",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
+					aliasObject: {
+						type: "Create",
+						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+						object: { type: "Note", content: "This is a simple note alias 10" },
 						published: "2015-01-25T12:34:56Z"
 					}
 				},
 				{
 					id: "bar456",
-					created: FIRST_TICK,
-					updated: SECOND_TICK,
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-						object: { "@type": "Note", content: "This is a simple note alias 20" },
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			resources: [
-				{
-					id: "resource1",
-					created: FIRST_TICK,
-					updated: SECOND_TICK,
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-						object: { "@type": "Note", content: "This is a simple note resource 10" },
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "resource2",
-					created: FIRST_TICK,
-					updated: SECOND_TICK,
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-						object: { "@type": "Note", content: "This is a simple note resource 20" },
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			edges: [
-				{
-					id: "edge1",
-					created: FIRST_TICK,
-					updated: SECOND_TICK,
-					relationship: "friend",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-						object: { "@type": "Note", content: "This is a simple note edge 10" },
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "edge2",
-					created: FIRST_TICK,
-					updated: SECOND_TICK,
-					relationship: "enemy",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-						object: { "@type": "Note", content: "This is a simple note edge 20" },
+					type: "AuditableItemGraphAlias",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
+					aliasObject: {
+						type: "Create",
+						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+						object: { type: "Note", content: "This is a simple note alias 20" },
 						published: "2015-01-25T12:34:56Z"
 					}
 				}
 			],
 			changesets: [
 				{
-					hash: "jTb9qgSQtXraoLWMpEB8DqHby6amfHbh2rdKu1O/144=",
-					signature:
-						"623KrKM43+giT9gpq12YewVrY2Cn2qGkHFubvQDyamHnpowgur2aK5QHwunM1NmxzKc8v2QbAxHf9hQQq2TPAg==",
-					created: FIRST_TICK,
-					userIdentity: TEST_USER_IDENTITY,
+					type: "AuditableItemGraphChangeset",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					hash: "tojDV5vHjU23J48xDwRERjzmtFXGuAoSsPIsA1jyhC4=",
+					immutableStorageId:
+						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					patches: [
 						{
-							op: "add",
-							path: "/metadata",
-							value: {
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/vertexObject",
+							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								"@type": "Create",
 								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
@@ -2535,13 +2623,14 @@ describe("AuditableItemGraphService", () => {
 							}
 						},
 						{
-							op: "add",
-							path: "/aliases",
-							value: [
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/aliases",
+							patchValue: [
 								{
 									id: "foo123",
-									created: FIRST_TICK,
-									metadata: {
+									dateCreated: "2024-08-22T11:55:16.271Z",
+									aliasObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
 										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
@@ -2551,8 +2640,8 @@ describe("AuditableItemGraphService", () => {
 								},
 								{
 									id: "bar456",
-									created: FIRST_TICK,
-									metadata: {
+									dateCreated: "2024-08-22T11:55:16.271Z",
+									aliasObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
 										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
@@ -2563,13 +2652,14 @@ describe("AuditableItemGraphService", () => {
 							]
 						},
 						{
-							op: "add",
-							path: "/resources",
-							value: [
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/resources",
+							patchValue: [
 								{
 									id: "resource1",
-									created: FIRST_TICK,
-									metadata: {
+									dateCreated: "2024-08-22T11:55:16.271Z",
+									resourceObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
 										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
@@ -2579,8 +2669,8 @@ describe("AuditableItemGraphService", () => {
 								},
 								{
 									id: "resource2",
-									created: FIRST_TICK,
-									metadata: {
+									dateCreated: "2024-08-22T11:55:16.271Z",
+									resourceObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
 										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
@@ -2591,108 +2681,224 @@ describe("AuditableItemGraphService", () => {
 							]
 						},
 						{
-							op: "add",
-							path: "/edges",
-							value: [
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/edges",
+							patchValue: [
 								{
 									id: "edge1",
-									created: FIRST_TICK,
-									metadata: {
+									dateCreated: "2024-08-22T11:55:16.271Z",
+									edgeObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
 										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
 										object: { "@type": "Note", content: "This is a simple edge 1" },
 										published: "2015-01-25T12:34:56Z"
 									},
-									relationship: "friend"
+									edgeRelationship: "friend"
 								},
 								{
 									id: "edge2",
-									created: FIRST_TICK,
-									metadata: {
+									dateCreated: "2024-08-22T11:55:16.271Z",
+									edgeObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										"@type": "Create",
 										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
 										object: { "@type": "Note", content: "This is a simple edge 2" },
 										published: "2015-01-25T12:34:56Z"
 									},
-									relationship: "enemy"
+									edgeRelationship: "enemy"
 								}
 							]
 						}
 					],
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
+					signature:
+						"ZWQO4BUOfAXhNDXYS55uRJEMjHXdHnAniaCY6dx7oIiC0dPR5z3Y90Y/peiVmUf5JeFvCuh2JybQtWwVhl3LDA==",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				},
 				{
-					hash: "snnM4wJd36iJyQU3z2RyJNpbJKyFUch/0itVwmBpPOQ=",
-					signature:
-						"ZIPvcuMyzIX/2VsymzuigdSoC1lbGqHO3jj/rm9w1eCWo6vTeyLIxy/k5x0/hMf1Ls4l9o+ELt5jN/ITAFSrDA==",
-					created: SECOND_TICK,
-					userIdentity: TEST_USER_IDENTITY,
+					type: "AuditableItemGraphChangeset",
+					dateCreated: "2024-08-22T11:56:56.272Z",
+					hash: "RPFzQTVqnF6xlgtHzvx4a5kyxwm+8m7pPt0jnWnf4W0=",
+					immutableStorageId:
+						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505",
 					patches: [
-						{ op: "replace", path: "/metadata/object/content", value: "This is a simple note 2" },
-						{ op: "add", path: "/aliases/0/updated", value: SECOND_TICK },
 						{
-							op: "replace",
-							path: "/aliases/0/metadata/object/content",
-							value: "This is a simple note alias 10"
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "replace",
+							patchPath: "/vertexObject/object/content",
+							patchValue: "This is a simple note 2"
 						},
-						{ op: "add", path: "/aliases/1/updated", value: SECOND_TICK },
 						{
-							op: "replace",
-							path: "/aliases/1/metadata/object/content",
-							value: "This is a simple note alias 20"
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/aliases/0/dateModified",
+							patchValue: "2024-08-22T11:56:56.272Z"
 						},
-						{ op: "add", path: "/resources/0/updated", value: SECOND_TICK },
 						{
-							op: "replace",
-							path: "/resources/0/metadata/object/content",
-							value: "This is a simple note resource 10"
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "replace",
+							patchPath: "/aliases/0/aliasObject/object/content",
+							patchValue: "This is a simple note alias 10"
 						},
-						{ op: "add", path: "/resources/1/updated", value: SECOND_TICK },
 						{
-							op: "replace",
-							path: "/resources/1/metadata/object/content",
-							value: "This is a simple note resource 20"
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/aliases/1/dateModified",
+							patchValue: "2024-08-22T11:56:56.272Z"
 						},
-						{ op: "add", path: "/edges/0/updated", value: SECOND_TICK },
 						{
-							op: "replace",
-							path: "/edges/0/metadata/object/content",
-							value: "This is a simple note edge 10"
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "replace",
+							patchPath: "/aliases/1/aliasObject/object/content",
+							patchValue: "This is a simple note alias 20"
 						},
-						{ op: "add", path: "/edges/1/updated", value: SECOND_TICK },
 						{
-							op: "replace",
-							path: "/edges/1/metadata/object/content",
-							value: "This is a simple note edge 20"
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/resources/0/dateModified",
+							patchValue: "2024-08-22T11:56:56.272Z"
+						},
+						{
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "replace",
+							patchPath: "/resources/0/resourceObject/object/content",
+							patchValue: "This is a simple note resource 10"
+						},
+						{
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/resources/1/dateModified",
+							patchValue: "2024-08-22T11:56:56.272Z"
+						},
+						{
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "replace",
+							patchPath: "/resources/1/resourceObject/object/content",
+							patchValue: "This is a simple note resource 20"
+						},
+						{
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/edges/0/dateModified",
+							patchValue: "2024-08-22T11:56:56.272Z"
+						},
+						{
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "replace",
+							patchPath: "/edges/0/edgeObject/object/content",
+							patchValue: "This is a simple note edge 10"
+						},
+						{
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/edges/1/dateModified",
+							patchValue: "2024-08-22T11:56:56.272Z"
+						},
+						{
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "replace",
+							patchPath: "/edges/1/edgeObject/object/content",
+							patchValue: "This is a simple note edge 20"
 						}
 					],
-					immutableStorageId:
-						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
+					signature:
+						"SSZvRpIbydDRt3evoi+tZ+8QVfxiAuNirOb1+Shu64Fn3NVVNtlgwrpxWfSCRUgAmSpUVCaHtYnVL6tBcb2NDA==",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
+				}
+			],
+			changesetsVerification: [
+				{
+					type: "AuditableItemGraphVerification",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					state: "ok"
+				},
+				{
+					type: "AuditableItemGraphVerification",
+					dateCreated: "2024-08-22T11:56:56.272Z",
+					state: "ok"
+				}
+			],
+			edges: [
+				{
+					id: "edge1",
+					type: "AuditableItemGraphEdge",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
+					edgeObject: {
+						type: "Create",
+						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+						object: { type: "Note", content: "This is a simple note edge 10" },
+						published: "2015-01-25T12:34:56Z"
+					},
+					edgeRelationship: "friend"
+				},
+				{
+					id: "edge2",
+					type: "AuditableItemGraphEdge",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
+					edgeObject: {
+						type: "Create",
+						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+						object: { type: "Note", content: "This is a simple note edge 20" },
+						published: "2015-01-25T12:34:56Z"
+					},
+					edgeRelationship: "enemy"
+				}
+			],
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			resources: [
+				{
+					id: "resource1",
+					type: "AuditableItemGraphResource",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
+					resourceObject: {
+						type: "Create",
+						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+						object: { type: "Note", content: "This is a simple note resource 10" },
+						published: "2015-01-25T12:34:56Z"
+					}
+				},
+				{
+					id: "resource2",
+					type: "AuditableItemGraphResource",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
+					resourceObject: {
+						type: "Create",
+						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+						object: { type: "Note", content: "This is a simple note resource 20" },
+						published: "2015-01-25T12:34:56Z"
+					}
 				}
 			],
 			verified: true,
-			changesetsVerification: [
-				{ state: "ok", epoch: FIRST_TICK },
-				{ state: "ok", epoch: SECOND_TICK }
-			]
+			vertexObject: {
+				type: "Create",
+				actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+				object: { type: "Note", content: "This is a simple note 2" },
+				published: "2015-01-25T12:34:56Z"
+			}
 		});
 
 		const changesetStore = changesetStorage.getStore();
 
 		expect(changesetStore[0]).toEqual({
-			hash: "jTb9qgSQtXraoLWMpEB8DqHby6amfHbh2rdKu1O/144=",
+			hash: "tojDV5vHjU23J48xDwRERjzmtFXGuAoSsPIsA1jyhC4=",
 			signature:
-				"623KrKM43+giT9gpq12YewVrY2Cn2qGkHFubvQDyamHnpowgur2aK5QHwunM1NmxzKc8v2QbAxHf9hQQq2TPAg==",
+				"ZWQO4BUOfAXhNDXYS55uRJEMjHXdHnAniaCY6dx7oIiC0dPR5z3Y90Y/peiVmUf5JeFvCuh2JybQtWwVhl3LDA==",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
+			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
 					op: "add",
-					path: "/metadata",
+					path: "/vertexObject",
 					value: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
@@ -2707,8 +2913,8 @@ describe("AuditableItemGraphService", () => {
 					value: [
 						{
 							id: "foo123",
-							created: FIRST_TICK,
-							metadata: {
+							dateCreated: "2024-08-22T11:55:16.271Z",
+							aliasObject: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								"@type": "Create",
 								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
@@ -2718,8 +2924,8 @@ describe("AuditableItemGraphService", () => {
 						},
 						{
 							id: "bar456",
-							created: FIRST_TICK,
-							metadata: {
+							dateCreated: "2024-08-22T11:55:16.271Z",
+							aliasObject: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								"@type": "Create",
 								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
@@ -2735,8 +2941,8 @@ describe("AuditableItemGraphService", () => {
 					value: [
 						{
 							id: "resource1",
-							created: FIRST_TICK,
-							metadata: {
+							dateCreated: "2024-08-22T11:55:16.271Z",
+							resourceObject: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								"@type": "Create",
 								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
@@ -2746,8 +2952,8 @@ describe("AuditableItemGraphService", () => {
 						},
 						{
 							id: "resource2",
-							created: FIRST_TICK,
-							metadata: {
+							dateCreated: "2024-08-22T11:55:16.271Z",
+							resourceObject: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								"@type": "Create",
 								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
@@ -2763,27 +2969,27 @@ describe("AuditableItemGraphService", () => {
 					value: [
 						{
 							id: "edge1",
-							created: FIRST_TICK,
-							metadata: {
+							dateCreated: "2024-08-22T11:55:16.271Z",
+							edgeObject: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								"@type": "Create",
 								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
 								object: { "@type": "Note", content: "This is a simple edge 1" },
 								published: "2015-01-25T12:34:56Z"
 							},
-							relationship: "friend"
+							edgeRelationship: "friend"
 						},
 						{
 							id: "edge2",
-							created: FIRST_TICK,
-							metadata: {
+							dateCreated: "2024-08-22T11:55:16.271Z",
+							edgeObject: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								"@type": "Create",
 								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
 								object: { "@type": "Note", content: "This is a simple edge 2" },
 								published: "2015-01-25T12:34:56Z"
 							},
-							relationship: "enemy"
+							edgeRelationship: "enemy"
 						}
 					]
 				}
@@ -2793,48 +2999,48 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(changesetStore[1]).toEqual({
-			hash: "snnM4wJd36iJyQU3z2RyJNpbJKyFUch/0itVwmBpPOQ=",
+			hash: "RPFzQTVqnF6xlgtHzvx4a5kyxwm+8m7pPt0jnWnf4W0=",
 			signature:
-				"ZIPvcuMyzIX/2VsymzuigdSoC1lbGqHO3jj/rm9w1eCWo6vTeyLIxy/k5x0/hMf1Ls4l9o+ELt5jN/ITAFSrDA==",
+				"SSZvRpIbydDRt3evoi+tZ+8QVfxiAuNirOb1+Shu64Fn3NVVNtlgwrpxWfSCRUgAmSpUVCaHtYnVL6tBcb2NDA==",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: SECOND_TICK,
+			dateCreated: "2024-08-22T11:56:56.272Z",
 			userIdentity: TEST_USER_IDENTITY,
 			patches: [
-				{ op: "replace", path: "/metadata/object/content", value: "This is a simple note 2" },
-				{ op: "add", path: "/aliases/0/updated", value: SECOND_TICK },
+				{ op: "replace", path: "/vertexObject/object/content", value: "This is a simple note 2" },
+				{ op: "add", path: "/aliases/0/dateModified", value: "2024-08-22T11:56:56.272Z" },
 				{
 					op: "replace",
-					path: "/aliases/0/metadata/object/content",
+					path: "/aliases/0/aliasObject/object/content",
 					value: "This is a simple note alias 10"
 				},
-				{ op: "add", path: "/aliases/1/updated", value: SECOND_TICK },
+				{ op: "add", path: "/aliases/1/dateModified", value: "2024-08-22T11:56:56.272Z" },
 				{
 					op: "replace",
-					path: "/aliases/1/metadata/object/content",
+					path: "/aliases/1/aliasObject/object/content",
 					value: "This is a simple note alias 20"
 				},
-				{ op: "add", path: "/resources/0/updated", value: SECOND_TICK },
+				{ op: "add", path: "/resources/0/dateModified", value: "2024-08-22T11:56:56.272Z" },
 				{
 					op: "replace",
-					path: "/resources/0/metadata/object/content",
+					path: "/resources/0/resourceObject/object/content",
 					value: "This is a simple note resource 10"
 				},
-				{ op: "add", path: "/resources/1/updated", value: SECOND_TICK },
+				{ op: "add", path: "/resources/1/dateModified", value: "2024-08-22T11:56:56.272Z" },
 				{
 					op: "replace",
-					path: "/resources/1/metadata/object/content",
+					path: "/resources/1/resourceObject/object/content",
 					value: "This is a simple note resource 20"
 				},
-				{ op: "add", path: "/edges/0/updated", value: SECOND_TICK },
+				{ op: "add", path: "/edges/0/dateModified", value: "2024-08-22T11:56:56.272Z" },
 				{
 					op: "replace",
-					path: "/edges/0/metadata/object/content",
+					path: "/edges/0/edgeObject/object/content",
 					value: "This is a simple note edge 10"
 				},
-				{ op: "add", path: "/edges/1/updated", value: SECOND_TICK },
+				{ op: "add", path: "/edges/1/dateModified", value: "2024-08-22T11:56:56.272Z" },
 				{
 					op: "replace",
-					path: "/edges/1/metadata/object/content",
+					path: "/edges/1/edgeObject/object/content",
 					value: "This is a simple note edge 20"
 				}
 			],
@@ -2849,1167 +3055,168 @@ describe("AuditableItemGraphService", () => {
 		);
 		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
 
-		let credentialSignature = await decodeJwtToIntegrity(immutableStore[0].data);
+		let immutableIntegrity = await decodeJwtToIntegrity(immutableStore[0].data);
 
-		expect(credentialSignature.signature).toEqual(
-			"623KrKM43+giT9gpq12YewVrY2Cn2qGkHFubvQDyamHnpowgur2aK5QHwunM1NmxzKc8v2QbAxHf9hQQq2TPAg=="
-		);
-
-		expect(credentialSignature.integrity).toEqual({
-			patches: [
-				{
-					op: "add",
-					path: "/metadata",
-					value: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-						object: { "@type": "Note", content: "This is a simple note" },
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					op: "add",
-					path: "/aliases",
-					value: [
-						{
-							created: FIRST_TICK,
-							id: "foo123",
-							metadata: {
-								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple alias 1" },
-								published: "2015-01-25T12:34:56Z"
-							}
-						},
-						{
-							created: FIRST_TICK,
-							id: "bar456",
-							metadata: {
-								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple note alias 2" },
-								published: "2015-01-25T12:34:56Z"
-							}
-						}
-					]
-				},
-				{
-					op: "add",
-					path: "/resources",
-					value: [
-						{
-							created: FIRST_TICK,
-							id: "resource1",
-							metadata: {
-								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple note resource 1" },
-								published: "2015-01-25T12:34:56Z"
-							}
-						},
-						{
-							created: FIRST_TICK,
-							id: "resource2",
-							metadata: {
-								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple resource 2" },
-								published: "2015-01-25T12:34:56Z"
-							}
-						}
-					]
-				},
-				{
-					op: "add",
-					path: "/edges",
-					value: [
-						{
-							created: FIRST_TICK,
-							id: "edge1",
-							metadata: {
-								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple edge 1" },
-								published: "2015-01-25T12:34:56Z"
-							},
-							relationship: "friend"
-						},
-						{
-							created: FIRST_TICK,
-							id: "edge2",
-							metadata: {
-								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple edge 2" },
-								published: "2015-01-25T12:34:56Z"
-							},
-							relationship: "enemy"
-						}
-					]
-				}
-			]
-		});
-
-		credentialSignature = await decodeJwtToIntegrity(immutableStore[1].data);
-
-		expect(credentialSignature.signature).toEqual(
-			"ZIPvcuMyzIX/2VsymzuigdSoC1lbGqHO3jj/rm9w1eCWo6vTeyLIxy/k5x0/hMf1Ls4l9o+ELt5jN/ITAFSrDA=="
-		);
-
-		expect(credentialSignature.integrity).toEqual({
-			patches: [
-				{ op: "replace", path: "/metadata/object/content", value: "This is a simple note 2" },
-				{ op: "add", path: "/aliases/0/updated", value: SECOND_TICK },
-				{
-					op: "replace",
-					path: "/aliases/0/metadata/object/content",
-					value: "This is a simple note alias 10"
-				},
-				{ op: "add", path: "/aliases/1/updated", value: SECOND_TICK },
-				{
-					op: "replace",
-					path: "/aliases/1/metadata/object/content",
-					value: "This is a simple note alias 20"
-				},
-				{ op: "add", path: "/resources/0/updated", value: SECOND_TICK },
-				{
-					op: "replace",
-					path: "/resources/0/metadata/object/content",
-					value: "This is a simple note resource 10"
-				},
-				{ op: "add", path: "/resources/1/updated", value: SECOND_TICK },
-				{
-					op: "replace",
-					path: "/resources/1/metadata/object/content",
-					value: "This is a simple note resource 20"
-				},
-				{ op: "add", path: "/edges/0/updated", value: SECOND_TICK },
-				{
-					op: "replace",
-					path: "/edges/0/metadata/object/content",
-					value: "This is a simple note edge 10"
-				},
-				{ op: "add", path: "/edges/1/updated", value: SECOND_TICK },
-				{
-					op: "replace",
-					path: "/edges/1/metadata/object/content",
-					value: "This is a simple note edge 20"
-				}
-			]
-		});
-	});
-
-	test("Can get an updated vertex as JSON-LD", async () => {
-		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
-		const id = await service.create(
-			{
-				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
-				actor: {
-					"@id": "acct:person@example.org",
-					"@type": "Person",
-					name: "Person"
-				},
-				object: {
-					"@type": "Note",
-					content: "This is a simple note"
-				},
-				published: "2015-01-25T12:34:56Z"
-			},
-			[
-				{
-					id: "foo123",
-					format: "type1",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple alias 1"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "bar456",
-					format: "type2",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note alias 2"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			[
-				{
-					id: "resource1",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note resource 1"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "resource2",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple resource 2"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			[
-				{
-					id: "edge1",
-					relationship: "friend",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple edge 1"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "edge2",
-					relationship: "enemy",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple edge 2"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
-
-		await service.update(
-			id,
-			{
-				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
-				actor: {
-					"@id": "acct:person@example.org",
-					"@type": "Person",
-					name: "Person"
-				},
-				object: {
-					"@type": "Note",
-					content: "This is a simple note 2"
-				},
-				published: "2015-01-25T12:34:56Z"
-			},
-			[
-				{
-					id: "foo123",
-					format: "type1",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note alias 10"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "bar456",
-					format: "type2",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note alias 20"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			[
-				{
-					id: "resource1",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note resource 10"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "resource2",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note resource 20"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			[
-				{
-					id: "edge1",
-					relationship: "friend",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note edge 10"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "edge2",
-					relationship: "enemy",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note edge 20"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
-
-		const result = await service.get(id, { verifySignatureDepth: VerifyDepth.All }, "jsonld");
-
-		expect(result).toEqual({
-			"@context": [
-				"https://schema.twindev.org/aig/",
-				"https://schema.org/",
-				"https://www.w3.org/ns/activitystreams"
-			],
-			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			type: "Vertex",
+		expect(immutableIntegrity).toEqual({
 			dateCreated: "2024-08-22T11:55:16.271Z",
-			dateModified: "2024-08-22T11:56:56.272Z",
-			aliases: [
-				{
-					id: "foo123",
-					type: "Alias",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					dateModified: "2024-08-22T11:56:56.272Z",
-					format: "type1",
-					metadata: {
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note alias 10"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "bar456",
-					type: "Alias",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					dateModified: "2024-08-22T11:56:56.272Z",
-					format: "type2",
-					metadata: {
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note alias 20"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			changesetsVerification: [
-				{
-					type: "Verification",
-					epoch: 1724327716271,
-					state: "ok"
-				},
-				{
-					type: "Verification",
-					epoch: 1724327816272,
-					state: "ok"
-				}
-			],
-			edges: [
-				{
-					id: "edge1",
-					type: "Edge",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					dateModified: "2024-08-22T11:56:56.272Z",
-					metadata: {
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note edge 10"
-						},
-						published: "2015-01-25T12:34:56Z"
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			hash: "tojDV5vHjU23J48xDwRERjzmtFXGuAoSsPIsA1jyhC4=",
+			signature:
+				"ZWQO4BUOfAXhNDXYS55uRJEMjHXdHnAniaCY6dx7oIiC0dPR5z3Y90Y/peiVmUf5JeFvCuh2JybQtWwVhl3LDA==",
+			integrity: {
+				patches: [
+					{
+						op: "add",
+						path: "/vertexObject",
+						value: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							"@type": "Create",
+							actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+							object: { "@type": "Note", content: "This is a simple note" },
+							published: "2015-01-25T12:34:56Z"
+						}
 					},
-					edgeRelationship: "friend"
-				},
-				{
-					id: "edge2",
-					type: "Edge",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					dateModified: "2024-08-22T11:56:56.272Z",
-					metadata: {
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note edge 20"
-						},
-						published: "2015-01-25T12:34:56Z"
-					},
-					edgeRelationship: "enemy"
-				}
-			],
-			metadata: {
-				type: "Create",
-				actor: {
-					id: "acct:person@example.org",
-					type: "Person",
-					name: "Person"
-				},
-				object: {
-					type: "Note",
-					content: "This is a simple note 2"
-				},
-				published: "2015-01-25T12:34:56Z"
-			},
-			nodeIdentity:
-				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
-			resources: [
-				{
-					id: "resource1",
-					type: "Resource",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					dateModified: "2024-08-22T11:56:56.272Z",
-					metadata: {
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note resource 10"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "resource2",
-					type: "Resource",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					dateModified: "2024-08-22T11:56:56.272Z",
-					metadata: {
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note resource 20"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			verified: true
-		});
-	});
-
-	test("Can get an updated vertex as JSON-LD with changeset", async () => {
-		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
-		const id = await service.create(
-			{
-				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
-				actor: {
-					"@id": "acct:person@example.org",
-					"@type": "Person",
-					name: "Person"
-				},
-				object: {
-					"@type": "Note",
-					content: "This is a simple note"
-				},
-				published: "2015-01-25T12:34:56Z"
-			},
-			[
-				{
-					id: "foo123",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple alias 1"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "bar456",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note alias 2"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			[
-				{
-					id: "resource1",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note resource 1"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "resource2",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple resource 2"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			[
-				{
-					id: "edge1",
-					relationship: "friend",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple edge 1"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "edge2",
-					relationship: "enemy",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple edge 2"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
-
-		await service.update(
-			id,
-			{
-				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
-				actor: {
-					"@id": "acct:person@example.org",
-					"@type": "Person",
-					name: "Person"
-				},
-				object: {
-					"@type": "Note",
-					content: "This is a simple note 2"
-				},
-				published: "2015-01-25T12:34:56Z"
-			},
-			[
-				{
-					id: "foo123",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note alias 10"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "bar456",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note alias 20"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			[
-				{
-					id: "resource1",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note resource 10"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "resource2",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note resource 20"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			[
-				{
-					id: "edge1",
-					relationship: "friend",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note edge 10"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "edge2",
-					relationship: "enemy",
-					metadata: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
-							name: "Person"
-						},
-						object: {
-							"@type": "Note",
-							content: "This is a simple note edge 20"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
-
-		const result = await service.get(
-			id,
-			{
-				includeChangesets: true
-			},
-			"jsonld"
-		);
-
-		expect(result).toEqual({
-			"@context": [
-				"https://schema.twindev.org/aig/",
-				"https://schema.org/",
-				"https://www.w3.org/ns/activitystreams"
-			],
-			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			type: "Vertex",
-			dateCreated: "2024-08-22T11:55:16.271Z",
-			dateModified: "2024-08-22T11:56:56.272Z",
-			aliases: [
-				{
-					id: "foo123",
-					type: "Alias",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					dateModified: "2024-08-22T11:56:56.272Z",
-					metadata: {
-						type: "Create",
-						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
-						object: { type: "Note", content: "This is a simple note alias 10" },
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "bar456",
-					type: "Alias",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					dateModified: "2024-08-22T11:56:56.272Z",
-					metadata: {
-						type: "Create",
-						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
-						object: { type: "Note", content: "This is a simple note alias 20" },
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			changesets: [
-				{
-					type: "Changeset",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					hash: "jTb9qgSQtXraoLWMpEB8DqHby6amfHbh2rdKu1O/144=",
-					immutableStorageId:
-						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
-					patches: [
-						{
-							type: "PatchOperation",
-							patchOperation: "add",
-							patchPath: "/metadata",
-							patchValue: {
-								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple note" },
-								published: "2015-01-25T12:34:56Z"
+					{
+						op: "add",
+						path: "/aliases",
+						value: [
+							{
+								aliasObject: {
+									"@context": "https://www.w3.org/ns/activitystreams",
+									"@type": "Create",
+									actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+									object: { "@type": "Note", content: "This is a simple alias 1" },
+									published: "2015-01-25T12:34:56Z"
+								},
+								dateCreated: "2024-08-22T11:55:16.271Z",
+								id: "foo123"
+							},
+							{
+								aliasObject: {
+									"@context": "https://www.w3.org/ns/activitystreams",
+									"@type": "Create",
+									actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+									object: { "@type": "Note", content: "This is a simple note alias 2" },
+									published: "2015-01-25T12:34:56Z"
+								},
+								dateCreated: "2024-08-22T11:55:16.271Z",
+								id: "bar456"
 							}
-						},
-						{
-							type: "PatchOperation",
-							patchOperation: "add",
-							patchPath: "/aliases",
-							patchValue: [
-								{
-									id: "foo123",
-									created: 1724327716271,
-									metadata: {
-										"@context": "https://www.w3.org/ns/activitystreams",
-										"@type": "Create",
-										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-										object: { "@type": "Note", content: "This is a simple alias 1" },
-										published: "2015-01-25T12:34:56Z"
-									}
-								},
-								{
-									id: "bar456",
-									created: 1724327716271,
-									metadata: {
-										"@context": "https://www.w3.org/ns/activitystreams",
-										"@type": "Create",
-										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-										object: { "@type": "Note", content: "This is a simple note alias 2" },
-										published: "2015-01-25T12:34:56Z"
-									}
-								}
-							]
-						},
-						{
-							type: "PatchOperation",
-							patchOperation: "add",
-							patchPath: "/resources",
-							patchValue: [
-								{
-									id: "resource1",
-									created: 1724327716271,
-									metadata: {
-										"@context": "https://www.w3.org/ns/activitystreams",
-										"@type": "Create",
-										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-										object: { "@type": "Note", content: "This is a simple note resource 1" },
-										published: "2015-01-25T12:34:56Z"
-									}
-								},
-								{
-									id: "resource2",
-									created: 1724327716271,
-									metadata: {
-										"@context": "https://www.w3.org/ns/activitystreams",
-										"@type": "Create",
-										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-										object: { "@type": "Note", content: "This is a simple resource 2" },
-										published: "2015-01-25T12:34:56Z"
-									}
-								}
-							]
-						},
-						{
-							type: "PatchOperation",
-							patchOperation: "add",
-							patchPath: "/edges",
-							patchValue: [
-								{
-									id: "edge1",
-									created: 1724327716271,
-									metadata: {
-										"@context": "https://www.w3.org/ns/activitystreams",
-										"@type": "Create",
-										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-										object: { "@type": "Note", content: "This is a simple edge 1" },
-										published: "2015-01-25T12:34:56Z"
-									},
-									relationship: "friend"
-								},
-								{
-									id: "edge2",
-									created: 1724327716271,
-									metadata: {
-										"@context": "https://www.w3.org/ns/activitystreams",
-										"@type": "Create",
-										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-										object: { "@type": "Note", content: "This is a simple edge 2" },
-										published: "2015-01-25T12:34:56Z"
-									},
-									relationship: "enemy"
-								}
-							]
-						}
-					],
-					signature:
-						"623KrKM43+giT9gpq12YewVrY2Cn2qGkHFubvQDyamHnpowgur2aK5QHwunM1NmxzKc8v2QbAxHf9hQQq2TPAg==",
-					userIdentity: TEST_USER_IDENTITY
-				},
-				{
-					type: "Changeset",
-					dateCreated: "2024-08-22T11:56:56.272Z",
-					hash: "snnM4wJd36iJyQU3z2RyJNpbJKyFUch/0itVwmBpPOQ=",
-					immutableStorageId:
-						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505",
-					patches: [
-						{
-							type: "PatchOperation",
-							patchOperation: "replace",
-							patchPath: "/metadata/object/content",
-							patchValue: "This is a simple note 2"
-						},
-						{
-							type: "PatchOperation",
-							patchOperation: "add",
-							patchPath: "/aliases/0/updated",
-							patchValue: 1724327816272
-						},
-						{
-							type: "PatchOperation",
-							patchOperation: "replace",
-							patchPath: "/aliases/0/metadata/object/content",
-							patchValue: "This is a simple note alias 10"
-						},
-						{
-							type: "PatchOperation",
-							patchOperation: "add",
-							patchPath: "/aliases/1/updated",
-							patchValue: 1724327816272
-						},
-						{
-							type: "PatchOperation",
-							patchOperation: "replace",
-							patchPath: "/aliases/1/metadata/object/content",
-							patchValue: "This is a simple note alias 20"
-						},
-						{
-							type: "PatchOperation",
-							patchOperation: "add",
-							patchPath: "/resources/0/updated",
-							patchValue: 1724327816272
-						},
-						{
-							type: "PatchOperation",
-							patchOperation: "replace",
-							patchPath: "/resources/0/metadata/object/content",
-							patchValue: "This is a simple note resource 10"
-						},
-						{
-							type: "PatchOperation",
-							patchOperation: "add",
-							patchPath: "/resources/1/updated",
-							patchValue: 1724327816272
-						},
-						{
-							type: "PatchOperation",
-							patchOperation: "replace",
-							patchPath: "/resources/1/metadata/object/content",
-							patchValue: "This is a simple note resource 20"
-						},
-						{
-							type: "PatchOperation",
-							patchOperation: "add",
-							patchPath: "/edges/0/updated",
-							patchValue: 1724327816272
-						},
-						{
-							type: "PatchOperation",
-							patchOperation: "replace",
-							patchPath: "/edges/0/metadata/object/content",
-							patchValue: "This is a simple note edge 10"
-						},
-						{
-							type: "PatchOperation",
-							patchOperation: "add",
-							patchPath: "/edges/1/updated",
-							patchValue: 1724327816272
-						},
-						{
-							type: "PatchOperation",
-							patchOperation: "replace",
-							patchPath: "/edges/1/metadata/object/content",
-							patchValue: "This is a simple note edge 20"
-						}
-					],
-					signature:
-						"ZIPvcuMyzIX/2VsymzuigdSoC1lbGqHO3jj/rm9w1eCWo6vTeyLIxy/k5x0/hMf1Ls4l9o+ELt5jN/ITAFSrDA==",
-					userIdentity: TEST_USER_IDENTITY
-				}
-			],
-			edges: [
-				{
-					id: "edge1",
-					type: "Edge",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					dateModified: "2024-08-22T11:56:56.272Z",
-					metadata: {
-						type: "Create",
-						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
-						object: { type: "Note", content: "This is a simple note edge 10" },
-						published: "2015-01-25T12:34:56Z"
+						]
 					},
-					edgeRelationship: "friend"
-				},
-				{
-					id: "edge2",
-					type: "Edge",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					dateModified: "2024-08-22T11:56:56.272Z",
-					metadata: {
-						type: "Create",
-						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
-						object: { type: "Note", content: "This is a simple note edge 20" },
-						published: "2015-01-25T12:34:56Z"
+					{
+						op: "add",
+						path: "/resources",
+						value: [
+							{
+								dateCreated: "2024-08-22T11:55:16.271Z",
+								id: "resource1",
+								resourceObject: {
+									"@context": "https://www.w3.org/ns/activitystreams",
+									"@type": "Create",
+									actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+									object: { "@type": "Note", content: "This is a simple note resource 1" },
+									published: "2015-01-25T12:34:56Z"
+								}
+							},
+							{
+								dateCreated: "2024-08-22T11:55:16.271Z",
+								id: "resource2",
+								resourceObject: {
+									"@context": "https://www.w3.org/ns/activitystreams",
+									"@type": "Create",
+									actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+									object: { "@type": "Note", content: "This is a simple resource 2" },
+									published: "2015-01-25T12:34:56Z"
+								}
+							}
+						]
 					},
-					edgeRelationship: "enemy"
-				}
-			],
-			metadata: {
-				type: "Create",
-				actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
-				object: { type: "Note", content: "This is a simple note 2" },
-				published: "2015-01-25T12:34:56Z"
-			},
-			nodeIdentity:
-				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
-			resources: [
-				{
-					id: "resource1",
-					type: "Resource",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					dateModified: "2024-08-22T11:56:56.272Z",
-					metadata: {
-						type: "Create",
-						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
-						object: { type: "Note", content: "This is a simple note resource 10" },
-						published: "2015-01-25T12:34:56Z"
+					{
+						op: "add",
+						path: "/edges",
+						value: [
+							{
+								dateCreated: "2024-08-22T11:55:16.271Z",
+								edgeObject: {
+									"@context": "https://www.w3.org/ns/activitystreams",
+									"@type": "Create",
+									actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+									object: { "@type": "Note", content: "This is a simple edge 1" },
+									published: "2015-01-25T12:34:56Z"
+								},
+								edgeRelationship: "friend",
+								id: "edge1"
+							},
+							{
+								dateCreated: "2024-08-22T11:55:16.271Z",
+								edgeObject: {
+									"@context": "https://www.w3.org/ns/activitystreams",
+									"@type": "Create",
+									actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+									object: { "@type": "Note", content: "This is a simple edge 2" },
+									published: "2015-01-25T12:34:56Z"
+								},
+								edgeRelationship: "enemy",
+								id: "edge2"
+							}
+						]
 					}
-				},
-				{
-					id: "resource2",
-					type: "Resource",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					dateModified: "2024-08-22T11:56:56.272Z",
-					metadata: {
-						type: "Create",
-						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
-						object: { type: "Note", content: "This is a simple note resource 20" },
-						published: "2015-01-25T12:34:56Z"
+				]
+			}
+		});
+
+		immutableIntegrity = await decodeJwtToIntegrity(immutableStore[1].data);
+
+		expect(immutableIntegrity).toEqual({
+			dateCreated: "2024-08-22T11:56:56.272Z",
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			hash: "RPFzQTVqnF6xlgtHzvx4a5kyxwm+8m7pPt0jnWnf4W0=",
+			signature:
+				"SSZvRpIbydDRt3evoi+tZ+8QVfxiAuNirOb1+Shu64Fn3NVVNtlgwrpxWfSCRUgAmSpUVCaHtYnVL6tBcb2NDA==",
+			integrity: {
+				patches: [
+					{ op: "replace", path: "/vertexObject/object/content", value: "This is a simple note 2" },
+					{ op: "add", path: "/aliases/0/dateModified", value: "2024-08-22T11:56:56.272Z" },
+					{
+						op: "replace",
+						path: "/aliases/0/aliasObject/object/content",
+						value: "This is a simple note alias 10"
+					},
+					{ op: "add", path: "/aliases/1/dateModified", value: "2024-08-22T11:56:56.272Z" },
+					{
+						op: "replace",
+						path: "/aliases/1/aliasObject/object/content",
+						value: "This is a simple note alias 20"
+					},
+					{ op: "add", path: "/resources/0/dateModified", value: "2024-08-22T11:56:56.272Z" },
+					{
+						op: "replace",
+						path: "/resources/0/resourceObject/object/content",
+						value: "This is a simple note resource 10"
+					},
+					{ op: "add", path: "/resources/1/dateModified", value: "2024-08-22T11:56:56.272Z" },
+					{
+						op: "replace",
+						path: "/resources/1/resourceObject/object/content",
+						value: "This is a simple note resource 20"
+					},
+					{ op: "add", path: "/edges/0/dateModified", value: "2024-08-22T11:56:56.272Z" },
+					{
+						op: "replace",
+						path: "/edges/0/edgeObject/object/content",
+						value: "This is a simple note edge 10"
+					},
+					{ op: "add", path: "/edges/1/dateModified", value: "2024-08-22T11:56:56.272Z" },
+					{
+						op: "replace",
+						path: "/edges/1/edgeObject/object/content",
+						value: "This is a simple note edge 20"
 					}
-				}
-			]
+				]
+			}
 		});
 	});
 
@@ -4035,35 +3242,47 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result).toEqual({
+			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
-			updated: FIRST_TICK,
-			nodeIdentity: TEST_NODE_IDENTITY,
+			type: "AuditableItemGraphVertex",
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateModified: "2024-08-22T11:55:16.271Z",
 			aliases: [
-				{ id: "foo123", created: FIRST_TICK },
-				{ id: "bar456", created: FIRST_TICK }
+				{ id: "foo123", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" },
+				{ id: "bar456", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" }
 			],
 			changesets: [
 				{
-					hash: "Ht6zFJi0yl+MYTKgk+HdZW1PLWjJmSOwOkqrAA1NfVU=",
-					signature:
-						"Upe1JYPqtP0FQ56xYwB5WFlR3CsyQKke55KTRmn0/waQm6/OWCz+HJlfDYR4EuMthR8NHAixrl2iweYLHZ1xAg==",
-					created: FIRST_TICK,
-					userIdentity: TEST_USER_IDENTITY,
+					type: "AuditableItemGraphChangeset",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					hash: "orN0KaNwyaMN/eNCasa5gVdxASLAboEUruNIjKjiVCk=",
 					patches: [
 						{
-							op: "add",
-							path: "/aliases",
-							value: [
-								{ id: "foo123", created: FIRST_TICK },
-								{ id: "bar456", created: FIRST_TICK }
+							type: "AuditableItemGraphPatchOperation",
+							patchOperation: "add",
+							patchPath: "/aliases",
+							patchValue: [
+								{ id: "foo123", dateCreated: "2024-08-22T11:55:16.271Z" },
+								{ id: "bar456", dateCreated: "2024-08-22T11:55:16.271Z" }
 							]
 						}
-					]
+					],
+					signature:
+						"/PSzLQIctmWsOnOy5sOVPS/+HuYxcylJHXm6g+yMOn6CBnjVQAiG1g3eQhnvZnd+/85w5Z35Ml592KTaGBqkAw==",
+					userIdentity:
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				}
 			],
-			verified: true,
-			changesetsVerification: [{ state: "ok", epoch: FIRST_TICK }]
+			changesetsVerification: [
+				{
+					type: "AuditableItemGraphVerification",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					state: "ok"
+				}
+			],
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			verified: true
 		});
 
 		expect(immutableStore.length).toEqual(0);
@@ -4089,17 +3308,22 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		const results = await service.query({ id: "0" });
+
 		expect(results).toEqual({
-			entities: [
+			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
+			type: "AuditableItemGraphVertexList",
+			vertices: [
 				{
+					type: "AuditableItemGraphVertex",
 					id: "0404040404040404040404040404040404040404040404040404040404040404",
-					created: SECOND_TICK,
-					updated: SECOND_TICK
+					dateCreated: "2024-08-22T11:56:56.272Z",
+					dateModified: "2024-08-22T11:56:56.272Z"
 				},
 				{
+					type: "AuditableItemGraphVertex",
 					id: "0101010101010101010101010101010101010101010101010101010101010101",
-					created: FIRST_TICK,
-					updated: FIRST_TICK
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:55:16.271Z"
 				}
 			]
 		});
@@ -4126,23 +3350,43 @@ describe("AuditableItemGraphService", () => {
 
 		const results = await service.query({ id: "foo" });
 		expect(results).toEqual({
-			entities: [
+			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
+			type: "AuditableItemGraphVertexList",
+			vertices: [
 				{
 					id: "0404040404040404040404040404040404040404040404040404040404040404",
-					created: SECOND_TICK,
-					updated: SECOND_TICK,
+					type: "AuditableItemGraphVertex",
+					dateCreated: "2024-08-22T11:56:56.272Z",
+					dateModified: "2024-08-22T11:56:56.272Z",
 					aliases: [
-						{ id: "foo456", created: SECOND_TICK },
-						{ id: "bar456", created: SECOND_TICK }
+						{
+							id: "foo456",
+							type: "AuditableItemGraphAlias",
+							dateCreated: "2024-08-22T11:56:56.272Z"
+						},
+						{
+							id: "bar456",
+							type: "AuditableItemGraphAlias",
+							dateCreated: "2024-08-22T11:56:56.272Z"
+						}
 					]
 				},
 				{
 					id: "0101010101010101010101010101010101010101010101010101010101010101",
-					created: FIRST_TICK,
-					updated: FIRST_TICK,
+					type: "AuditableItemGraphVertex",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:55:16.271Z",
 					aliases: [
-						{ id: "foo123", created: FIRST_TICK },
-						{ id: "bar123", created: FIRST_TICK }
+						{
+							id: "foo123",
+							type: "AuditableItemGraphAlias",
+							dateCreated: "2024-08-22T11:55:16.271Z"
+						},
+						{
+							id: "bar123",
+							type: "AuditableItemGraphAlias",
+							dateCreated: "2024-08-22T11:55:16.271Z"
+						}
 					]
 				}
 			]
@@ -4170,17 +3414,23 @@ describe("AuditableItemGraphService", () => {
 
 		const results = await service.query({ id: "4" });
 		expect(results).toEqual({
-			entities: [
+			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
+			type: "AuditableItemGraphVertexList",
+			vertices: [
 				{
 					id: "0404040404040404040404040404040404040404040404040404040404040404",
-					created: SECOND_TICK,
-					updated: SECOND_TICK
+					type: "AuditableItemGraphVertex",
+					dateCreated: "2024-08-22T11:56:56.272Z",
+					dateModified: "2024-08-22T11:56:56.272Z"
 				},
 				{
 					id: "0101010101010101010101010101010101010101010101010101010101010101",
-					created: FIRST_TICK,
-					updated: FIRST_TICK,
-					aliases: [{ id: "foo4", created: FIRST_TICK }]
+					type: "AuditableItemGraphVertex",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:55:16.271Z",
+					aliases: [
+						{ id: "foo4", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" }
+					]
 				}
 			]
 		});
@@ -4207,11 +3457,14 @@ describe("AuditableItemGraphService", () => {
 
 		const results = await service.query({ id: "4", idMode: "id" });
 		expect(results).toEqual({
-			entities: [
+			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
+			type: "AuditableItemGraphVertexList",
+			vertices: [
 				{
 					id: "0404040404040404040404040404040404040404040404040404040404040404",
-					created: SECOND_TICK,
-					updated: SECOND_TICK
+					type: "AuditableItemGraphVertex",
+					dateCreated: "2024-08-22T11:56:56.272Z",
+					dateModified: "2024-08-22T11:56:56.272Z"
 				}
 			]
 		});
@@ -4238,23 +3491,23 @@ describe("AuditableItemGraphService", () => {
 
 		const results = await service.query({ id: "4", idMode: "alias" });
 		expect(results).toEqual({
-			entities: [
+			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
+			type: "AuditableItemGraphVertexList",
+			vertices: [
 				{
 					id: "0101010101010101010101010101010101010101010101010101010101010101",
-					created: FIRST_TICK,
-					updated: FIRST_TICK,
+					type: "AuditableItemGraphVertex",
+					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateModified: "2024-08-22T11:55:16.271Z",
 					aliases: [
-						{
-							id: "foo4",
-							created: FIRST_TICK
-						}
+						{ id: "foo4", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" }
 					]
 				}
 			]
 		});
 	});
 
-	test("Can create a vertex with some metadata and a valid schema", async () => {
+	test("Can create a vertex with an object and a valid schema", async () => {
 		const service = new AuditableItemGraphService({ config: { enableImmutableDiffs: true } });
 
 		const id = await service.create(
@@ -4285,10 +3538,10 @@ describe("AuditableItemGraphService", () => {
 
 		expect(vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
-			updated: FIRST_TICK,
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
-			metadata: {
+			vertexObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
 				"@type": "Create",
 				actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
@@ -4301,16 +3554,16 @@ describe("AuditableItemGraphService", () => {
 		const changeset = changesetStore[0];
 
 		expect(changeset).toEqual({
-			hash: "+b1f6l+JkK6vJYOmk84EExH5mxV1lqY5QJ/L+D7UWsk=",
+			hash: "2JyaH11cx1Q/OAn4UfKxx4xOAn5MLoTKlbhmALSjJMo=",
 			signature:
-				"Jgvd1FjWd0VsQdkkqzxaByLkkCCDVuQtDEtskD6o3ZhxZfDx5towOGbYtHc8vz9cj8/v8NED+iBVFSjtHgugCQ==",
+				"bJmUAWhXtlb/awI5eVV7z59MrNetpfZpsud8a5dijLiZUCanAN3/0qMQ5dufa1RypG3bnQEBUWh4f6nthh03DQ==",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-			created: FIRST_TICK,
+			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity: TEST_USER_IDENTITY,
 			patches: [
 				{
 					op: "add",
-					path: "/metadata",
+					path: "/vertexObject",
 					value: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						"@type": "Create",
@@ -4332,25 +3585,28 @@ describe("AuditableItemGraphService", () => {
 		expect(immutableStore[0].controller).toEqual(TEST_NODE_IDENTITY);
 
 		const immutableIntegrity = await decodeJwtToIntegrity(immutableStore[0].data);
-
-		expect(immutableIntegrity.signature).toEqual(
-			"Jgvd1FjWd0VsQdkkqzxaByLkkCCDVuQtDEtskD6o3ZhxZfDx5towOGbYtHc8vz9cj8/v8NED+iBVFSjtHgugCQ=="
-		);
-
-		expect(immutableIntegrity.integrity).toEqual({
-			patches: [
-				{
-					op: "add",
-					path: "/metadata",
-					value: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-						object: { "@type": "Note", content: "This is a simple note 2" },
-						published: "2015-01-25T12:34:56Z"
+		expect(immutableIntegrity).toEqual({
+			dateCreated: "2024-08-22T11:55:16.271Z",
+			userIdentity:
+				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+			hash: "2JyaH11cx1Q/OAn4UfKxx4xOAn5MLoTKlbhmALSjJMo=",
+			signature:
+				"bJmUAWhXtlb/awI5eVV7z59MrNetpfZpsud8a5dijLiZUCanAN3/0qMQ5dufa1RypG3bnQEBUWh4f6nthh03DQ==",
+			integrity: {
+				patches: [
+					{
+						op: "add",
+						path: "/vertexObject",
+						value: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							"@type": "Create",
+							actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
+							object: { "@type": "Note", content: "This is a simple note 2" },
+							published: "2015-01-25T12:34:56Z"
+						}
 					}
-				}
-			]
+				]
+			}
 		});
 	});
 });

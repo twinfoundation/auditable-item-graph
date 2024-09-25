@@ -1,9 +1,10 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import path from "node:path";
-import type {
-	IAuditableItemGraphCredential,
-	IAuditableItemGraphPatchOperation
+import {
+	AuditableItemGraphTypes,
+	type IAuditableItemGraphCredential,
+	type IAuditableItemGraphPatchOperation
 } from "@twin.org/auditable-item-graph-models";
 import { Converter, Is, RandomHelper } from "@twin.org/core";
 import { Bip39 } from "@twin.org/crypto";
@@ -101,7 +102,7 @@ export async function setupTestEnv(): Promise<void> {
  * @returns The integrity data.
  */
 export async function decodeJwtToIntegrity(immutableStore: string): Promise<{
-	created: number;
+	dateCreated: string;
 	userIdentity: string;
 	hash: string;
 	signature: string;
@@ -119,7 +120,9 @@ export async function decodeJwtToIntegrity(immutableStore: string): Promise<{
 	const credentialData = Is.arrayValue(decodedJwt.payload?.vc?.credentialSubject)
 		? decodedJwt.payload?.vc?.credentialSubject[0]
 		: (decodedJwt.payload?.vc?.credentialSubject ?? {
-				created: 0,
+				"@context": [AuditableItemGraphTypes.ContextRoot],
+				type: AuditableItemGraphTypes.Credential,
+				dateCreated: "",
 				userIdentity: "",
 				hash: "",
 				signature: ""
@@ -136,7 +139,7 @@ export async function decodeJwtToIntegrity(immutableStore: string): Promise<{
 	}
 
 	return {
-		created: credentialData.created,
+		dateCreated: credentialData.dateCreated,
 		userIdentity: credentialData.userIdentity,
 		hash: credentialData.hash,
 		signature: credentialData.signature,

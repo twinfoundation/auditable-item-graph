@@ -1,7 +1,8 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import type { SortDirection } from "@twin.org/entity";
-import type { MimeTypes } from "@twin.org/web";
+import type { HeaderTypes, MimeTypes } from "@twin.org/web";
+import type { IAuditableItemGraphVertex } from "../IAuditableItemGraphVertex";
 
 /**
  * Get the a list of the vertices with matching ids or aliases.
@@ -11,7 +12,7 @@ export interface IAuditableItemGraphListRequest {
 	 * The headers which can be used to determine the response data type.
 	 */
 	headers?: {
-		Accept: typeof MimeTypes.Json | typeof MimeTypes.JsonLd;
+		[HeaderTypes.Accept]: typeof MimeTypes.Json | typeof MimeTypes.JsonLd;
 	};
 
 	/**
@@ -29,9 +30,9 @@ export interface IAuditableItemGraphListRequest {
 		idMode?: "id" | "alias" | "both";
 
 		/**
-		 * The order for the results, default to created.
+		 * The order for the results, default to dateCreated.
 		 */
-		orderBy?: "created" | "updated";
+		orderBy?: keyof Pick<IAuditableItemGraphVertex, "dateCreated" | "dateModified">;
 
 		/**
 		 * The direction for the order, defaults to desc.
@@ -39,7 +40,7 @@ export interface IAuditableItemGraphListRequest {
 		orderByDirection?: SortDirection;
 
 		/**
-		 * The properties to return as a comma separated list, defaults to "id,created,aliases,metadata".
+		 * The properties to return as a comma separated list, defaults to "id,dateCreated,aliases,vertexObject".
 		 */
 		properties?: string;
 

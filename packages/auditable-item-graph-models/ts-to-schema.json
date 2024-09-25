@@ -10,6 +10,7 @@
 		"IAuditableItemGraphPatchOperation",
 		"IAuditableItemGraphCredential",
 		"IAuditableItemGraphVerification",
+		"IAuditableItemGraphVertexList",
 		"AuditableItemGraphVerificationState"
 	],
 	"externalReferences": {

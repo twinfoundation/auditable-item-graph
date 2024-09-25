@@ -19,4 +19,5 @@ export * from "./models/IAuditableItemGraphPatchOperation";
 export * from "./models/IAuditableItemGraphResource";
 export * from "./models/IAuditableItemGraphVerification";
 export * from "./models/IAuditableItemGraphVertex";
+export * from "./models/IAuditableItemGraphVertexList";
 export * from "./models/verifyDepth";

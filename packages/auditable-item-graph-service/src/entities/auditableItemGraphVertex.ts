@@ -24,16 +24,16 @@ export class AuditableItemGraphVertex {
 	public nodeIdentity?: string;
 
 	/**
-	 * The timestamp of when the vertex was created.
+	 * The date/time of when the vertex was created.
 	 */
-	@property({ type: "number", sortDirection: SortDirection.Descending })
-	public created!: number;
+	@property({ type: "string", format: "date-time", sortDirection: SortDirection.Descending })
+	public dateCreated!: string;
 
 	/**
-	 * The timestamp of when the vertex was last updated.
+	 * The date/time of when the vertex was last modified.
 	 */
-	@property({ type: "number", sortDirection: SortDirection.Descending })
-	public updated?: number;
+	@property({ type: "string", format: "date-time", sortDirection: SortDirection.Descending })
+	public dateModified?: string;
 
 	/**
 	 * Combined alias index for the vertex used for querying.
@@ -42,10 +42,10 @@ export class AuditableItemGraphVertex {
 	public aliasIndex?: string;
 
 	/**
-	 * Metadata to associate with the vertex as JSON-LD.
+	 * Object to associate with the vertex as JSON-LD.
 	 */
 	@property({ type: "object", itemTypeRef: JsonLdTypes.NodeObject })
-	public metadata?: IJsonLdNodeObject;
+	public vertexObject?: IJsonLdNodeObject;
 
 	/**
 	 * Alternative aliases that can be used to identify the vertex.

@@ -1,5 +1,6 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
+import type { AuditableItemGraphTypes } from "./auditableItemGraphTypes";
 import type { IAuditableItemGraphPatchOperation } from "./IAuditableItemGraphPatchOperation";
 
 /**
@@ -7,9 +8,21 @@ import type { IAuditableItemGraphPatchOperation } from "./IAuditableItemGraphPat
  */
 export interface IAuditableItemGraphChangeset {
 	/**
-	 * The timestamp of when the changeset was created.
+	 * JSON-LD Context.
 	 */
-	created: number;
+	"@context":
+		| typeof AuditableItemGraphTypes.ContextRoot
+		| [typeof AuditableItemGraphTypes.ContextRoot, ...string[]];
+
+	/**
+	 * JSON-LD Type.
+	 */
+	type: typeof AuditableItemGraphTypes.Changeset;
+
+	/**
+	 * The date/time of when the changeset was created.
+	 */
+	dateCreated: string;
 
 	/**
 	 * The user identity that created the changes.

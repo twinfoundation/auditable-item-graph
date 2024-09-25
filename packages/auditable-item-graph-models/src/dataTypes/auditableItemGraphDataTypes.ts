@@ -12,6 +12,8 @@ import AuditableItemGraphResourceSchema from "../schemas/AuditableItemGraphResou
 import AuditableItemGraphVerificationSchema from "../schemas/AuditableItemGraphVerification.json";
 import AuditableItemGraphVerificationStateSchema from "../schemas/AuditableItemGraphVerificationState.json";
 import AuditableItemGraphVertexSchema from "../schemas/AuditableItemGraphVertex.json";
+import AuditableItemGraphVertexListSchema from "../schemas/AuditableItemGraphVertexList.json";
+
 /**
  * Handle all the data types for auditable item graph.
  */
@@ -59,6 +61,11 @@ export class AuditableItemGraphDataTypes {
 			type: AuditableItemGraphTypes.Verification,
 			defaultValue: {},
 			jsonSchema: async () => AuditableItemGraphVerificationSchema as JSONSchema7
+		}));
+		DataTypeHandlerFactory.register(AuditableItemGraphTypes.VertexList, () => ({
+			type: AuditableItemGraphTypes.VertexList,
+			defaultValue: {},
+			jsonSchema: async () => AuditableItemGraphVertexListSchema as JSONSchema7
 		}));
 		DataTypeHandlerFactory.register(AuditableItemGraphTypes.VerificationState, () => ({
 			type: AuditableItemGraphTypes.VerificationState,

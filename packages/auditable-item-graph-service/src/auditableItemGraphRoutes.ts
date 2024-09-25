@@ -7,17 +7,19 @@ import type {
 	IRestRoute,
 	ITag
 } from "@twin.org/api-models";
-import type {
-	IAuditableItemGraphComponent,
-	IAuditableItemGraphCreateRequest,
-	IAuditableItemGraphGetRequest,
-	IAuditableItemGraphGetResponse,
-	IAuditableItemGraphListRequest,
-	IAuditableItemGraphListResponse,
-	IAuditableItemGraphUpdateRequest,
-	IAuditableItemGraphVertex
+import {
+	AuditableItemGraphTypes,
+	type IAuditableItemGraphComponent,
+	type IAuditableItemGraphCreateRequest,
+	type IAuditableItemGraphGetRequest,
+	type IAuditableItemGraphGetResponse,
+	type IAuditableItemGraphListRequest,
+	type IAuditableItemGraphListResponse,
+	type IAuditableItemGraphUpdateRequest,
+	type IAuditableItemGraphVertex
 } from "@twin.org/auditable-item-graph-models";
 import { ComponentFactory, Guards } from "@twin.org/core";
+import { SchemaOrgTypes } from "@twin.org/data-schema-org";
 import { nameof } from "@twin.org/nameof";
 import { HeaderTypes, HttpStatusCode, MimeTypes } from "@twin.org/web";
 
@@ -61,7 +63,7 @@ export function generateRestRoutesAuditableItemGraph(
 					id: "auditableItemGraphCreateRequestExample",
 					request: {
 						body: {
-							metadata: {
+							vertexObject: {
 								"@context": "http://schema.org/",
 								"@type": "Note",
 								content: "This is a simple note"
@@ -69,7 +71,7 @@ export function generateRestRoutesAuditableItemGraph(
 							aliases: [
 								{
 									id: "bar456",
-									metadata: {
+									aliasObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -77,7 +79,7 @@ export function generateRestRoutesAuditableItemGraph(
 								},
 								{
 									id: "foo321",
-									metadata: {
+									aliasObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -87,7 +89,7 @@ export function generateRestRoutesAuditableItemGraph(
 							resources: [
 								{
 									id: "resource1",
-									metadata: {
+									resourceObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -95,7 +97,7 @@ export function generateRestRoutesAuditableItemGraph(
 								},
 								{
 									id: "resource2",
-									metadata: {
+									resourceObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -105,8 +107,8 @@ export function generateRestRoutesAuditableItemGraph(
 							edges: [
 								{
 									id: "edge1",
-									relationship: "frenemy",
-									metadata: {
+									edgeRelationship: "frenemy",
+									edgeObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -114,8 +116,8 @@ export function generateRestRoutesAuditableItemGraph(
 								},
 								{
 									id: "edge2",
-									relationship: "end",
-									metadata: {
+									edgeRelationship: "end",
+									edgeObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -137,7 +139,7 @@ export function generateRestRoutesAuditableItemGraph(
 						response: {
 							statusCode: HttpStatusCode.created,
 							headers: {
-								Location: "aig:1234567890"
+								location: "aig:1234567890"
 							}
 						}
 					}
@@ -161,7 +163,7 @@ export function generateRestRoutesAuditableItemGraph(
 					id: "auditableItemGraphGetRequestExample",
 					request: {
 						headers: {
-							Accept: MimeTypes.Json
+							[HeaderTypes.Accept]: MimeTypes.Json
 						},
 						pathParams: {
 							id: "aig:1234567890"
@@ -178,18 +180,22 @@ export function generateRestRoutesAuditableItemGraph(
 						id: "auditableItemGraphGetResponseExample",
 						response: {
 							body: {
+								"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+								type: AuditableItemGraphTypes.Vertex,
 								id: "aig:1234567890",
-								created: 1234567890,
-								updated: 1234567890,
-								metadata: {
+								dateCreated: "2024-08-22T11:55:16.271Z",
+								dateModified: "2024-08-22T11:55:16.271Z",
+								vertexObject: {
 									"@context": "http://schema.org/",
 									"@type": "Note",
 									content: "This is a simple note"
 								},
 								aliases: [
 									{
+										"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+										type: AuditableItemGraphTypes.Alias,
 										id: "tst:1234567890",
-										created: 1234567890
+										dateCreated: "2024-08-22T11:55:16.271Z"
 									}
 								]
 							}
@@ -208,20 +214,21 @@ export function generateRestRoutesAuditableItemGraph(
 								[HeaderTypes.ContentType]: MimeTypes.JsonLd
 							},
 							body: {
-								"@context": "https://schema.twindev.org/aig/",
-								"@type": "vertex",
+								"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+								type: AuditableItemGraphTypes.Vertex,
 								id: "aig:1234567890",
-								created: "2024-08-22T11:55:16.271Z",
-								updated: "2024-08-22T11:55:16.271Z",
-								metadata: {
+								dateCreated: "2024-08-22T11:55:16.271Z",
+								dateModified: "2024-08-22T11:55:16.271Z",
+								vertexObject: {
 									"@context": "http://schema.org/",
 									"@type": "Note",
 									content: "This is a simple note"
 								},
 								aliases: [
 									{
-										"@type": "alias",
-										created: "2024-08-22T11:55:16.271Z",
+										"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+										type: AuditableItemGraphTypes.Alias,
+										dateCreated: "2024-08-22T11:55:16.271Z",
 										id: "tst:1234567890"
 									}
 								]
@@ -251,7 +258,7 @@ export function generateRestRoutesAuditableItemGraph(
 							id: "aig:1234567890"
 						},
 						body: {
-							metadata: {
+							vertexObject: {
 								"@context": "http://schema.org/",
 								"@type": "Note",
 								content: "This is a simple note"
@@ -259,7 +266,7 @@ export function generateRestRoutesAuditableItemGraph(
 							aliases: [
 								{
 									id: "bar456",
-									metadata: {
+									aliasObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -267,7 +274,7 @@ export function generateRestRoutesAuditableItemGraph(
 								},
 								{
 									id: "foo321",
-									metadata: {
+									aliasObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -277,7 +284,7 @@ export function generateRestRoutesAuditableItemGraph(
 							resources: [
 								{
 									id: "resource1",
-									metadata: {
+									resourceObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -285,7 +292,7 @@ export function generateRestRoutesAuditableItemGraph(
 								},
 								{
 									id: "resource2",
-									metadata: {
+									resourceObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -295,8 +302,8 @@ export function generateRestRoutesAuditableItemGraph(
 							edges: [
 								{
 									id: "edge1",
-									relationship: "frenemy",
-									metadata: {
+									edgeRelationship: "frenemy",
+									edgeObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -304,8 +311,8 @@ export function generateRestRoutesAuditableItemGraph(
 								},
 								{
 									id: "edge2",
-									relationship: "end",
-									metadata: {
+									edgeRelationship: "end",
+									edgeObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -357,13 +364,23 @@ export function generateRestRoutesAuditableItemGraph(
 						id: "auditableItemGraphListResponseExample",
 						response: {
 							body: {
-								entities: [
+								"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+								type: AuditableItemGraphTypes.VertexList,
+								vertices: [
 									{
+										"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+										type: AuditableItemGraphTypes.Vertex,
 										id: "0101010101010101010101010101010101010101010101010101010101010101",
+										dateCreated: "2024-08-22T11:55:16.271Z",
 										aliases: [
 											{
+												"@context": [
+													AuditableItemGraphTypes.ContextRoot,
+													SchemaOrgTypes.ContextRoot
+												],
+												type: AuditableItemGraphTypes.Alias,
 												id: "foo4",
-												created: 1234567890
+												dateCreated: "2024-08-22T11:55:16.271Z"
 											}
 										]
 									}
@@ -385,27 +402,28 @@ export function generateRestRoutesAuditableItemGraph(
 								[HeaderTypes.ContentType]: MimeTypes.JsonLd
 							},
 							body: {
-								"@context": "https://schema.twindev.org/aig/",
-								"@graph": [
+								"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+								type: AuditableItemGraphTypes.VertexList,
+								vertices: [
 									{
-										"@type": "vertex",
-										id: "aig:1234567890",
-										created: "2024-08-22T11:55:16.271Z",
-										updated: "2024-08-22T11:55:16.271Z",
-										metadata: {
-											"@context": "http://schema.org/",
-											"@type": "Note",
-											content: "This is a simple note"
-										},
+										"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+										type: AuditableItemGraphTypes.Vertex,
+										id: "0101010101010101010101010101010101010101010101010101010101010101",
+										dateCreated: "2024-08-22T11:55:16.271Z",
 										aliases: [
 											{
-												"@type": "alias",
-												created: "2024-08-22T11:55:16.271Z",
-												id: "tst:1234567890"
+												"@context": [
+													AuditableItemGraphTypes.ContextRoot,
+													SchemaOrgTypes.ContextRoot
+												],
+												type: AuditableItemGraphTypes.Alias,
+												id: "foo4",
+												dateCreated: "2024-08-22T11:55:16.271Z"
 											}
 										]
 									}
-								]
+								],
+								cursor: "1"
 							}
 						}
 					}
@@ -433,7 +451,7 @@ export async function auditableItemGraphCreate(
 
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
 	const id = await component.create(
-		request.body?.metadata,
+		request.body?.vertexObject,
 		request.body?.aliases,
 		request.body?.resources,
 		request.body?.edges,
@@ -443,7 +461,7 @@ export async function auditableItemGraphCreate(
 	return {
 		statusCode: HttpStatusCode.created,
 		headers: {
-			Location: id
+			location: id
 		}
 	};
 }
@@ -468,18 +486,14 @@ export async function auditableItemGraphGet(
 	);
 	Guards.stringValue(ROUTES_SOURCE, nameof(request.pathParams.id), request.pathParams.id);
 
-	const mimeType = request.headers?.Accept === MimeTypes.JsonLd ? "jsonld" : "json";
+	const mimeType = request.headers?.[HeaderTypes.Accept] === MimeTypes.JsonLd ? "jsonld" : "json";
 
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
-	const result = await component.get(
-		request.pathParams.id,
-		{
-			includeDeleted: request.query?.includeDeleted,
-			includeChangesets: request.query?.includeChangesets,
-			verifySignatureDepth: request.query?.verifySignatureDepth
-		},
-		mimeType
-	);
+	const result = await component.get(request.pathParams.id, {
+		includeDeleted: request.query?.includeDeleted,
+		includeChangesets: request.query?.includeChangesets,
+		verifySignatureDepth: request.query?.verifySignatureDepth
+	});
 
 	return {
 		headers: {
@@ -512,7 +526,7 @@ export async function auditableItemGraphUpdate(
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
 	await component.update(
 		request.pathParams.id,
-		request.body?.metadata,
+		request.body?.vertexObject,
 		request.body?.aliases,
 		request.body?.resources,
 		request.body?.edges,
@@ -543,6 +557,8 @@ export async function auditableItemGraphList(
 		request.query
 	);
 
+	const mimeType = request.headers?.[HeaderTypes.Accept] === MimeTypes.JsonLd ? "jsonld" : "json";
+
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
 
 	const result = await component.query(
@@ -558,6 +574,9 @@ export async function auditableItemGraphList(
 	);
 
 	return {
+		headers: {
+			[HeaderTypes.ContentType]: mimeType === "json" ? MimeTypes.Json : MimeTypes.JsonLd
+		},
 		body: result
 	};
 }

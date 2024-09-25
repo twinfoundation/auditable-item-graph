@@ -21,10 +21,10 @@ export class AuditableItemGraphChangeset {
 	public vertexId!: string;
 
 	/**
-	 * The timestamp of when the changeset was created.
+	 * The date/time of when the changeset was created.
 	 */
-	@property({ type: "number", sortDirection: SortDirection.Ascending })
-	public created!: number;
+	@property({ type: "string", format: "date-time", sortDirection: SortDirection.Descending })
+	public dateCreated!: string;
 
 	/**
 	 * The identity of the user who made the changeset.

@@ -12,12 +12,29 @@ describe("AuditableItemGraphDataTypes", () => {
 		AuditableItemGraphDataTypes.registerTypes();
 	});
 
-	test("Can validate an empty vertex", async () => {
+	test("Can fail to validate an empty vertex", async () => {
 		const validationFailures: IValidationFailure[] = [];
 		const isValid = await DataTypeHelper.validate(
 			"",
 			AuditableItemGraphTypes.Vertex,
 			{},
+			validationFailures
+		);
+		expect(validationFailures.length).toEqual(1);
+		expect(isValid).toEqual(false);
+	});
+
+	test("Can validate an empty vertex", async () => {
+		const validationFailures: IValidationFailure[] = [];
+		const isValid = await DataTypeHelper.validate(
+			"",
+			AuditableItemGraphTypes.Vertex,
+			{
+				"@context": AuditableItemGraphTypes.ContextRoot,
+				type: AuditableItemGraphTypes.Vertex,
+				dateCreated: new Date().toISOString(),
+				id: "1111"
+			},
 			validationFailures
 		);
 		expect(validationFailures.length).toEqual(0);

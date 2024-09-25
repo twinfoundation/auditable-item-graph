@@ -6,9 +6,9 @@
  */
 export interface IAuditableItemGraphServiceContext {
 	/**
-	 * The current timestamp.
+	 * The current date/time.
 	 */
-	now: number;
+	now: string;
 
 	/**
 	 * The identity of the user.

@@ -340,7 +340,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				vertexModel.changesetsVerification = changesetsVerification;
 			}
 
-			const compacted = await JsonLdProcessor.compact(vertexModel);
+			const compacted = await JsonLdProcessor.compact(vertexModel, vertexModel["@context"]);
 			return compacted as IAuditableItemGraphVertex;
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "getFailed", undefined, error);
@@ -584,7 +584,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				cursor: results.cursor
 			};
 
-			const compacted = await JsonLdProcessor.compact(vertexList);
+			const compacted = await JsonLdProcessor.compact(vertexList, vertexList["@context"]);
 			return compacted as IAuditableItemGraphVertexList;
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "queryingFailed", undefined, error);

@@ -239,14 +239,14 @@ describe("AuditableItemGraphService", () => {
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
+				type: "Create",
 				actor: {
-					"@type": "Person",
-					"@id": "acct:person@example.org",
+					type: "Person",
+					id: "acct:person@example.org",
 					name: "Person"
 				},
 				object: {
-					"@type": "Note",
+					type: "Note",
 					content: "This is a simple note"
 				},
 				published: "2015-01-25T12:34:56Z"
@@ -269,14 +269,14 @@ describe("AuditableItemGraphService", () => {
 			nodeIdentity: TEST_NODE_IDENTITY,
 			vertexObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
+				type: "Create",
 				actor: {
-					"@type": "Person",
-					"@id": "acct:person@example.org",
+					type: "Person",
+					id: "acct:person@example.org",
 					name: "Person"
 				},
 				object: {
-					"@type": "Note",
+					type: "Note",
 					content: "This is a simple note"
 				},
 				published: "2015-01-25T12:34:56Z"
@@ -296,23 +296,23 @@ describe("AuditableItemGraphService", () => {
 					path: "/vertexObject",
 					value: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@type": "Person",
-							"@id": "acct:person@example.org",
+							type: "Person",
+							id: "acct:person@example.org",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple note"
 						},
 						published: "2015-01-25T12:34:56Z"
 					}
 				}
 			],
-			hash: "wEBP4FkJ2I6MdhRPiD2xP38ONGj9NWuNvDEx/kxLZzY=",
+			hash: "6ebyliNLGXmMnPyzDqbD6VKpwHsHDVW3/4BCyYuP9kM=",
 			signature:
-				"hzFrZIDKZhq+oLhCPSNR5bD85cy66S/Dt/gjwLb2hn+3mX5ehjq6KtJWwZmXCBMIdKSSy7Vl+Ant8zPN3rKgCw==",
+				"/sjU35iIgXNNk3tRhpOppSmJ+p77PpvElRTrsuvxuwzlX9pZgpIzZx2UOZ7pT/XSoHDC+OiH5E6dpRfsB1WJCg==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -330,9 +330,9 @@ describe("AuditableItemGraphService", () => {
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-			hash: "wEBP4FkJ2I6MdhRPiD2xP38ONGj9NWuNvDEx/kxLZzY=",
+			hash: "6ebyliNLGXmMnPyzDqbD6VKpwHsHDVW3/4BCyYuP9kM=",
 			signature:
-				"hzFrZIDKZhq+oLhCPSNR5bD85cy66S/Dt/gjwLb2hn+3mX5ehjq6KtJWwZmXCBMIdKSSy7Vl+Ant8zPN3rKgCw==",
+				"/sjU35iIgXNNk3tRhpOppSmJ+p77PpvElRTrsuvxuwzlX9pZgpIzZx2UOZ7pT/XSoHDC+OiH5E6dpRfsB1WJCg==",
 			integrity: {
 				patches: [
 					{
@@ -340,9 +340,9 @@ describe("AuditableItemGraphService", () => {
 						path: "/vertexObject",
 						value: {
 							"@context": "https://www.w3.org/ns/activitystreams",
-							"@type": "Create",
-							actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-							object: { "@type": "Note", content: "This is a simple note" },
+							type: "Create",
+							actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+							object: { type: "Note", content: "This is a simple note" },
 							published: "2015-01-25T12:34:56Z"
 						}
 					}
@@ -356,14 +356,14 @@ describe("AuditableItemGraphService", () => {
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
+				type: "Create",
 				actor: {
-					"@type": "Person",
-					"@id": "acct:person@example.org",
+					type: "Person",
+					id: "acct:person@example.org",
 					name: "Person"
 				},
 				object: {
-					"@type": "Note",
+					type: "Note",
 					content: "This is a simple note"
 				},
 				published: "2015-01-25T12:34:56Z"
@@ -379,17 +379,14 @@ describe("AuditableItemGraphService", () => {
 		const result = await service.get(id);
 
 		expect(result).toEqual({
-			"@context": [
-				AuditableItemGraphTypes.ContextRoot,
-				SchemaOrgTypes.ContextRoot,
-				"https://www.w3.org/ns/activitystreams"
-			],
+			"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
 			type: AuditableItemGraphTypes.Vertex,
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
 			vertexObject: {
+				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: {
 					type: "Person",
@@ -422,14 +419,14 @@ describe("AuditableItemGraphService", () => {
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
+				type: "Create",
 				actor: {
-					"@type": "Person",
-					"@id": "acct:person@example.org",
+					type: "Person",
+					id: "acct:person@example.org",
 					name: "Person"
 				},
 				object: {
-					"@type": "Note",
+					type: "Note",
 					content: "This is a simple note"
 				},
 				published: "2015-01-25T12:34:56Z"
@@ -448,17 +445,14 @@ describe("AuditableItemGraphService", () => {
 		const result = await service.get(id, { includeChangesets: true });
 
 		expect(result).toEqual({
-			"@context": [
-				AuditableItemGraphTypes.ContextRoot,
-				SchemaOrgTypes.ContextRoot,
-				"https://www.w3.org/ns/activitystreams"
-			],
+			"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
 			type: AuditableItemGraphTypes.Vertex,
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
 			vertexObject: {
+				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
 				object: { type: "Note", content: "This is a simple note" },
@@ -481,9 +475,9 @@ describe("AuditableItemGraphService", () => {
 			changesets: [
 				{
 					type: AuditableItemGraphTypes.Changeset,
-					hash: "qWUiywE1B5T6Dbxoiv9tyXg/LuPBS/b8rOdWhd6tEF0=",
+					hash: "PCV1mx2STZR7lUaI15MzW9dlEHc7Wqf9vIZ0RVU1hvg=",
 					signature:
-						"MNknwnf0eAPgEBnf8Vvr4qetOZc9Ph0fwu9uYa/eno7Uy76p9ED1zif6ns+VwOEga9M+2MKn+oy91ljZR/0nAQ==",
+						"HHdXZdM8XnwVxWKIANLnzfPPke07TnDWOCXcKw/rPa6xyLZ7T/XYxEC/kbEn58/qfdeHU2z1VCXB7cAWmn4vCg==",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					dateCreated: "2024-08-22T11:55:16.271Z",
@@ -495,9 +489,9 @@ describe("AuditableItemGraphService", () => {
 							patchPath: "/vertexObject",
 							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple note" },
+								type: "Create",
+								actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
+								object: { type: "Note", content: "This is a simple note" },
 								published: "2015-01-25T12:34:56Z"
 							}
 						},
@@ -519,9 +513,9 @@ describe("AuditableItemGraphService", () => {
 		const changeset = changesetStore[0];
 
 		expect(changeset).toEqual({
-			hash: "qWUiywE1B5T6Dbxoiv9tyXg/LuPBS/b8rOdWhd6tEF0=",
+			hash: "PCV1mx2STZR7lUaI15MzW9dlEHc7Wqf9vIZ0RVU1hvg=",
 			signature:
-				"MNknwnf0eAPgEBnf8Vvr4qetOZc9Ph0fwu9uYa/eno7Uy76p9ED1zif6ns+VwOEga9M+2MKn+oy91ljZR/0nAQ==",
+				"HHdXZdM8XnwVxWKIANLnzfPPke07TnDWOCXcKw/rPa6xyLZ7T/XYxEC/kbEn58/qfdeHU2z1VCXB7cAWmn4vCg==",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity: TEST_USER_IDENTITY,
@@ -531,9 +525,9 @@ describe("AuditableItemGraphService", () => {
 					path: "/vertexObject",
 					value: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
-						object: { "@type": "Note", content: "This is a simple note" },
+						type: "Create",
+						actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
+						object: { type: "Note", content: "This is a simple note" },
 						published: "2015-01-25T12:34:56Z"
 					}
 				},
@@ -556,14 +550,14 @@ describe("AuditableItemGraphService", () => {
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
+				type: "Create",
 				actor: {
-					"@type": "Person",
-					"@id": "acct:person@example.org",
+					type: "Person",
+					id: "acct:person@example.org",
 					name: "Person"
 				},
 				object: {
-					"@type": "Note",
+					type: "Note",
 					content: "This is a simple note"
 				},
 				published: "2015-01-25T12:34:56Z"
@@ -582,17 +576,14 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result).toEqual({
-			"@context": [
-				AuditableItemGraphTypes.ContextRoot,
-				SchemaOrgTypes.ContextRoot,
-				"https://www.w3.org/ns/activitystreams"
-			],
+			"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
 			type: AuditableItemGraphTypes.Vertex,
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
 			vertexObject: {
+				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
 				object: { type: "Note", content: "This is a simple note" },
@@ -605,9 +596,9 @@ describe("AuditableItemGraphService", () => {
 			changesets: [
 				{
 					type: "AuditableItemGraphChangeset",
-					hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
+					hash: "A19UP24jHInbFaM5rj0TXqBC25ZfkVNs+6fLOmYLG1A=",
 					signature:
-						"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
+						"R/xumvccKc/eFewOMO+xL/6M2utP18p/AIWm6pxpnKuHD/B07rqkVHQYt71lIChEAPy86Y4a4MThkz2lel9oAg==",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					dateCreated: "2024-08-22T11:55:16.271Z",
@@ -619,9 +610,9 @@ describe("AuditableItemGraphService", () => {
 							patchPath: "/vertexObject",
 							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple note" },
+								type: "Create",
+								actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
+								object: { type: "Note", content: "This is a simple note" },
 								published: "2015-01-25T12:34:56Z"
 							}
 						},
@@ -660,14 +651,14 @@ describe("AuditableItemGraphService", () => {
 					path: "/vertexObject",
 					value: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@type": "Person",
-							"@id": "acct:person@example.org",
+							type: "Person",
+							id: "acct:person@example.org",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple note"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -688,9 +679,9 @@ describe("AuditableItemGraphService", () => {
 					]
 				}
 			],
-			hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
+			hash: "A19UP24jHInbFaM5rj0TXqBC25ZfkVNs+6fLOmYLG1A=",
 			signature:
-				"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
+				"R/xumvccKc/eFewOMO+xL/6M2utP18p/AIWm6pxpnKuHD/B07rqkVHQYt71lIChEAPy86Y4a4MThkz2lel9oAg==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -701,14 +692,14 @@ describe("AuditableItemGraphService", () => {
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
+				type: "Create",
 				actor: {
-					"@type": "Person",
-					"@id": "acct:person@example.org",
+					type: "Person",
+					id: "acct:person@example.org",
 					name: "Person"
 				},
 				object: {
-					"@type": "Note",
+					type: "Note",
 					content: "This is a simple note"
 				},
 				published: "2015-01-25T12:34:56Z"
@@ -724,14 +715,14 @@ describe("AuditableItemGraphService", () => {
 			id,
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
+				type: "Create",
 				actor: {
-					"@type": "Person",
-					"@id": "acct:person@example.org",
+					type: "Person",
+					id: "acct:person@example.org",
 					name: "Person"
 				},
 				object: {
-					"@type": "Note",
+					type: "Note",
 					content: "This is a simple note"
 				},
 				published: "2015-01-25T12:34:56Z"
@@ -749,11 +740,7 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result).toEqual({
-			"@context": [
-				"https://schema.twindev.org/aig/",
-				"https://schema.org/",
-				"https://www.w3.org/ns/activitystreams"
-			],
+			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
 			dateCreated: "2024-08-22T11:55:16.271Z",
@@ -766,7 +753,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					type: "AuditableItemGraphChangeset",
 					dateCreated: "2024-08-22T11:55:16.271Z",
-					hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
+					hash: "A19UP24jHInbFaM5rj0TXqBC25ZfkVNs+6fLOmYLG1A=",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					patches: [
@@ -776,9 +763,9 @@ describe("AuditableItemGraphService", () => {
 							patchPath: "/vertexObject",
 							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple note" },
+								type: "Create",
+								actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
+								object: { type: "Note", content: "This is a simple note" },
 								published: "2015-01-25T12:34:56Z"
 							}
 						},
@@ -793,7 +780,7 @@ describe("AuditableItemGraphService", () => {
 						}
 					],
 					signature:
-						"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
+						"R/xumvccKc/eFewOMO+xL/6M2utP18p/AIWm6pxpnKuHD/B07rqkVHQYt71lIChEAPy86Y4a4MThkz2lel9oAg==",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				}
@@ -809,6 +796,7 @@ describe("AuditableItemGraphService", () => {
 				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			verified: true,
 			vertexObject: {
+				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
 				object: { type: "Note", content: "This is a simple note" },
@@ -820,9 +808,9 @@ describe("AuditableItemGraphService", () => {
 		const changeset = changesetStore[0];
 
 		expect(changeset).toEqual({
-			hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
+			hash: "A19UP24jHInbFaM5rj0TXqBC25ZfkVNs+6fLOmYLG1A=",
 			signature:
-				"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
+				"R/xumvccKc/eFewOMO+xL/6M2utP18p/AIWm6pxpnKuHD/B07rqkVHQYt71lIChEAPy86Y4a4MThkz2lel9oAg==",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity:
@@ -833,9 +821,9 @@ describe("AuditableItemGraphService", () => {
 					path: "/vertexObject",
 					value: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
-						object: { "@type": "Note", content: "This is a simple note" },
+						type: "Create",
+						actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
+						object: { type: "Note", content: "This is a simple note" },
 						published: "2015-01-25T12:34:56Z"
 					}
 				},
@@ -858,14 +846,14 @@ describe("AuditableItemGraphService", () => {
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
+				type: "Create",
 				actor: {
-					"@type": "Person",
-					"@id": "acct:person@example.org",
+					type: "Person",
+					id: "acct:person@example.org",
 					name: "Person"
 				},
 				object: {
-					"@type": "Note",
+					type: "Note",
 					content: "This is a simple note"
 				},
 				published: "2015-01-25T12:34:56Z"
@@ -881,14 +869,14 @@ describe("AuditableItemGraphService", () => {
 			id,
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
+				type: "Create",
 				actor: {
-					"@type": "Person",
-					"@id": "acct:person@example.org",
+					type: "Person",
+					id: "acct:person@example.org",
 					name: "Person"
 				},
 				object: {
-					"@type": "Note",
+					type: "Note",
 					content: "This is a simple note"
 				},
 				published: "2015-01-25T12:34:56Z"
@@ -907,11 +895,7 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result).toEqual({
-			"@context": [
-				"https://schema.twindev.org/aig/",
-				"https://schema.org/",
-				"https://www.w3.org/ns/activitystreams"
-			],
+			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
 			dateCreated: "2024-08-22T11:55:16.271Z",
@@ -930,7 +914,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					type: "AuditableItemGraphChangeset",
 					dateCreated: "2024-08-22T11:55:16.271Z",
-					hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
+					hash: "A19UP24jHInbFaM5rj0TXqBC25ZfkVNs+6fLOmYLG1A=",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					patches: [
@@ -940,9 +924,9 @@ describe("AuditableItemGraphService", () => {
 							patchPath: "/vertexObject",
 							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: { "@type": "Person", "@id": "acct:person@example.org", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple note" },
+								type: "Create",
+								actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
+								object: { type: "Note", content: "This is a simple note" },
 								published: "2015-01-25T12:34:56Z"
 							}
 						},
@@ -957,14 +941,14 @@ describe("AuditableItemGraphService", () => {
 						}
 					],
 					signature:
-						"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
+						"R/xumvccKc/eFewOMO+xL/6M2utP18p/AIWm6pxpnKuHD/B07rqkVHQYt71lIChEAPy86Y4a4MThkz2lel9oAg==",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				},
 				{
 					type: "AuditableItemGraphChangeset",
 					dateCreated: "2024-08-22T11:56:56.272Z",
-					hash: "26iW3Ft5v2WE2Wy24JSC2vCqshTU9FVESMj6tJ/Y8Hg=",
+					hash: "PhHTg8+chkBxNkyxWGpommPRmhRZ3lmeSDPuuAltdnY=",
 					immutableStorageId:
 						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505",
 					patches: [
@@ -982,7 +966,7 @@ describe("AuditableItemGraphService", () => {
 						}
 					],
 					signature:
-						"F9OqIVVmUmPQTT63k4IDLjIPO+uFRIJ/+f1biRN1m0dP6SnN+kYADvhyh73gmms/CVfJxw14HfcEmow7dHfcCQ==",
+						"t94nlYBCXIUnXUdVPH6T+HId6OIAALxR+8yYMqHHhHaHKLHgzvNHWZlU6r8lDhwoBO/sC1EXQqZ8h+k7yXbdBQ==",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				}
@@ -1003,6 +987,7 @@ describe("AuditableItemGraphService", () => {
 				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			verified: true,
 			vertexObject: {
+				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
 				object: { type: "Note", content: "This is a simple note" },
@@ -1022,14 +1007,14 @@ describe("AuditableItemGraphService", () => {
 					path: "/vertexObject",
 					value: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@type": "Person",
-							"@id": "acct:person@example.org",
+							type: "Person",
+							id: "acct:person@example.org",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple note"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -1050,9 +1035,9 @@ describe("AuditableItemGraphService", () => {
 					]
 				}
 			],
-			hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
+			hash: "A19UP24jHInbFaM5rj0TXqBC25ZfkVNs+6fLOmYLG1A=",
 			signature:
-				"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
+				"R/xumvccKc/eFewOMO+xL/6M2utP18p/AIWm6pxpnKuHD/B07rqkVHQYt71lIChEAPy86Y4a4MThkz2lel9oAg==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -1076,9 +1061,9 @@ describe("AuditableItemGraphService", () => {
 					}
 				}
 			],
-			hash: "26iW3Ft5v2WE2Wy24JSC2vCqshTU9FVESMj6tJ/Y8Hg=",
+			hash: "PhHTg8+chkBxNkyxWGpommPRmhRZ3lmeSDPuuAltdnY=",
 			signature:
-				"F9OqIVVmUmPQTT63k4IDLjIPO+uFRIJ/+f1biRN1m0dP6SnN+kYADvhyh73gmms/CVfJxw14HfcEmow7dHfcCQ==",
+				"t94nlYBCXIUnXUdVPH6T+HId6OIAALxR+8yYMqHHhHaHKLHgzvNHWZlU6r8lDhwoBO/sC1EXQqZ8h+k7yXbdBQ==",
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
@@ -1096,9 +1081,9 @@ describe("AuditableItemGraphService", () => {
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-			hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
+			hash: "A19UP24jHInbFaM5rj0TXqBC25ZfkVNs+6fLOmYLG1A=",
 			signature:
-				"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
+				"R/xumvccKc/eFewOMO+xL/6M2utP18p/AIWm6pxpnKuHD/B07rqkVHQYt71lIChEAPy86Y4a4MThkz2lel9oAg==",
 			integrity: {
 				patches: [
 					{
@@ -1106,14 +1091,14 @@ describe("AuditableItemGraphService", () => {
 						path: "/vertexObject",
 						value: {
 							"@context": "https://www.w3.org/ns/activitystreams",
-							"@type": "Create",
+							type: "Create",
 							actor: {
-								"@id": "acct:person@example.org",
-								"@type": "Person",
+								id: "acct:person@example.org",
+								type: "Person",
 								name: "Person"
 							},
 							object: {
-								"@type": "Note",
+								type: "Note",
 								content: "This is a simple note"
 							},
 							published: "2015-01-25T12:34:56Z"
@@ -1143,9 +1128,9 @@ describe("AuditableItemGraphService", () => {
 			dateCreated: "2024-08-22T11:56:56.272Z",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-			hash: "26iW3Ft5v2WE2Wy24JSC2vCqshTU9FVESMj6tJ/Y8Hg=",
+			hash: "PhHTg8+chkBxNkyxWGpommPRmhRZ3lmeSDPuuAltdnY=",
 			signature:
-				"F9OqIVVmUmPQTT63k4IDLjIPO+uFRIJ/+f1biRN1m0dP6SnN+kYADvhyh73gmms/CVfJxw14HfcEmow7dHfcCQ==",
+				"t94nlYBCXIUnXUdVPH6T+HId6OIAALxR+8yYMqHHhHaHKLHgzvNHWZlU6r8lDhwoBO/sC1EXQqZ8h+k7yXbdBQ==",
 			integrity: {
 				patches: [
 					{
@@ -1171,14 +1156,14 @@ describe("AuditableItemGraphService", () => {
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
+				type: "Create",
 				actor: {
-					"@type": "Person",
-					"@id": "acct:person@example.org",
+					type: "Person",
+					id: "acct:person@example.org",
 					name: "Person"
 				},
 				object: {
-					"@type": "Note",
+					type: "Note",
 					content: "This is a simple note"
 				},
 				published: "2015-01-25T12:34:56Z"
@@ -1195,14 +1180,14 @@ describe("AuditableItemGraphService", () => {
 
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
+				type: "Create",
 				actor: {
-					"@type": "Person",
-					"@id": "acct:person@example.org",
+					type: "Person",
+					id: "acct:person@example.org",
 					name: "Person"
 				},
 				object: {
-					"@type": "Note",
+					type: "Note",
 					content: "This is a simple note 2"
 				},
 				published: "2015-01-25T12:34:56Z"
@@ -1220,11 +1205,7 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result).toEqual({
-			"@context": [
-				"https://schema.twindev.org/aig/",
-				"https://schema.org/",
-				"https://www.w3.org/ns/activitystreams"
-			],
+			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
 			dateCreated: "2024-08-22T11:55:16.271Z",
@@ -1245,7 +1226,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					type: "AuditableItemGraphChangeset",
 					dateCreated: "2024-08-22T11:55:16.271Z",
-					hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
+					hash: "A19UP24jHInbFaM5rj0TXqBC25ZfkVNs+6fLOmYLG1A=",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					patches: [
@@ -1255,14 +1236,14 @@ describe("AuditableItemGraphService", () => {
 							patchPath: "/vertexObject",
 							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
+								type: "Create",
 								actor: {
-									"@type": "Person",
-									"@id": "acct:person@example.org",
+									type: "Person",
+									id: "acct:person@example.org",
 									name: "Person"
 								},
 								object: {
-									"@type": "Note",
+									type: "Note",
 									content: "This is a simple note"
 								},
 								published: "2015-01-25T12:34:56Z"
@@ -1285,14 +1266,14 @@ describe("AuditableItemGraphService", () => {
 						}
 					],
 					signature:
-						"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
+						"R/xumvccKc/eFewOMO+xL/6M2utP18p/AIWm6pxpnKuHD/B07rqkVHQYt71lIChEAPy86Y4a4MThkz2lel9oAg==",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				},
 				{
 					type: "AuditableItemGraphChangeset",
 					dateCreated: "2024-08-22T11:56:56.272Z",
-					hash: "6BCo+A3a6R1OhFpkxXoOIL9sCnmg902ldjh/pmOHMw8=",
+					hash: "ZBIfStzitzSpdJ/nocvSVFqheKzAQrgyHxugizSbrgE=",
 					immutableStorageId:
 						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505",
 					patches: [
@@ -1304,7 +1285,7 @@ describe("AuditableItemGraphService", () => {
 						}
 					],
 					signature:
-						"pm9EFgtyOMfQQRiHIfZDm5Vr27AYEQOz6BDFFArwl75PYbPjGuYexORTMh7neCM6Wl7tzznjPkZkWmxQgx0MDA==",
+						"cmoVe6HQvvYuF+7EiJIUzOnQ1UnQSfiYkhlnhDOeMcAtU1jGAsSBX+T2SDS8aY4EViemexZuc15DRkDnKXF+AA==",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				}
@@ -1325,6 +1306,7 @@ describe("AuditableItemGraphService", () => {
 				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			verified: true,
 			vertexObject: {
+				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: {
 					id: "acct:person@example.org",
@@ -1351,14 +1333,14 @@ describe("AuditableItemGraphService", () => {
 					path: "/vertexObject",
 					value: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@type": "Person",
-							"@id": "acct:person@example.org",
+							type: "Person",
+							id: "acct:person@example.org",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple note"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -1379,9 +1361,9 @@ describe("AuditableItemGraphService", () => {
 					]
 				}
 			],
-			hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
+			hash: "A19UP24jHInbFaM5rj0TXqBC25ZfkVNs+6fLOmYLG1A=",
 			signature:
-				"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
+				"R/xumvccKc/eFewOMO+xL/6M2utP18p/AIWm6pxpnKuHD/B07rqkVHQYt71lIChEAPy86Y4a4MThkz2lel9oAg==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -1397,9 +1379,9 @@ describe("AuditableItemGraphService", () => {
 					value: "This is a simple note 2"
 				}
 			],
-			hash: "6BCo+A3a6R1OhFpkxXoOIL9sCnmg902ldjh/pmOHMw8=",
+			hash: "ZBIfStzitzSpdJ/nocvSVFqheKzAQrgyHxugizSbrgE=",
 			signature:
-				"pm9EFgtyOMfQQRiHIfZDm5Vr27AYEQOz6BDFFArwl75PYbPjGuYexORTMh7neCM6Wl7tzznjPkZkWmxQgx0MDA==",
+				"cmoVe6HQvvYuF+7EiJIUzOnQ1UnQSfiYkhlnhDOeMcAtU1jGAsSBX+T2SDS8aY4EViemexZuc15DRkDnKXF+AA==",
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
@@ -1416,9 +1398,9 @@ describe("AuditableItemGraphService", () => {
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-			hash: "EmCKQAzmyva/WWsQIBJYFbOVscKptvUnPVOLglAiMgE=",
+			hash: "A19UP24jHInbFaM5rj0TXqBC25ZfkVNs+6fLOmYLG1A=",
 			signature:
-				"AF2GQ45Zz8kbdsQJlE1tmGdmcRG9Cxx/OmI9+gcduAjWNqdr3FO2Km15o5ujaX1rErX1fXsmb9dCQKto5bDUBQ==",
+				"R/xumvccKc/eFewOMO+xL/6M2utP18p/AIWm6pxpnKuHD/B07rqkVHQYt71lIChEAPy86Y4a4MThkz2lel9oAg==",
 			integrity: {
 				patches: [
 					{
@@ -1426,14 +1408,14 @@ describe("AuditableItemGraphService", () => {
 						path: "/vertexObject",
 						value: {
 							"@context": "https://www.w3.org/ns/activitystreams",
-							"@type": "Create",
+							type: "Create",
 							actor: {
-								"@id": "acct:person@example.org",
-								"@type": "Person",
+								id: "acct:person@example.org",
+								type: "Person",
 								name: "Person"
 							},
 							object: {
-								"@type": "Note",
+								type: "Note",
 								content: "This is a simple note"
 							},
 							published: "2015-01-25T12:34:56Z"
@@ -1463,14 +1445,14 @@ describe("AuditableItemGraphService", () => {
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
+				type: "Create",
 				actor: {
-					"@type": "Person",
-					"@id": "acct:person@example.org",
+					type: "Person",
+					id: "acct:person@example.org",
 					name: "Person"
 				},
 				object: {
-					"@type": "Note",
+					type: "Note",
 					content: "This is a simple note"
 				},
 				published: "2015-01-25T12:34:56Z"
@@ -1481,14 +1463,14 @@ describe("AuditableItemGraphService", () => {
 					id: "resource1",
 					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@type": "Person",
-							"@id": "acct:person@example.org",
+							type: "Person",
+							id: "acct:person@example.org",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple note resource"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -1498,14 +1480,14 @@ describe("AuditableItemGraphService", () => {
 					id: "resource2",
 					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@type": "Person",
-							"@id": "acct:person@example.org",
+							type: "Person",
+							id: "acct:person@example.org",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple note resource 2"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -1521,14 +1503,14 @@ describe("AuditableItemGraphService", () => {
 			id,
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
+				type: "Create",
 				actor: {
-					"@type": "Person",
-					"@id": "acct:person@example.org",
+					type: "Person",
+					id: "acct:person@example.org",
 					name: "Person"
 				},
 				object: {
-					"@type": "Note",
+					type: "Note",
 					content: "This is a simple note 2"
 				},
 				published: "2015-01-25T12:34:56Z"
@@ -1539,14 +1521,14 @@ describe("AuditableItemGraphService", () => {
 					id: "resource1",
 					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@type": "Person",
-							"@id": "acct:person@example.org",
+							type: "Person",
+							id: "acct:person@example.org",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple note resource 10"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -1556,14 +1538,14 @@ describe("AuditableItemGraphService", () => {
 					id: "resource2",
 					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@type": "Person",
-							"@id": "acct:person@example.org",
+							type: "Person",
+							id: "acct:person@example.org",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple note resource 11"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -1581,11 +1563,7 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result).toEqual({
-			"@context": [
-				"https://schema.twindev.org/aig/",
-				"https://schema.org/",
-				"https://www.w3.org/ns/activitystreams"
-			],
+			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
 			dateCreated: "2024-08-22T11:55:16.271Z",
@@ -1606,7 +1584,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					type: "AuditableItemGraphChangeset",
 					dateCreated: "2024-08-22T11:55:16.271Z",
-					hash: "Hv748kaW/EVY3QuF5zxdi/4VAkUUk5U2BHGeD63CKm8=",
+					hash: "qnNrA/UnqdVqB6l+TG3TaSu74NzclH0GDJrc9hz/Yrk=",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					patches: [
@@ -1616,14 +1594,14 @@ describe("AuditableItemGraphService", () => {
 							patchPath: "/vertexObject",
 							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
+								type: "Create",
 								actor: {
-									"@type": "Person",
-									"@id": "acct:person@example.org",
+									type: "Person",
+									id: "acct:person@example.org",
 									name: "Person"
 								},
 								object: {
-									"@type": "Note",
+									type: "Note",
 									content: "This is a simple note"
 								},
 								published: "2015-01-25T12:34:56Z"
@@ -1654,14 +1632,14 @@ describe("AuditableItemGraphService", () => {
 									dateCreated: "2024-08-22T11:55:16.271Z",
 									resourceObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
-										"@type": "Create",
+										type: "Create",
 										actor: {
-											"@type": "Person",
-											"@id": "acct:person@example.org",
+											type: "Person",
+											id: "acct:person@example.org",
 											name: "Person"
 										},
 										object: {
-											"@type": "Note",
+											type: "Note",
 											content: "This is a simple note resource"
 										},
 										published: "2015-01-25T12:34:56Z"
@@ -1672,14 +1650,14 @@ describe("AuditableItemGraphService", () => {
 									dateCreated: "2024-08-22T11:55:16.271Z",
 									resourceObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
-										"@type": "Create",
+										type: "Create",
 										actor: {
-											"@type": "Person",
-											"@id": "acct:person@example.org",
+											type: "Person",
+											id: "acct:person@example.org",
 											name: "Person"
 										},
 										object: {
-											"@type": "Note",
+											type: "Note",
 											content: "This is a simple note resource 2"
 										},
 										published: "2015-01-25T12:34:56Z"
@@ -1689,14 +1667,14 @@ describe("AuditableItemGraphService", () => {
 						}
 					],
 					signature:
-						"19NArjoMrT+cMO7b45DyUBnm3bA1C5amxYHu1D4qX1zqva5lBqUTixtsGkIXtqiG4vh6E2+2VexGswWSiRwyDw==",
+						"ixxwqpTLXWwaPKUKiCqNxD9V5GfDEJj/H+K8VrL+0JSWLxEd3IKEZZTkiW6RBqhqAWdol2wzMVHm1Zpz3slMCg==",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				},
 				{
 					type: "AuditableItemGraphChangeset",
 					dateCreated: "2024-08-22T11:56:56.272Z",
-					hash: "+UC7WV6Br1LkX2oL9QkXbLlB47vWLhFu3IHH0Zu+Ybo=",
+					hash: "Tk0r0AbswKLvcPNDBpxsHMGwGec5lx+gEBY5a8GAIOU=",
 					immutableStorageId:
 						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505",
 					patches: [
@@ -1732,7 +1710,7 @@ describe("AuditableItemGraphService", () => {
 						}
 					],
 					signature:
-						"fa18gqnSJlw5bPdCAqRxnvw3o2O1xlXVvDyOX0uxYXapAvzUrsyiOwc0VMeR6gVBm0Mu/6Y47cKlaThgnf7BBw==",
+						"JRs8s2q6/VfqDLamoGImJiVcaNWtpzRjuJf9/x5FVBvQXjD8lgVnLt4Bi5bjVlUwFWtIKhbTcm8N/GICRkuJDA==",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				}
@@ -1753,11 +1731,12 @@ describe("AuditableItemGraphService", () => {
 				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			resources: [
 				{
-					id: "resource1",
 					type: "AuditableItemGraphResource",
+					id: "resource1",
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					resourceObject: {
+						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: {
 							id: "acct:person@example.org",
@@ -1772,11 +1751,12 @@ describe("AuditableItemGraphService", () => {
 					}
 				},
 				{
-					id: "resource2",
 					type: "AuditableItemGraphResource",
+					id: "resource2",
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					resourceObject: {
+						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: {
 							id: "acct:person@example.org",
@@ -1793,6 +1773,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			verified: true,
 			vertexObject: {
+				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: {
 					id: "acct:person@example.org",
@@ -1819,14 +1800,14 @@ describe("AuditableItemGraphService", () => {
 					path: "/vertexObject",
 					value: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@type": "Person",
-							"@id": "acct:person@example.org",
+							type: "Person",
+							id: "acct:person@example.org",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple note"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -1855,14 +1836,14 @@ describe("AuditableItemGraphService", () => {
 							dateCreated: "2024-08-22T11:55:16.271Z",
 							resourceObject: {
 								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
+								type: "Create",
 								actor: {
-									"@type": "Person",
-									"@id": "acct:person@example.org",
+									type: "Person",
+									id: "acct:person@example.org",
 									name: "Person"
 								},
 								object: {
-									"@type": "Note",
+									type: "Note",
 									content: "This is a simple note resource"
 								},
 								published: "2015-01-25T12:34:56Z"
@@ -1873,14 +1854,14 @@ describe("AuditableItemGraphService", () => {
 							dateCreated: "2024-08-22T11:55:16.271Z",
 							resourceObject: {
 								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
+								type: "Create",
 								actor: {
-									"@type": "Person",
-									"@id": "acct:person@example.org",
+									type: "Person",
+									id: "acct:person@example.org",
 									name: "Person"
 								},
 								object: {
-									"@type": "Note",
+									type: "Note",
 									content: "This is a simple note resource 2"
 								},
 								published: "2015-01-25T12:34:56Z"
@@ -1889,9 +1870,9 @@ describe("AuditableItemGraphService", () => {
 					]
 				}
 			],
-			hash: "Hv748kaW/EVY3QuF5zxdi/4VAkUUk5U2BHGeD63CKm8=",
+			hash: "qnNrA/UnqdVqB6l+TG3TaSu74NzclH0GDJrc9hz/Yrk=",
 			signature:
-				"19NArjoMrT+cMO7b45DyUBnm3bA1C5amxYHu1D4qX1zqva5lBqUTixtsGkIXtqiG4vh6E2+2VexGswWSiRwyDw==",
+				"ixxwqpTLXWwaPKUKiCqNxD9V5GfDEJj/H+K8VrL+0JSWLxEd3IKEZZTkiW6RBqhqAWdol2wzMVHm1Zpz3slMCg==",
 			immutableStorageId:
 				"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303"
 		});
@@ -1927,9 +1908,9 @@ describe("AuditableItemGraphService", () => {
 					value: "This is a simple note resource 11"
 				}
 			],
-			hash: "+UC7WV6Br1LkX2oL9QkXbLlB47vWLhFu3IHH0Zu+Ybo=",
+			hash: "Tk0r0AbswKLvcPNDBpxsHMGwGec5lx+gEBY5a8GAIOU=",
 			signature:
-				"fa18gqnSJlw5bPdCAqRxnvw3o2O1xlXVvDyOX0uxYXapAvzUrsyiOwc0VMeR6gVBm0Mu/6Y47cKlaThgnf7BBw==",
+				"JRs8s2q6/VfqDLamoGImJiVcaNWtpzRjuJf9/x5FVBvQXjD8lgVnLt4Bi5bjVlUwFWtIKhbTcm8N/GICRkuJDA==",
 			immutableStorageId:
 				"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505"
 		});
@@ -1946,9 +1927,9 @@ describe("AuditableItemGraphService", () => {
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-			hash: "Hv748kaW/EVY3QuF5zxdi/4VAkUUk5U2BHGeD63CKm8=",
+			hash: "qnNrA/UnqdVqB6l+TG3TaSu74NzclH0GDJrc9hz/Yrk=",
 			signature:
-				"19NArjoMrT+cMO7b45DyUBnm3bA1C5amxYHu1D4qX1zqva5lBqUTixtsGkIXtqiG4vh6E2+2VexGswWSiRwyDw==",
+				"ixxwqpTLXWwaPKUKiCqNxD9V5GfDEJj/H+K8VrL+0JSWLxEd3IKEZZTkiW6RBqhqAWdol2wzMVHm1Zpz3slMCg==",
 			integrity: {
 				patches: [
 					{
@@ -1956,14 +1937,14 @@ describe("AuditableItemGraphService", () => {
 						path: "/vertexObject",
 						value: {
 							"@context": "https://www.w3.org/ns/activitystreams",
-							"@type": "Create",
+							type: "Create",
 							actor: {
-								"@id": "acct:person@example.org",
-								"@type": "Person",
+								id: "acct:person@example.org",
+								type: "Person",
 								name: "Person"
 							},
 							object: {
-								"@type": "Note",
+								type: "Note",
 								content: "This is a simple note"
 							},
 							published: "2015-01-25T12:34:56Z"
@@ -1992,14 +1973,14 @@ describe("AuditableItemGraphService", () => {
 								id: "resource1",
 								resourceObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
-									"@type": "Create",
+									type: "Create",
 									actor: {
-										"@id": "acct:person@example.org",
-										"@type": "Person",
+										id: "acct:person@example.org",
+										type: "Person",
 										name: "Person"
 									},
 									object: {
-										"@type": "Note",
+										type: "Note",
 										content: "This is a simple note resource"
 									},
 									published: "2015-01-25T12:34:56Z"
@@ -2010,14 +1991,14 @@ describe("AuditableItemGraphService", () => {
 								id: "resource2",
 								resourceObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
-									"@type": "Create",
+									type: "Create",
 									actor: {
-										"@id": "acct:person@example.org",
-										"@type": "Person",
+										id: "acct:person@example.org",
+										type: "Person",
 										name: "Person"
 									},
 									object: {
-										"@type": "Note",
+										type: "Note",
 										content: "This is a simple note resource 2"
 									},
 									published: "2015-01-25T12:34:56Z"
@@ -2034,9 +2015,9 @@ describe("AuditableItemGraphService", () => {
 			dateCreated: "2024-08-22T11:56:56.272Z",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-			hash: "+UC7WV6Br1LkX2oL9QkXbLlB47vWLhFu3IHH0Zu+Ybo=",
+			hash: "Tk0r0AbswKLvcPNDBpxsHMGwGec5lx+gEBY5a8GAIOU=",
 			signature:
-				"fa18gqnSJlw5bPdCAqRxnvw3o2O1xlXVvDyOX0uxYXapAvzUrsyiOwc0VMeR6gVBm0Mu/6Y47cKlaThgnf7BBw==",
+				"JRs8s2q6/VfqDLamoGImJiVcaNWtpzRjuJf9/x5FVBvQXjD8lgVnLt4Bi5bjVlUwFWtIKhbTcm8N/GICRkuJDA==",
 			integrity: {
 				patches: [
 					{
@@ -2081,14 +2062,14 @@ describe("AuditableItemGraphService", () => {
 					edgeRelationship: "friend",
 					edgeObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
+							id: "acct:person@example.org",
+							type: "Person",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple note"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -2110,14 +2091,14 @@ describe("AuditableItemGraphService", () => {
 					edgeRelationship: "frenemy",
 					edgeObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
+							id: "acct:person@example.org",
+							type: "Person",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple note 2"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -2134,11 +2115,7 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result).toEqual({
-			"@context": [
-				"https://schema.twindev.org/aig/",
-				"https://schema.org/",
-				"https://www.w3.org/ns/activitystreams"
-			],
+			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
 			dateCreated: "2024-08-22T11:55:16.271Z",
@@ -2147,7 +2124,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					type: "AuditableItemGraphChangeset",
 					dateCreated: "2024-08-22T11:55:16.271Z",
-					hash: "sOrnVuZYfyU3rKgZcnU6pTb5iOR7pNdJkPX5NIjh+jw=",
+					hash: "iOxF5z/VREtUG2jNQBpE3soniV76l0uoj6ETOhvm8bw=",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					patches: [
@@ -2160,9 +2137,9 @@ describe("AuditableItemGraphService", () => {
 								dateCreated: "2024-08-22T11:55:16.271Z",
 								edgeObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
-									"@type": "Create",
-									actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-									object: { "@type": "Note", content: "This is a simple note" },
+									type: "Create",
+									actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+									object: { type: "Note", content: "This is a simple note" },
 									published: "2015-01-25T12:34:56Z"
 								},
 								edgeRelationship: "friend"
@@ -2170,14 +2147,14 @@ describe("AuditableItemGraphService", () => {
 						}
 					],
 					signature:
-						"RQ+LD5ts30gGfDRB+z36uCwaS8xYmac6p6Uz2i3+P83zvRsz+Rcj7k6iZZrj+8V2WJ8b1nwah5o4OhfGJBvzBw==",
+						"mEPcZvMpTCPRSeNJAVLe2+95USPLp+wLzddPfXS3KKlg489uFmRUOW3a+JtAtc4WAG0P9vCHakwYPHmqcuNiDQ==",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				},
 				{
 					type: "AuditableItemGraphChangeset",
 					dateCreated: "2024-08-22T11:56:56.272Z",
-					hash: "HNBBORsq/qTRTZpblLg8Qss9cRImhE5tFQTbx+E1YVQ=",
+					hash: "5pLwHfmiDtGHvE5bp19sef0WyOAgT9gPiDPDFLKuOpI=",
 					immutableStorageId:
 						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505",
 					patches: [
@@ -2201,7 +2178,7 @@ describe("AuditableItemGraphService", () => {
 						}
 					],
 					signature:
-						"iiDUQ7myX0PsfU4lWVndCcP0jpBvVlvvbPTyyl3FIweKAd8efW6JMPRGHRBHYz20omaVExoiz1KMRZbKHCmUCg==",
+						"okNTHo201zQbLp014+lmULUfwD07EK6K0gHduEd5MHiX9RmvoA3V9scozkS0NrGVDLPlfBVcVdeK7PNPyf91AA==",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				}
@@ -2225,6 +2202,7 @@ describe("AuditableItemGraphService", () => {
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					edgeObject: {
+						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
 						object: { type: "Note", content: "This is a simple note 2" },
@@ -2241,9 +2219,9 @@ describe("AuditableItemGraphService", () => {
 		const changesetStore = changesetStorage.getStore();
 
 		expect(changesetStore[0]).toEqual({
-			hash: "sOrnVuZYfyU3rKgZcnU6pTb5iOR7pNdJkPX5NIjh+jw=",
+			hash: "iOxF5z/VREtUG2jNQBpE3soniV76l0uoj6ETOhvm8bw=",
 			signature:
-				"RQ+LD5ts30gGfDRB+z36uCwaS8xYmac6p6Uz2i3+P83zvRsz+Rcj7k6iZZrj+8V2WJ8b1nwah5o4OhfGJBvzBw==",
+				"mEPcZvMpTCPRSeNJAVLe2+95USPLp+wLzddPfXS3KKlg489uFmRUOW3a+JtAtc4WAG0P9vCHakwYPHmqcuNiDQ==",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity:
@@ -2258,14 +2236,14 @@ describe("AuditableItemGraphService", () => {
 							dateCreated: "2024-08-22T11:55:16.271Z",
 							edgeObject: {
 								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
+								type: "Create",
 								actor: {
-									"@id": "acct:person@example.org",
-									"@type": "Person",
+									id: "acct:person@example.org",
+									type: "Person",
 									name: "Person"
 								},
 								object: {
-									"@type": "Note",
+									type: "Note",
 									content: "This is a simple note"
 								},
 								published: "2015-01-25T12:34:56Z"
@@ -2280,9 +2258,9 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(changesetStore[1]).toEqual({
-			hash: "HNBBORsq/qTRTZpblLg8Qss9cRImhE5tFQTbx+E1YVQ=",
+			hash: "5pLwHfmiDtGHvE5bp19sef0WyOAgT9gPiDPDFLKuOpI=",
 			signature:
-				"iiDUQ7myX0PsfU4lWVndCcP0jpBvVlvvbPTyyl3FIweKAd8efW6JMPRGHRBHYz20omaVExoiz1KMRZbKHCmUCg==",
+				"okNTHo201zQbLp014+lmULUfwD07EK6K0gHduEd5MHiX9RmvoA3V9scozkS0NrGVDLPlfBVcVdeK7PNPyf91AA==",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:56:56.272Z",
 			userIdentity: TEST_USER_IDENTITY,
@@ -2305,14 +2283,14 @@ describe("AuditableItemGraphService", () => {
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
+				type: "Create",
 				actor: {
-					"@id": "acct:person@example.org",
-					"@type": "Person",
+					id: "acct:person@example.org",
+					type: "Person",
 					name: "Person"
 				},
 				object: {
-					"@type": "Note",
+					type: "Note",
 					content: "This is a simple note"
 				},
 				published: "2015-01-25T12:34:56Z"
@@ -2322,14 +2300,14 @@ describe("AuditableItemGraphService", () => {
 					id: "foo123",
 					aliasObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
+							id: "acct:person@example.org",
+							type: "Person",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple alias 1"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -2339,14 +2317,14 @@ describe("AuditableItemGraphService", () => {
 					id: "bar456",
 					aliasObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
+							id: "acct:person@example.org",
+							type: "Person",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple note alias 2"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -2358,14 +2336,14 @@ describe("AuditableItemGraphService", () => {
 					id: "resource1",
 					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
+							id: "acct:person@example.org",
+							type: "Person",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple note resource 1"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -2375,14 +2353,14 @@ describe("AuditableItemGraphService", () => {
 					id: "resource2",
 					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
+							id: "acct:person@example.org",
+							type: "Person",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple resource 2"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -2395,14 +2373,14 @@ describe("AuditableItemGraphService", () => {
 					edgeRelationship: "friend",
 					edgeObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
+							id: "acct:person@example.org",
+							type: "Person",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple edge 1"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -2413,14 +2391,14 @@ describe("AuditableItemGraphService", () => {
 					edgeRelationship: "enemy",
 					edgeObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
+							id: "acct:person@example.org",
+							type: "Person",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple edge 2"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -2435,14 +2413,14 @@ describe("AuditableItemGraphService", () => {
 			id,
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
+				type: "Create",
 				actor: {
-					"@id": "acct:person@example.org",
-					"@type": "Person",
+					id: "acct:person@example.org",
+					type: "Person",
 					name: "Person"
 				},
 				object: {
-					"@type": "Note",
+					type: "Note",
 					content: "This is a simple note 2"
 				},
 				published: "2015-01-25T12:34:56Z"
@@ -2452,14 +2430,14 @@ describe("AuditableItemGraphService", () => {
 					id: "foo123",
 					aliasObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
+							id: "acct:person@example.org",
+							type: "Person",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple note alias 10"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -2469,14 +2447,14 @@ describe("AuditableItemGraphService", () => {
 					id: "bar456",
 					aliasObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
+							id: "acct:person@example.org",
+							type: "Person",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple note alias 20"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -2488,14 +2466,14 @@ describe("AuditableItemGraphService", () => {
 					id: "resource1",
 					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
+							id: "acct:person@example.org",
+							type: "Person",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple note resource 10"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -2505,14 +2483,14 @@ describe("AuditableItemGraphService", () => {
 					id: "resource2",
 					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
+							id: "acct:person@example.org",
+							type: "Person",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple note resource 20"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -2525,14 +2503,14 @@ describe("AuditableItemGraphService", () => {
 					edgeRelationship: "friend",
 					edgeObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
+							id: "acct:person@example.org",
+							type: "Person",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple note edge 10"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -2543,14 +2521,14 @@ describe("AuditableItemGraphService", () => {
 					edgeRelationship: "enemy",
 					edgeObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
+						type: "Create",
 						actor: {
-							"@id": "acct:person@example.org",
-							"@type": "Person",
+							id: "acct:person@example.org",
+							type: "Person",
 							name: "Person"
 						},
 						object: {
-							"@type": "Note",
+							type: "Note",
 							content: "This is a simple note edge 20"
 						},
 						published: "2015-01-25T12:34:56Z"
@@ -2567,11 +2545,7 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(result).toEqual({
-			"@context": [
-				"https://schema.twindev.org/aig/",
-				"https://schema.org/",
-				"https://www.w3.org/ns/activitystreams"
-			],
+			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
 			dateCreated: "2024-08-22T11:55:16.271Z",
@@ -2583,6 +2557,7 @@ describe("AuditableItemGraphService", () => {
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					aliasObject: {
+						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
 						object: { type: "Note", content: "This is a simple note alias 10" },
@@ -2595,6 +2570,7 @@ describe("AuditableItemGraphService", () => {
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					aliasObject: {
+						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
 						object: { type: "Note", content: "This is a simple note alias 20" },
@@ -2606,7 +2582,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					type: "AuditableItemGraphChangeset",
 					dateCreated: "2024-08-22T11:55:16.271Z",
-					hash: "tojDV5vHjU23J48xDwRERjzmtFXGuAoSsPIsA1jyhC4=",
+					hash: "CLw23qg3ZXjZTS+YhMae/z5lw6Hs1a9wCXQ59M/VL38=",
 					immutableStorageId:
 						"immutable:entity-storage:0303030303030303030303030303030303030303030303030303030303030303",
 					patches: [
@@ -2616,9 +2592,9 @@ describe("AuditableItemGraphService", () => {
 							patchPath: "/vertexObject",
 							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple note" },
+								type: "Create",
+								actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+								object: { type: "Note", content: "This is a simple note" },
 								published: "2015-01-25T12:34:56Z"
 							}
 						},
@@ -2632,9 +2608,9 @@ describe("AuditableItemGraphService", () => {
 									dateCreated: "2024-08-22T11:55:16.271Z",
 									aliasObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
-										"@type": "Create",
-										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-										object: { "@type": "Note", content: "This is a simple alias 1" },
+										type: "Create",
+										actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+										object: { type: "Note", content: "This is a simple alias 1" },
 										published: "2015-01-25T12:34:56Z"
 									}
 								},
@@ -2643,9 +2619,9 @@ describe("AuditableItemGraphService", () => {
 									dateCreated: "2024-08-22T11:55:16.271Z",
 									aliasObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
-										"@type": "Create",
-										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-										object: { "@type": "Note", content: "This is a simple note alias 2" },
+										type: "Create",
+										actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+										object: { type: "Note", content: "This is a simple note alias 2" },
 										published: "2015-01-25T12:34:56Z"
 									}
 								}
@@ -2661,9 +2637,9 @@ describe("AuditableItemGraphService", () => {
 									dateCreated: "2024-08-22T11:55:16.271Z",
 									resourceObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
-										"@type": "Create",
-										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-										object: { "@type": "Note", content: "This is a simple note resource 1" },
+										type: "Create",
+										actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+										object: { type: "Note", content: "This is a simple note resource 1" },
 										published: "2015-01-25T12:34:56Z"
 									}
 								},
@@ -2672,9 +2648,9 @@ describe("AuditableItemGraphService", () => {
 									dateCreated: "2024-08-22T11:55:16.271Z",
 									resourceObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
-										"@type": "Create",
-										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-										object: { "@type": "Note", content: "This is a simple resource 2" },
+										type: "Create",
+										actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+										object: { type: "Note", content: "This is a simple resource 2" },
 										published: "2015-01-25T12:34:56Z"
 									}
 								}
@@ -2690,9 +2666,9 @@ describe("AuditableItemGraphService", () => {
 									dateCreated: "2024-08-22T11:55:16.271Z",
 									edgeObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
-										"@type": "Create",
-										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-										object: { "@type": "Note", content: "This is a simple edge 1" },
+										type: "Create",
+										actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+										object: { type: "Note", content: "This is a simple edge 1" },
 										published: "2015-01-25T12:34:56Z"
 									},
 									edgeRelationship: "friend"
@@ -2702,9 +2678,9 @@ describe("AuditableItemGraphService", () => {
 									dateCreated: "2024-08-22T11:55:16.271Z",
 									edgeObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
-										"@type": "Create",
-										actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-										object: { "@type": "Note", content: "This is a simple edge 2" },
+										type: "Create",
+										actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+										object: { type: "Note", content: "This is a simple edge 2" },
 										published: "2015-01-25T12:34:56Z"
 									},
 									edgeRelationship: "enemy"
@@ -2713,14 +2689,14 @@ describe("AuditableItemGraphService", () => {
 						}
 					],
 					signature:
-						"ZWQO4BUOfAXhNDXYS55uRJEMjHXdHnAniaCY6dx7oIiC0dPR5z3Y90Y/peiVmUf5JeFvCuh2JybQtWwVhl3LDA==",
+						"ybxXW6P5ospZs/z0ulFvs55ZgRfnj1oMgSSxjeCVR3THfhfcEuLbQJeFxgfmK+0NWOB2TG/u/kcGsVGlyMSyDw==",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				},
 				{
 					type: "AuditableItemGraphChangeset",
 					dateCreated: "2024-08-22T11:56:56.272Z",
-					hash: "RPFzQTVqnF6xlgtHzvx4a5kyxwm+8m7pPt0jnWnf4W0=",
+					hash: "ank774DVi2rngvo6+QjKeN9mghB5UC7pvWBbBwXuFUs=",
 					immutableStorageId:
 						"immutable:entity-storage:0505050505050505050505050505050505050505050505050505050505050505",
 					patches: [
@@ -2804,7 +2780,7 @@ describe("AuditableItemGraphService", () => {
 						}
 					],
 					signature:
-						"SSZvRpIbydDRt3evoi+tZ+8QVfxiAuNirOb1+Shu64Fn3NVVNtlgwrpxWfSCRUgAmSpUVCaHtYnVL6tBcb2NDA==",
+						"pNpgeKqAmkLzvOpQcTb6Or9kPa+RasosaY0I/StCu3JhcmHqiSwA+GKIYgSR1A5IBEkthV1JHc1l7NbCsz86CA==",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				}
@@ -2828,6 +2804,7 @@ describe("AuditableItemGraphService", () => {
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					edgeObject: {
+						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
 						object: { type: "Note", content: "This is a simple note edge 10" },
@@ -2841,6 +2818,7 @@ describe("AuditableItemGraphService", () => {
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					edgeObject: {
+						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
 						object: { type: "Note", content: "This is a simple note edge 20" },
@@ -2858,6 +2836,7 @@ describe("AuditableItemGraphService", () => {
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					resourceObject: {
+						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
 						object: { type: "Note", content: "This is a simple note resource 10" },
@@ -2870,6 +2849,7 @@ describe("AuditableItemGraphService", () => {
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					resourceObject: {
+						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
 						object: { type: "Note", content: "This is a simple note resource 20" },
@@ -2879,6 +2859,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			verified: true,
 			vertexObject: {
+				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
 				object: { type: "Note", content: "This is a simple note 2" },
@@ -2889,9 +2870,9 @@ describe("AuditableItemGraphService", () => {
 		const changesetStore = changesetStorage.getStore();
 
 		expect(changesetStore[0]).toEqual({
-			hash: "tojDV5vHjU23J48xDwRERjzmtFXGuAoSsPIsA1jyhC4=",
+			hash: "CLw23qg3ZXjZTS+YhMae/z5lw6Hs1a9wCXQ59M/VL38=",
 			signature:
-				"ZWQO4BUOfAXhNDXYS55uRJEMjHXdHnAniaCY6dx7oIiC0dPR5z3Y90Y/peiVmUf5JeFvCuh2JybQtWwVhl3LDA==",
+				"ybxXW6P5ospZs/z0ulFvs55ZgRfnj1oMgSSxjeCVR3THfhfcEuLbQJeFxgfmK+0NWOB2TG/u/kcGsVGlyMSyDw==",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity: TEST_USER_IDENTITY,
@@ -2901,9 +2882,9 @@ describe("AuditableItemGraphService", () => {
 					path: "/vertexObject",
 					value: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-						object: { "@type": "Note", content: "This is a simple note" },
+						type: "Create",
+						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+						object: { type: "Note", content: "This is a simple note" },
 						published: "2015-01-25T12:34:56Z"
 					}
 				},
@@ -2916,9 +2897,9 @@ describe("AuditableItemGraphService", () => {
 							dateCreated: "2024-08-22T11:55:16.271Z",
 							aliasObject: {
 								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple alias 1" },
+								type: "Create",
+								actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+								object: { type: "Note", content: "This is a simple alias 1" },
 								published: "2015-01-25T12:34:56Z"
 							}
 						},
@@ -2927,9 +2908,9 @@ describe("AuditableItemGraphService", () => {
 							dateCreated: "2024-08-22T11:55:16.271Z",
 							aliasObject: {
 								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple note alias 2" },
+								type: "Create",
+								actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+								object: { type: "Note", content: "This is a simple note alias 2" },
 								published: "2015-01-25T12:34:56Z"
 							}
 						}
@@ -2944,9 +2925,9 @@ describe("AuditableItemGraphService", () => {
 							dateCreated: "2024-08-22T11:55:16.271Z",
 							resourceObject: {
 								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple note resource 1" },
+								type: "Create",
+								actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+								object: { type: "Note", content: "This is a simple note resource 1" },
 								published: "2015-01-25T12:34:56Z"
 							}
 						},
@@ -2955,9 +2936,9 @@ describe("AuditableItemGraphService", () => {
 							dateCreated: "2024-08-22T11:55:16.271Z",
 							resourceObject: {
 								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple resource 2" },
+								type: "Create",
+								actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+								object: { type: "Note", content: "This is a simple resource 2" },
 								published: "2015-01-25T12:34:56Z"
 							}
 						}
@@ -2972,9 +2953,9 @@ describe("AuditableItemGraphService", () => {
 							dateCreated: "2024-08-22T11:55:16.271Z",
 							edgeObject: {
 								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple edge 1" },
+								type: "Create",
+								actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+								object: { type: "Note", content: "This is a simple edge 1" },
 								published: "2015-01-25T12:34:56Z"
 							},
 							edgeRelationship: "friend"
@@ -2984,9 +2965,9 @@ describe("AuditableItemGraphService", () => {
 							dateCreated: "2024-08-22T11:55:16.271Z",
 							edgeObject: {
 								"@context": "https://www.w3.org/ns/activitystreams",
-								"@type": "Create",
-								actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-								object: { "@type": "Note", content: "This is a simple edge 2" },
+								type: "Create",
+								actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+								object: { type: "Note", content: "This is a simple edge 2" },
 								published: "2015-01-25T12:34:56Z"
 							},
 							edgeRelationship: "enemy"
@@ -2999,9 +2980,9 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		expect(changesetStore[1]).toEqual({
-			hash: "RPFzQTVqnF6xlgtHzvx4a5kyxwm+8m7pPt0jnWnf4W0=",
+			hash: "ank774DVi2rngvo6+QjKeN9mghB5UC7pvWBbBwXuFUs=",
 			signature:
-				"SSZvRpIbydDRt3evoi+tZ+8QVfxiAuNirOb1+Shu64Fn3NVVNtlgwrpxWfSCRUgAmSpUVCaHtYnVL6tBcb2NDA==",
+				"pNpgeKqAmkLzvOpQcTb6Or9kPa+RasosaY0I/StCu3JhcmHqiSwA+GKIYgSR1A5IBEkthV1JHc1l7NbCsz86CA==",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:56:56.272Z",
 			userIdentity: TEST_USER_IDENTITY,
@@ -3061,9 +3042,9 @@ describe("AuditableItemGraphService", () => {
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-			hash: "tojDV5vHjU23J48xDwRERjzmtFXGuAoSsPIsA1jyhC4=",
+			hash: "CLw23qg3ZXjZTS+YhMae/z5lw6Hs1a9wCXQ59M/VL38=",
 			signature:
-				"ZWQO4BUOfAXhNDXYS55uRJEMjHXdHnAniaCY6dx7oIiC0dPR5z3Y90Y/peiVmUf5JeFvCuh2JybQtWwVhl3LDA==",
+				"ybxXW6P5ospZs/z0ulFvs55ZgRfnj1oMgSSxjeCVR3THfhfcEuLbQJeFxgfmK+0NWOB2TG/u/kcGsVGlyMSyDw==",
 			integrity: {
 				patches: [
 					{
@@ -3071,9 +3052,9 @@ describe("AuditableItemGraphService", () => {
 						path: "/vertexObject",
 						value: {
 							"@context": "https://www.w3.org/ns/activitystreams",
-							"@type": "Create",
-							actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-							object: { "@type": "Note", content: "This is a simple note" },
+							type: "Create",
+							actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+							object: { type: "Note", content: "This is a simple note" },
 							published: "2015-01-25T12:34:56Z"
 						}
 					},
@@ -3084,9 +3065,9 @@ describe("AuditableItemGraphService", () => {
 							{
 								aliasObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
-									"@type": "Create",
-									actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-									object: { "@type": "Note", content: "This is a simple alias 1" },
+									type: "Create",
+									actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+									object: { type: "Note", content: "This is a simple alias 1" },
 									published: "2015-01-25T12:34:56Z"
 								},
 								dateCreated: "2024-08-22T11:55:16.271Z",
@@ -3095,9 +3076,9 @@ describe("AuditableItemGraphService", () => {
 							{
 								aliasObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
-									"@type": "Create",
-									actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-									object: { "@type": "Note", content: "This is a simple note alias 2" },
+									type: "Create",
+									actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+									object: { type: "Note", content: "This is a simple note alias 2" },
 									published: "2015-01-25T12:34:56Z"
 								},
 								dateCreated: "2024-08-22T11:55:16.271Z",
@@ -3114,9 +3095,9 @@ describe("AuditableItemGraphService", () => {
 								id: "resource1",
 								resourceObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
-									"@type": "Create",
-									actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-									object: { "@type": "Note", content: "This is a simple note resource 1" },
+									type: "Create",
+									actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+									object: { type: "Note", content: "This is a simple note resource 1" },
 									published: "2015-01-25T12:34:56Z"
 								}
 							},
@@ -3125,9 +3106,9 @@ describe("AuditableItemGraphService", () => {
 								id: "resource2",
 								resourceObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
-									"@type": "Create",
-									actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-									object: { "@type": "Note", content: "This is a simple resource 2" },
+									type: "Create",
+									actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+									object: { type: "Note", content: "This is a simple resource 2" },
 									published: "2015-01-25T12:34:56Z"
 								}
 							}
@@ -3141,9 +3122,9 @@ describe("AuditableItemGraphService", () => {
 								dateCreated: "2024-08-22T11:55:16.271Z",
 								edgeObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
-									"@type": "Create",
-									actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-									object: { "@type": "Note", content: "This is a simple edge 1" },
+									type: "Create",
+									actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+									object: { type: "Note", content: "This is a simple edge 1" },
 									published: "2015-01-25T12:34:56Z"
 								},
 								edgeRelationship: "friend",
@@ -3153,9 +3134,9 @@ describe("AuditableItemGraphService", () => {
 								dateCreated: "2024-08-22T11:55:16.271Z",
 								edgeObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
-									"@type": "Create",
-									actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-									object: { "@type": "Note", content: "This is a simple edge 2" },
+									type: "Create",
+									actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+									object: { type: "Note", content: "This is a simple edge 2" },
 									published: "2015-01-25T12:34:56Z"
 								},
 								edgeRelationship: "enemy",
@@ -3173,9 +3154,9 @@ describe("AuditableItemGraphService", () => {
 			dateCreated: "2024-08-22T11:56:56.272Z",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-			hash: "RPFzQTVqnF6xlgtHzvx4a5kyxwm+8m7pPt0jnWnf4W0=",
+			hash: "ank774DVi2rngvo6+QjKeN9mghB5UC7pvWBbBwXuFUs=",
 			signature:
-				"SSZvRpIbydDRt3evoi+tZ+8QVfxiAuNirOb1+Shu64Fn3NVVNtlgwrpxWfSCRUgAmSpUVCaHtYnVL6tBcb2NDA==",
+				"pNpgeKqAmkLzvOpQcTb6Or9kPa+RasosaY0I/StCu3JhcmHqiSwA+GKIYgSR1A5IBEkthV1JHc1l7NbCsz86CA==",
 			integrity: {
 				patches: [
 					{ op: "replace", path: "/vertexObject/object/content", value: "This is a simple note 2" },
@@ -3513,14 +3494,14 @@ describe("AuditableItemGraphService", () => {
 		const id = await service.create(
 			{
 				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
+				type: "Create",
 				actor: {
-					"@id": "acct:person@example.org",
-					"@type": "Person",
+					id: "acct:person@example.org",
+					type: "Person",
 					name: "Person"
 				},
 				object: {
-					"@type": "Note",
+					type: "Note",
 					content: "This is a simple note 2"
 				},
 				published: "2015-01-25T12:34:56Z"
@@ -3543,9 +3524,9 @@ describe("AuditableItemGraphService", () => {
 			nodeIdentity: TEST_NODE_IDENTITY,
 			vertexObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
-				"@type": "Create",
-				actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-				object: { "@type": "Note", content: "This is a simple note 2" },
+				type: "Create",
+				actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+				object: { type: "Note", content: "This is a simple note 2" },
 				published: "2015-01-25T12:34:56Z"
 			}
 		});
@@ -3554,9 +3535,9 @@ describe("AuditableItemGraphService", () => {
 		const changeset = changesetStore[0];
 
 		expect(changeset).toEqual({
-			hash: "2JyaH11cx1Q/OAn4UfKxx4xOAn5MLoTKlbhmALSjJMo=",
+			hash: "pG8ZHTKY7ifqlyeRGqYol8lN/0bH814H6A4syih2bOc=",
 			signature:
-				"bJmUAWhXtlb/awI5eVV7z59MrNetpfZpsud8a5dijLiZUCanAN3/0qMQ5dufa1RypG3bnQEBUWh4f6nthh03DQ==",
+				"oZynaO4RLFDSZqde5PtT2jvCQvcOyABgr1J4GQj3gxrDnWRwr4gRqvKZqNnIi95OhHQvX4dOfoHoDOV6p4JdCg==",
 			vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity: TEST_USER_IDENTITY,
@@ -3566,9 +3547,9 @@ describe("AuditableItemGraphService", () => {
 					path: "/vertexObject",
 					value: {
 						"@context": "https://www.w3.org/ns/activitystreams",
-						"@type": "Create",
-						actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-						object: { "@type": "Note", content: "This is a simple note 2" },
+						type: "Create",
+						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+						object: { type: "Note", content: "This is a simple note 2" },
 						published: "2015-01-25T12:34:56Z"
 					}
 				}
@@ -3589,9 +3570,9 @@ describe("AuditableItemGraphService", () => {
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
-			hash: "2JyaH11cx1Q/OAn4UfKxx4xOAn5MLoTKlbhmALSjJMo=",
+			hash: "pG8ZHTKY7ifqlyeRGqYol8lN/0bH814H6A4syih2bOc=",
 			signature:
-				"bJmUAWhXtlb/awI5eVV7z59MrNetpfZpsud8a5dijLiZUCanAN3/0qMQ5dufa1RypG3bnQEBUWh4f6nthh03DQ==",
+				"oZynaO4RLFDSZqde5PtT2jvCQvcOyABgr1J4GQj3gxrDnWRwr4gRqvKZqNnIi95OhHQvX4dOfoHoDOV6p4JdCg==",
 			integrity: {
 				patches: [
 					{
@@ -3599,9 +3580,9 @@ describe("AuditableItemGraphService", () => {
 						path: "/vertexObject",
 						value: {
 							"@context": "https://www.w3.org/ns/activitystreams",
-							"@type": "Create",
-							actor: { "@id": "acct:person@example.org", "@type": "Person", name: "Person" },
-							object: { "@type": "Note", content: "This is a simple note 2" },
+							type: "Create",
+							actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
+							object: { type: "Note", content: "This is a simple note 2" },
 							published: "2015-01-25T12:34:56Z"
 						}
 					}

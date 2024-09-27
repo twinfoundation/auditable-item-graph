@@ -139,7 +139,7 @@ export function generateRestRoutesAuditableItemGraph(
 						response: {
 							statusCode: HttpStatusCode.created,
 							headers: {
-								location: "aig:1234567890"
+								[HeaderTypes.Location]: "aig:1234567890"
 							}
 						}
 					}
@@ -461,7 +461,7 @@ export async function auditableItemGraphCreate(
 	return {
 		statusCode: HttpStatusCode.created,
 		headers: {
-			location: id
+			[HeaderTypes.Location]: id
 		}
 	};
 }

@@ -48,6 +48,7 @@ import {
 	type IImmutableStorageConnector
 } from "@twin.org/immutable-storage-models";
 import { nameof } from "@twin.org/nameof";
+import type { IDidVerifiableCredential } from "@twin.org/standards-w3c-did";
 import {
 	VaultConnectorFactory,
 	VaultEncryptionType,
@@ -296,7 +297,6 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			const verifySignatureDepth = options?.verifySignatureDepth ?? "none";
 
 			let verified: boolean | undefined;
-			let changesetsVerification: IAuditableItemGraphVerification[] | undefined;
 			let changesets: IAuditableItemGraphChangeset[] | undefined;
 
 			if (
@@ -304,9 +304,12 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				verifySignatureDepth === VerifyDepth.All ||
 				includeChangesets
 			) {
-				const verifyResult = await this.verifyChangesets(vertexModel, verifySignatureDepth);
+				const verifyResult = await this.verifyChangesets(
+					vertexModel,
+					verifySignatureDepth,
+					includeChangesets
+				);
 				verified = verifyResult.verified;
-				changesetsVerification = verifyResult.changesetsVerification;
 				changesets = verifyResult.changesets;
 			}
 
@@ -337,7 +340,6 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 			if (verifySignatureDepth !== VerifyDepth.None) {
 				vertexModel.verified = verified;
-				vertexModel.changesetsVerification = changesetsVerification;
 			}
 
 			const compacted = await JsonLdProcessor.compact(vertexModel, vertexModel["@context"]);
@@ -1058,14 +1060,13 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 */
 	private async verifyChangesets(
 		vertex: IAuditableItemGraphVertex,
-		verifySignatureDepth: VerifyDepth
+		verifySignatureDepth: VerifyDepth,
+		includeChangesets: boolean
 	): Promise<{
 		verified?: boolean;
-		changesetsVerification?: IAuditableItemGraphVerification[];
 		changesets?: IAuditableItemGraphChangeset[];
 	}> {
 		let verified: boolean = true;
-		const changesetsVerification: IAuditableItemGraphVerification[] = [];
 		const changesets: IAuditableItemGraphChangeset[] = [];
 
 		let changesetsResult;
@@ -1092,121 +1093,131 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			if (Is.arrayValue(storedChangesets)) {
 				for (let i = 0; i < storedChangesets.length; i++) {
 					const storedChangeset = storedChangesets[i];
-					changesets.push(this.changesetEntityToModel(storedChangeset));
+					const storedChangesetModel = this.changesetEntityToModel(storedChangeset);
 
-					const verify: IAuditableItemGraphVerification = {
-						"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
-						type: AuditableItemGraphTypes.Verification,
-						state: AuditableItemGraphVerificationState.Ok,
-						dateCreated: storedChangeset.dateCreated
-					};
+					changesets.push(storedChangesetModel);
 
-					changesetsVerification.push(verify);
+					if (verifySignatureDepth !== VerifyDepth.None) {
+						const verification: IAuditableItemGraphVerification = {
+							"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+							type: AuditableItemGraphTypes.Verification,
+							state: AuditableItemGraphVerificationState.Ok,
+							dateCreated: storedChangeset.dateCreated
+						};
+						storedChangesetModel.verification = verification;
 
-					const calculatedHash = this.calculateChangesetHash(
-						storedChangeset.dateCreated,
-						storedChangeset.userIdentity,
-						storedChangeset.patches,
-						lastHash
-					);
-
-					lastHash = calculatedHash;
-
-					if (Converter.bytesToBase64(calculatedHash) !== storedChangeset.hash) {
-						verify.state = AuditableItemGraphVerificationState.HashMismatch;
-					} else if (
-						verifySignatureDepth === VerifyDepth.All ||
-						(verifySignatureDepth === VerifyDepth.Current &&
-							!Is.stringValue(changesetsResult.cursor) &&
-							i === storedChangesets.length - 1)
-					) {
-						let immutablePatches: IPatchOperation[] | undefined;
-						let immutableNodeIdentity: string | undefined;
-						let immutableUserIdentity: string | undefined;
-
-						const signatureVerified = await this._vaultConnector.verify(
-							`${vertex.nodeIdentity}/${this._vaultKeyId}`,
-							calculatedHash,
-							Converter.base64ToBytes(storedChangeset.signature)
+						const calculatedHash = this.calculateChangesetHash(
+							storedChangeset.dateCreated,
+							storedChangeset.userIdentity,
+							storedChangeset.patches,
+							lastHash
 						);
 
-						if (!signatureVerified) {
-							verify.state = AuditableItemGraphVerificationState.SignatureNotVerified;
-						} else if (Is.stringValue(storedChangeset.immutableStorageId)) {
-							// Get the vc from the immutable data store
-							const verifiableCredentialBytes = await this._immutableStorage.get(
-								storedChangeset.immutableStorageId
+						lastHash = calculatedHash;
+
+						if (Converter.bytesToBase64(calculatedHash) !== storedChangeset.hash) {
+							verification.state = AuditableItemGraphVerificationState.HashMismatch;
+						} else if (
+							verifySignatureDepth === VerifyDepth.All ||
+							(verifySignatureDepth === VerifyDepth.Current &&
+								!Is.stringValue(changesetsResult.cursor) &&
+								i === storedChangesets.length - 1)
+						) {
+							let immutablePatches: IPatchOperation[] | undefined;
+							let immutableNodeIdentity: string | undefined;
+							let immutableUserIdentity: string | undefined;
+
+							const signatureVerified = await this._vaultConnector.verify(
+								`${vertex.nodeIdentity}/${this._vaultKeyId}`,
+								calculatedHash,
+								Converter.base64ToBytes(storedChangeset.signature)
 							);
-							const verifiableCredentialJwt = Converter.bytesToUtf8(verifiableCredentialBytes);
-							const decodedJwt = await Jwt.decode(verifiableCredentialJwt);
 
-							// Verify the credential
-							const verificationResult =
-								await this._identityConnector.checkVerifiableCredential<IAuditableItemGraphCredential>(
-									verifiableCredentialJwt
+							if (!signatureVerified) {
+								verification.state = AuditableItemGraphVerificationState.SignatureNotVerified;
+							} else if (Is.stringValue(storedChangeset.immutableStorageId)) {
+								// Get the vc from the immutable data store
+								const verifiableCredentialBytes = await this._immutableStorage.get(
+									storedChangeset.immutableStorageId
 								);
+								const verifiableCredentialJwt = Converter.bytesToUtf8(verifiableCredentialBytes);
+								const decodedJwt = await Jwt.decode(verifiableCredentialJwt);
 
-							if (verificationResult.revoked) {
-								verify.state = AuditableItemGraphVerificationState.CredentialRevoked;
-							} else {
-								// Credential is not revoked so check the signature
-								const credentialData = Is.array(
-									verificationResult.verifiableCredential?.credentialSubject
-								)
-									? verificationResult.verifiableCredential?.credentialSubject[0]
-									: (verificationResult.verifiableCredential?.credentialSubject ?? {
-											"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
-											type: AuditableItemGraphTypes.Credential,
-											dateCreated: "",
-											userIdentity: "",
-											signature: "",
-											hash: ""
-										});
+								// Verify the credential
+								const verificationResult = (await this._identityConnector.checkVerifiableCredential(
+									verifiableCredentialJwt
+								)) as {
+									revoked: boolean;
+									verifiableCredential?: IDidVerifiableCredential<IAuditableItemGraphCredential>;
+								};
 
-								immutableNodeIdentity = DocumentHelper.parse(decodedJwt.header?.kid ?? "").id;
-								immutableUserIdentity = credentialData.userIdentity;
+								if (verificationResult.revoked) {
+									verification.state = AuditableItemGraphVerificationState.CredentialRevoked;
+								} else {
+									// Credential is not revoked so check the signature
+									const credentialData = Is.array(
+										verificationResult.verifiableCredential?.credentialSubject
+									)
+										? verificationResult.verifiableCredential?.credentialSubject[0]
+										: (verificationResult.verifiableCredential?.credentialSubject ?? {
+												"@context": [
+													AuditableItemGraphTypes.ContextRoot,
+													SchemaOrgTypes.ContextRoot
+												],
+												type: AuditableItemGraphTypes.Credential,
+												dateCreated: "",
+												userIdentity: "",
+												signature: "",
+												hash: ""
+											});
 
-								if (credentialData.hash !== storedChangeset.hash) {
-									// Does the immutable hash match the local one we calculated
-									verify.state = AuditableItemGraphVerificationState.ImmutableHashMismatch;
-								} else if (credentialData.signature !== storedChangeset.signature) {
-									// Does the immutable signature match the local one we calculated
-									verify.state = AuditableItemGraphVerificationState.ImmutableSignatureMismatch;
-								} else if (Is.stringValue(credentialData.integrity)) {
-									const decrypted = await this._vaultConnector.decrypt(
-										`${vertex.nodeIdentity}/${this._vaultKeyId}`,
-										VaultEncryptionType.ChaCha20Poly1305,
-										Converter.base64ToBytes(credentialData.integrity)
-									);
+									immutableNodeIdentity = DocumentHelper.parse(decodedJwt.header?.kid ?? "").id;
+									immutableUserIdentity = credentialData.userIdentity;
 
-									const canonical = Converter.bytesToUtf8(decrypted);
-									const calculatedIntegrity = {
-										patches: storedChangeset.patches
-									};
-									if (canonical !== JsonHelper.canonicalize(calculatedIntegrity)) {
-										verify.state = AuditableItemGraphVerificationState.IntegrityDataMismatch;
+									if (credentialData.hash !== storedChangeset.hash) {
+										// Does the immutable hash match the local one we calculated
+										verification.state = AuditableItemGraphVerificationState.ImmutableHashMismatch;
+									} else if (credentialData.signature !== storedChangeset.signature) {
+										// Does the immutable signature match the local one we calculated
+										verification.state =
+											AuditableItemGraphVerificationState.ImmutableSignatureMismatch;
+									} else if (Is.stringValue(credentialData.integrity)) {
+										const decrypted = await this._vaultConnector.decrypt(
+											`${vertex.nodeIdentity}/${this._vaultKeyId}`,
+											VaultEncryptionType.ChaCha20Poly1305,
+											Converter.base64ToBytes(credentialData.integrity)
+										);
+
+										const canonical = Converter.bytesToUtf8(decrypted);
+										const calculatedIntegrity = {
+											patches: storedChangeset.patches
+										};
+										if (canonical !== JsonHelper.canonicalize(calculatedIntegrity)) {
+											verification.state =
+												AuditableItemGraphVerificationState.IntegrityDataMismatch;
+										}
+										const immutableIntegrity: { patches: IAuditableItemGraphPatchOperation[] } =
+											JSON.parse(canonical);
+										immutablePatches = immutableIntegrity.patches.map(p => ({
+											op: p.patchOperation,
+											from: p.patchFrom,
+											path: p.patchPath,
+											value: p.patchValue
+										}));
 									}
-									const immutableIntegrity: { patches: IAuditableItemGraphPatchOperation[] } =
-										JSON.parse(canonical);
-									immutablePatches = immutableIntegrity.patches.map(p => ({
-										op: p.patchOperation,
-										from: p.patchFrom,
-										path: p.patchPath,
-										value: p.patchValue
-									}));
 								}
 							}
-						}
 
-						// If there was a failure add some additional information
-						if (verify.state !== AuditableItemGraphVerificationState.Ok) {
-							verify.stateProperties = {
-								hash: storedChangeset.hash,
-								integrityPatches: immutablePatches,
-								integrityNodeIdentity: immutableNodeIdentity,
-								integrityUserIdentity: immutableUserIdentity
-							};
-							verified = false;
+							// If there was a failure add some additional information
+							if (verification.state !== AuditableItemGraphVerificationState.Ok) {
+								verification.stateProperties = {
+									hash: storedChangeset.hash,
+									integrityPatches: immutablePatches,
+									integrityNodeIdentity: immutableNodeIdentity,
+									integrityUserIdentity: immutableUserIdentity
+								};
+								verified = false;
+							}
 						}
 					}
 				}
@@ -1215,7 +1226,6 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 		return {
 			verified,
-			changesetsVerification,
 			changesets
 		};
 	}

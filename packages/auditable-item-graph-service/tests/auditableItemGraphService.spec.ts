@@ -625,17 +625,15 @@ describe("AuditableItemGraphService", () => {
 								{ id: "bar456", dateCreated: "2024-08-22T11:55:16.271Z" }
 							]
 						}
-					]
+					],
+					verification: {
+						type: "AuditableItemGraphVerification",
+						state: "ok",
+						dateCreated: "2024-08-22T11:55:16.271Z"
+					}
 				}
 			],
-			verified: true,
-			changesetsVerification: [
-				{
-					type: "AuditableItemGraphVerification",
-					state: "ok",
-					dateCreated: "2024-08-22T11:55:16.271Z"
-				}
-			]
+			verified: true
 		});
 
 		const changesetStore = changesetStorage.getStore();
@@ -779,17 +777,15 @@ describe("AuditableItemGraphService", () => {
 							]
 						}
 					],
+					verification: {
+						type: "AuditableItemGraphVerification",
+						dateCreated: "2024-08-22T11:55:16.271Z",
+						state: "ok"
+					},
 					signature:
 						"R/xumvccKc/eFewOMO+xL/6M2utP18p/AIWm6pxpnKuHD/B07rqkVHQYt71lIChEAPy86Y4a4MThkz2lel9oAg==",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
-				}
-			],
-			changesetsVerification: [
-				{
-					type: "AuditableItemGraphVerification",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					state: "ok"
 				}
 			],
 			nodeIdentity:
@@ -940,6 +936,11 @@ describe("AuditableItemGraphService", () => {
 							]
 						}
 					],
+					verification: {
+						type: "AuditableItemGraphVerification",
+						dateCreated: "2024-08-22T11:55:16.271Z",
+						state: "ok"
+					},
 					signature:
 						"R/xumvccKc/eFewOMO+xL/6M2utP18p/AIWm6pxpnKuHD/B07rqkVHQYt71lIChEAPy86Y4a4MThkz2lel9oAg==",
 					userIdentity:
@@ -965,22 +966,15 @@ describe("AuditableItemGraphService", () => {
 							patchValue: { id: "foo321", dateCreated: "2024-08-22T11:56:56.272Z" }
 						}
 					],
+					verification: {
+						type: "AuditableItemGraphVerification",
+						dateCreated: "2024-08-22T11:56:56.272Z",
+						state: "ok"
+					},
 					signature:
 						"t94nlYBCXIUnXUdVPH6T+HId6OIAALxR+8yYMqHHhHaHKLHgzvNHWZlU6r8lDhwoBO/sC1EXQqZ8h+k7yXbdBQ==",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
-				}
-			],
-			changesetsVerification: [
-				{
-					type: "AuditableItemGraphVerification",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					state: "ok"
-				},
-				{
-					type: "AuditableItemGraphVerification",
-					dateCreated: "2024-08-22T11:56:56.272Z",
-					state: "ok"
 				}
 			],
 			nodeIdentity:
@@ -1265,6 +1259,11 @@ describe("AuditableItemGraphService", () => {
 							]
 						}
 					],
+					verification: {
+						type: "AuditableItemGraphVerification",
+						dateCreated: "2024-08-22T11:55:16.271Z",
+						state: "ok"
+					},
 					signature:
 						"R/xumvccKc/eFewOMO+xL/6M2utP18p/AIWm6pxpnKuHD/B07rqkVHQYt71lIChEAPy86Y4a4MThkz2lel9oAg==",
 					userIdentity:
@@ -1284,22 +1283,15 @@ describe("AuditableItemGraphService", () => {
 							patchValue: "This is a simple note 2"
 						}
 					],
+					verification: {
+						type: "AuditableItemGraphVerification",
+						dateCreated: "2024-08-22T11:56:56.272Z",
+						state: "ok"
+					},
 					signature:
 						"cmoVe6HQvvYuF+7EiJIUzOnQ1UnQSfiYkhlnhDOeMcAtU1jGAsSBX+T2SDS8aY4EViemexZuc15DRkDnKXF+AA==",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
-				}
-			],
-			changesetsVerification: [
-				{
-					type: "AuditableItemGraphVerification",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					state: "ok"
-				},
-				{
-					type: "AuditableItemGraphVerification",
-					dateCreated: "2024-08-22T11:56:56.272Z",
-					state: "ok"
 				}
 			],
 			nodeIdentity:
@@ -1666,6 +1658,11 @@ describe("AuditableItemGraphService", () => {
 							]
 						}
 					],
+					verification: {
+						type: "AuditableItemGraphVerification",
+						dateCreated: "2024-08-22T11:55:16.271Z",
+						state: "ok"
+					},
 					signature:
 						"ixxwqpTLXWwaPKUKiCqNxD9V5GfDEJj/H+K8VrL+0JSWLxEd3IKEZZTkiW6RBqhqAWdol2wzMVHm1Zpz3slMCg==",
 					userIdentity:
@@ -1709,22 +1706,15 @@ describe("AuditableItemGraphService", () => {
 							patchValue: "This is a simple note resource 11"
 						}
 					],
+					verification: {
+						type: "AuditableItemGraphVerification",
+						dateCreated: "2024-08-22T11:56:56.272Z",
+						state: "ok"
+					},
 					signature:
 						"JRs8s2q6/VfqDLamoGImJiVcaNWtpzRjuJf9/x5FVBvQXjD8lgVnLt4Bi5bjVlUwFWtIKhbTcm8N/GICRkuJDA==",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
-				}
-			],
-			changesetsVerification: [
-				{
-					type: "AuditableItemGraphVerification",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					state: "ok"
-				},
-				{
-					type: "AuditableItemGraphVerification",
-					dateCreated: "2024-08-22T11:56:56.272Z",
-					state: "ok"
 				}
 			],
 			nodeIdentity:
@@ -2146,6 +2136,11 @@ describe("AuditableItemGraphService", () => {
 							}
 						}
 					],
+					verification: {
+						type: "AuditableItemGraphVerification",
+						dateCreated: "2024-08-22T11:55:16.271Z",
+						state: "ok"
+					},
 					signature:
 						"mEPcZvMpTCPRSeNJAVLe2+95USPLp+wLzddPfXS3KKlg489uFmRUOW3a+JtAtc4WAG0P9vCHakwYPHmqcuNiDQ==",
 					userIdentity:
@@ -2177,22 +2172,15 @@ describe("AuditableItemGraphService", () => {
 							patchValue: "frenemy"
 						}
 					],
+					verification: {
+						type: "AuditableItemGraphVerification",
+						dateCreated: "2024-08-22T11:56:56.272Z",
+						state: "ok"
+					},
 					signature:
 						"okNTHo201zQbLp014+lmULUfwD07EK6K0gHduEd5MHiX9RmvoA3V9scozkS0NrGVDLPlfBVcVdeK7PNPyf91AA==",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
-				}
-			],
-			changesetsVerification: [
-				{
-					type: "AuditableItemGraphVerification",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					state: "ok"
-				},
-				{
-					type: "AuditableItemGraphVerification",
-					dateCreated: "2024-08-22T11:56:56.272Z",
-					state: "ok"
 				}
 			],
 			edges: [
@@ -2688,6 +2676,11 @@ describe("AuditableItemGraphService", () => {
 							]
 						}
 					],
+					verification: {
+						type: "AuditableItemGraphVerification",
+						dateCreated: "2024-08-22T11:55:16.271Z",
+						state: "ok"
+					},
 					signature:
 						"ybxXW6P5ospZs/z0ulFvs55ZgRfnj1oMgSSxjeCVR3THfhfcEuLbQJeFxgfmK+0NWOB2TG/u/kcGsVGlyMSyDw==",
 					userIdentity:
@@ -2779,22 +2772,15 @@ describe("AuditableItemGraphService", () => {
 							patchValue: "This is a simple note edge 20"
 						}
 					],
+					verification: {
+						type: "AuditableItemGraphVerification",
+						dateCreated: "2024-08-22T11:56:56.272Z",
+						state: "ok"
+					},
 					signature:
 						"pNpgeKqAmkLzvOpQcTb6Or9kPa+RasosaY0I/StCu3JhcmHqiSwA+GKIYgSR1A5IBEkthV1JHc1l7NbCsz86CA==",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
-				}
-			],
-			changesetsVerification: [
-				{
-					type: "AuditableItemGraphVerification",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					state: "ok"
-				},
-				{
-					type: "AuditableItemGraphVerification",
-					dateCreated: "2024-08-22T11:56:56.272Z",
-					state: "ok"
 				}
 			],
 			edges: [
@@ -3248,17 +3234,15 @@ describe("AuditableItemGraphService", () => {
 							]
 						}
 					],
+					verification: {
+						type: "AuditableItemGraphVerification",
+						dateCreated: "2024-08-22T11:55:16.271Z",
+						state: "ok"
+					},
 					signature:
 						"/PSzLQIctmWsOnOy5sOVPS/+HuYxcylJHXm6g+yMOn6CBnjVQAiG1g3eQhnvZnd+/85w5Z35Ml592KTaGBqkAw==",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
-				}
-			],
-			changesetsVerification: [
-				{
-					type: "AuditableItemGraphVerification",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					state: "ok"
 				}
 			],
 			nodeIdentity:

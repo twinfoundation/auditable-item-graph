@@ -65,3 +65,11 @@ The signature for the changeset.
 > `optional` **immutableStorageId**: `string`
 
 The immutable storage id containing the signature for the changeset.
+
+***
+
+### verification?
+
+> `optional` **verification**: [`IAuditableItemGraphVerification`](IAuditableItemGraphVerification.md)
+
+The verification for the changeset.

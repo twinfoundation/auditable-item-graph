@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0.
 import type { AuditableItemGraphTypes } from "./auditableItemGraphTypes";
 import type { IAuditableItemGraphPatchOperation } from "./IAuditableItemGraphPatchOperation";
+import type { IAuditableItemGraphVerification } from "./IAuditableItemGraphVerification";
 
 /**
  * Interface describing a set of updates to the vertex.
@@ -48,4 +49,9 @@ export interface IAuditableItemGraphChangeset {
 	 * The immutable storage id containing the signature for the changeset.
 	 */
 	immutableStorageId?: string;
+
+	/**
+	 * The verification for the changeset.
+	 */
+	verification?: IAuditableItemGraphVerification;
 }

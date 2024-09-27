@@ -7,7 +7,6 @@ import type { IAuditableItemGraphAuditedElement } from "./IAuditableItemGraphAud
 import type { IAuditableItemGraphChangeset } from "./IAuditableItemGraphChangeset";
 import type { IAuditableItemGraphEdge } from "./IAuditableItemGraphEdge";
 import type { IAuditableItemGraphResource } from "./IAuditableItemGraphResource";
-import type { IAuditableItemGraphVerification } from "./IAuditableItemGraphVerification";
 
 /**
  * Interface describing an auditable item graph vertex.
@@ -60,9 +59,4 @@ export interface IAuditableItemGraphVertex
 	 * Is the vertex verified, will only be populated when verification is requested.
 	 */
 	verified?: boolean;
-
-	/**
-	 * The verification state of the changesets, will only be populated when changesets are requested.
-	 */
-	changesetsVerification?: IAuditableItemGraphVerification[];
 }

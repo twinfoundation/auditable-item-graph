@@ -82,7 +82,7 @@ export class AuditableItemGraphClient
 			}
 		);
 
-		return response.headers.location;
+		return response.headers[HeaderTypes.Location];
 	}
 
 	/**

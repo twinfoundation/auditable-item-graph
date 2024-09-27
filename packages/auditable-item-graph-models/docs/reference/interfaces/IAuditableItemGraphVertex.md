@@ -125,11 +125,3 @@ Changesets for the vertex.
 > `optional` **verified**: `boolean`
 
 Is the vertex verified, will only be populated when verification is requested.
-
-***
-
-### changesetsVerification?
-
-> `optional` **changesetsVerification**: [`IAuditableItemGraphVerification`](IAuditableItemGraphVerification.md)[]
-
-The verification state of the changesets, will only be populated when changesets are requested.

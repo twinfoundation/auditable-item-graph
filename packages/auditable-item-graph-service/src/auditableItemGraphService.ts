@@ -2,20 +2,17 @@
 // SPDX-License-Identifier: Apache-2.0.
 import {
 	AuditableItemGraphTypes,
-	AuditableItemGraphVerificationState,
 	VerifyDepth,
 	type IAuditableItemGraphAlias,
 	type IAuditableItemGraphChangeset,
 	type IAuditableItemGraphComponent,
-	type IAuditableItemGraphCredential,
 	type IAuditableItemGraphEdge,
-	type IAuditableItemGraphPatchOperation,
 	type IAuditableItemGraphResource,
-	type IAuditableItemGraphVerification,
 	type IAuditableItemGraphVertex,
 	type IAuditableItemGraphVertexList
 } from "@twin.org/auditable-item-graph-models";
 import {
+	ComponentFactory,
 	Converter,
 	GeneralError,
 	Guards,
@@ -27,10 +24,8 @@ import {
 	StringHelper,
 	Urn,
 	Validation,
-	type IPatchOperation,
 	type IValidationFailure
 } from "@twin.org/core";
-import { Blake2b } from "@twin.org/crypto";
 import { JsonLdHelper, JsonLdProcessor, type IJsonLdNodeObject } from "@twin.org/data-json-ld";
 import { SchemaOrgDataTypes, SchemaOrgTypes } from "@twin.org/data-schema-org";
 import { ComparisonOperator, LogicalOperator, SortDirection } from "@twin.org/entity";
@@ -39,22 +34,11 @@ import {
 	type IEntityStorageConnector
 } from "@twin.org/entity-storage-models";
 import {
-	DocumentHelper,
-	IdentityConnectorFactory,
-	type IIdentityConnector
-} from "@twin.org/identity-models";
-import {
-	ImmutableStorageConnectorFactory,
-	type IImmutableStorageConnector
-} from "@twin.org/immutable-storage-models";
+	ImmutableProofFailure,
+	ImmutableProofTypes,
+	type IImmutableProofComponent
+} from "@twin.org/immutable-proof-models";
 import { nameof } from "@twin.org/nameof";
-import type { IDidVerifiableCredential } from "@twin.org/standards-w3c-did";
-import {
-	VaultConnectorFactory,
-	VaultEncryptionType,
-	type IVaultConnector
-} from "@twin.org/vault-models";
-import { Jwt } from "@twin.org/web";
 import type { AuditableItemGraphAlias } from "./entities/auditableItemGraphAlias";
 import type { AuditableItemGraphChangeset } from "./entities/auditableItemGraphChangeset";
 import type { AuditableItemGraphEdge } from "./entities/auditableItemGraphEdge";
@@ -73,21 +57,31 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	public static readonly NAMESPACE: string = "aig";
 
 	/**
+	 * The namespace for the service changeset.
+	 */
+	public static readonly NAMESPACE_CHANGESET: string = "changeset";
+
+	/**
+	 * The keys to pick when creating the proof for the stream.
+	 */
+	private static readonly _PROOF_KEYS_CHANGESET: (keyof AuditableItemGraphChangeset)[] = [
+		"id",
+		"vertexId",
+		"userIdentity",
+		"dateCreated",
+		"patches"
+	];
+
+	/**
 	 * Runtime name for the class.
 	 */
 	public readonly CLASS_NAME: string = nameof<AuditableItemGraphService>();
 
 	/**
-	 * The configuration for the connector.
+	 * The immutable proof component.
 	 * @internal
 	 */
-	private readonly _config: IAuditableItemGraphServiceConfig;
-
-	/**
-	 * The vault connector.
-	 * @internal
-	 */
-	private readonly _vaultConnector: IVaultConnector;
+	private readonly _immutableProofComponent: IImmutableProofComponent;
 
 	/**
 	 * The entity storage for vertices.
@@ -102,54 +96,22 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	private readonly _changesetStorage: IEntityStorageConnector<AuditableItemGraphChangeset>;
 
 	/**
-	 * The immutable storage for the integrity data.
-	 * @internal
-	 */
-	private readonly _immutableStorage: IImmutableStorageConnector;
-
-	/**
-	 * The identity connector for generating verifiable credentials.
-	 * @internal
-	 */
-	private readonly _identityConnector: IIdentityConnector;
-
-	/**
-	 * The vault key for signing or encrypting the data.
-	 * @internal
-	 */
-	private readonly _vaultKeyId: string;
-
-	/**
-	 * The assertion method id to use for the graph.
-	 * @internal
-	 */
-	private readonly _assertionMethodId: string;
-
-	/**
-	 * Enable immutable integrity checking by storing the changes encrypted in immutable storage.
-	 * @internal
-	 */
-	private readonly _enableIntegrityCheck: boolean;
-
-	/**
 	 * Create a new instance of AuditableItemGraphService.
 	 * @param options The dependencies for the auditable item graph connector.
 	 * @param options.config The configuration for the connector.
-	 * @param options.vaultConnectorType The vault connector type, defaults to "vault".
+	 * @param options.immutableProofComponentType The immutable proof component type, defaults to "immutable-proof".
 	 * @param options.vertexEntityStorageType The entity storage for vertices, defaults to "auditable-item-graph-vertex".
 	 * @param options.changesetEntityStorageType The entity storage for changesets, defaults to "auditable-item-graph-changeset".
-	 * @param options.immutableStorageType The immutable storage for audit trail, defaults to "auditable-item-graph".
-	 * @param options.identityConnectorType The identity connector type, defaults to "identity".
 	 */
 	constructor(options?: {
-		vaultConnectorType?: string;
+		immutableProofComponentType?: string;
 		vertexEntityStorageType?: string;
-		immutableStorageType?: string;
 		changesetEntityStorageType?: string;
-		identityConnectorType?: string;
 		config?: IAuditableItemGraphServiceConfig;
 	}) {
-		this._vaultConnector = VaultConnectorFactory.get(options?.vaultConnectorType ?? "vault");
+		this._immutableProofComponent = ComponentFactory.get(
+			options?.immutableProofComponentType ?? "immutable-proof"
+		);
 
 		this._vertexStorage = EntityStorageConnectorFactory.get(
 			options?.vertexEntityStorageType ?? StringHelper.kebabCase(nameof<AuditableItemGraphVertex>())
@@ -159,19 +121,6 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			options?.changesetEntityStorageType ??
 				StringHelper.kebabCase(nameof<AuditableItemGraphChangeset>())
 		);
-
-		this._immutableStorage = ImmutableStorageConnectorFactory.get(
-			options?.immutableStorageType ?? "auditable-item-graph"
-		);
-
-		this._identityConnector = IdentityConnectorFactory.get(
-			options?.identityConnectorType ?? "identity"
-		);
-
-		this._config = options?.config ?? {};
-		this._vaultKeyId = this._config.vaultKeyId ?? "auditable-item-graph";
-		this._assertionMethodId = this._config.assertionMethodId ?? "auditable-item-graph";
-		this._enableIntegrityCheck = this._config.enableImmutableDiffs ?? false;
 
 		SchemaOrgDataTypes.registerRedirects();
 	}
@@ -238,7 +187,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			await this.updateEdgeList(context, vertex, edges);
 
 			delete originalEntity.aliasIndex;
-			await this.addChangeset(context, originalEntity, vertex);
+			await this.addChangeset(context, originalEntity, vertex, true);
 
 			await this._vertexStorage.set({
 				...vertex,
@@ -291,7 +240,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				throw new NotFoundError(this.CLASS_NAME, "vertexNotFound", id);
 			}
 
-			const vertexModel = this.vertexEntityToModel(vertexEntity);
+			const vertexModel = this.vertexEntityToJsonLd(vertexEntity);
 
 			const includeChangesets = options?.includeChangesets ?? false;
 			const verifySignatureDepth = options?.verifySignatureDepth ?? "none";
@@ -304,11 +253,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				verifySignatureDepth === VerifyDepth.All ||
 				includeChangesets
 			) {
-				const verifyResult = await this.verifyChangesets(
-					vertexModel,
-					verifySignatureDepth,
-					includeChangesets
-				);
+				const verifyResult = await this.verifyChangesets(vertexModel, verifySignatureDepth);
 				verified = verifyResult.verified;
 				changesets = verifyResult.changesets;
 			}
@@ -423,8 +368,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			await this.updateResourceList(context, newEntity, resources);
 			await this.updateEdgeList(context, newEntity, edges);
 
-			const changes = await this.addChangeset(context, originalEntity, newEntity);
-
+			const changes = await this.addChangeset(context, originalEntity, newEntity, false);
 			if (changes) {
 				newEntity.dateModified = context.now;
 				await this._vertexStorage.set({
@@ -487,9 +431,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				);
 
 				for (const changeset of changesetsResult.entities) {
-					if (Is.stringValue(changeset.immutableStorageId)) {
-						await this._immutableStorage.remove(nodeIdentity, changeset.immutableStorageId);
-						delete changeset.immutableStorageId;
+					if (Is.stringValue(changeset.proofId)) {
+						await this._immutableProofComponent.removeImmutable(changeset.proofId, nodeIdentity);
+						delete changeset.proofId;
 						await this._changesetStorage.set(changeset as AuditableItemGraphChangeset);
 					}
 				}
@@ -576,7 +520,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			);
 
 			const models: IAuditableItemGraphVertex[] = results.entities.map(e =>
-				this.vertexEntityToModel(e as AuditableItemGraphVertex)
+				this.vertexEntityToJsonLd(e as AuditableItemGraphVertex)
 			);
 
 			const vertexList: IAuditableItemGraphVertexList = {
@@ -594,14 +538,18 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	}
 
 	/**
-	 * Map the vertex entity to a model.
+	 * Map the vertex entity to JSON-LD.
 	 * @param vertexEntity The vertex entity.
 	 * @returns The model.
 	 * @internal
 	 */
-	private vertexEntityToModel(vertexEntity: AuditableItemGraphVertex): IAuditableItemGraphVertex {
+	private vertexEntityToJsonLd(vertexEntity: AuditableItemGraphVertex): IAuditableItemGraphVertex {
 		const model: IAuditableItemGraphVertex = {
-			"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+			"@context": [
+				AuditableItemGraphTypes.ContextRoot,
+				ImmutableProofTypes.ContextRoot,
+				SchemaOrgTypes.ContextRoot
+			],
 			type: AuditableItemGraphTypes.Vertex,
 			id: vertexEntity.id,
 			dateCreated: vertexEntity.dateCreated,
@@ -664,20 +612,18 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	}
 
 	/**
-	 * Map the changeset entity to a model.
+	 * Map the changeset entity to a JSON-LD.
 	 * @param changesetEntity The changeset entity.
 	 * @returns The model.
 	 * @internal
 	 */
-	private changesetEntityToModel(
+	private changesetEntityToJsonLd(
 		changesetEntity: AuditableItemGraphChangeset
 	): IAuditableItemGraphChangeset {
 		const model: IAuditableItemGraphChangeset = {
 			"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
 			type: AuditableItemGraphTypes.Changeset,
-			hash: changesetEntity.hash,
-			signature: changesetEntity.signature,
-			immutableStorageId: changesetEntity.immutableStorageId,
+			id: changesetEntity.id,
 			dateCreated: changesetEntity.dateCreated,
 			userIdentity: changesetEntity.userIdentity,
 			patches: changesetEntity.patches.map(p => ({
@@ -687,7 +633,8 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				patchPath: p.path,
 				patchFrom: p.from,
 				patchValue: p.value
-			}))
+			})),
+			proofId: changesetEntity.proofId
 		};
 
 		return model;
@@ -951,99 +898,48 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @param context The context for the operation.
 	 * @param original The original vertex.
 	 * @param updated The updated vertex.
+	 * @param isNew Whether this is a new item.
 	 * @returns True if there were changes.
 	 * @internal
 	 */
 	private async addChangeset(
 		context: IAuditableItemGraphServiceContext,
 		original: AuditableItemGraphVertex,
-		updated: AuditableItemGraphVertex
+		updated: AuditableItemGraphVertex,
+		isNew: boolean
 	): Promise<boolean> {
 		const patches = JsonHelper.diff(original, updated);
 
-		const lastChangesetResult = await this._changesetStorage.query(
-			{
-				property: "vertexId",
-				value: original.id,
-				comparison: ComparisonOperator.Equals
-			},
-			[
-				{
-					property: "dateCreated",
-					sortDirection: SortDirection.Descending
-				}
-			],
-			undefined,
-			undefined,
-			1
-		);
-
-		const lastChangeset = lastChangesetResult.entities[0];
-
-		if (patches.length > 0 || Is.empty(lastChangeset)) {
-			const changeSetHash = this.calculateChangesetHash(
-				context.now,
-				context.userIdentity,
-				patches,
-				Is.stringValue(lastChangeset?.hash)
-					? Converter.base64ToBytes(lastChangeset.hash)
-					: undefined
-			);
-
-			// Generate the signature for the changeset using the hash.
-			const signature = await this._vaultConnector.sign(
-				`${context.nodeIdentity}/${this._vaultKeyId}`,
-				changeSetHash
-			);
-
-			// Create the data for the verifiable credential
-			const credentialData: IAuditableItemGraphCredential = {
-				"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
-				type: AuditableItemGraphTypes.Credential,
-				dateCreated: context.now,
-				userIdentity: context.userIdentity,
-				signature: Converter.bytesToBase64(signature),
-				hash: Converter.bytesToBase64(changeSetHash)
-			};
-
-			// If integrity check is enabled add an encrypted version of the changes to the credential data.
-			if (this._enableIntegrityCheck) {
-				const canonical = JsonHelper.canonicalize({
-					patches
-				});
-				const encrypted = await this._vaultConnector.encrypt(
-					`${context.nodeIdentity}/${this._vaultKeyId}`,
-					VaultEncryptionType.ChaCha20Poly1305,
-					Converter.utf8ToBytes(canonical)
-				);
-
-				credentialData.integrity = Converter.bytesToBase64(encrypted);
-			}
-
-			// Create the verifiable credential
-			const verifiableCredential = await this._identityConnector.createVerifiableCredential(
-				context.nodeIdentity,
-				`${context.nodeIdentity}#${this._assertionMethodId}`,
-				new Urn(AuditableItemGraphService.NAMESPACE, original.id).toString(),
-				credentialData
-			);
-
-			// Store the verifiable credential immutably
-			const immutableStorageId = await this._immutableStorage.store(
-				context.nodeIdentity,
-				Converter.utf8ToBytes(verifiableCredential.jwt)
-			);
-
-			// Link the immutable storage id to the changeset
-			await this._changesetStorage.set({
-				hash: credentialData.hash,
-				signature: credentialData.signature,
+		// If there is a diff set or this is the first time the item is created.
+		if (patches.length > 0 || isNew) {
+			const changesetEntity: AuditableItemGraphChangeset = {
+				id: Converter.bytesToHex(RandomHelper.generate(32), false),
 				vertexId: updated.id,
 				dateCreated: context.now,
 				userIdentity: context.userIdentity,
 				patches,
-				immutableStorageId
+				proofId: ""
+			};
+
+			// Create the JSON-LD object we want to use for the proof
+			// this is a subset of fixed properties from the changeset object.
+			const reducedChangesetJsonLd = await this.changesetEntityToJsonLd({
+				...(ObjectHelper.pick(
+					changesetEntity,
+					AuditableItemGraphService._PROOF_KEYS_CHANGESET
+				) as AuditableItemGraphChangeset),
+				id: `${AuditableItemGraphService.NAMESPACE}:${updated.id}:${AuditableItemGraphService.NAMESPACE_CHANGESET}:${changesetEntity.id}`
 			});
+
+			// Create the proof for the changeset object
+			changesetEntity.proofId = await this._immutableProofComponent.create(
+				reducedChangesetJsonLd as unknown as IJsonLdNodeObject,
+				context.userIdentity,
+				context.nodeIdentity
+			);
+
+			// Link the immutable storage id to the changeset
+			await this._changesetStorage.set(changesetEntity);
 
 			return true;
 		}
@@ -1060,17 +956,15 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 */
 	private async verifyChangesets(
 		vertex: IAuditableItemGraphVertex,
-		verifySignatureDepth: VerifyDepth,
-		includeChangesets: boolean
+		verifySignatureDepth: VerifyDepth
 	): Promise<{
-		verified?: boolean;
-		changesets?: IAuditableItemGraphChangeset[];
+		verified: boolean;
+		changesets: IAuditableItemGraphChangeset[];
 	}> {
-		let verified: boolean = true;
 		const changesets: IAuditableItemGraphChangeset[] = [];
 
 		let changesetsResult;
-		let lastHash: Uint8Array | undefined;
+		let verified = true;
 
 		do {
 			changesetsResult = await this._changesetStorage.query(
@@ -1093,129 +987,44 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			if (Is.arrayValue(storedChangesets)) {
 				for (let i = 0; i < storedChangesets.length; i++) {
 					const storedChangeset = storedChangesets[i];
-					const storedChangesetModel = this.changesetEntityToModel(storedChangeset);
 
-					changesets.push(storedChangesetModel);
+					const storedChangesetJsonLd = this.changesetEntityToJsonLd(storedChangeset);
+					changesets.push(storedChangesetJsonLd);
 
-					if (verifySignatureDepth !== VerifyDepth.None) {
-						const verification: IAuditableItemGraphVerification = {
-							"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
-							type: AuditableItemGraphTypes.Verification,
-							state: AuditableItemGraphVerificationState.Ok,
-							dateCreated: storedChangeset.dateCreated
-						};
-						storedChangesetModel.verification = verification;
-
-						const calculatedHash = this.calculateChangesetHash(
-							storedChangeset.dateCreated,
-							storedChangeset.userIdentity,
-							storedChangeset.patches,
-							lastHash
-						);
-
-						lastHash = calculatedHash;
-
-						if (Converter.bytesToBase64(calculatedHash) !== storedChangeset.hash) {
-							verification.state = AuditableItemGraphVerificationState.HashMismatch;
-						} else if (
-							verifySignatureDepth === VerifyDepth.All ||
-							(verifySignatureDepth === VerifyDepth.Current &&
-								!Is.stringValue(changesetsResult.cursor) &&
-								i === storedChangesets.length - 1)
-						) {
-							let immutablePatches: IPatchOperation[] | undefined;
-							let immutableNodeIdentity: string | undefined;
-							let immutableUserIdentity: string | undefined;
-
-							const signatureVerified = await this._vaultConnector.verify(
-								`${vertex.nodeIdentity}/${this._vaultKeyId}`,
-								calculatedHash,
-								Converter.base64ToBytes(storedChangeset.signature)
+					// If we are verifying all signatures
+					// or this is the last changeset (cursor is empty)
+					// and the changeset has a proofId, then verify the proof.
+					if (
+						verifySignatureDepth === VerifyDepth.All ||
+						(verifySignatureDepth === VerifyDepth.Current &&
+							!Is.stringValue(changesetsResult.cursor) &&
+							i === storedChangesets.length - 1)
+					) {
+						if (!Is.stringValue(storedChangeset.proofId)) {
+							verified = false;
+							storedChangesetJsonLd.verification = {
+								"@context": ImmutableProofTypes.ContextRoot,
+								type: ImmutableProofTypes.ImmutableProofVerification,
+								verified: false,
+								failure: ImmutableProofFailure.ProofMissing
+							};
+						} else {
+							// Create the JSON-LD object we want to use for the proof
+							// this is a subset of fixed properties from the changeset object.
+							const reducedChangesetJsonLd = await this.changesetEntityToJsonLd(
+								ObjectHelper.pick(
+									storedChangeset,
+									AuditableItemGraphService._PROOF_KEYS_CHANGESET
+								) as AuditableItemGraphChangeset
 							);
 
-							if (!signatureVerified) {
-								verification.state = AuditableItemGraphVerificationState.SignatureNotVerified;
-							} else if (Is.stringValue(storedChangeset.immutableStorageId)) {
-								// Get the vc from the immutable data store
-								const verifiableCredentialBytes = await this._immutableStorage.get(
-									storedChangeset.immutableStorageId
-								);
-								const verifiableCredentialJwt = Converter.bytesToUtf8(verifiableCredentialBytes);
-								const decodedJwt = await Jwt.decode(verifiableCredentialJwt);
+							// Verify the proof for the changeset object
+							storedChangesetJsonLd.verification = await this._immutableProofComponent.verify(
+								storedChangeset.proofId,
+								reducedChangesetJsonLd as unknown as IJsonLdNodeObject
+							);
 
-								// Verify the credential
-								const verificationResult = (await this._identityConnector.checkVerifiableCredential(
-									verifiableCredentialJwt
-								)) as {
-									revoked: boolean;
-									verifiableCredential?: IDidVerifiableCredential<IAuditableItemGraphCredential>;
-								};
-
-								if (verificationResult.revoked) {
-									verification.state = AuditableItemGraphVerificationState.CredentialRevoked;
-								} else {
-									// Credential is not revoked so check the signature
-									const credentialData = Is.array(
-										verificationResult.verifiableCredential?.credentialSubject
-									)
-										? verificationResult.verifiableCredential?.credentialSubject[0]
-										: (verificationResult.verifiableCredential?.credentialSubject ?? {
-												"@context": [
-													AuditableItemGraphTypes.ContextRoot,
-													SchemaOrgTypes.ContextRoot
-												],
-												type: AuditableItemGraphTypes.Credential,
-												dateCreated: "",
-												userIdentity: "",
-												signature: "",
-												hash: ""
-											});
-
-									immutableNodeIdentity = DocumentHelper.parse(decodedJwt.header?.kid ?? "").id;
-									immutableUserIdentity = credentialData.userIdentity;
-
-									if (credentialData.hash !== storedChangeset.hash) {
-										// Does the immutable hash match the local one we calculated
-										verification.state = AuditableItemGraphVerificationState.ImmutableHashMismatch;
-									} else if (credentialData.signature !== storedChangeset.signature) {
-										// Does the immutable signature match the local one we calculated
-										verification.state =
-											AuditableItemGraphVerificationState.ImmutableSignatureMismatch;
-									} else if (Is.stringValue(credentialData.integrity)) {
-										const decrypted = await this._vaultConnector.decrypt(
-											`${vertex.nodeIdentity}/${this._vaultKeyId}`,
-											VaultEncryptionType.ChaCha20Poly1305,
-											Converter.base64ToBytes(credentialData.integrity)
-										);
-
-										const canonical = Converter.bytesToUtf8(decrypted);
-										const calculatedIntegrity = {
-											patches: storedChangeset.patches
-										};
-										if (canonical !== JsonHelper.canonicalize(calculatedIntegrity)) {
-											verification.state =
-												AuditableItemGraphVerificationState.IntegrityDataMismatch;
-										}
-										const immutableIntegrity: { patches: IAuditableItemGraphPatchOperation[] } =
-											JSON.parse(canonical);
-										immutablePatches = immutableIntegrity.patches.map(p => ({
-											op: p.patchOperation,
-											from: p.patchFrom,
-											path: p.patchPath,
-											value: p.patchValue
-										}));
-									}
-								}
-							}
-
-							// If there was a failure add some additional information
-							if (verification.state !== AuditableItemGraphVerificationState.Ok) {
-								verification.stateProperties = {
-									hash: storedChangeset.hash,
-									integrityPatches: immutablePatches,
-									integrityNodeIdentity: immutableNodeIdentity,
-									integrityUserIdentity: immutableUserIdentity
-								};
+							if (!storedChangesetJsonLd.verification.verified) {
 								verified = false;
 							}
 						}
@@ -1228,38 +1037,5 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			verified,
 			changesets
 		};
-	}
-
-	/**
-	 * Calculate the changeset hash.
-	 * @param now The current epoch.
-	 * @param userIdentity The user identity.
-	 * @param patches The patches.
-	 * @param lastHash The last hash.
-	 * @returns The hash.
-	 * @internal
-	 */
-	private calculateChangesetHash(
-		now: string,
-		userIdentity: string,
-		patches: IPatchOperation[],
-		lastHash: Uint8Array | undefined
-	): Uint8Array {
-		const b2b = new Blake2b(Blake2b.SIZE_256);
-
-		// If there is a previous changeset, add the most recent one to the new hash.
-		// This provides a link to previous integrity checks.
-		if (Is.uint8Array(lastHash)) {
-			b2b.update(lastHash);
-		}
-
-		// Add the epoch and the identity in to the signature
-		b2b.update(Converter.utf8ToBytes(now));
-		b2b.update(Converter.utf8ToBytes(userIdentity));
-
-		// Add the patch operations to the hash.
-		b2b.update(ObjectHelper.toBytes(patches));
-
-		return b2b.digest();
 	}
 }

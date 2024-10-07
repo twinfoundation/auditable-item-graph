@@ -8,12 +8,10 @@
 		"IAuditableItemGraphEdge",
 		"IAuditableItemGraphChangeset",
 		"IAuditableItemGraphPatchOperation",
-		"IAuditableItemGraphCredential",
-		"IAuditableItemGraphVerification",
-		"IAuditableItemGraphVertexList",
-		"AuditableItemGraphVerificationState"
+		"IAuditableItemGraphVertexList"
 	],
 	"externalReferences": {
-		"IJsonLd(.*)": "https://schema.twindev.org/json-ld/JsonLd$1"
+		"IJsonLd(.*)": "https://schema.twindev.org/json-ld/JsonLd$1",
+		"IImmutableProof(.*)": "https://schema.twindev.org/immutable-proof/ImmutableProof$1"
 	}
 }

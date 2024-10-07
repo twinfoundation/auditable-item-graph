@@ -42,21 +42,6 @@ export const AuditableItemGraphTypes = {
 	PatchOperation: "AuditableItemGraphPatchOperation",
 
 	/**
-	 * Represents the immutable credential payload.
-	 */
-	Credential: "AuditableItemGraphPatchCredential",
-
-	/**
-	 * Represents auditable item stream verification.
-	 */
-	Verification: "AuditableItemGraphVerification",
-
-	/**
-	 * Represents auditable item stream verification state.
-	 */
-	VerificationState: "AuditableItemGraphVerificationState",
-
-	/**
 	 * Represents auditable item stream vertex list.
 	 */
 	VertexList: "AuditableItemGraphVertexList"

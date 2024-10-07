@@ -1,8 +1,8 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
+import type { IImmutableProofVerification } from "@twin.org/immutable-proof-models";
 import type { AuditableItemGraphTypes } from "./auditableItemGraphTypes";
 import type { IAuditableItemGraphPatchOperation } from "./IAuditableItemGraphPatchOperation";
-import type { IAuditableItemGraphVerification } from "./IAuditableItemGraphVerification";
 
 /**
  * Interface describing a set of updates to the vertex.
@@ -21,6 +21,11 @@ export interface IAuditableItemGraphChangeset {
 	type: typeof AuditableItemGraphTypes.Changeset;
 
 	/**
+	 * The id of the changeset.
+	 */
+	id: string;
+
+	/**
 	 * The date/time of when the changeset was created.
 	 */
 	dateCreated: string;
@@ -36,22 +41,12 @@ export interface IAuditableItemGraphChangeset {
 	patches: IAuditableItemGraphPatchOperation[];
 
 	/**
-	 * The hash for the changeset.
+	 * The immutable proof id which contains the signature for this changeset.
 	 */
-	hash: string;
-
-	/**
-	 * The signature for the changeset.
-	 */
-	signature: string;
-
-	/**
-	 * The immutable storage id containing the signature for the changeset.
-	 */
-	immutableStorageId?: string;
+	proofId?: string;
 
 	/**
 	 * The verification for the changeset.
 	 */
-	verification?: IAuditableItemGraphVerification;
+	verification?: IImmutableProofVerification;
 }

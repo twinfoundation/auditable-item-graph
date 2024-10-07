@@ -4,23 +4,5 @@
 /**
  * Configuration for the auditable item graph service.
  */
-export interface IAuditableItemGraphServiceConfig {
-	/**
-	 * The key to use for the graph.
-	 * @default auditable-item-graph
-	 */
-	vaultKeyId?: string;
-
-	/**
-	 * Enable immutable diffs by storing the changes encrypted in immutable storage.
-	 * This will incur additional costs and should only be enabled if you require immutable integrity checking.
-	 * @default false
-	 */
-	enableImmutableDiffs?: boolean;
-
-	/**
-	 * The assertion method id to use for the graph.
-	 * @default auditable-item-graph
-	 */
-	assertionMethodId?: string;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface IAuditableItemGraphServiceConfig {}

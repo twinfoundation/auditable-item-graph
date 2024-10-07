@@ -1,14 +1,8 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import path from "node:path";
-import {
-	AuditableItemGraphTypes,
-	type IAuditableItemGraphCredential,
-	type IAuditableItemGraphPatchOperation
-} from "@twin.org/auditable-item-graph-models";
-import { Converter, Is, RandomHelper } from "@twin.org/core";
+import { Converter, RandomHelper } from "@twin.org/core";
 import { Bip39 } from "@twin.org/crypto";
-import type { IJsonLdNodeObject } from "@twin.org/data-json-ld";
 import { MemoryEntityStorageConnector } from "@twin.org/entity-storage-connector-memory";
 import { EntityStorageConnectorFactory } from "@twin.org/entity-storage-models";
 import {
@@ -18,15 +12,13 @@ import {
 } from "@twin.org/identity-connector-entity-storage";
 import { IdentityConnectorFactory } from "@twin.org/identity-models";
 import { nameof } from "@twin.org/nameof";
-import type { IDidVerifiableCredential } from "@twin.org/standards-w3c-did";
 import {
 	EntityStorageVaultConnector,
 	type VaultKey,
 	type VaultSecret,
 	initSchema as initSchemaVault
 } from "@twin.org/vault-connector-entity-storage";
-import { VaultConnectorFactory, VaultEncryptionType, VaultKeyType } from "@twin.org/vault-models";
-import { type IJwtHeader, type IJwtPayload, Jwt } from "@twin.org/web";
+import { VaultConnectorFactory, VaultKeyType } from "@twin.org/vault-models";
 import * as dotenv from "dotenv";
 
 console.debug("Setting up test environment from .env and .env.dev files");
@@ -80,13 +72,13 @@ export async function setupTestEnv(): Promise<void> {
 		"test-node-identity",
 		didNode.id,
 		"assertionMethod",
-		"auditable-item-graph"
+		"immutable-proof"
 	);
 	const didUser = await TEST_IDENTITY_CONNECTOR.createDocument("test-node-identity");
 
 	TEST_NODE_IDENTITY = didNode.id;
 	TEST_USER_IDENTITY = didUser.id;
-	TEST_VAULT_KEY = `${TEST_NODE_IDENTITY}/auditable-item-graph`;
+	TEST_VAULT_KEY = `${TEST_NODE_IDENTITY}/immutable-proof`;
 
 	await TEST_VAULT_CONNECTOR.addKey(
 		TEST_VAULT_KEY,
@@ -94,55 +86,4 @@ export async function setupTestEnv(): Promise<void> {
 		Converter.base64ToBytes("p519gRazpBYvzqviRrFRBUT+ZNRZ24FYgOLcGO+Nj4Q="),
 		Converter.base64ToBytes("DzFGb9pwkyom+MGrKeVCAV2CMEiy04z9bJLj48XGjWw=")
 	);
-}
-
-/**
- * Decode the JWT to get the integrity data.
- * @param immutableStore The immutable store to decode.
- * @returns The integrity data.
- */
-export async function decodeJwtToIntegrity(immutableStore: string): Promise<{
-	dateCreated: string;
-	userIdentity: string;
-	hash: string;
-	signature: string;
-	integrity: {
-		patches: IAuditableItemGraphPatchOperation[];
-	};
-}> {
-	const vcJwt = Converter.bytesToUtf8(Converter.base64ToBytes(immutableStore));
-	const decodedJwt = await Jwt.decode<
-		IJwtHeader,
-		IJwtPayload & {
-			vc: IDidVerifiableCredential<IAuditableItemGraphCredential & IJsonLdNodeObject>;
-		}
-	>(vcJwt);
-	const credentialData = Is.arrayValue(decodedJwt.payload?.vc?.credentialSubject)
-		? decodedJwt.payload?.vc?.credentialSubject[0]
-		: (decodedJwt.payload?.vc?.credentialSubject ?? {
-				"@context": [AuditableItemGraphTypes.ContextRoot],
-				type: AuditableItemGraphTypes.Credential,
-				dateCreated: "",
-				userIdentity: "",
-				hash: "",
-				signature: ""
-			});
-
-	let integrityJson;
-	if (Is.stringValue(credentialData.integrity)) {
-		const integrityBytes = await TEST_VAULT_CONNECTOR.decrypt(
-			TEST_VAULT_KEY,
-			VaultEncryptionType.ChaCha20Poly1305,
-			Converter.base64ToBytes(credentialData.integrity)
-		);
-		integrityJson = JSON.parse(Converter.bytesToUtf8(integrityBytes));
-	}
-
-	return {
-		dateCreated: credentialData.dateCreated,
-		userIdentity: credentialData.userIdentity,
-		hash: credentialData.hash,
-		signature: credentialData.signature,
-		integrity: integrityJson
-	};
 }

@@ -9,10 +9,10 @@ import type { AuditableItemGraphPatch } from "./auditableItemGraphPatch";
 @entity()
 export class AuditableItemGraphChangeset {
 	/**
-	 * The hash of the changeset.
+	 * The id of the changeset.
 	 */
 	@property({ type: "string", isPrimary: true })
-	public hash!: string;
+	public id!: string;
 
 	/**
 	 * The vertex the changeset belongs to.
@@ -39,14 +39,8 @@ export class AuditableItemGraphChangeset {
 	public patches!: AuditableItemGraphPatch[];
 
 	/**
-	 * The signature of the changeset.
+	 * The immutable proof id which contains the signature for this changeset.
 	 */
 	@property({ type: "string" })
-	public signature!: string;
-
-	/**
-	 * The immutable storage id which contains the signature for this changeset.
-	 */
-	@property({ type: "string" })
-	public immutableStorageId?: string;
+	public proofId!: string;
 }

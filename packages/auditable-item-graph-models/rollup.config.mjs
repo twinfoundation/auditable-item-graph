@@ -35,8 +35,7 @@ export default {
 			.join(''),
 		compact: false,
 		exports: 'auto',
-		globals: globs,
-		exports: 'named'
+		globals: globs
 	},
 	external: [/^node:.*/].concat(Object.keys(globs)),
 	onwarn: message => {

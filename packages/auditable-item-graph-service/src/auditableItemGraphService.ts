@@ -861,11 +861,20 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		Guards.stringValue(this.CLASS_NAME, nameof(edge.id), edge.id);
 		Guards.stringValue(this.CLASS_NAME, nameof(edge.edgeRelationship), edge.edgeRelationship);
 
-		if (Is.object(edge.edgeObject)) {
-			const validationFailures: IValidationFailure[] = [];
-			await JsonLdHelper.validate(edge.edgeObject, validationFailures);
-			Validation.asValidationError(this.CLASS_NAME, nameof(edge.edgeObject), validationFailures);
+		const validationFailures: IValidationFailure[] = [];
+		if (edge.id === vertex.id) {
+			validationFailures.push({
+				property: "id",
+				reason: `validation.${StringHelper.camelCase(this.CLASS_NAME)}.edgeIdSameAsVertexId`,
+				properties: {
+					id: edge.id
+				}
+			});
 		}
+		if (Is.object(edge.edgeObject)) {
+			await JsonLdHelper.validate(edge.edgeObject, validationFailures);
+		}
+		Validation.asValidationError(this.CLASS_NAME, nameof(edge.edgeObject), validationFailures);
 
 		// Try to find an existing edge with the same id.
 		const existing = vertex.edges?.find(r => r.id === edge.id);

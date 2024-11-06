@@ -7,12 +7,12 @@
 			"updatingFailed": "Updating the Auditable Item Graph vertex failed",
 			"queryingFailed": "Querying the Auditable Item Graph failed",
 			"removeImmutableFailed": "Removing the immutable data the Auditable Item Graph vertex failed",
-			"vertexNotFound": "The vertex with the Id \"{notFoundId}\" was not found",
-			"changesetCredentialRevoked": "The verification credential for the changeset has been revoked",
-			"invalidChangesetHash": "The changeset with epoch \"{epoch}\" and hash \"{hash}\" is invalid",
-			"invalidChangesetSignature": "The changeset with epoch \"{epoch}\" and hash \"{hash}\" signature does not match the changeset signature",
-			"immutableChangesetSignature": "The changeset with epoch \"{epoch}\" and hash \"{hash}\" signature does not match the immutable changeset signature",
-			"invalidChangesetCanonical": "The changeset with epoch \"{epoch}\" and hash \"{hash}\" integrity check does not match the immutable changeset integrity check"
+			"vertexNotFound": "The vertex with the Id \"{notFoundId}\" was not found"
+		},
+		"validation": {
+			"auditableItemGraphService": {
+				"edgeIdSameAsVertexId": "The edge id \"{id}\"can not point to the vertex it belongs to"
+			}
 		}
 	},
 	"auditableItemGraphService": {}

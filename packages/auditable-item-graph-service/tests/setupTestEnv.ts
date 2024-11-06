@@ -80,8 +80,6 @@ export async function setupTestEnv(): Promise<void> {
 	TEST_USER_IDENTITY = didUser.id;
 	TEST_VAULT_KEY = `${TEST_NODE_IDENTITY}/immutable-proof-hash`;
 
-	console.log(keyEntityStorage.getStore());
-
 	await TEST_VAULT_CONNECTOR.addKey(
 		TEST_VAULT_KEY,
 		VaultKeyType.Ed25519,

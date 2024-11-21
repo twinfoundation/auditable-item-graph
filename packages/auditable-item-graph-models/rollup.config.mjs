@@ -34,7 +34,7 @@ export default {
 			.map(p => p[0].toUpperCase() + p.slice(1))
 			.join(''),
 		compact: false,
-		exports: 'auto',
+		exports: 'named',
 		globals: globs
 	},
 	external: [/^node:.*/].concat(Object.keys(globs)),

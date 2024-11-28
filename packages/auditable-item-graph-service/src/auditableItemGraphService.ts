@@ -1018,19 +1018,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 								failure: ImmutableProofFailure.ProofMissing
 							};
 						} else {
-							// Create the JSON-LD object we want to use for the proof
-							// this is a subset of fixed properties from the changeset object.
-							const reducedChangesetJsonLd = await this.changesetEntityToJsonLd(
-								ObjectHelper.pick(
-									storedChangeset,
-									AuditableItemGraphService._PROOF_KEYS_CHANGESET
-								) as AuditableItemGraphChangeset
-							);
-
 							// Verify the proof for the changeset object
 							storedChangesetJsonLd.verification = await this._immutableProofComponent.verify(
-								storedChangeset.proofId,
-								reducedChangesetJsonLd as unknown as IJsonLdNodeObject
+								storedChangeset.proofId
 							);
 
 							if (!storedChangesetJsonLd.verification.verified) {

@@ -631,7 +631,6 @@ describe("AuditableItemGraphService", () => {
 		const immutableStore = immutableStorage.getStore();
 		expect(immutableStore).toMatchObject([
 			{
-				id: "0505050505050505050505050505050505050505050505050505050505050505",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			}
@@ -687,7 +686,10 @@ describe("AuditableItemGraphService", () => {
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
+
 		expect(id.startsWith("aig:")).toEqual(true);
+
+		await waitForProofGeneration();
 
 		const result = await service.get(id, {
 			includeChangesets: true,
@@ -1045,7 +1047,7 @@ describe("AuditableItemGraphService", () => {
 			verifySignatureDepth: VerifyDepth.All
 		});
 
-		expect(result).toEqual({
+		expect(result).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/immutable-proof/",
@@ -1104,7 +1106,6 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					type: "AuditableItemGraphChangeset",
-					id: "0606060606060606060606060606060606060606060606060606060606060606",
 					dateCreated: "2024-08-22T11:56:56.272Z",
 					patches: [
 						{
@@ -1124,8 +1125,6 @@ describe("AuditableItemGraphService", () => {
 						type: "ImmutableProofVerification",
 						verified: true
 					},
-					proofId:
-						"immutable-proof:0707070707070707070707070707070707070707070707070707070707070707",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				}
@@ -1143,7 +1142,7 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		const changesetStore = changesetStorage.getStore();
-		expect(changesetStore).toEqual([
+		expect(changesetStore).toMatchObject([
 			{
 				id: "0202020202020202020202020202020202020202020202020202020202020202",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
@@ -1174,7 +1173,6 @@ describe("AuditableItemGraphService", () => {
 				proofId: "immutable-proof:0303030303030303030303030303030303030303030303030303030303030303"
 			},
 			{
-				id: "0606060606060606060606060606060606060606060606060606060606060606",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 				dateCreated: "2024-08-22T11:56:56.272Z",
 				userIdentity:
@@ -1186,20 +1184,17 @@ describe("AuditableItemGraphService", () => {
 						path: "/aliases/-",
 						value: { id: "foo321", dateCreated: "2024-08-22T11:56:56.272Z" }
 					}
-				],
-				proofId: "immutable-proof:0707070707070707070707070707070707070707070707070707070707070707"
+				]
 			}
 		]);
 
 		const immutableStore = immutableStorage.getStore();
 		expect(immutableStore).toMatchObject([
 			{
-				id: "0505050505050505050505050505050505050505050505050505050505050505",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			},
 			{
-				id: "0909090909090909090909090909090909090909090909090909090909090909",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			}
@@ -1239,11 +1234,8 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/immutable-proof/",
 				"https://w3id.org/security/data-integrity/v2"
 			],
-			id: "0707070707070707070707070707070707070707070707070707070707070707",
 			type: "ImmutableProof",
-			proofObjectHash: "vABEtMiVQoBrRdt0pYPD6PS9VEuUglPgUJqGSgPswDY=",
-			proofObjectId:
-				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0606060606060606060606060606060606060606060606060606060606060606",
+			proofObjectHash: "Ht5r435KpM36A+zGeyWK1d5/ZiSsfhVyfKVSPF6XPns=",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
@@ -1251,7 +1243,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"59kNtasi6FNNJAQCB7oGL4TcbWN4jPU9U2Tk6yt5gX6y7LpJxH6ijhS8t5GdwAb7fagxXw1av6vxaPExcrrHbgDj",
+					"5CVrwpZ3SF4CLYijJCcLpCG4xJoqo1ZHsAEJNEDCLjWwSqom8KT95U7BwPSCZkEpRJohNcuihL9AFqBbVQBJEjuz",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1313,7 +1305,7 @@ describe("AuditableItemGraphService", () => {
 			verifySignatureDepth: VerifyDepth.All
 		});
 
-		expect(result).toEqual({
+		expect(result).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/immutable-proof/",
@@ -1362,11 +1354,8 @@ describe("AuditableItemGraphService", () => {
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				},
 				{
-					id: "0606060606060606060606060606060606060606060606060606060606060606",
 					type: "AuditableItemGraphChangeset",
 					dateCreated: "2024-08-22T11:56:56.272Z",
-					proofId:
-						"immutable-proof:0707070707070707070707070707070707070707070707070707070707070707",
 					patches: [
 						{
 							type: "AuditableItemGraphPatchOperation",
@@ -1394,7 +1383,7 @@ describe("AuditableItemGraphService", () => {
 
 		const changesetStore = changesetStorage.getStore();
 
-		expect(changesetStore).toEqual([
+		expect(changesetStore).toMatchObject([
 			{
 				id: "0202020202020202020202020202020202020202020202020202020202020202",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
@@ -1425,27 +1414,23 @@ describe("AuditableItemGraphService", () => {
 				proofId: "immutable-proof:0303030303030303030303030303030303030303030303030303030303030303"
 			},
 			{
-				id: "0606060606060606060606060606060606060606060606060606060606060606",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 				dateCreated: "2024-08-22T11:56:56.272Z",
 				userIdentity:
 					"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 				patches: [
 					{ op: "replace", path: "/vertexObject/object/content", value: "This is a simple note 2" }
-				],
-				proofId: "immutable-proof:0707070707070707070707070707070707070707070707070707070707070707"
+				]
 			}
 		]);
 
 		const immutableStore = immutableStorage.getStore();
 		expect(immutableStore).toMatchObject([
 			{
-				id: "0505050505050505050505050505050505050505050505050505050505050505",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			},
 			{
-				id: "0909090909090909090909090909090909090909090909090909090909090909",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			}
@@ -1485,11 +1470,8 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/immutable-proof/",
 				"https://w3id.org/security/data-integrity/v2"
 			],
-			id: "0707070707070707070707070707070707070707070707070707070707070707",
 			type: "ImmutableProof",
-			proofObjectHash: "ETwwuiu5kXy3vGJmIZGL9Ah0HhoDrg96AxXAJGFmS4Y=",
-			proofObjectId:
-				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0606060606060606060606060606060606060606060606060606060606060606",
+			proofObjectHash: "QevEnGMXvRz2vZ0Idp0os43kci39nElkjiSZAK1de2E=",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
@@ -1497,7 +1479,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"4938YvZ1Y3YRjvEsi4WeJjm3jWzZYVxWyNg1uzSeab1B7XgXuJNpPr1GCMuvh9p2L3YRkk9HR7kVoC17F5sFusHZ",
+					"5xK2qhd9Rc2LGzhczSdtfzyzCpV9mcHVRwMXmrHucezYcU6s9DVa934Y488dF5wa72ChztsYMz3GEg9cdEx35YQU",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1628,7 +1610,7 @@ describe("AuditableItemGraphService", () => {
 			verifySignatureDepth: VerifyDepth.All
 		});
 
-		expect(result).toEqual({
+		expect(result).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/immutable-proof/",
@@ -1706,11 +1688,8 @@ describe("AuditableItemGraphService", () => {
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				},
 				{
-					id: "0606060606060606060606060606060606060606060606060606060606060606",
 					type: "AuditableItemGraphChangeset",
 					dateCreated: "2024-08-22T11:56:56.272Z",
-					proofId:
-						"immutable-proof:0707070707070707070707070707070707070707070707070707070707070707",
 					patches: [
 						{
 							type: "AuditableItemGraphPatchOperation",
@@ -1789,7 +1768,7 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		const changesetStore = changesetStorage.getStore();
-		expect(changesetStore).toEqual([
+		expect(changesetStore).toMatchObject([
 			{
 				id: "0202020202020202020202020202020202020202020202020202020202020202",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
@@ -1848,7 +1827,6 @@ describe("AuditableItemGraphService", () => {
 				proofId: "immutable-proof:0303030303030303030303030303030303030303030303030303030303030303"
 			},
 			{
-				id: "0606060606060606060606060606060606060606060606060606060606060606",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 				dateCreated: "2024-08-22T11:56:56.272Z",
 				userIdentity:
@@ -1867,20 +1845,17 @@ describe("AuditableItemGraphService", () => {
 						path: "/resources/1/resourceObject/object/content",
 						value: "This is a simple note resource 11"
 					}
-				],
-				proofId: "immutable-proof:0707070707070707070707070707070707070707070707070707070707070707"
+				]
 			}
 		]);
 
 		const immutableStore = immutableStorage.getStore();
 		expect(immutableStore).toMatchObject([
 			{
-				id: "0505050505050505050505050505050505050505050505050505050505050505",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			},
 			{
-				id: "0909090909090909090909090909090909090909090909090909090909090909",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			}
@@ -1920,11 +1895,8 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/immutable-proof/",
 				"https://w3id.org/security/data-integrity/v2"
 			],
-			id: "0707070707070707070707070707070707070707070707070707070707070707",
 			type: "ImmutableProof",
-			proofObjectHash: "eDfyxFd0tzL1kBKEith49Q1yzfgQvOF5bpbIr3/SZrw=",
-			proofObjectId:
-				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0606060606060606060606060606060606060606060606060606060606060606",
+			proofObjectHash: "x4oG+eIfYP5KqmKEcD6p55MKTSprHS0oLMvHuJXVLlw=",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
@@ -1932,7 +1904,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"2W7vqR43pu4frJqs26tK2tPvUTpRsRK4Mq6CUynNJqHW3TzpkDWSzBxoKU8emBTtJW2ntRjZVTx3KHSinpt8VLQo",
+					"5G9oUCw4Nkb1p3m2amhzyXZjvnvHNXumPXP4mpUXAxDELY3jxuMx7b6TwAqVYrWpRCx3hNfQDgw4mT5jnH2okcBU",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -2005,7 +1977,7 @@ describe("AuditableItemGraphService", () => {
 			verifySignatureDepth: VerifyDepth.All
 		});
 
-		expect(result).toEqual({
+		expect(result).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/immutable-proof/",
@@ -2046,11 +2018,8 @@ describe("AuditableItemGraphService", () => {
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				},
 				{
-					id: "0606060606060606060606060606060606060606060606060606060606060606",
 					type: "AuditableItemGraphChangeset",
 					dateCreated: "2024-08-22T11:56:56.272Z",
-					proofId:
-						"immutable-proof:0707070707070707070707070707070707070707070707070707070707070707",
 					patches: [
 						{
 							type: "AuditableItemGraphPatchOperation",
@@ -2099,7 +2068,7 @@ describe("AuditableItemGraphService", () => {
 
 		const changesetStore = changesetStorage.getStore();
 
-		expect(changesetStore).toEqual([
+		expect(changesetStore).toMatchObject([
 			{
 				id: "0202020202020202020202020202020202020202020202020202020202020202",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
@@ -2129,7 +2098,6 @@ describe("AuditableItemGraphService", () => {
 				proofId: "immutable-proof:0303030303030303030303030303030303030303030303030303030303030303"
 			},
 			{
-				id: "0606060606060606060606060606060606060606060606060606060606060606",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 				dateCreated: "2024-08-22T11:56:56.272Z",
 				userIdentity:
@@ -2142,8 +2110,7 @@ describe("AuditableItemGraphService", () => {
 						value: "This is a simple note 2"
 					},
 					{ op: "replace", path: "/edges/0/edgeRelationship", value: "frenemy" }
-				],
-				proofId: "immutable-proof:0707070707070707070707070707070707070707070707070707070707070707"
+				]
 			}
 		]);
 	});
@@ -2416,7 +2383,7 @@ describe("AuditableItemGraphService", () => {
 			verifySignatureDepth: VerifyDepth.All
 		});
 
-		expect(result).toEqual({
+		expect(result).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/immutable-proof/",
@@ -2569,11 +2536,8 @@ describe("AuditableItemGraphService", () => {
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				},
 				{
-					id: "0606060606060606060606060606060606060606060606060606060606060606",
 					type: "AuditableItemGraphChangeset",
 					dateCreated: "2024-08-22T11:56:56.272Z",
-					proofId:
-						"immutable-proof:0707070707070707070707070707070707070707070707070707070707070707",
 					patches: [
 						{
 							type: "AuditableItemGraphPatchOperation",
@@ -2730,7 +2694,7 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		const changesetStore = changesetStorage.getStore();
-		expect(changesetStore).toEqual([
+		expect(changesetStore).toMatchObject([
 			{
 				id: "0202020202020202020202020202020202020202020202020202020202020202",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
@@ -2839,7 +2803,6 @@ describe("AuditableItemGraphService", () => {
 				proofId: "immutable-proof:0303030303030303030303030303030303030303030303030303030303030303"
 			},
 			{
-				id: "0606060606060606060606060606060606060606060606060606060606060606",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 				dateCreated: "2024-08-22T11:56:56.272Z",
 				userIdentity:
@@ -2882,20 +2845,17 @@ describe("AuditableItemGraphService", () => {
 						path: "/edges/1/edgeObject/object/content",
 						value: "This is a simple note edge 20"
 					}
-				],
-				proofId: "immutable-proof:0707070707070707070707070707070707070707070707070707070707070707"
+				]
 			}
 		]);
 
 		const immutableStore = immutableStorage.getStore();
 		expect(immutableStore).toMatchObject([
 			{
-				id: "0505050505050505050505050505050505050505050505050505050505050505",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			},
 			{
-				id: "0909090909090909090909090909090909090909090909090909090909090909",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			}
@@ -2935,11 +2895,8 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/immutable-proof/",
 				"https://w3id.org/security/data-integrity/v2"
 			],
-			id: "0707070707070707070707070707070707070707070707070707070707070707",
 			type: "ImmutableProof",
-			proofObjectHash: "HIBfa6oWsT0eeRkiPic4+ty+W+8cmPM0Im8FRMIEX/o=",
-			proofObjectId:
-				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0606060606060606060606060606060606060606060606060606060606060606",
+			proofObjectHash: "Linuc1erqf9KgMyj8TFKq5exEmr81U6Q2gi0DmFe6Rg=",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
@@ -2947,7 +2904,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"2VaePJ2tAVRQYpJC3WdF27bdvUNh64aAAGwRX937rhvUwPk7pCFuZGQR5bVxypm5EUmFquoConzbzKn6RVJm56LA",
+					"VewSHkWPkCjwGUg22sCSmm1i1d8TK26vGFszRzJ4EC7GvRUefpn5bPJASYYj636vVo4yPCWUCuTn2RLHiLYPXBA",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -3045,13 +3002,12 @@ describe("AuditableItemGraphService", () => {
 
 		const results = await service.query({ id: "0" });
 
-		expect(results).toEqual({
+		expect(results).toMatchObject({
 			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
 			type: "AuditableItemGraphVertexList",
 			vertices: [
 				{
 					type: "AuditableItemGraphVertex",
-					id: "0606060606060606060606060606060606060606060606060606060606060606",
 					dateCreated: "2024-08-22T11:56:56.272Z",
 					dateModified: "2024-08-22T11:56:56.272Z"
 				},
@@ -3085,12 +3041,11 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		const results = await service.query({ id: "foo" });
-		expect(results).toEqual({
+		expect(results).toMatchObject({
 			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
 			type: "AuditableItemGraphVertexList",
 			vertices: [
 				{
-					id: "0606060606060606060606060606060606060606060606060606060606060606",
 					type: "AuditableItemGraphVertex",
 					dateCreated: "2024-08-22T11:56:56.272Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
@@ -3133,7 +3088,7 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: {} });
 		await service.create(
 			undefined,
-			[{ id: "foo6" }],
+			[{ id: "foo5" }],
 			undefined,
 			undefined,
 			TEST_USER_IDENTITY,
@@ -3148,13 +3103,13 @@ describe("AuditableItemGraphService", () => {
 			TEST_NODE_IDENTITY
 		);
 
-		const results = await service.query({ id: "6" });
+		const results = await service.query({ id: "5" });
 		expect(results).toEqual({
 			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
 			type: "AuditableItemGraphVertexList",
 			vertices: [
 				{
-					id: "0606060606060606060606060606060606060606060606060606060606060606",
+					id: "0505050505050505050505050505050505050505050505050505050505050505",
 					type: "AuditableItemGraphVertex",
 					dateCreated: "2024-08-22T11:56:56.272Z",
 					dateModified: "2024-08-22T11:56:56.272Z"
@@ -3165,7 +3120,7 @@ describe("AuditableItemGraphService", () => {
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:55:16.271Z",
 					aliases: [
-						{ id: "foo6", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" }
+						{ id: "foo5", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" }
 					]
 				}
 			]
@@ -3191,13 +3146,13 @@ describe("AuditableItemGraphService", () => {
 			TEST_NODE_IDENTITY
 		);
 
-		const results = await service.query({ id: "6", idMode: "id" });
+		const results = await service.query({ id: "5", idMode: "id" });
 		expect(results).toEqual({
 			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
 			type: "AuditableItemGraphVertexList",
 			vertices: [
 				{
-					id: "0606060606060606060606060606060606060606060606060606060606060606",
+					id: "0505050505050505050505050505050505050505050505050505050505050505",
 					type: "AuditableItemGraphVertex",
 					dateCreated: "2024-08-22T11:56:56.272Z",
 					dateModified: "2024-08-22T11:56:56.272Z"

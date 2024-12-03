@@ -1,12 +1,15 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import {
+	AuditableItemGraphTopics,
 	AuditableItemGraphTypes,
 	VerifyDepth,
 	type IAuditableItemGraphAlias,
 	type IAuditableItemGraphChangeset,
 	type IAuditableItemGraphComponent,
 	type IAuditableItemGraphEdge,
+	type IAuditableItemGraphEventBusVertexCreated,
+	type IAuditableItemGraphEventBusVertexUpdated,
 	type IAuditableItemGraphResource,
 	type IAuditableItemGraphVertex,
 	type IAuditableItemGraphVertexList
@@ -24,6 +27,7 @@ import {
 	StringHelper,
 	Urn,
 	Validation,
+	type IPatchOperation,
 	type IValidationFailure
 } from "@twin.org/core";
 import { JsonLdHelper, JsonLdProcessor, type IJsonLdNodeObject } from "@twin.org/data-json-ld";
@@ -33,6 +37,7 @@ import {
 	EntityStorageConnectorFactory,
 	type IEntityStorageConnector
 } from "@twin.org/entity-storage-models";
+import type { IEventBusComponent } from "@twin.org/event-bus-models";
 import {
 	ImmutableProofFailure,
 	ImmutableProofTypes,
@@ -96,17 +101,25 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	private readonly _changesetStorage: IEntityStorageConnector<AuditableItemGraphChangeset>;
 
 	/**
+	 * The event bus component.
+	 * @internal
+	 */
+	private readonly _eventBusComponent?: IEventBusComponent;
+
+	/**
 	 * Create a new instance of AuditableItemGraphService.
 	 * @param options The dependencies for the auditable item graph connector.
 	 * @param options.config The configuration for the connector.
 	 * @param options.immutableProofComponentType The immutable proof component type, defaults to "immutable-proof".
 	 * @param options.vertexEntityStorageType The entity storage for vertices, defaults to "auditable-item-graph-vertex".
 	 * @param options.changesetEntityStorageType The entity storage for changesets, defaults to "auditable-item-graph-changeset".
+	 * @param options.eventBusComponentType The event bus component type, defaults to no event bus.
 	 */
 	constructor(options?: {
 		immutableProofComponentType?: string;
 		vertexEntityStorageType?: string;
 		changesetEntityStorageType?: string;
+		eventBusComponentType?: string;
 		config?: IAuditableItemGraphServiceConfig;
 	}) {
 		this._immutableProofComponent = ComponentFactory.get(
@@ -121,6 +134,10 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			options?.changesetEntityStorageType ??
 				StringHelper.kebabCase(nameof<AuditableItemGraphChangeset>())
 		);
+
+		if (Is.stringValue(options?.eventBusComponentType)) {
+			this._eventBusComponent = ComponentFactory.get(options.eventBusComponentType);
+		}
 
 		SchemaOrgDataTypes.registerRedirects();
 	}
@@ -197,7 +214,14 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 					.toLowerCase()
 			});
 
-			return new Urn(AuditableItemGraphService.NAMESPACE, id).toString();
+			const fullId = new Urn(AuditableItemGraphService.NAMESPACE, id).toString();
+
+			await this._eventBusComponent?.publish<IAuditableItemGraphEventBusVertexCreated>(
+				AuditableItemGraphTopics.VertexCreated,
+				{ id: fullId }
+			);
+
+			return fullId;
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "createFailed", undefined, error);
 		}
@@ -368,8 +392,8 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			await this.updateResourceList(context, newEntity, resources);
 			await this.updateEdgeList(context, newEntity, edges);
 
-			const changes = await this.addChangeset(context, originalEntity, newEntity, false);
-			if (changes) {
+			const patches = await this.addChangeset(context, originalEntity, newEntity, false);
+			if (patches.length > 0) {
 				newEntity.dateModified = context.now;
 				await this._vertexStorage.set({
 					...newEntity,
@@ -378,6 +402,11 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 						.join("||")
 						.toLowerCase()
 				});
+
+				await this._eventBusComponent?.publish<IAuditableItemGraphEventBusVertexUpdated>(
+					AuditableItemGraphTopics.VertexUpdated,
+					{ id, patches }
+				);
 			}
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "updateFailed", undefined, error);
@@ -916,7 +945,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		original: AuditableItemGraphVertex,
 		updated: AuditableItemGraphVertex,
 		isNew: boolean
-	): Promise<boolean> {
+	): Promise<IPatchOperation[]> {
 		const patches = JsonHelper.diff(original, updated);
 
 		// If there is a diff set or this is the first time the item is created.
@@ -950,10 +979,10 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			// Link the immutable storage id to the changeset
 			await this._changesetStorage.set(changesetEntity);
 
-			return true;
+			return patches;
 		}
 
-		return false;
+		return [];
 	}
 
 	/**

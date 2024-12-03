@@ -32,6 +32,10 @@ The entity storage for vertices, defaults to "auditable-item-graph-vertex".
 
 The entity storage for changesets, defaults to "auditable-item-graph-changeset".
 
+• **options.eventBusComponentType?**: `string`
+
+The event bus component type, defaults to no event bus.
+
 • **options.config?**: [`IAuditableItemGraphServiceConfig`](../interfaces/IAuditableItemGraphServiceConfig.md)
 
 The configuration for the connector.

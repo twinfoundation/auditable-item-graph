@@ -4,17 +4,21 @@ import { mkdir, rm } from "node:fs/promises";
 import path from "node:path";
 import { Converter, RandomHelper } from "@twin.org/core";
 import { Bip39 } from "@twin.org/crypto";
-import { Engine } from "@twin.org/engine";
-import { EngineCoreFactory } from "@twin.org/engine-models";
+import { MemoryEntityStorageConnector } from "@twin.org/entity-storage-connector-memory";
+import { EntityStorageConnectorFactory } from "@twin.org/entity-storage-models";
 import {
-	EntityStorageConnectorType,
-	IdentityConnectorType,
-	type IEngineConfig,
-	VaultConnectorType
-} from "@twin.org/engine-types";
-import { initSchema as initSchemaIdentity } from "@twin.org/identity-connector-entity-storage";
+	EntityStorageIdentityConnector,
+	type IdentityDocument,
+	initSchema as initSchemaIdentity
+} from "@twin.org/identity-connector-entity-storage";
 import { IdentityConnectorFactory } from "@twin.org/identity-models";
-import { initSchema as initSchemaVault } from "@twin.org/vault-connector-entity-storage";
+import { nameof } from "@twin.org/nameof";
+import {
+	EntityStorageVaultConnector,
+	initSchema as initSchemaVault,
+	type VaultKey,
+	type VaultSecret
+} from "@twin.org/vault-connector-entity-storage";
 import { VaultConnectorFactory, VaultKeyType } from "@twin.org/vault-models";
 import * as dotenv from "dotenv";
 
@@ -27,31 +31,28 @@ const TEST_FOLDER = "./tests/.tmp";
 initSchemaVault();
 initSchemaIdentity();
 
-const engineConfig: IEngineConfig = {
-	silent: true,
-	types: {
-		entityStorageConnector: [
-			{
-				type: EntityStorageConnectorType.File,
-				options: {
-					config: {
-						directory: TEST_FOLDER
-					}
-				}
-			}
-		],
-		identityConnector: [
-			{ type: IdentityConnectorType.EntityStorage, overrideInstanceType: "identity" }
-		],
-		vaultConnector: [{ type: VaultConnectorType.EntityStorage, overrideInstanceType: "vault" }]
-	}
-};
-
-const engine = new Engine({
-	config: engineConfig
+EntityStorageConnectorFactory.register(
+	"vault-key",
+	() =>
+		new MemoryEntityStorageConnector<VaultKey>({
+			entitySchema: nameof<VaultKey>()
+		})
+);
+const secretEntityStorage = new MemoryEntityStorageConnector<VaultSecret>({
+	entitySchema: nameof<VaultSecret>()
 });
+EntityStorageConnectorFactory.register("vault-secret", () => secretEntityStorage);
 
-EngineCoreFactory.register("engine", () => engine);
+const identityDocumentEntityStorage = new MemoryEntityStorageConnector<IdentityDocument>({
+	entitySchema: nameof<IdentityDocument>()
+});
+EntityStorageConnectorFactory.register("identity-document", () => identityDocumentEntityStorage);
+
+const TEST_VAULT_CONNECTOR = new EntityStorageVaultConnector();
+VaultConnectorFactory.register("vault", () => TEST_VAULT_CONNECTOR);
+
+export const TEST_IDENTITY_CONNECTOR = new EntityStorageIdentityConnector();
+IdentityConnectorFactory.register("identity", () => TEST_IDENTITY_CONNECTOR);
 
 export let TEST_NODE_IDENTITY: string;
 export let TEST_USER_IDENTITY: string;
@@ -63,8 +64,6 @@ export let TEST_VAULT_KEY: string;
 export async function setupTestEnv(): Promise<void> {
 	await cleanupTestEnv();
 	await mkdir(TEST_FOLDER, { recursive: true });
-
-	await engine.start();
 
 	RandomHelper.generate = vi
 		.fn()

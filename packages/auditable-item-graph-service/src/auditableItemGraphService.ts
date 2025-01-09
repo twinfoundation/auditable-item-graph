@@ -49,7 +49,7 @@ import type { AuditableItemGraphChangeset } from "./entities/auditableItemGraphC
 import type { AuditableItemGraphEdge } from "./entities/auditableItemGraphEdge";
 import type { AuditableItemGraphResource } from "./entities/auditableItemGraphResource";
 import type { AuditableItemGraphVertex } from "./entities/auditableItemGraphVertex";
-import type { IAuditableItemGraphServiceConfig } from "./models/IAuditableItemGraphServiceConfig";
+import type { IAuditableItemGraphServiceConstructorOptions } from "./models/IAuditableItemGraphServiceConstructorOptions";
 import type { IAuditableItemGraphServiceContext } from "./models/IAuditableItemGraphServiceContext";
 
 /**
@@ -109,19 +109,8 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	/**
 	 * Create a new instance of AuditableItemGraphService.
 	 * @param options The dependencies for the auditable item graph connector.
-	 * @param options.config The configuration for the connector.
-	 * @param options.immutableProofComponentType The immutable proof component type, defaults to "immutable-proof".
-	 * @param options.vertexEntityStorageType The entity storage for vertices, defaults to "auditable-item-graph-vertex".
-	 * @param options.changesetEntityStorageType The entity storage for changesets, defaults to "auditable-item-graph-changeset".
-	 * @param options.eventBusComponentType The event bus component type, defaults to no event bus.
 	 */
-	constructor(options?: {
-		immutableProofComponentType?: string;
-		vertexEntityStorageType?: string;
-		changesetEntityStorageType?: string;
-		eventBusComponentType?: string;
-		config?: IAuditableItemGraphServiceConfig;
-	}) {
+	constructor(options?: IAuditableItemGraphServiceConstructorOptions) {
 		this._immutableProofComponent = ComponentFactory.get(
 			options?.immutableProofComponentType ?? "immutable-proof"
 		);

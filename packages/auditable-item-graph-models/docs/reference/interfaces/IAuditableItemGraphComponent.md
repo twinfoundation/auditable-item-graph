@@ -16,27 +16,39 @@ Create a new graph vertex.
 
 #### Parameters
 
-• **vertexObject?**: `IJsonLdNodeObject`
+##### vertexObject?
+
+`IJsonLdNodeObject`
 
 The object for the vertex as JSON-LD.
 
-• **aliases?**: `object`[]
+##### aliases?
+
+`object`[]
 
 Alternative aliases that can be used to identify the vertex.
 
-• **resources?**: `object`[]
+##### resources?
+
+`object`[]
 
 The resources attached to the vertex.
 
-• **edges?**: `object`[]
+##### edges?
+
+`object`[]
 
 The edges connected to the vertex.
 
-• **userIdentity?**: `string`
+##### userIdentity?
+
+`string`
 
 The identity to create the auditable item graph operation with.
 
-• **nodeIdentity?**: `string`
+##### nodeIdentity?
+
+`string`
 
 The node identity to use for vault operations.
 
@@ -56,31 +68,45 @@ Update a graph vertex.
 
 #### Parameters
 
-• **id**: `string`
+##### id
+
+`string`
 
 The id of the vertex to update.
 
-• **vertexObject?**: `IJsonLdNodeObject`
+##### vertexObject?
+
+`IJsonLdNodeObject`
 
 The object for the vertex as JSON-LD.
 
-• **aliases?**: `object`[]
+##### aliases?
+
+`object`[]
 
 Alternative aliases that can be used to identify the vertex.
 
-• **resources?**: `object`[]
+##### resources?
+
+`object`[]
 
 The resources attached to the vertex.
 
-• **edges?**: `object`[]
+##### edges?
+
+`object`[]
 
 The edges connected to the vertex.
 
-• **userIdentity?**: `string`
+##### userIdentity?
+
+`string`
 
 The identity to create the auditable item graph operation with.
 
-• **nodeIdentity?**: `string`
+##### nodeIdentity?
+
+`string`
 
 The node identity to use for vault operations.
 
@@ -100,23 +126,31 @@ Get a graph vertex.
 
 #### Parameters
 
-• **id**: `string`
+##### id
+
+`string`
 
 The id of the vertex to get.
 
-• **options?**
+##### options?
 
 Additional options for the get operation.
 
-• **options.includeDeleted?**: `boolean`
+###### includeDeleted
+
+`boolean`
 
 Whether to include deleted aliases, resource, edges, defaults to false.
 
-• **options.includeChangesets?**: `boolean`
+###### includeChangesets
+
+`boolean`
 
 Whether to include the changesets of the vertex, defaults to false.
 
-• **options.verifySignatureDepth?**: [`VerifyDepth`](../type-aliases/VerifyDepth.md)
+###### verifySignatureDepth
+
+[`VerifyDepth`](../type-aliases/VerifyDepth.md)
 
 How many signatures to verify, defaults to "none".
 
@@ -140,11 +174,15 @@ Remove the immutable storage for an item.
 
 #### Parameters
 
-• **id**: `string`
+##### id
+
+`string`
 
 The id of the vertex to remove the storage from.
 
-• **nodeIdentity?**: `string`
+##### nodeIdentity?
+
+`string`
 
 The node identity to use for vault operations.
 
@@ -168,35 +206,49 @@ Query the graph for vertices.
 
 #### Parameters
 
-• **options?**
+##### options?
 
 The query options.
 
-• **options.id?**: `string`
+###### id
+
+`string`
 
 The optional id to look for.
 
-• **options.idMode?**: `"both"` \| `"id"` \| `"alias"`
+###### idMode
+
+`"both"` \| `"id"` \| `"alias"`
 
 Look in id, alias or both, defaults to both.
 
-• **orderBy?**: `"dateCreated"` \| `"dateModified"`
+##### orderBy?
 
 The order for the results, defaults to dateCreated.
 
-• **orderByDirection?**: `SortDirection`
+`"dateCreated"` | `"dateModified"`
+
+##### orderByDirection?
+
+`SortDirection`
 
 The direction for the order, defaults to descending.
 
-• **properties?**: keyof [`IAuditableItemGraphVertex`](IAuditableItemGraphVertex.md)[]
+##### properties?
+
+keyof [`IAuditableItemGraphVertex`](IAuditableItemGraphVertex.md)[]
 
 The properties to return, if not provided defaults to id, dateCreated, aliases and object.
 
-• **cursor?**: `string`
+##### cursor?
+
+`string`
 
 The cursor to request the next page of entities.
 
-• **pageSize?**: `number`
+##### pageSize?
+
+`number`
 
 The maximum number of entities in a page.
 

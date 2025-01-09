@@ -9,5 +9,6 @@ export * from "./entities/auditableItemGraphPatch";
 export * from "./entities/auditableItemGraphResource";
 export * from "./entities/auditableItemGraphVertex";
 export * from "./models/IAuditableItemGraphServiceConfig";
+export * from "./models/IAuditableItemGraphServiceConstructorOptions";
 export * from "./restEntryPoints";
 export * from "./schema";

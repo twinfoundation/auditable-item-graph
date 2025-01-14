@@ -16,14 +16,19 @@ export interface IAuditableItemGraphEdge extends IAuditableItemGraphAuditedEleme
 		| [typeof AuditableItemGraphTypes.ContextRoot, ...string[]];
 
 	/**
+	 * The id of the element.
+	 */
+	id: string;
+
+	/**
 	 * JSON-LD Type.
 	 */
 	type: typeof AuditableItemGraphTypes.Edge;
 
 	/**
-	 * The JSON-LD object for the edge.
+	 * The JSON-LD annotation object for the edge.
 	 */
-	edgeObject?: IJsonLdNodeObject;
+	annotationObject?: IJsonLdNodeObject;
 
 	/**
 	 * The relationship between the two vertices.

@@ -8,7 +8,7 @@ export interface IAuditableItemGraphAuditedElement {
 	/**
 	 * The id of the element.
 	 */
-	id: string;
+	id?: string;
 
 	/**
 	 * The date/time of when the element was created.

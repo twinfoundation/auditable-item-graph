@@ -21,6 +21,11 @@ export interface IAuditableItemGraphVertex
 		| [typeof AuditableItemGraphTypes.ContextRoot, ...string[]];
 
 	/**
+	 * The id of the element.
+	 */
+	id: string;
+
+	/**
 	 * JSON-LD Type.
 	 */
 	type: typeof AuditableItemGraphTypes.Vertex;
@@ -31,9 +36,9 @@ export interface IAuditableItemGraphVertex
 	nodeIdentity?: string;
 
 	/**
-	 * The JSON-LD object for the vertex.
+	 * The JSON-LD annotation object for the vertex.
 	 */
-	vertexObject?: IJsonLdNodeObject;
+	annotationObject?: IJsonLdNodeObject;
 
 	/**
 	 * Alternative aliases that can be used to identify the vertex.

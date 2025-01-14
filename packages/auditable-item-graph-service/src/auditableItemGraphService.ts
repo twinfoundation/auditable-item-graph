@@ -32,7 +32,12 @@ import {
 } from "@twin.org/core";
 import { JsonLdHelper, JsonLdProcessor, type IJsonLdNodeObject } from "@twin.org/data-json-ld";
 import { SchemaOrgDataTypes, SchemaOrgTypes } from "@twin.org/data-schema-org";
-import { ComparisonOperator, LogicalOperator, SortDirection } from "@twin.org/entity";
+import {
+	ComparisonOperator,
+	type IComparator,
+	LogicalOperator,
+	SortDirection
+} from "@twin.org/entity";
 import {
 	EntityStorageConnectorFactory,
 	type IEntityStorageConnector
@@ -133,7 +138,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 	/**
 	 * Create a new graph vertex.
-	 * @param vertexObject The object for the vertex as JSON-LD.
+	 * @param annotationObject The annotation object for the vertex as JSON-LD.
 	 * @param aliases Alternative aliases that can be used to identify the vertex.
 	 * @param resources The resources attached to the vertex.
 	 * @param edges The edges connected to the vertex.
@@ -142,20 +147,20 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @returns The id of the new graph item.
 	 */
 	public async create(
-		vertexObject?: IJsonLdNodeObject,
+		annotationObject?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
 			aliasFormat?: string;
-			aliasObject?: IJsonLdNodeObject;
+			annotationObject?: IJsonLdNodeObject;
 		}[],
 		resources?: {
-			id: string;
+			id?: string;
 			resourceObject?: IJsonLdNodeObject;
 		}[],
 		edges?: {
 			id: string;
 			edgeRelationship: string;
-			edgeObject?: IJsonLdNodeObject;
+			annotationObject?: IJsonLdNodeObject;
 		}[],
 		userIdentity?: string,
 		nodeIdentity?: string
@@ -164,10 +169,10 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
 
 		try {
-			if (Is.object(vertexObject)) {
+			if (Is.object(annotationObject)) {
 				const validationFailures: IValidationFailure[] = [];
-				await JsonLdHelper.validate(vertexObject, validationFailures);
-				Validation.asValidationError(this.CLASS_NAME, nameof(vertexObject), validationFailures);
+				await JsonLdHelper.validate(annotationObject, validationFailures);
+				Validation.asValidationError(this.CLASS_NAME, nameof(annotationObject), validationFailures);
 			}
 
 			const id = Converter.bytesToHex(RandomHelper.generate(32), false);
@@ -186,7 +191,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			};
 			const originalEntity = ObjectHelper.clone(vertex);
 
-			vertex.vertexObject = vertexObject;
+			vertex.annotationObject = annotationObject;
 
 			await this.updateAliasList(context, vertex, aliases);
 			await this.updateResourceList(context, vertex, resources);
@@ -219,11 +224,11 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	/**
 	 * Get a graph vertex.
 	 * @param id The id of the vertex to get.
-	 * @returns The vertex if found.
 	 * @param options Additional options for the get operation.
 	 * @param options.includeDeleted Whether to include deleted/updated aliases, resource, edges, defaults to false.
 	 * @param options.includeChangesets Whether to include the changesets of the vertex, defaults to false.
 	 * @param options.verifySignatureDepth How many signatures to verify, defaults to "none".
+	 * @returns The vertex if found.
 	 * @throws NotFoundError if the vertex is not found.
 	 */
 	public async get(
@@ -310,7 +315,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	/**
 	 * Update a graph vertex.
 	 * @param id The id of the vertex to update.
-	 * @param vertexObject The object for the vertex.
+	 * @param annotationObject The annotation object for the vertex.
 	 * @param aliases Alternative aliases that can be used to identify the vertex.
 	 * @param resources The resources attached to the vertex.
 	 * @param edges The edges connected to the vertex.
@@ -320,20 +325,20 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 */
 	public async update(
 		id: string,
-		vertexObject?: IJsonLdNodeObject,
+		annotationObject?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
 			aliasFormat?: string;
-			aliasObject?: IJsonLdNodeObject;
+			annotationObject?: IJsonLdNodeObject;
 		}[],
 		resources?: {
-			id: string;
+			id?: string;
 			resourceObject?: IJsonLdNodeObject;
 		}[],
 		edges?: {
 			id: string;
 			edgeRelationship: string;
-			edgeObject?: IJsonLdNodeObject;
+			annotationObject?: IJsonLdNodeObject;
 		}[],
 		userIdentity?: string,
 		nodeIdentity?: string
@@ -359,10 +364,10 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				throw new NotFoundError(this.CLASS_NAME, "vertexNotFound", id);
 			}
 
-			if (Is.object(vertexObject)) {
+			if (Is.object(annotationObject)) {
 				const validationFailures: IValidationFailure[] = [];
-				await JsonLdHelper.validate(vertexObject, validationFailures);
-				Validation.asValidationError(this.CLASS_NAME, nameof(vertexObject), validationFailures);
+				await JsonLdHelper.validate(annotationObject, validationFailures);
+				Validation.asValidationError(this.CLASS_NAME, nameof(annotationObject), validationFailures);
 			}
 
 			const context: IAuditableItemGraphServiceContext = {
@@ -375,7 +380,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			const originalEntity = ObjectHelper.clone(vertexEntity);
 			const newEntity = ObjectHelper.clone(vertexEntity);
 
-			newEntity.vertexObject = vertexObject;
+			newEntity.annotationObject = annotationObject;
 
 			await this.updateAliasList(context, newEntity, aliases);
 			await this.updateResourceList(context, newEntity, resources);
@@ -466,6 +471,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @param options The query options.
 	 * @param options.id The optional id to look for.
 	 * @param options.idMode Look in id, alias or both, defaults to both.
+	 * @param conditions Conditions to use in the query.
 	 * @param orderBy The order for the results, defaults to created.
 	 * @param orderByDirection The direction for the order, defaults to desc.
 	 * @param properties The properties to return, if not provided defaults to id, created, aliases and object.
@@ -478,6 +484,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			id?: string;
 			idMode?: "id" | "alias" | "both";
 		},
+		conditions?: IComparator[],
 		orderBy?: keyof Pick<IAuditableItemGraphVertex, "dateCreated" | "dateModified">,
 		orderByDirection?: SortDirection,
 		properties?: (keyof IAuditableItemGraphVertex)[],
@@ -490,9 +497,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				"dateCreated",
 				"dateModified",
 				"aliases",
-				"vertexObject"
+				"annotationObject"
 			];
-			const conditions = [];
+			const combinedConditions = conditions ?? [];
 			const orderProperty = orderBy ?? "dateCreated";
 			const orderDirection = orderByDirection ?? SortDirection.Descending;
 
@@ -500,14 +507,14 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			if (Is.stringValue(idOrAlias)) {
 				const idMode = options?.idMode ?? "both";
 				if (idMode === "id" || idMode === "both") {
-					conditions.push({
+					combinedConditions.push({
 						property: "id",
 						comparison: ComparisonOperator.Includes,
 						value: idOrAlias
 					});
 				}
 				if (idMode === "alias" || idMode === "both") {
-					conditions.push({
+					combinedConditions.push({
 						property: "aliasIndex",
 						comparison: ComparisonOperator.Includes,
 						value: idOrAlias.toLowerCase()
@@ -520,9 +527,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			}
 
 			const results = await this._vertexStorage.query(
-				conditions.length > 0
+				combinedConditions.length > 0
 					? {
-							conditions,
+							conditions: combinedConditions,
 							logicalOperator: LogicalOperator.Or
 						}
 					: undefined,
@@ -573,7 +580,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			dateCreated: vertexEntity.dateCreated,
 			dateModified: vertexEntity.dateModified,
 			nodeIdentity: vertexEntity.nodeIdentity,
-			vertexObject: vertexEntity.vertexObject
+			annotationObject: vertexEntity.annotationObject
 		};
 
 		if (Is.arrayValue(vertexEntity.aliases)) {
@@ -587,7 +594,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 					dateCreated: aliasEntity.dateCreated,
 					dateModified: aliasEntity.dateModified,
 					dateDeleted: aliasEntity.dateDeleted,
-					aliasObject: aliasEntity.aliasObject
+					annotationObject: aliasEntity.annotationObject
 				};
 				model.aliases.push(aliasModel);
 			}
@@ -620,7 +627,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 					dateModified: edgeEntity.dateModified,
 					dateDeleted: edgeEntity.dateDeleted,
 					edgeRelationship: edgeEntity.edgeRelationship,
-					edgeObject: edgeEntity.edgeObject
+					annotationObject: edgeEntity.annotationObject
 				};
 				model.edges.push(edgeModel);
 			}
@@ -671,7 +678,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		aliases?: {
 			id: string;
 			aliasFormat?: string;
-			aliasObject?: IJsonLdNodeObject;
+			annotationObject?: IJsonLdNodeObject;
 		}[]
 	): Promise<void> {
 		const active = vertex.aliases?.filter(a => Is.empty(a.dateDeleted)) ?? [];
@@ -705,16 +712,20 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		alias: {
 			id: string;
 			aliasFormat?: string;
-			aliasObject?: IJsonLdNodeObject;
+			annotationObject?: IJsonLdNodeObject;
 		}
 	): Promise<void> {
 		Guards.object(this.CLASS_NAME, nameof(alias), alias);
 		Guards.stringValue(this.CLASS_NAME, nameof(alias.id), alias.id);
 
-		if (Is.object(alias.aliasObject)) {
+		if (Is.object(alias.annotationObject)) {
 			const validationFailures: IValidationFailure[] = [];
-			await JsonLdHelper.validate(alias.aliasObject, validationFailures);
-			Validation.asValidationError(this.CLASS_NAME, nameof(alias.aliasObject), validationFailures);
+			await JsonLdHelper.validate(alias.annotationObject, validationFailures);
+			Validation.asValidationError(
+				this.CLASS_NAME,
+				nameof(alias.annotationObject),
+				validationFailures
+			);
 		}
 
 		// Try to find an existing alias with the same id.
@@ -728,18 +739,18 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				id: alias.id,
 				aliasFormat: alias.aliasFormat,
 				dateCreated: context.now,
-				aliasObject: alias.aliasObject
+				annotationObject: alias.annotationObject
 			};
 
 			vertex.aliases.push(model);
 		} else if (
 			existing.aliasFormat !== alias.aliasFormat ||
-			!ObjectHelper.equal(existing.aliasObject, alias.aliasObject, false)
+			!ObjectHelper.equal(existing.annotationObject, alias.annotationObject, false)
 		) {
-			// Existing alias found, update the aliasObject.
+			// Existing alias found, update the annotationObject.
 			existing.dateModified = context.now;
 			existing.aliasFormat = alias.aliasFormat;
-			existing.aliasObject = alias.aliasObject;
+			existing.annotationObject = alias.annotationObject;
 		}
 	}
 
@@ -754,16 +765,25 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		context: IAuditableItemGraphServiceContext,
 		vertex: AuditableItemGraphVertex,
 		resources?: {
-			id: string;
+			id?: string;
 			resourceObject?: IJsonLdNodeObject;
 		}[]
 	): Promise<void> {
+		if (Is.arrayValue(resources)) {
+			for (let i = 0; i < resources.length; i++) {
+				const id = this.getResourceId(resources[i]);
+				if (Is.empty(id)) {
+					throw new GeneralError(this.CLASS_NAME, "resourceIdMissing", { index: i });
+				}
+			}
+		}
+
 		const active = vertex.resources?.filter(r => Is.empty(r.dateDeleted)) ?? [];
 
 		// The active resources that are not in the update list should be marked as deleted.
 		if (Is.arrayValue(active)) {
 			for (const resource of active) {
-				if (!resources?.find(a => a.id === resource.id)) {
+				if (!resources?.find(a => this.getResourceId(a) === this.getResourceId(resource))) {
 					resource.dateDeleted = context.now;
 				}
 			}
@@ -787,16 +807,15 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		context: IAuditableItemGraphServiceContext,
 		vertex: AuditableItemGraphVertex,
 		resource: {
-			id: string;
+			id?: string;
 			resourceObject?: IJsonLdNodeObject;
 		}
 	): Promise<void> {
 		Guards.object(this.CLASS_NAME, nameof(resource), resource);
-		Guards.stringValue(this.CLASS_NAME, nameof(resource.id), resource.id);
 
 		if (Is.object(resource.resourceObject)) {
 			const validationFailures: IValidationFailure[] = [];
-			await JsonLdHelper.validate(resource.resourceObject, validationFailures);
+			await JsonLdHelper.validate(resource, validationFailures);
 			Validation.asValidationError(
 				this.CLASS_NAME,
 				nameof(resource.resourceObject),
@@ -805,7 +824,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		}
 
 		// Try to find an existing resource with the same id.
-		const existing = vertex.resources?.find(r => r.id === resource.id);
+		const existing = vertex.resources?.find(
+			r => this.getResourceId(r) === this.getResourceId(resource)
+		);
 
 		if (Is.empty(existing) || !Is.empty(existing?.dateDeleted)) {
 			// Did not find a matching item, or found one which is deleted.
@@ -838,7 +859,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		edges?: {
 			id: string;
 			edgeRelationship: string;
-			edgeObject?: IJsonLdNodeObject;
+			annotationObject?: IJsonLdNodeObject;
 		}[]
 	): Promise<void> {
 		const active = vertex.edges?.filter(e => Is.empty(e.dateDeleted)) ?? [];
@@ -872,7 +893,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		edge: {
 			id: string;
 			edgeRelationship: string;
-			edgeObject?: IJsonLdNodeObject;
+			annotationObject?: IJsonLdNodeObject;
 		}
 	): Promise<void> {
 		Guards.object(this.CLASS_NAME, nameof(edge), edge);
@@ -889,10 +910,14 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				}
 			});
 		}
-		if (Is.object(edge.edgeObject)) {
-			await JsonLdHelper.validate(edge.edgeObject, validationFailures);
+		if (Is.object(edge.annotationObject)) {
+			await JsonLdHelper.validate(edge.annotationObject, validationFailures);
 		}
-		Validation.asValidationError(this.CLASS_NAME, nameof(edge.edgeObject), validationFailures);
+		Validation.asValidationError(
+			this.CLASS_NAME,
+			nameof(edge.annotationObject),
+			validationFailures
+		);
 
 		// Try to find an existing edge with the same id.
 		const existing = vertex.edges?.find(r => r.id === edge.id);
@@ -904,19 +929,19 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			const model: AuditableItemGraphEdge = {
 				id: edge.id,
 				dateCreated: context.now,
-				edgeObject: edge.edgeObject,
+				annotationObject: edge.annotationObject,
 				edgeRelationship: edge.edgeRelationship
 			};
 
 			vertex.edges.push(model);
 		} else if (
 			existing.edgeRelationship !== edge.edgeRelationship ||
-			!ObjectHelper.equal(existing.edgeObject, edge.edgeObject, false)
+			!ObjectHelper.equal(existing.annotationObject, edge.annotationObject, false)
 		) {
-			// Existing resource found, update the edgeObject.
+			// Existing resource found, update the annotationObject.
 			existing.dateModified = context.now;
 			existing.edgeRelationship = edge.edgeRelationship;
-			existing.edgeObject = edge.edgeObject;
+			existing.annotationObject = edge.annotationObject;
 		}
 	}
 
@@ -1054,5 +1079,22 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			verified,
 			changesets
 		};
+	}
+
+	/**
+	 * Get the resource id from a resource object.
+	 * @param resource The resource.
+	 * @param resource.id The id of the resource.
+	 * @param resource.resourceObject The resource object.
+	 * @returns The resource id if it can find one.
+	 */
+	private getResourceId(resource: {
+		id?: string;
+		resourceObject?: IJsonLdNodeObject;
+	}): string | undefined {
+		return (
+			resource.id ??
+			ObjectHelper.extractProperty<string>(resource.resourceObject, ["id", "@id"], false)
+		);
 	}
 }

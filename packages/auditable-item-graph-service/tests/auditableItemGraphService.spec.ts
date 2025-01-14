@@ -202,7 +202,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "JivCShtIyJ6WNpy7AsSZ0mwu84TZ6FljBFpzinTyo2A=",
+			proofObjectHash: "oUHhd2GCsVcdxJ4ockuxaLg7sC+s5bh6hwX8IOWfDe4=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -212,7 +212,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"4r7eyJcxvR32qhVZDqHtV1rhBGAtpDFWUJR4fh2FP1616Da2uBawdtCSfpKbsDAuYiZxgn8n2vBL3uNndJkqSCeL",
+					"4p5uf9Q8BacXJEMnGwjT6UYRUkX9HzY4tGfdT6Y1xgtaPQUwdNy7CumvFo9VMXCYkZVi86XbNNApBsPrTr8DAtJx",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -301,7 +301,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "K+dsykb0u3/40N/Vhsu3cHxYU90hWZmkh/I5IVw4ymw=",
+			proofObjectHash: "MLCqfVryT5zGNItNRUD9+ZdSoWWFqcDcf0425F1P+ek=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -311,7 +311,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"dyLzdxRDwb7pTVPnk5xGE1VvdVqhXkzf2ez9GTAvLbAM4UFDN3ja9xSXgNahBzWE3j5DQ2tTQtsUo22pR25J3S8",
+					"3WJnKZcAKG1nb3u9WSwUhDiMmCFs7sWhcJChn1eA7Qt79XhncyHWxjnFmPo8RAxgpKwzgSqRhv64V7ELRuENG9zu",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -351,7 +351,7 @@ describe("AuditableItemGraphService", () => {
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
-			vertexObject: {
+			annotationObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: {
@@ -378,7 +378,7 @@ describe("AuditableItemGraphService", () => {
 				patches: [
 					{
 						op: "add",
-						path: "/vertexObject",
+						path: "/annotationObject",
 						value: {
 							"@context": "https://www.w3.org/ns/activitystreams",
 							type: "Create",
@@ -420,7 +420,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "L5BTYnOExVqifeARZB+puXEVw14dSSoslAG+Vv3BYeM=",
+			proofObjectHash: "7Pf8grdhkbXYTZCylFzdhvvPvCN4nz4/OmAs+yTCTFI=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -430,7 +430,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"3uwDhqj7hwj1qF6w7FFrMyNftXj5QRWxegXDsmEX28mfcvFoeXWVJdRqZWEM8cabrCSLs2RPuHrQj4E2hVjQsAi2",
+					"2UMcomEtnezeGu3bymwfNA5rPaTAgRJaWRCUfw2ZGALTyLF4ruU5KvvXW85yYcf5sNbXFzq6psG1jm1L4nXeQWRR",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -468,14 +468,14 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/immutable-proof/",
-				"https://schema.org/"
+				"https://schema.org"
 			],
 			type: "AuditableItemGraphVertex",
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
-			vertexObject: {
+			annotationObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: {
@@ -538,14 +538,14 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/immutable-proof/",
-				"https://schema.org/"
+				"https://schema.org"
 			],
 			type: "AuditableItemGraphVertex",
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
-			vertexObject: {
+			annotationObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
@@ -578,7 +578,7 @@ describe("AuditableItemGraphService", () => {
 						{
 							type: "AuditableItemGraphPatchOperation",
 							patchOperation: "add",
-							patchPath: "/vertexObject",
+							patchPath: "/annotationObject",
 							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								type: "Create",
@@ -613,7 +613,7 @@ describe("AuditableItemGraphService", () => {
 				patches: [
 					{
 						op: "add",
-						path: "/vertexObject",
+						path: "/annotationObject",
 						value: {
 							"@context": "https://www.w3.org/ns/activitystreams",
 							type: "Create",
@@ -654,7 +654,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "egal2NStxgk8OwxLOwxLVF8zL+DYM+sVELYcBNG4wQw=",
+			proofObjectHash: "meJxRYsSeR8ZiRqLemmGeenbcBVjGKwoPG1aVV2DfF8=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -664,7 +664,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"5Zxj4REVPNtVe6ykAwKZBQpLXcFEbU3koGwKr1Awm85dQaPiRYJF676UwLDAGX3w2xEnZGasqx8FcHpkgDSgXxh1",
+					"3tF8h6GsfJ3mbo5suhH55iAoJKzmEiVQKgZQn6sDxvXb2izZBgw4P7dwVaBstGBrfPV3yu3bBjhkLH1BCdjfr6eg",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -708,14 +708,14 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/immutable-proof/",
-				"https://schema.org/"
+				"https://schema.org"
 			],
 			type: "AuditableItemGraphVertex",
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
-			vertexObject: {
+			annotationObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
@@ -738,7 +738,7 @@ describe("AuditableItemGraphService", () => {
 						{
 							type: "AuditableItemGraphPatchOperation",
 							patchOperation: "add",
-							patchPath: "/vertexObject",
+							patchPath: "/annotationObject",
 							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								type: "Create",
@@ -777,7 +777,7 @@ describe("AuditableItemGraphService", () => {
 				patches: [
 					{
 						op: "add",
-						path: "/vertexObject",
+						path: "/annotationObject",
 						value: {
 							"@context": "https://www.w3.org/ns/activitystreams",
 							type: "Create",
@@ -833,7 +833,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "tM+POHEonArBnubRWqCtR5jaVstNNpeusrLcOwrLZJo=",
+			proofObjectHash: "t/wjnkUvAIzx4i5uZfgIuYJOd2cZ/i9Yu/6WdvmoJLk=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -843,7 +843,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"LvqwM5PnrNwmArKcpRVEBBY12PAU3GaKRioYpZA88tfVz5NfycBeLc3dDHVWawawt4rFoaoUPU3hxt7EnpjvGT2",
+					"YF5mkAyu8KquPBXbSfMg3YzRhphiFG2A7MdE8fgc7NwGXM9MUS2fUJbF7VVm5fxSWczMU8Lq7gSKmKxS8AdCsPh",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -908,7 +908,7 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/immutable-proof/",
-				"https://schema.org/"
+				"https://schema.org"
 			],
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
@@ -929,7 +929,7 @@ describe("AuditableItemGraphService", () => {
 						{
 							type: "AuditableItemGraphPatchOperation",
 							patchOperation: "add",
-							patchPath: "/vertexObject",
+							patchPath: "/annotationObject",
 							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								type: "Create",
@@ -953,7 +953,7 @@ describe("AuditableItemGraphService", () => {
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				}
 			],
-			vertexObject: {
+			annotationObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
@@ -977,7 +977,7 @@ describe("AuditableItemGraphService", () => {
 				patches: [
 					{
 						op: "add",
-						path: "/vertexObject",
+						path: "/annotationObject",
 						value: {
 							"@context": "https://www.w3.org/ns/activitystreams",
 							type: "Create",
@@ -1059,7 +1059,7 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/immutable-proof/",
-				"https://schema.org/"
+				"https://schema.org"
 			],
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
@@ -1084,7 +1084,7 @@ describe("AuditableItemGraphService", () => {
 						{
 							type: "AuditableItemGraphPatchOperation",
 							patchOperation: "add",
-							patchPath: "/vertexObject",
+							patchPath: "/annotationObject",
 							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								type: "Create",
@@ -1140,7 +1140,7 @@ describe("AuditableItemGraphService", () => {
 			nodeIdentity:
 				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			verified: true,
-			vertexObject: {
+			annotationObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
@@ -1160,7 +1160,7 @@ describe("AuditableItemGraphService", () => {
 				patches: [
 					{
 						op: "add",
-						path: "/vertexObject",
+						path: "/annotationObject",
 						value: {
 							"@context": "https://www.w3.org/ns/activitystreams",
 							type: "Create",
@@ -1218,7 +1218,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "tM+POHEonArBnubRWqCtR5jaVstNNpeusrLcOwrLZJo=",
+			proofObjectHash: "t/wjnkUvAIzx4i5uZfgIuYJOd2cZ/i9Yu/6WdvmoJLk=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -1228,7 +1228,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"LvqwM5PnrNwmArKcpRVEBBY12PAU3GaKRioYpZA88tfVz5NfycBeLc3dDHVWawawt4rFoaoUPU3hxt7EnpjvGT2",
+					"YF5mkAyu8KquPBXbSfMg3YzRhphiFG2A7MdE8fgc7NwGXM9MUS2fUJbF7VVm5fxSWczMU8Lq7gSKmKxS8AdCsPh",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1243,7 +1243,7 @@ describe("AuditableItemGraphService", () => {
 				"https://w3id.org/security/data-integrity/v2"
 			],
 			type: "ImmutableProof",
-			proofObjectHash: "Ht5r435KpM36A+zGeyWK1d5/ZiSsfhVyfKVSPF6XPns=",
+			proofObjectHash: "MmpS4LawqoKu2aHCiWwelba6dDGtaNANnSYN7fUicwc=",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
@@ -1251,7 +1251,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"5CVrwpZ3SF4CLYijJCcLpCG4xJoqo1ZHsAEJNEDCLjWwSqom8KT95U7BwPSCZkEpRJohNcuihL9AFqBbVQBJEjuz",
+					"2rUcWZNHx4FLe5xTWXSGSRrDosWat8w3ambPZPeuRtPS4TwYv1G2HSg6ZbMQwV4ncF9c3huYSXvsRCn6fHkD6Fao",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1317,7 +1317,7 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/immutable-proof/",
-				"https://schema.org/"
+				"https://schema.org"
 			],
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
@@ -1338,7 +1338,7 @@ describe("AuditableItemGraphService", () => {
 						{
 							type: "AuditableItemGraphPatchOperation",
 							patchOperation: "add",
-							patchPath: "/vertexObject",
+							patchPath: "/annotationObject",
 							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								type: "Create",
@@ -1368,7 +1368,7 @@ describe("AuditableItemGraphService", () => {
 						{
 							type: "AuditableItemGraphPatchOperation",
 							patchOperation: "replace",
-							patchPath: "/vertexObject/object/content",
+							patchPath: "/annotationObject/object/content",
 							patchValue: "This is a simple note 2"
 						}
 					],
@@ -1377,7 +1377,7 @@ describe("AuditableItemGraphService", () => {
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				}
 			],
-			vertexObject: {
+			annotationObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
@@ -1401,7 +1401,7 @@ describe("AuditableItemGraphService", () => {
 				patches: [
 					{
 						op: "add",
-						path: "/vertexObject",
+						path: "/annotationObject",
 						value: {
 							"@context": "https://www.w3.org/ns/activitystreams",
 							type: "Create",
@@ -1427,7 +1427,11 @@ describe("AuditableItemGraphService", () => {
 				userIdentity:
 					"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 				patches: [
-					{ op: "replace", path: "/vertexObject/object/content", value: "This is a simple note 2" }
+					{
+						op: "replace",
+						path: "/annotationObject/object/content",
+						value: "This is a simple note 2"
+					}
 				]
 			}
 		]);
@@ -1454,7 +1458,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "tM+POHEonArBnubRWqCtR5jaVstNNpeusrLcOwrLZJo=",
+			proofObjectHash: "t/wjnkUvAIzx4i5uZfgIuYJOd2cZ/i9Yu/6WdvmoJLk=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -1464,7 +1468,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"LvqwM5PnrNwmArKcpRVEBBY12PAU3GaKRioYpZA88tfVz5NfycBeLc3dDHVWawawt4rFoaoUPU3hxt7EnpjvGT2",
+					"YF5mkAyu8KquPBXbSfMg3YzRhphiFG2A7MdE8fgc7NwGXM9MUS2fUJbF7VVm5fxSWczMU8Lq7gSKmKxS8AdCsPh",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1479,7 +1483,7 @@ describe("AuditableItemGraphService", () => {
 				"https://w3id.org/security/data-integrity/v2"
 			],
 			type: "ImmutableProof",
-			proofObjectHash: "QevEnGMXvRz2vZ0Idp0os43kci39nElkjiSZAK1de2E=",
+			proofObjectHash: "WdCw1L0yufQ5ZOo+/Ja5Zw4/F9erNtqlrH50LmQRCrU=",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
@@ -1487,7 +1491,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"5xK2qhd9Rc2LGzhczSdtfzyzCpV9mcHVRwMXmrHucezYcU6s9DVa934Y488dF5wa72ChztsYMz3GEg9cdEx35YQU",
+					"DJdMMp7CjfzRzB8oEtsNT1Yyz8QDSkf6RdrpCvJrcTrxNvYYEFN6Ano71majpCBocNEN12hDUY3LZEPC8tPxJCN",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1622,7 +1626,7 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/immutable-proof/",
-				"https://schema.org/"
+				"https://schema.org"
 			],
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
@@ -1643,7 +1647,7 @@ describe("AuditableItemGraphService", () => {
 						{
 							type: "AuditableItemGraphPatchOperation",
 							patchOperation: "add",
-							patchPath: "/vertexObject",
+							patchPath: "/annotationObject",
 							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								type: "Create",
@@ -1702,7 +1706,7 @@ describe("AuditableItemGraphService", () => {
 						{
 							type: "AuditableItemGraphPatchOperation",
 							patchOperation: "replace",
-							patchPath: "/vertexObject/object/content",
+							patchPath: "/annotationObject/object/content",
 							patchValue: "This is a simple note 2"
 						},
 						{
@@ -1763,7 +1767,7 @@ describe("AuditableItemGraphService", () => {
 					}
 				}
 			],
-			vertexObject: {
+			annotationObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
@@ -1786,7 +1790,7 @@ describe("AuditableItemGraphService", () => {
 				patches: [
 					{
 						op: "add",
-						path: "/vertexObject",
+						path: "/annotationObject",
 						value: {
 							"@context": "https://www.w3.org/ns/activitystreams",
 							type: "Create",
@@ -1840,7 +1844,11 @@ describe("AuditableItemGraphService", () => {
 				userIdentity:
 					"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 				patches: [
-					{ op: "replace", path: "/vertexObject/object/content", value: "This is a simple note 2" },
+					{
+						op: "replace",
+						path: "/annotationObject/object/content",
+						value: "This is a simple note 2"
+					},
 					{ op: "add", path: "/resources/0/dateModified", value: "2024-08-22T11:56:56.272Z" },
 					{
 						op: "replace",
@@ -1879,7 +1887,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "d5Xueg5A5hOqQau7oKrWjPfrTtBVi04T84CyO/7rmpw=",
+			proofObjectHash: "qmn0O5zxzV/LQuVAQCUPYvxluue+8WKrGjKpLhOV9n4=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -1889,7 +1897,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"w9XUEiMosC6JmYyKz1vDSLtuWxeZuUHuzDvSsGGREo27DcpFUje2o6u7vS9cbpYiKdgemBN5zL4Yvhb8raVqKq4",
+					"3KPUzLxaAQcVmb4HmiLCP1xDmwr76eCAuVjVGM4H25T4UoUPR5daEnPcDVB2tPW7hdvTUpFGTWzqruCgiPWvBYam",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1904,7 +1912,7 @@ describe("AuditableItemGraphService", () => {
 				"https://w3id.org/security/data-integrity/v2"
 			],
 			type: "ImmutableProof",
-			proofObjectHash: "x4oG+eIfYP5KqmKEcD6p55MKTSprHS0oLMvHuJXVLlw=",
+			proofObjectHash: "HAwIjoJ/d3ooMzKZavJk+xwUhjwyNJIk8f0YDxm/nBU=",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
@@ -1912,7 +1920,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"5G9oUCw4Nkb1p3m2amhzyXZjvnvHNXumPXP4mpUXAxDELY3jxuMx7b6TwAqVYrWpRCx3hNfQDgw4mT5jnH2okcBU",
+					"2D2WHb8jK69XF9GVXRh55Y4r5966QS3EL7UmWDEhgtR4JFU97PR93D3FArzwDvDggS3GJNtTCfs9hDvodoxQJ6Fh",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1929,7 +1937,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "edge1",
 					edgeRelationship: "friend",
-					edgeObject: {
+					annotationObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: {
@@ -1958,7 +1966,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "edge1",
 					edgeRelationship: "frenemy",
-					edgeObject: {
+					annotationObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: {
@@ -1989,7 +1997,7 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/immutable-proof/",
-				"https://schema.org/"
+				"https://schema.org"
 			],
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
@@ -2010,7 +2018,7 @@ describe("AuditableItemGraphService", () => {
 							patchValue: {
 								id: "edge1",
 								dateCreated: "2024-08-22T11:55:16.271Z",
-								edgeObject: {
+								annotationObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
 									type: "Create",
 									actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
@@ -2038,7 +2046,7 @@ describe("AuditableItemGraphService", () => {
 						{
 							type: "AuditableItemGraphPatchOperation",
 							patchOperation: "replace",
-							patchPath: "/edges/0/edgeObject/object/content",
+							patchPath: "/edges/0/annotationObject/object/content",
 							patchValue: "This is a simple note 2"
 						},
 						{
@@ -2059,7 +2067,7 @@ describe("AuditableItemGraphService", () => {
 					type: "AuditableItemGraphEdge",
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
-					edgeObject: {
+					annotationObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
@@ -2091,7 +2099,7 @@ describe("AuditableItemGraphService", () => {
 							{
 								id: "edge1",
 								dateCreated: "2024-08-22T11:55:16.271Z",
-								edgeObject: {
+								annotationObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
 									type: "Create",
 									actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
@@ -2114,7 +2122,7 @@ describe("AuditableItemGraphService", () => {
 					{ op: "add", path: "/edges/0/dateModified", value: "2024-08-22T11:56:56.272Z" },
 					{
 						op: "replace",
-						path: "/edges/0/edgeObject/object/content",
+						path: "/edges/0/annotationObject/object/content",
 						value: "This is a simple note 2"
 					},
 					{ op: "replace", path: "/edges/0/edgeRelationship", value: "frenemy" }
@@ -2143,7 +2151,7 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "foo123",
-					aliasObject: {
+					annotationObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: {
@@ -2160,7 +2168,7 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					id: "bar456",
-					aliasObject: {
+					annotationObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: {
@@ -2216,7 +2224,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "edge1",
 					edgeRelationship: "friend",
-					edgeObject: {
+					annotationObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: {
@@ -2234,7 +2242,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "edge2",
 					edgeRelationship: "enemy",
-					edgeObject: {
+					annotationObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: {
@@ -2273,7 +2281,7 @@ describe("AuditableItemGraphService", () => {
 			[
 				{
 					id: "foo123",
-					aliasObject: {
+					annotationObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: {
@@ -2290,7 +2298,7 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					id: "bar456",
-					aliasObject: {
+					annotationObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: {
@@ -2346,7 +2354,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "edge1",
 					edgeRelationship: "friend",
-					edgeObject: {
+					annotationObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: {
@@ -2364,7 +2372,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "edge2",
 					edgeRelationship: "enemy",
-					edgeObject: {
+					annotationObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: {
@@ -2395,7 +2403,7 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/immutable-proof/",
-				"https://schema.org/"
+				"https://schema.org"
 			],
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
@@ -2407,7 +2415,7 @@ describe("AuditableItemGraphService", () => {
 					type: "AuditableItemGraphAlias",
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
-					aliasObject: {
+					annotationObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
@@ -2420,7 +2428,7 @@ describe("AuditableItemGraphService", () => {
 					type: "AuditableItemGraphAlias",
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
-					aliasObject: {
+					annotationObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
@@ -2440,7 +2448,7 @@ describe("AuditableItemGraphService", () => {
 						{
 							type: "AuditableItemGraphPatchOperation",
 							patchOperation: "add",
-							patchPath: "/vertexObject",
+							patchPath: "/annotationObject",
 							patchValue: {
 								"@context": "https://www.w3.org/ns/activitystreams",
 								type: "Create",
@@ -2457,7 +2465,7 @@ describe("AuditableItemGraphService", () => {
 								{
 									id: "foo123",
 									dateCreated: "2024-08-22T11:55:16.271Z",
-									aliasObject: {
+									annotationObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										type: "Create",
 										actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
@@ -2468,7 +2476,7 @@ describe("AuditableItemGraphService", () => {
 								{
 									id: "bar456",
 									dateCreated: "2024-08-22T11:55:16.271Z",
-									aliasObject: {
+									annotationObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										type: "Create",
 										actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
@@ -2515,7 +2523,7 @@ describe("AuditableItemGraphService", () => {
 								{
 									id: "edge1",
 									dateCreated: "2024-08-22T11:55:16.271Z",
-									edgeObject: {
+									annotationObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										type: "Create",
 										actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
@@ -2527,7 +2535,7 @@ describe("AuditableItemGraphService", () => {
 								{
 									id: "edge2",
 									dateCreated: "2024-08-22T11:55:16.271Z",
-									edgeObject: {
+									annotationObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										type: "Create",
 										actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
@@ -2550,7 +2558,7 @@ describe("AuditableItemGraphService", () => {
 						{
 							type: "AuditableItemGraphPatchOperation",
 							patchOperation: "replace",
-							patchPath: "/vertexObject/object/content",
+							patchPath: "/annotationObject/object/content",
 							patchValue: "This is a simple note 2"
 						},
 						{
@@ -2562,7 +2570,7 @@ describe("AuditableItemGraphService", () => {
 						{
 							type: "AuditableItemGraphPatchOperation",
 							patchOperation: "replace",
-							patchPath: "/aliases/0/aliasObject/object/content",
+							patchPath: "/aliases/0/annotationObject/object/content",
 							patchValue: "This is a simple note alias 10"
 						},
 						{
@@ -2574,7 +2582,7 @@ describe("AuditableItemGraphService", () => {
 						{
 							type: "AuditableItemGraphPatchOperation",
 							patchOperation: "replace",
-							patchPath: "/aliases/1/aliasObject/object/content",
+							patchPath: "/aliases/1/annotationObject/object/content",
 							patchValue: "This is a simple note alias 20"
 						},
 						{
@@ -2610,7 +2618,7 @@ describe("AuditableItemGraphService", () => {
 						{
 							type: "AuditableItemGraphPatchOperation",
 							patchOperation: "replace",
-							patchPath: "/edges/0/edgeObject/object/content",
+							patchPath: "/edges/0/annotationObject/object/content",
 							patchValue: "This is a simple note edge 10"
 						},
 						{
@@ -2622,7 +2630,7 @@ describe("AuditableItemGraphService", () => {
 						{
 							type: "AuditableItemGraphPatchOperation",
 							patchOperation: "replace",
-							patchPath: "/edges/1/edgeObject/object/content",
+							patchPath: "/edges/1/annotationObject/object/content",
 							patchValue: "This is a simple note edge 20"
 						}
 					],
@@ -2637,7 +2645,7 @@ describe("AuditableItemGraphService", () => {
 					type: "AuditableItemGraphEdge",
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
-					edgeObject: {
+					annotationObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
@@ -2651,7 +2659,7 @@ describe("AuditableItemGraphService", () => {
 					type: "AuditableItemGraphEdge",
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
-					edgeObject: {
+					annotationObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
@@ -2689,7 +2697,7 @@ describe("AuditableItemGraphService", () => {
 					}
 				}
 			],
-			vertexObject: {
+			annotationObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
@@ -2712,7 +2720,7 @@ describe("AuditableItemGraphService", () => {
 				patches: [
 					{
 						op: "add",
-						path: "/vertexObject",
+						path: "/annotationObject",
 						value: {
 							"@context": "https://www.w3.org/ns/activitystreams",
 							type: "Create",
@@ -2728,7 +2736,7 @@ describe("AuditableItemGraphService", () => {
 							{
 								id: "foo123",
 								dateCreated: "2024-08-22T11:55:16.271Z",
-								aliasObject: {
+								annotationObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
 									type: "Create",
 									actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
@@ -2739,7 +2747,7 @@ describe("AuditableItemGraphService", () => {
 							{
 								id: "bar456",
 								dateCreated: "2024-08-22T11:55:16.271Z",
-								aliasObject: {
+								annotationObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
 									type: "Create",
 									actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
@@ -2784,7 +2792,7 @@ describe("AuditableItemGraphService", () => {
 							{
 								id: "edge1",
 								dateCreated: "2024-08-22T11:55:16.271Z",
-								edgeObject: {
+								annotationObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
 									type: "Create",
 									actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
@@ -2796,7 +2804,7 @@ describe("AuditableItemGraphService", () => {
 							{
 								id: "edge2",
 								dateCreated: "2024-08-22T11:55:16.271Z",
-								edgeObject: {
+								annotationObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
 									type: "Create",
 									actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
@@ -2816,17 +2824,21 @@ describe("AuditableItemGraphService", () => {
 				userIdentity:
 					"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 				patches: [
-					{ op: "replace", path: "/vertexObject/object/content", value: "This is a simple note 2" },
+					{
+						op: "replace",
+						path: "/annotationObject/object/content",
+						value: "This is a simple note 2"
+					},
 					{ op: "add", path: "/aliases/0/dateModified", value: "2024-08-22T11:56:56.272Z" },
 					{
 						op: "replace",
-						path: "/aliases/0/aliasObject/object/content",
+						path: "/aliases/0/annotationObject/object/content",
 						value: "This is a simple note alias 10"
 					},
 					{ op: "add", path: "/aliases/1/dateModified", value: "2024-08-22T11:56:56.272Z" },
 					{
 						op: "replace",
-						path: "/aliases/1/aliasObject/object/content",
+						path: "/aliases/1/annotationObject/object/content",
 						value: "This is a simple note alias 20"
 					},
 					{ op: "add", path: "/resources/0/dateModified", value: "2024-08-22T11:56:56.272Z" },
@@ -2844,13 +2856,13 @@ describe("AuditableItemGraphService", () => {
 					{ op: "add", path: "/edges/0/dateModified", value: "2024-08-22T11:56:56.272Z" },
 					{
 						op: "replace",
-						path: "/edges/0/edgeObject/object/content",
+						path: "/edges/0/annotationObject/object/content",
 						value: "This is a simple note edge 10"
 					},
 					{ op: "add", path: "/edges/1/dateModified", value: "2024-08-22T11:56:56.272Z" },
 					{
 						op: "replace",
-						path: "/edges/1/edgeObject/object/content",
+						path: "/edges/1/annotationObject/object/content",
 						value: "This is a simple note edge 20"
 					}
 				]
@@ -2879,7 +2891,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "SRmgnhw42SxA29tj/cTxPqs3luRSj3b4RxjNY3mOQxI=",
+			proofObjectHash: "9CV9Kyr/ayoVvWZhmWZtw0nf1E6ODrZ8zvwpaDeT/wE=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -2889,7 +2901,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"2z8cPYNZqa9oYi2Gk6SCBoNu5aQZbNZzhzp6bydkoNz4prHaujk2mrk5E5QbdyDCMGezKZUKGU9kahiju5yAmSqy",
+					"3SPaQiGcFsn9EcbsXH7vRsBWedixJ7mBzPU82shVRBCsLjrNBrakcwAwRsg81inacuaWF4cG3W2ChwmmBQYcPvu6",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -2904,7 +2916,7 @@ describe("AuditableItemGraphService", () => {
 				"https://w3id.org/security/data-integrity/v2"
 			],
 			type: "ImmutableProof",
-			proofObjectHash: "Linuc1erqf9KgMyj8TFKq5exEmr81U6Q2gi0DmFe6Rg=",
+			proofObjectHash: "7+v3ST9mIClbtmletkfCsr/pIHEBDtKfUOH8iyC6N8Y=",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
@@ -2912,7 +2924,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"VewSHkWPkCjwGUg22sCSmm1i1d8TK26vGFszRzJ4EC7GvRUefpn5bPJASYYj636vVo4yPCWUCuTn2RLHiLYPXBA",
+					"2NzvVDinNunYNW1o6GnY7bwqPiGuVzbWGLaGZmkJkahf4v319LcEA8JHAbfmdjuRjA6vm9oBgxp2jprKbRDECKeM",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -2946,7 +2958,7 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/immutable-proof/",
-				"https://schema.org/"
+				"https://schema.org"
 			],
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
@@ -3011,7 +3023,7 @@ describe("AuditableItemGraphService", () => {
 		const results = await service.query({ id: "0" });
 
 		expect(results).toMatchObject({
-			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
+			"@context": ["https://schema.twindev.org/aig/", "https://schema.org"],
 			type: "AuditableItemGraphVertexList",
 			vertices: [
 				{
@@ -3050,7 +3062,7 @@ describe("AuditableItemGraphService", () => {
 
 		const results = await service.query({ id: "foo" });
 		expect(results).toMatchObject({
-			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
+			"@context": ["https://schema.twindev.org/aig/", "https://schema.org"],
 			type: "AuditableItemGraphVertexList",
 			vertices: [
 				{
@@ -3113,7 +3125,7 @@ describe("AuditableItemGraphService", () => {
 
 		const results = await service.query({ id: "5" });
 		expect(results).toEqual({
-			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
+			"@context": ["https://schema.twindev.org/aig/", "https://schema.org"],
 			type: "AuditableItemGraphVertexList",
 			vertices: [
 				{
@@ -3156,7 +3168,7 @@ describe("AuditableItemGraphService", () => {
 
 		const results = await service.query({ id: "5", idMode: "id" });
 		expect(results).toEqual({
-			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
+			"@context": ["https://schema.twindev.org/aig/", "https://schema.org"],
 			type: "AuditableItemGraphVertexList",
 			vertices: [
 				{
@@ -3192,7 +3204,7 @@ describe("AuditableItemGraphService", () => {
 
 		const results = await service.query({ id: "4", idMode: "alias" });
 		expect(results).toEqual({
-			"@context": ["https://schema.twindev.org/aig/", "https://schema.org/"],
+			"@context": ["https://schema.twindev.org/aig/", "https://schema.org"],
 			type: "AuditableItemGraphVertexList",
 			vertices: [
 				{

@@ -16,14 +16,19 @@ export interface IAuditableItemGraphAlias extends IAuditableItemGraphAuditedElem
 		| [typeof AuditableItemGraphTypes.ContextRoot, ...string[]];
 
 	/**
+	 * The id of the element.
+	 */
+	id: string;
+
+	/**
 	 * JSON-LD Type.
 	 */
 	type: typeof AuditableItemGraphTypes.Alias;
 
 	/**
-	 * The JSON-LD object for the alias.
+	 * The JSON-LD annotation object for the alias.
 	 */
-	aliasObject?: IJsonLdNodeObject;
+	annotationObject?: IJsonLdNodeObject;
 
 	/**
 	 * The format of the id in the alias.

@@ -8,18 +8,6 @@ Interface describing an edge between two vertices in an auditable item graph.
 
 ## Properties
 
-### id
-
-> **id**: `string`
-
-The id of the element.
-
-#### Inherited from
-
-[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`id`](IAuditableItemGraphAuditedElement.md#id)
-
-***
-
 ### dateCreated
 
 > **dateCreated**: `string`
@@ -64,6 +52,18 @@ JSON-LD Context.
 
 ***
 
+### id
+
+> **id**: `string`
+
+The id of the element.
+
+#### Overrides
+
+[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`id`](IAuditableItemGraphAuditedElement.md#id)
+
+***
+
 ### type
 
 > **type**: `"AuditableItemGraphEdge"`
@@ -72,11 +72,11 @@ JSON-LD Type.
 
 ***
 
-### edgeObject?
+### annotationObject?
 
-> `optional` **edgeObject**: `IJsonLdNodeObject`
+> `optional` **annotationObject**: `IJsonLdNodeObject`
 
-The JSON-LD object for the edge.
+The JSON-LD annotation object for the edge.
 
 ***
 

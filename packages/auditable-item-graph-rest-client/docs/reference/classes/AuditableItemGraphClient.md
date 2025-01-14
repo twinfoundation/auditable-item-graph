@@ -50,17 +50,17 @@ Runtime name for the class.
 
 ### create()
 
-> **create**(`vertexObject`?, `aliases`?, `resources`?, `edges`?): `Promise`\<`string`\>
+> **create**(`annotationObject`?, `aliases`?, `resources`?, `edges`?): `Promise`\<`string`\>
 
 Create a new graph vertex.
 
 #### Parameters
 
-##### vertexObject?
+##### annotationObject?
 
 `IJsonLdNodeObject`
 
-The object for the vertex.
+The annotation object for the vertex.
 
 ##### aliases?
 
@@ -146,7 +146,7 @@ NotFoundError if the vertex is not found.
 
 ### update()
 
-> **update**(`id`, `vertexObject`?, `aliases`?, `resources`?, `edges`?): `Promise`\<`void`\>
+> **update**(`id`, `annotationObject`?, `aliases`?, `resources`?, `edges`?): `Promise`\<`void`\>
 
 Update a graph vertex.
 
@@ -158,11 +158,11 @@ Update a graph vertex.
 
 The id of the vertex to update.
 
-##### vertexObject?
+##### annotationObject?
 
 `IJsonLdNodeObject`
 
-The object for the vertex as JSON-LD.
+The annotation object for the vertex as JSON-LD.
 
 ##### aliases?
 
@@ -196,7 +196,7 @@ Nothing.
 
 ### query()
 
-> **query**(`options`?, `orderBy`?, `orderByDirection`?, `properties`?, `cursor`?, `pageSize`?): `Promise`\<`IAuditableItemGraphVertexList`\>
+> **query**(`options`?, `conditions`?, `orderBy`?, `orderByDirection`?, `properties`?, `cursor`?, `pageSize`?): `Promise`\<`IAuditableItemGraphVertexList`\>
 
 Query the graph for vertices.
 
@@ -217,6 +217,12 @@ The optional id to look for.
 `"both"` \| `"id"` \| `"alias"`
 
 Look in id, alias or both, defaults to both.
+
+##### conditions?
+
+`IComparator`[]
+
+Conditions to use in the query.
 
 ##### orderBy?
 

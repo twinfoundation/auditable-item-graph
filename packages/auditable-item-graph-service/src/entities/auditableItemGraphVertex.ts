@@ -45,7 +45,7 @@ export class AuditableItemGraphVertex {
 	 * Object to associate with the vertex as JSON-LD.
 	 */
 	@property({ type: "object", itemTypeRef: JsonLdTypes.NodeObject })
-	public vertexObject?: IJsonLdNodeObject;
+	public annotationObject?: IJsonLdNodeObject;
 
 	/**
 	 * Alternative aliases that can be used to identify the vertex.

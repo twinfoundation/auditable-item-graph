@@ -42,5 +42,5 @@ export class AuditableItemGraphAlias {
 	 * Object to associate with the alias as JSON-LD.
 	 */
 	@property({ type: "object", itemTypeRef: JsonLdTypes.NodeObject })
-	public aliasObject?: IJsonLdNodeObject;
+	public annotationObject?: IJsonLdNodeObject;
 }

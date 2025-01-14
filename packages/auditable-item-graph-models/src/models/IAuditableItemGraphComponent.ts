@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0.
 import type { IComponent } from "@twin.org/core";
 import type { IJsonLdNodeObject } from "@twin.org/data-json-ld";
-import type { SortDirection } from "@twin.org/entity";
+import type { IComparator, SortDirection } from "@twin.org/entity";
 import type { IAuditableItemGraphVertex } from "./IAuditableItemGraphVertex";
 import type { IAuditableItemGraphVertexList } from "./IAuditableItemGraphVertexList";
 import type { VerifyDepth } from "./verifyDepth";
@@ -13,7 +13,7 @@ import type { VerifyDepth } from "./verifyDepth";
 export interface IAuditableItemGraphComponent extends IComponent {
 	/**
 	 * Create a new graph vertex.
-	 * @param vertexObject The object for the vertex as JSON-LD.
+	 * @param annotationObject The annotation object for the vertex as JSON-LD.
 	 * @param aliases Alternative aliases that can be used to identify the vertex.
 	 * @param resources The resources attached to the vertex.
 	 * @param edges The edges connected to the vertex.
@@ -22,20 +22,20 @@ export interface IAuditableItemGraphComponent extends IComponent {
 	 * @returns The id of the new graph item.
 	 */
 	create(
-		vertexObject?: IJsonLdNodeObject,
+		annotationObject?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
 			aliasFormat?: string;
-			aliasObject?: IJsonLdNodeObject;
+			annotationObject?: IJsonLdNodeObject;
 		}[],
 		resources?: {
-			id: string;
+			id?: string;
 			resourceObject?: IJsonLdNodeObject;
 		}[],
 		edges?: {
 			id: string;
 			edgeRelationship: string;
-			edgeObject?: IJsonLdNodeObject;
+			annotationObject?: IJsonLdNodeObject;
 		}[],
 		userIdentity?: string,
 		nodeIdentity?: string
@@ -44,7 +44,7 @@ export interface IAuditableItemGraphComponent extends IComponent {
 	/**
 	 * Update a graph vertex.
 	 * @param id The id of the vertex to update.
-	 * @param vertexObject The object for the vertex as JSON-LD.
+	 * @param annotationObject The annotation object for the vertex as JSON-LD.
 	 * @param aliases Alternative aliases that can be used to identify the vertex.
 	 * @param resources The resources attached to the vertex.
 	 * @param edges The edges connected to the vertex.
@@ -54,20 +54,20 @@ export interface IAuditableItemGraphComponent extends IComponent {
 	 */
 	update(
 		id: string,
-		vertexObject?: IJsonLdNodeObject,
+		annotationObject?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
 			aliasFormat?: string;
-			aliasObject?: IJsonLdNodeObject;
+			annotationObject?: IJsonLdNodeObject;
 		}[],
 		resources?: {
-			id: string;
+			id?: string;
 			resourceObject?: IJsonLdNodeObject;
 		}[],
 		edges?: {
 			id: string;
 			edgeRelationship: string;
-			edgeObject?: IJsonLdNodeObject;
+			annotationObject?: IJsonLdNodeObject;
 		}[],
 		userIdentity?: string,
 		nodeIdentity?: string
@@ -106,6 +106,7 @@ export interface IAuditableItemGraphComponent extends IComponent {
 	 * @param options The query options.
 	 * @param options.id The optional id to look for.
 	 * @param options.idMode Look in id, alias or both, defaults to both.
+	 * @param conditions Conditions to use in the query.
 	 * @param orderBy The order for the results, defaults to dateCreated.
 	 * @param orderByDirection The direction for the order, defaults to descending.
 	 * @param properties The properties to return, if not provided defaults to id, dateCreated, aliases and object.
@@ -118,6 +119,7 @@ export interface IAuditableItemGraphComponent extends IComponent {
 			id?: string;
 			idMode?: "id" | "alias" | "both";
 		},
+		conditions?: IComparator[],
 		orderBy?: keyof Pick<IAuditableItemGraphVertex, "dateCreated" | "dateModified">,
 		orderByDirection?: SortDirection,
 		properties?: (keyof IAuditableItemGraphVertex)[],

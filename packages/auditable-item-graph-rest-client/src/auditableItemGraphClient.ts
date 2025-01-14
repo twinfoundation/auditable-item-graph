@@ -1,10 +1,11 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import { BaseRestClient } from "@twin.org/api-core";
-import type {
-	IBaseRestClientConfig,
-	ICreatedResponse,
-	INoContentResponse
+import {
+	HttpParameterHelper,
+	type IBaseRestClientConfig,
+	type ICreatedResponse,
+	type INoContentResponse
 } from "@twin.org/api-models";
 import type {
 	IAuditableItemGraphComponent,
@@ -20,7 +21,7 @@ import type {
 } from "@twin.org/auditable-item-graph-models";
 import { Guards, NotSupportedError } from "@twin.org/core";
 import type { IJsonLdNodeObject } from "@twin.org/data-json-ld";
-import type { SortDirection } from "@twin.org/entity";
+import type { IComparator, SortDirection } from "@twin.org/entity";
 import { nameof } from "@twin.org/nameof";
 import { HeaderTypes, MimeTypes } from "@twin.org/web";
 
@@ -46,27 +47,27 @@ export class AuditableItemGraphClient
 
 	/**
 	 * Create a new graph vertex.
-	 * @param vertexObject The object for the vertex.
+	 * @param annotationObject The annotation object for the vertex.
 	 * @param aliases Alternative aliases that can be used to identify the vertex.
 	 * @param resources The resources attached to the vertex.
 	 * @param edges The edges connected to the vertex.
 	 * @returns The id of the new graph item.
 	 */
 	public async create(
-		vertexObject?: IJsonLdNodeObject,
+		annotationObject?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
 			aliasFormat?: string;
-			aliasObject?: IJsonLdNodeObject;
+			annotationObject?: IJsonLdNodeObject;
 		}[],
 		resources?: {
-			id: string;
+			id?: string;
 			resourceObject?: IJsonLdNodeObject;
 		}[],
 		edges?: {
 			id: string;
 			edgeRelationship: string;
-			edgeObject?: IJsonLdNodeObject;
+			annotationObject?: IJsonLdNodeObject;
 		}[]
 	): Promise<string> {
 		const response = await this.fetch<IAuditableItemGraphCreateRequest, ICreatedResponse>(
@@ -74,7 +75,7 @@ export class AuditableItemGraphClient
 			"POST",
 			{
 				body: {
-					vertexObject,
+					annotationObject,
 					aliases,
 					resources,
 					edges
@@ -88,11 +89,11 @@ export class AuditableItemGraphClient
 	/**
 	 * Get a graph vertex.
 	 * @param id The id of the vertex to get.
-	 * @returns The vertex if found.
 	 * @param options Additional options for the get operation.
 	 * @param options.includeDeleted Whether to include deleted/updated aliases, resource, edges, defaults to false.
 	 * @param options.includeChangesets Whether to include the changesets of the vertex, defaults to false.
 	 * @param options.verifySignatureDepth How many signatures to verify, defaults to "none".
+	 * @returns The vertex if found.
 	 * @throws NotFoundError if the vertex is not found.
 	 */
 	public async get(
@@ -128,7 +129,7 @@ export class AuditableItemGraphClient
 	/**
 	 * Update a graph vertex.
 	 * @param id The id of the vertex to update.
-	 * @param vertexObject The object for the vertex as JSON-LD.
+	 * @param annotationObject The annotation object for the vertex as JSON-LD.
 	 * @param aliases Alternative aliases that can be used to identify the vertex.
 	 * @param resources The resources attached to the vertex.
 	 * @param edges The edges connected to the vertex.
@@ -136,20 +137,20 @@ export class AuditableItemGraphClient
 	 */
 	public async update(
 		id: string,
-		vertexObject?: IJsonLdNodeObject,
+		annotationObject?: IJsonLdNodeObject,
 		aliases?: {
 			id: string;
 			aliasFormat?: string;
-			aliasObject?: IJsonLdNodeObject;
+			annotationObject?: IJsonLdNodeObject;
 		}[],
 		resources?: {
-			id: string;
+			id?: string;
 			resourceObject?: IJsonLdNodeObject;
 		}[],
 		edges?: {
 			id: string;
 			edgeRelationship: string;
-			edgeObject?: IJsonLdNodeObject;
+			annotationObject?: IJsonLdNodeObject;
 		}[]
 	): Promise<void> {
 		Guards.stringValue(this.CLASS_NAME, nameof(id), id);
@@ -159,7 +160,7 @@ export class AuditableItemGraphClient
 				id
 			},
 			body: {
-				vertexObject,
+				annotationObject,
 				aliases,
 				resources,
 				edges
@@ -183,6 +184,7 @@ export class AuditableItemGraphClient
 	 * @param options The query options.
 	 * @param options.id The optional id to look for.
 	 * @param options.idMode Look in id, alias or both, defaults to both.
+	 * @param conditions Conditions to use in the query.
 	 * @param orderBy The order for the results, defaults to created.
 	 * @param orderByDirection The direction for the order, defaults to descending.
 	 * @param properties The properties to return, if not provided defaults to id, created, aliases and object.
@@ -195,6 +197,7 @@ export class AuditableItemGraphClient
 			id?: string;
 			idMode?: "id" | "alias" | "both";
 		},
+		conditions?: IComparator[],
 		orderBy?: keyof Pick<IAuditableItemGraphVertex, "dateCreated" | "dateModified">,
 		orderByDirection?: SortDirection,
 		properties?: (keyof IAuditableItemGraphVertex)[],
@@ -211,9 +214,10 @@ export class AuditableItemGraphClient
 			query: {
 				id: options?.id,
 				idMode: options?.idMode,
+				conditions: HttpParameterHelper.objectToString(conditions),
 				orderBy,
 				orderByDirection,
-				properties: properties?.join(","),
+				properties: HttpParameterHelper.arrayToString(properties),
 				cursor,
 				pageSize
 			}

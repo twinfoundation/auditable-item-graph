@@ -1,11 +1,12 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import type {
-	ICreatedResponse,
-	IHttpRequestContext,
-	INoContentResponse,
-	IRestRoute,
-	ITag
+import {
+	HttpParameterHelper,
+	type ICreatedResponse,
+	type IHttpRequestContext,
+	type INoContentResponse,
+	type IRestRoute,
+	type ITag
 } from "@twin.org/api-models";
 import {
 	AuditableItemGraphTypes,
@@ -15,8 +16,7 @@ import {
 	type IAuditableItemGraphGetResponse,
 	type IAuditableItemGraphListRequest,
 	type IAuditableItemGraphListResponse,
-	type IAuditableItemGraphUpdateRequest,
-	type IAuditableItemGraphVertex
+	type IAuditableItemGraphUpdateRequest
 } from "@twin.org/auditable-item-graph-models";
 import { ComponentFactory, Guards } from "@twin.org/core";
 import { SchemaOrgTypes } from "@twin.org/data-schema-org";
@@ -63,7 +63,7 @@ export function generateRestRoutesAuditableItemGraph(
 					id: "auditableItemGraphCreateRequestExample",
 					request: {
 						body: {
-							vertexObject: {
+							annotationObject: {
 								"@context": "http://schema.org/",
 								"@type": "Note",
 								content: "This is a simple note"
@@ -71,7 +71,7 @@ export function generateRestRoutesAuditableItemGraph(
 							aliases: [
 								{
 									id: "bar456",
-									aliasObject: {
+									annotationObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -79,7 +79,7 @@ export function generateRestRoutesAuditableItemGraph(
 								},
 								{
 									id: "foo321",
-									aliasObject: {
+									annotationObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -108,7 +108,7 @@ export function generateRestRoutesAuditableItemGraph(
 								{
 									id: "edge1",
 									edgeRelationship: "frenemy",
-									edgeObject: {
+									annotationObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -117,7 +117,7 @@ export function generateRestRoutesAuditableItemGraph(
 								{
 									id: "edge2",
 									edgeRelationship: "end",
-									edgeObject: {
+									annotationObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -185,7 +185,7 @@ export function generateRestRoutesAuditableItemGraph(
 								id: "aig:1234567890",
 								dateCreated: "2024-08-22T11:55:16.271Z",
 								dateModified: "2024-08-22T11:55:16.271Z",
-								vertexObject: {
+								annotationObject: {
 									"@context": "http://schema.org/",
 									"@type": "Note",
 									content: "This is a simple note"
@@ -219,7 +219,7 @@ export function generateRestRoutesAuditableItemGraph(
 								id: "aig:1234567890",
 								dateCreated: "2024-08-22T11:55:16.271Z",
 								dateModified: "2024-08-22T11:55:16.271Z",
-								vertexObject: {
+								annotationObject: {
 									"@context": "http://schema.org/",
 									"@type": "Note",
 									content: "This is a simple note"
@@ -258,7 +258,7 @@ export function generateRestRoutesAuditableItemGraph(
 							id: "aig:1234567890"
 						},
 						body: {
-							vertexObject: {
+							annotationObject: {
 								"@context": "http://schema.org/",
 								"@type": "Note",
 								content: "This is a simple note"
@@ -266,7 +266,7 @@ export function generateRestRoutesAuditableItemGraph(
 							aliases: [
 								{
 									id: "bar456",
-									aliasObject: {
+									annotationObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -274,7 +274,7 @@ export function generateRestRoutesAuditableItemGraph(
 								},
 								{
 									id: "foo321",
-									aliasObject: {
+									annotationObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -303,7 +303,7 @@ export function generateRestRoutesAuditableItemGraph(
 								{
 									id: "edge1",
 									edgeRelationship: "frenemy",
-									edgeObject: {
+									annotationObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -312,7 +312,7 @@ export function generateRestRoutesAuditableItemGraph(
 								{
 									id: "edge2",
 									edgeRelationship: "end",
-									edgeObject: {
+									annotationObject: {
 										"@context": "http://schema.org/",
 										"@type": "Note",
 										content: "This is a simple note"
@@ -451,7 +451,7 @@ export async function auditableItemGraphCreate(
 
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
 	const id = await component.create(
-		request.body?.vertexObject,
+		request.body?.annotationObject,
 		request.body?.aliases,
 		request.body?.resources,
 		request.body?.edges,
@@ -526,7 +526,7 @@ export async function auditableItemGraphUpdate(
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
 	await component.update(
 		request.pathParams.id,
-		request.body?.vertexObject,
+		request.body?.annotationObject,
 		request.body?.aliases,
 		request.body?.resources,
 		request.body?.edges,
@@ -566,9 +566,10 @@ export async function auditableItemGraphList(
 			id: request.query?.id,
 			idMode: request.query?.idMode
 		},
+		HttpParameterHelper.objectFromString(request.query?.conditions),
 		request.query?.orderBy,
 		request.query?.orderByDirection,
-		request.query?.properties?.split(",") as (keyof IAuditableItemGraphVertex)[],
+		HttpParameterHelper.arrayFromString(request.query?.properties),
 		request.query?.cursor,
 		request.query?.pageSize
 	);

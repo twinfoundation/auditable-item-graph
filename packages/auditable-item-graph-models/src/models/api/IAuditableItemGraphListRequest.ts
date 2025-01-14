@@ -30,6 +30,11 @@ export interface IAuditableItemGraphListRequest {
 		idMode?: "id" | "alias" | "both";
 
 		/**
+		 * The conditions to filter the streams, JSON stringified IComparator[].
+		 */
+		conditions?: string;
+
+		/**
 		 * The order for the results, default to dateCreated.
 		 */
 		orderBy?: keyof Pick<IAuditableItemGraphVertex, "dateCreated" | "dateModified">;
@@ -40,7 +45,7 @@ export interface IAuditableItemGraphListRequest {
 		orderByDirection?: SortDirection;
 
 		/**
-		 * The properties to return as a comma separated list, defaults to "id,dateCreated,aliases,vertexObject".
+		 * The properties to return as a comma separated list, defaults to "id,dateCreated,aliases,annotationObject".
 		 */
 		properties?: string;
 

@@ -11,8 +11,8 @@ export class AuditableItemGraphResource {
 	/**
 	 * The id of the resource.
 	 */
-	@property({ type: "string", isPrimary: true })
-	public id!: string;
+	@property({ type: "string" })
+	public id?: string;
 
 	/**
 	 * The date/time of when the resource was created.

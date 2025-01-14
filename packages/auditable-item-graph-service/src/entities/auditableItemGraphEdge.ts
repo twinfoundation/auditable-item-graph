@@ -42,5 +42,5 @@ export class AuditableItemGraphEdge {
 	 * Object to associate with the edge as JSON-LD.
 	 */
 	@property({ type: "object", itemTypeRef: JsonLdTypes.NodeObject })
-	public edgeObject?: IJsonLdNodeObject;
+	public annotationObject?: IJsonLdNodeObject;
 }

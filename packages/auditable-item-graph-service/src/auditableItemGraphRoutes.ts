@@ -19,8 +19,8 @@ import {
 	type IAuditableItemGraphUpdateRequest
 } from "@twin.org/auditable-item-graph-models";
 import { ComponentFactory, Guards } from "@twin.org/core";
-import { SchemaOrgTypes } from "@twin.org/data-schema-org";
 import { nameof } from "@twin.org/nameof";
+import { SchemaOrgTypes } from "@twin.org/standards-schema-org";
 import { HeaderTypes, HttpStatusCode, MimeTypes } from "@twin.org/web";
 
 /**

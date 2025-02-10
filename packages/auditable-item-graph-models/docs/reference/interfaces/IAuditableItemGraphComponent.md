@@ -136,19 +136,19 @@ The id of the vertex to get.
 
 Additional options for the get operation.
 
-###### includeDeleted
+###### includeDeleted?
 
 `boolean`
 
 Whether to include deleted aliases, resource, edges, defaults to false.
 
-###### includeChangesets
+###### includeChangesets?
 
 `boolean`
 
 Whether to include the changesets of the vertex, defaults to false.
 
-###### verifySignatureDepth
+###### verifySignatureDepth?
 
 [`VerifyDepth`](../type-aliases/VerifyDepth.md)
 
@@ -210,13 +210,13 @@ Query the graph for vertices.
 
 The query options.
 
-###### id
+###### id?
 
 `string`
 
 The optional id to look for.
 
-###### idMode
+###### idMode?
 
 `"both"` \| `"id"` \| `"alias"`
 

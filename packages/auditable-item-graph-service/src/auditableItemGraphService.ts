@@ -31,12 +31,11 @@ import {
 	type IValidationFailure
 } from "@twin.org/core";
 import { JsonLdHelper, JsonLdProcessor, type IJsonLdNodeObject } from "@twin.org/data-json-ld";
-import { SchemaOrgDataTypes, SchemaOrgTypes } from "@twin.org/data-schema-org";
 import {
 	ComparisonOperator,
-	type IComparator,
 	LogicalOperator,
-	SortDirection
+	SortDirection,
+	type IComparator
 } from "@twin.org/entity";
 import {
 	EntityStorageConnectorFactory,
@@ -49,6 +48,7 @@ import {
 	type IImmutableProofComponent
 } from "@twin.org/immutable-proof-models";
 import { nameof } from "@twin.org/nameof";
+import { SchemaOrgDataTypes, SchemaOrgTypes } from "@twin.org/standards-schema-org";
 import type { AuditableItemGraphAlias } from "./entities/auditableItemGraphAlias";
 import type { AuditableItemGraphChangeset } from "./entities/auditableItemGraphChangeset";
 import type { AuditableItemGraphEdge } from "./entities/auditableItemGraphEdge";

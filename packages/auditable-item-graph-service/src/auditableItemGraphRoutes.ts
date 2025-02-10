@@ -64,7 +64,7 @@ export function generateRestRoutesAuditableItemGraph(
 					request: {
 						body: {
 							annotationObject: {
-								"@context": "http://schema.org/",
+								"@context": "https://schema.org",
 								"@type": "Note",
 								content: "This is a simple note"
 							},
@@ -72,7 +72,7 @@ export function generateRestRoutesAuditableItemGraph(
 								{
 									id: "bar456",
 									annotationObject: {
-										"@context": "http://schema.org/",
+										"@context": "https://schema.org",
 										"@type": "Note",
 										content: "This is a simple note"
 									}
@@ -80,7 +80,7 @@ export function generateRestRoutesAuditableItemGraph(
 								{
 									id: "foo321",
 									annotationObject: {
-										"@context": "http://schema.org/",
+										"@context": "https://schema.org",
 										"@type": "Note",
 										content: "This is a simple note"
 									}
@@ -90,7 +90,7 @@ export function generateRestRoutesAuditableItemGraph(
 								{
 									id: "resource1",
 									resourceObject: {
-										"@context": "http://schema.org/",
+										"@context": "https://schema.org",
 										"@type": "Note",
 										content: "This is a simple note"
 									}
@@ -98,7 +98,7 @@ export function generateRestRoutesAuditableItemGraph(
 								{
 									id: "resource2",
 									resourceObject: {
-										"@context": "http://schema.org/",
+										"@context": "https://schema.org",
 										"@type": "Note",
 										content: "This is a simple note"
 									}
@@ -109,7 +109,7 @@ export function generateRestRoutesAuditableItemGraph(
 									id: "edge1",
 									edgeRelationship: "frenemy",
 									annotationObject: {
-										"@context": "http://schema.org/",
+										"@context": "https://schema.org",
 										"@type": "Note",
 										content: "This is a simple note"
 									}
@@ -118,7 +118,7 @@ export function generateRestRoutesAuditableItemGraph(
 									id: "edge2",
 									edgeRelationship: "end",
 									annotationObject: {
-										"@context": "http://schema.org/",
+										"@context": "https://schema.org",
 										"@type": "Note",
 										content: "This is a simple note"
 									}
@@ -186,7 +186,7 @@ export function generateRestRoutesAuditableItemGraph(
 								dateCreated: "2024-08-22T11:55:16.271Z",
 								dateModified: "2024-08-22T11:55:16.271Z",
 								annotationObject: {
-									"@context": "http://schema.org/",
+									"@context": "https://schema.org",
 									"@type": "Note",
 									content: "This is a simple note"
 								},
@@ -220,7 +220,7 @@ export function generateRestRoutesAuditableItemGraph(
 								dateCreated: "2024-08-22T11:55:16.271Z",
 								dateModified: "2024-08-22T11:55:16.271Z",
 								annotationObject: {
-									"@context": "http://schema.org/",
+									"@context": "https://schema.org",
 									"@type": "Note",
 									content: "This is a simple note"
 								},
@@ -259,7 +259,7 @@ export function generateRestRoutesAuditableItemGraph(
 						},
 						body: {
 							annotationObject: {
-								"@context": "http://schema.org/",
+								"@context": "https://schema.org",
 								"@type": "Note",
 								content: "This is a simple note"
 							},
@@ -267,7 +267,7 @@ export function generateRestRoutesAuditableItemGraph(
 								{
 									id: "bar456",
 									annotationObject: {
-										"@context": "http://schema.org/",
+										"@context": "https://schema.org",
 										"@type": "Note",
 										content: "This is a simple note"
 									}
@@ -275,7 +275,7 @@ export function generateRestRoutesAuditableItemGraph(
 								{
 									id: "foo321",
 									annotationObject: {
-										"@context": "http://schema.org/",
+										"@context": "https://schema.org",
 										"@type": "Note",
 										content: "This is a simple note"
 									}
@@ -285,7 +285,7 @@ export function generateRestRoutesAuditableItemGraph(
 								{
 									id: "resource1",
 									resourceObject: {
-										"@context": "http://schema.org/",
+										"@context": "https://schema.org",
 										"@type": "Note",
 										content: "This is a simple note"
 									}
@@ -293,7 +293,7 @@ export function generateRestRoutesAuditableItemGraph(
 								{
 									id: "resource2",
 									resourceObject: {
-										"@context": "http://schema.org/",
+										"@context": "https://schema.org",
 										"@type": "Note",
 										content: "This is a simple note"
 									}
@@ -304,7 +304,7 @@ export function generateRestRoutesAuditableItemGraph(
 									id: "edge1",
 									edgeRelationship: "frenemy",
 									annotationObject: {
-										"@context": "http://schema.org/",
+										"@context": "https://schema.org",
 										"@type": "Note",
 										content: "This is a simple note"
 									}
@@ -313,7 +313,7 @@ export function generateRestRoutesAuditableItemGraph(
 									id: "edge2",
 									edgeRelationship: "end",
 									annotationObject: {
-										"@context": "http://schema.org/",
+										"@context": "https://schema.org",
 										"@type": "Note",
 										content: "This is a simple note"
 									}

@@ -149,14 +149,7 @@ describe("AuditableItemGraphService", () => {
 
 	test("Can create a vertex with no properties", async () => {
 		const service = new AuditableItemGraphService({ config: {} });
-		const id = await service.create(
-			undefined,
-			undefined,
-			undefined,
-			undefined,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
+		const id = await service.create({}, TEST_USER_IDENTITY, TEST_NODE_IDENTITY);
 		expect(id.startsWith("aig:")).toEqual(true);
 
 		await waitForProofGeneration();
@@ -222,10 +215,9 @@ describe("AuditableItemGraphService", () => {
 	test("Can create a vertex with an alias", async () => {
 		const service = new AuditableItemGraphService({ config: {} });
 		const id = await service.create(
-			undefined,
-			[{ id: "foo123" }, { id: "bar456" }],
-			undefined,
-			undefined,
+			{
+				aliases: [{ id: "foo123" }, { id: "bar456" }]
+			},
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
@@ -322,22 +314,21 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: {} });
 		const id = await service.create(
 			{
-				"@context": "https://www.w3.org/ns/activitystreams",
-				type: "Create",
-				actor: {
-					type: "Person",
-					id: "acct:person@example.org",
-					name: "Person"
-				},
-				object: {
-					type: "Note",
-					content: "This is a simple note"
-				},
-				published: "2015-01-25T12:34:56Z"
+				annotationObject: {
+					"@context": "https://www.w3.org/ns/activitystreams",
+					type: "Create",
+					actor: {
+						type: "Person",
+						id: "acct:person@example.org",
+						name: "Person"
+					},
+					object: {
+						type: "Note",
+						content: "This is a simple note"
+					},
+					published: "2015-01-25T12:34:56Z"
+				}
 			},
-			undefined,
-			undefined,
-			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
@@ -441,22 +432,22 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: {} });
 		const id = await service.create(
 			{
-				"@context": "https://www.w3.org/ns/activitystreams",
-				type: "Create",
-				actor: {
-					type: "Person",
-					id: "acct:person@example.org",
-					name: "Person"
+				annotationObject: {
+					"@context": "https://www.w3.org/ns/activitystreams",
+					type: "Create",
+					actor: {
+						type: "Person",
+						id: "acct:person@example.org",
+						name: "Person"
+					},
+					object: {
+						type: "Note",
+						content: "This is a simple note"
+					},
+					published: "2015-01-25T12:34:56Z"
 				},
-				object: {
-					type: "Note",
-					content: "This is a simple note"
-				},
-				published: "2015-01-25T12:34:56Z"
+				aliases: [{ id: "foo123" }, { id: "bar456" }]
 			},
-			[{ id: "foo123" }, { id: "bar456" }],
-			undefined,
-			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
@@ -508,25 +499,25 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: {} });
 		const id = await service.create(
 			{
-				"@context": "https://www.w3.org/ns/activitystreams",
-				type: "Create",
-				actor: {
-					type: "Person",
-					id: "acct:person@example.org",
-					name: "Person"
+				annotationObject: {
+					"@context": "https://www.w3.org/ns/activitystreams",
+					type: "Create",
+					actor: {
+						type: "Person",
+						id: "acct:person@example.org",
+						name: "Person"
+					},
+					object: {
+						type: "Note",
+						content: "This is a simple note"
+					},
+					published: "2015-01-25T12:34:56Z"
 				},
-				object: {
-					type: "Note",
-					content: "This is a simple note"
-				},
-				published: "2015-01-25T12:34:56Z"
+				aliases: [
+					{ id: "foo123", aliasFormat: "type1" },
+					{ id: "bar456", aliasFormat: "type2" }
+				]
 			},
-			[
-				{ id: "foo123", aliasFormat: "type1" },
-				{ id: "bar456", aliasFormat: "type2" }
-			],
-			undefined,
-			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
@@ -675,22 +666,22 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: {} });
 		const id = await service.create(
 			{
-				"@context": "https://www.w3.org/ns/activitystreams",
-				type: "Create",
-				actor: {
-					type: "Person",
-					id: "acct:person@example.org",
-					name: "Person"
+				annotationObject: {
+					"@context": "https://www.w3.org/ns/activitystreams",
+					type: "Create",
+					actor: {
+						type: "Person",
+						id: "acct:person@example.org",
+						name: "Person"
+					},
+					object: {
+						type: "Note",
+						content: "This is a simple note"
+					},
+					published: "2015-01-25T12:34:56Z"
 				},
-				object: {
-					type: "Note",
-					content: "This is a simple note"
-				},
-				published: "2015-01-25T12:34:56Z"
+				aliases: [{ id: "foo123" }, { id: "bar456" }]
 			},
-			[{ id: "foo123" }, { id: "bar456" }],
-			undefined,
-			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
@@ -854,45 +845,45 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: {} });
 		const id = await service.create(
 			{
-				"@context": "https://www.w3.org/ns/activitystreams",
-				type: "Create",
-				actor: {
-					type: "Person",
-					id: "acct:person@example.org",
-					name: "Person"
+				annotationObject: {
+					"@context": "https://www.w3.org/ns/activitystreams",
+					type: "Create",
+					actor: {
+						type: "Person",
+						id: "acct:person@example.org",
+						name: "Person"
+					},
+					object: {
+						type: "Note",
+						content: "This is a simple note"
+					},
+					published: "2015-01-25T12:34:56Z"
 				},
-				object: {
-					type: "Note",
-					content: "This is a simple note"
-				},
-				published: "2015-01-25T12:34:56Z"
+				aliases: [{ id: "foo123" }, { id: "bar456" }]
 			},
-			[{ id: "foo123" }, { id: "bar456" }],
-			undefined,
-			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
 
 		await service.update(
-			id,
 			{
-				"@context": "https://www.w3.org/ns/activitystreams",
-				type: "Create",
-				actor: {
-					type: "Person",
-					id: "acct:person@example.org",
-					name: "Person"
+				id,
+				annotationObject: {
+					"@context": "https://www.w3.org/ns/activitystreams",
+					type: "Create",
+					actor: {
+						type: "Person",
+						id: "acct:person@example.org",
+						name: "Person"
+					},
+					object: {
+						type: "Note",
+						content: "This is a simple note"
+					},
+					published: "2015-01-25T12:34:56Z"
 				},
-				object: {
-					type: "Note",
-					content: "This is a simple note"
-				},
-				published: "2015-01-25T12:34:56Z"
+				aliases: [{ id: "foo123" }, { id: "bar456" }]
 			},
-			[{ id: "foo123" }, { id: "bar456" }],
-			undefined,
-			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
@@ -1004,45 +995,45 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: {} });
 		const id = await service.create(
 			{
-				"@context": "https://www.w3.org/ns/activitystreams",
-				type: "Create",
-				actor: {
-					type: "Person",
-					id: "acct:person@example.org",
-					name: "Person"
+				annotationObject: {
+					"@context": "https://www.w3.org/ns/activitystreams",
+					type: "Create",
+					actor: {
+						type: "Person",
+						id: "acct:person@example.org",
+						name: "Person"
+					},
+					object: {
+						type: "Note",
+						content: "This is a simple note"
+					},
+					published: "2015-01-25T12:34:56Z"
 				},
-				object: {
-					type: "Note",
-					content: "This is a simple note"
-				},
-				published: "2015-01-25T12:34:56Z"
+				aliases: [{ id: "foo123" }, { id: "bar456" }]
 			},
-			[{ id: "foo123" }, { id: "bar456" }],
-			undefined,
-			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
 
 		await service.update(
-			id,
 			{
-				"@context": "https://www.w3.org/ns/activitystreams",
-				type: "Create",
-				actor: {
-					type: "Person",
-					id: "acct:person@example.org",
-					name: "Person"
+				id,
+				annotationObject: {
+					"@context": "https://www.w3.org/ns/activitystreams",
+					type: "Create",
+					actor: {
+						type: "Person",
+						id: "acct:person@example.org",
+						name: "Person"
+					},
+					object: {
+						type: "Note",
+						content: "This is a simple note"
+					},
+					published: "2015-01-25T12:34:56Z"
 				},
-				object: {
-					type: "Note",
-					content: "This is a simple note"
-				},
-				published: "2015-01-25T12:34:56Z"
+				aliases: [{ id: "foo321" }, { id: "bar456" }]
 			},
-			[{ id: "foo321" }, { id: "bar456" }],
-			undefined,
-			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
@@ -1262,46 +1253,45 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: {} });
 		const id = await service.create(
 			{
-				"@context": "https://www.w3.org/ns/activitystreams",
-				type: "Create",
-				actor: {
-					type: "Person",
-					id: "acct:person@example.org",
-					name: "Person"
+				annotationObject: {
+					"@context": "https://www.w3.org/ns/activitystreams",
+					type: "Create",
+					actor: {
+						type: "Person",
+						id: "acct:person@example.org",
+						name: "Person"
+					},
+					object: {
+						type: "Note",
+						content: "This is a simple note"
+					},
+					published: "2015-01-25T12:34:56Z"
 				},
-				object: {
-					type: "Note",
-					content: "This is a simple note"
-				},
-				published: "2015-01-25T12:34:56Z"
+				aliases: [{ id: "foo123" }, { id: "bar456" }]
 			},
-			[{ id: "foo123" }, { id: "bar456" }],
-			undefined,
-			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
 
 		await service.update(
-			id,
-
 			{
-				"@context": "https://www.w3.org/ns/activitystreams",
-				type: "Create",
-				actor: {
-					type: "Person",
-					id: "acct:person@example.org",
-					name: "Person"
+				id,
+				annotationObject: {
+					"@context": "https://www.w3.org/ns/activitystreams",
+					type: "Create",
+					actor: {
+						type: "Person",
+						id: "acct:person@example.org",
+						name: "Person"
+					},
+					object: {
+						type: "Note",
+						content: "This is a simple note 2"
+					},
+					published: "2015-01-25T12:34:56Z"
 				},
-				object: {
-					type: "Note",
-					content: "This is a simple note 2"
-				},
-				published: "2015-01-25T12:34:56Z"
+				aliases: [{ id: "foo123" }, { id: "bar456" }]
 			},
-			[{ id: "foo123" }, { id: "bar456" }],
-			undefined,
-			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
@@ -1502,115 +1492,117 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: {} });
 		const id = await service.create(
 			{
-				"@context": "https://www.w3.org/ns/activitystreams",
-				type: "Create",
-				actor: {
-					type: "Person",
-					id: "acct:person@example.org",
-					name: "Person"
+				annotationObject: {
+					"@context": "https://www.w3.org/ns/activitystreams",
+					type: "Create",
+					actor: {
+						type: "Person",
+						id: "acct:person@example.org",
+						name: "Person"
+					},
+					object: {
+						type: "Note",
+						content: "This is a simple note"
+					},
+					published: "2015-01-25T12:34:56Z"
 				},
-				object: {
-					type: "Note",
-					content: "This is a simple note"
-				},
-				published: "2015-01-25T12:34:56Z"
+				aliases: [{ id: "foo123" }, { id: "bar456" }],
+				resources: [
+					{
+						id: "resource1",
+						resourceObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Create",
+							actor: {
+								type: "Person",
+								id: "acct:person@example.org",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple note resource"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
+					},
+					{
+						id: "resource2",
+						resourceObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Create",
+							actor: {
+								type: "Person",
+								id: "acct:person@example.org",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple note resource 2"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
+					}
+				]
 			},
-			[{ id: "foo123" }, { id: "bar456" }],
-			[
-				{
-					id: "resource1",
-					resourceObject: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						type: "Create",
-						actor: {
-							type: "Person",
-							id: "acct:person@example.org",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note resource"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "resource2",
-					resourceObject: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						type: "Create",
-						actor: {
-							type: "Person",
-							id: "acct:person@example.org",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note resource 2"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
 
 		await service.update(
-			id,
 			{
-				"@context": "https://www.w3.org/ns/activitystreams",
-				type: "Create",
-				actor: {
-					type: "Person",
-					id: "acct:person@example.org",
-					name: "Person"
+				id,
+				annotationObject: {
+					"@context": "https://www.w3.org/ns/activitystreams",
+					type: "Create",
+					actor: {
+						type: "Person",
+						id: "acct:person@example.org",
+						name: "Person"
+					},
+					object: {
+						type: "Note",
+						content: "This is a simple note 2"
+					},
+					published: "2015-01-25T12:34:56Z"
 				},
-				object: {
-					type: "Note",
-					content: "This is a simple note 2"
-				},
-				published: "2015-01-25T12:34:56Z"
+				aliases: [{ id: "foo123" }, { id: "bar456" }],
+				resources: [
+					{
+						id: "resource1",
+						resourceObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Create",
+							actor: {
+								type: "Person",
+								id: "acct:person@example.org",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple note resource 10"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
+					},
+					{
+						id: "resource2",
+						resourceObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Create",
+							actor: {
+								type: "Person",
+								id: "acct:person@example.org",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple note resource 11"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
+					}
+				]
 			},
-			[{ id: "foo123" }, { id: "bar456" }],
-			[
-				{
-					id: "resource1",
-					resourceObject: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						type: "Create",
-						actor: {
-							type: "Person",
-							id: "acct:person@example.org",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note resource 10"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "resource2",
-					resourceObject: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						type: "Create",
-						actor: {
-							type: "Person",
-							id: "acct:person@example.org",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note resource 11"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			undefined,
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
@@ -1930,58 +1922,56 @@ describe("AuditableItemGraphService", () => {
 	test("Can create and update and verify edges", async () => {
 		const service = new AuditableItemGraphService({ config: {} });
 		const id = await service.create(
-			undefined,
-			undefined,
-			undefined,
-			[
-				{
-					id: "edge1",
-					edgeRelationship: "friend",
-					annotationObject: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note"
-						},
-						published: "2015-01-25T12:34:56Z"
+			{
+				edges: [
+					{
+						id: "edge1",
+						edgeRelationship: "friend",
+						annotationObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Create",
+							actor: {
+								id: "acct:person@example.org",
+								type: "Person",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple note"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
 					}
-				}
-			],
+				]
+			},
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
 
 		await service.update(
-			id,
-			undefined,
-			undefined,
-			undefined,
-			[
-				{
-					id: "edge1",
-					edgeRelationship: "frenemy",
-					annotationObject: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note 2"
-						},
-						published: "2015-01-25T12:34:56Z"
+			{
+				id,
+				edges: [
+					{
+						id: "edge1",
+						edgeRelationship: "frenemy",
+						annotationObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Create",
+							actor: {
+								id: "acct:person@example.org",
+								type: "Person",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple note 2"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
 					}
-				}
-			],
+				]
+			},
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
@@ -2135,259 +2125,263 @@ describe("AuditableItemGraphService", () => {
 		const service = new AuditableItemGraphService({ config: {} });
 		const id = await service.create(
 			{
-				"@context": "https://www.w3.org/ns/activitystreams",
-				type: "Create",
-				actor: {
-					id: "acct:person@example.org",
-					type: "Person",
-					name: "Person"
+				annotationObject: {
+					"@context": "https://www.w3.org/ns/activitystreams",
+					type: "Create",
+					actor: {
+						id: "acct:person@example.org",
+						type: "Person",
+						name: "Person"
+					},
+					object: {
+						type: "Note",
+						content: "This is a simple note"
+					},
+					published: "2015-01-25T12:34:56Z"
 				},
-				object: {
-					type: "Note",
-					content: "This is a simple note"
-				},
-				published: "2015-01-25T12:34:56Z"
+				aliases: [
+					{
+						id: "foo123",
+						annotationObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Create",
+							actor: {
+								id: "acct:person@example.org",
+								type: "Person",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple alias 1"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
+					},
+					{
+						id: "bar456",
+						annotationObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Create",
+							actor: {
+								id: "acct:person@example.org",
+								type: "Person",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple note alias 2"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
+					}
+				],
+				resources: [
+					{
+						id: "resource1",
+						resourceObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Create",
+							actor: {
+								id: "acct:person@example.org",
+								type: "Person",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple note resource 1"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
+					},
+					{
+						id: "resource2",
+						resourceObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Create",
+							actor: {
+								id: "acct:person@example.org",
+								type: "Person",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple resource 2"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
+					}
+				],
+				edges: [
+					{
+						id: "edge1",
+						edgeRelationship: "friend",
+						annotationObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Create",
+							actor: {
+								id: "acct:person@example.org",
+								type: "Person",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple edge 1"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
+					},
+					{
+						id: "edge2",
+						edgeRelationship: "enemy",
+						annotationObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Create",
+							actor: {
+								id: "acct:person@example.org",
+								type: "Person",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple edge 2"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
+					}
+				]
 			},
-			[
-				{
-					id: "foo123",
-					annotationObject: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple alias 1"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "bar456",
-					annotationObject: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note alias 2"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			[
-				{
-					id: "resource1",
-					resourceObject: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note resource 1"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "resource2",
-					resourceObject: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple resource 2"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			[
-				{
-					id: "edge1",
-					edgeRelationship: "friend",
-					annotationObject: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple edge 1"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "edge2",
-					edgeRelationship: "enemy",
-					annotationObject: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple edge 2"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
 
 		await service.update(
-			id,
 			{
-				"@context": "https://www.w3.org/ns/activitystreams",
-				type: "Create",
-				actor: {
-					id: "acct:person@example.org",
-					type: "Person",
-					name: "Person"
+				id,
+				annotationObject: {
+					"@context": "https://www.w3.org/ns/activitystreams",
+					type: "Create",
+					actor: {
+						id: "acct:person@example.org",
+						type: "Person",
+						name: "Person"
+					},
+					object: {
+						type: "Note",
+						content: "This is a simple note 2"
+					},
+					published: "2015-01-25T12:34:56Z"
 				},
-				object: {
-					type: "Note",
-					content: "This is a simple note 2"
-				},
-				published: "2015-01-25T12:34:56Z"
+				aliases: [
+					{
+						id: "foo123",
+						annotationObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Create",
+							actor: {
+								id: "acct:person@example.org",
+								type: "Person",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple note alias 10"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
+					},
+					{
+						id: "bar456",
+						annotationObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Create",
+							actor: {
+								id: "acct:person@example.org",
+								type: "Person",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple note alias 20"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
+					}
+				],
+				resources: [
+					{
+						id: "resource1",
+						resourceObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Create",
+							actor: {
+								id: "acct:person@example.org",
+								type: "Person",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple note resource 10"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
+					},
+					{
+						id: "resource2",
+						resourceObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Create",
+							actor: {
+								id: "acct:person@example.org",
+								type: "Person",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple note resource 20"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
+					}
+				],
+				edges: [
+					{
+						id: "edge1",
+						edgeRelationship: "friend",
+						annotationObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Create",
+							actor: {
+								id: "acct:person@example.org",
+								type: "Person",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple note edge 10"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
+					},
+					{
+						id: "edge2",
+						edgeRelationship: "enemy",
+						annotationObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Create",
+							actor: {
+								id: "acct:person@example.org",
+								type: "Person",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple note edge 20"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
+					}
+				]
 			},
-			[
-				{
-					id: "foo123",
-					annotationObject: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note alias 10"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "bar456",
-					annotationObject: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note alias 20"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			[
-				{
-					id: "resource1",
-					resourceObject: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note resource 10"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "resource2",
-					resourceObject: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note resource 20"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
-			[
-				{
-					id: "edge1",
-					edgeRelationship: "friend",
-					annotationObject: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note edge 10"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				},
-				{
-					id: "edge2",
-					edgeRelationship: "enemy",
-					annotationObject: {
-						"@context": "https://www.w3.org/ns/activitystreams",
-						type: "Create",
-						actor: {
-							id: "acct:person@example.org",
-							type: "Person",
-							name: "Person"
-						},
-						object: {
-							type: "Note",
-							content: "This is a simple note edge 20"
-						},
-						published: "2015-01-25T12:34:56Z"
-					}
-				}
-			],
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
@@ -2934,10 +2928,9 @@ describe("AuditableItemGraphService", () => {
 	test("Can remove the immutable storage for a vertex", async () => {
 		const service = new AuditableItemGraphService({ config: {} });
 		const id = await service.create(
-			undefined,
-			[{ id: "foo123" }, { id: "bar456" }],
-			undefined,
-			undefined,
+			{
+				aliases: [{ id: "foo123" }, { id: "bar456" }]
+			},
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
@@ -3003,22 +2996,8 @@ describe("AuditableItemGraphService", () => {
 
 	test("Can query for a vertex by id", async () => {
 		const service = new AuditableItemGraphService({ config: {} });
-		await service.create(
-			undefined,
-			undefined,
-			undefined,
-			undefined,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
-		await service.create(
-			undefined,
-			undefined,
-			undefined,
-			undefined,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
+		await service.create({}, TEST_USER_IDENTITY, TEST_NODE_IDENTITY);
+		await service.create({}, TEST_USER_IDENTITY, TEST_NODE_IDENTITY);
 
 		const results = await service.query({ id: "0" });
 
@@ -3044,18 +3023,16 @@ describe("AuditableItemGraphService", () => {
 	test("Can query for a vertex by alias", async () => {
 		const service = new AuditableItemGraphService({ config: {} });
 		await service.create(
-			undefined,
-			[{ id: "foo123" }, { id: "bar123" }],
-			undefined,
-			undefined,
+			{
+				aliases: [{ id: "foo123" }, { id: "bar123" }]
+			},
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
 		await service.create(
-			undefined,
-			[{ id: "foo456" }, { id: "bar456" }],
-			undefined,
-			undefined,
+			{
+				aliases: [{ id: "foo456" }, { id: "bar456" }]
+			},
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
@@ -3107,21 +3084,13 @@ describe("AuditableItemGraphService", () => {
 	test("Can query for a vertex by id or alias", async () => {
 		const service = new AuditableItemGraphService({ config: {} });
 		await service.create(
-			undefined,
-			[{ id: "foo5" }],
-			undefined,
-			undefined,
+			{
+				aliases: [{ id: "foo5" }]
+			},
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
-		await service.create(
-			undefined,
-			undefined,
-			undefined,
-			undefined,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
+		await service.create({}, TEST_USER_IDENTITY, TEST_NODE_IDENTITY);
 
 		const results = await service.query({ id: "5" });
 		expect(results).toEqual({
@@ -3150,21 +3119,13 @@ describe("AuditableItemGraphService", () => {
 	test("Can query for a vertex by mode id", async () => {
 		const service = new AuditableItemGraphService({ config: {} });
 		await service.create(
-			undefined,
-			[{ id: "foo6" }],
-			undefined,
-			undefined,
+			{
+				aliases: [{ id: "foo6" }]
+			},
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
-		await service.create(
-			undefined,
-			undefined,
-			undefined,
-			undefined,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
+		await service.create({}, TEST_USER_IDENTITY, TEST_NODE_IDENTITY);
 
 		const results = await service.query({ id: "5", idMode: "id" });
 		expect(results).toEqual({
@@ -3184,21 +3145,13 @@ describe("AuditableItemGraphService", () => {
 	test("Can query for a vertex by using mode alias", async () => {
 		const service = new AuditableItemGraphService({ config: {} });
 		await service.create(
-			undefined,
-			[{ id: "foo4" }],
-			undefined,
-			undefined,
+			{
+				aliases: [{ id: "foo4" }]
+			},
 			TEST_USER_IDENTITY,
 			TEST_NODE_IDENTITY
 		);
-		await service.create(
-			undefined,
-			undefined,
-			undefined,
-			undefined,
-			TEST_USER_IDENTITY,
-			TEST_NODE_IDENTITY
-		);
+		await service.create({}, TEST_USER_IDENTITY, TEST_NODE_IDENTITY);
 
 		await waitForProofGeneration();
 

@@ -448,13 +448,15 @@ export async function auditableItemGraphCreate(
 	request: IAuditableItemGraphCreateRequest
 ): Promise<ICreatedResponse> {
 	Guards.object<IAuditableItemGraphCreateRequest>(ROUTES_SOURCE, nameof(request), request);
+	Guards.object<IAuditableItemGraphCreateRequest["body"]>(
+		ROUTES_SOURCE,
+		nameof(request.body),
+		request.body
+	);
 
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
 	const id = await component.create(
-		request.body?.annotationObject,
-		request.body?.aliases,
-		request.body?.resources,
-		request.body?.edges,
+		request.body,
 		httpRequestContext.userIdentity,
 		httpRequestContext.nodeIdentity
 	);
@@ -522,14 +524,15 @@ export async function auditableItemGraphUpdate(
 		request.pathParams
 	);
 	Guards.stringValue(ROUTES_SOURCE, nameof(request.pathParams.id), request.pathParams.id);
+	Guards.object<IAuditableItemGraphUpdateRequest["body"]>(
+		ROUTES_SOURCE,
+		nameof(request.body),
+		request.body
+	);
 
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
 	await component.update(
-		request.pathParams.id,
-		request.body?.annotationObject,
-		request.body?.aliases,
-		request.body?.resources,
-		request.body?.edges,
+		{ ...request.body, id: request.pathParams.id },
 		httpRequestContext.userIdentity,
 		httpRequestContext.nodeIdentity
 	);

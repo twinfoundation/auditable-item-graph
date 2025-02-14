@@ -47,39 +47,35 @@ export class AuditableItemGraphClient
 
 	/**
 	 * Create a new graph vertex.
-	 * @param annotationObject The annotation object for the vertex.
-	 * @param aliases Alternative aliases that can be used to identify the vertex.
-	 * @param resources The resources attached to the vertex.
-	 * @param edges The edges connected to the vertex.
+	 * @param vertex The vertex to create.
+	 * @param vertex.annotationObject The annotation object for the vertex as JSON-LD.
+	 * @param vertex.aliases Alternative aliases that can be used to identify the vertex.
+	 * @param vertex.resources The resources attached to the vertex.
+	 * @param vertex.edges The edges connected to the vertex.
 	 * @returns The id of the new graph item.
 	 */
-	public async create(
-		annotationObject?: IJsonLdNodeObject,
+	public async create(vertex: {
+		annotationObject?: IJsonLdNodeObject;
 		aliases?: {
 			id: string;
 			aliasFormat?: string;
 			annotationObject?: IJsonLdNodeObject;
-		}[],
+		}[];
 		resources?: {
 			id?: string;
 			resourceObject?: IJsonLdNodeObject;
-		}[],
+		}[];
 		edges?: {
 			id: string;
 			edgeRelationship: string;
 			annotationObject?: IJsonLdNodeObject;
-		}[]
-	): Promise<string> {
+		}[];
+	}): Promise<string> {
 		const response = await this.fetch<IAuditableItemGraphCreateRequest, ICreatedResponse>(
 			"/",
 			"POST",
 			{
-				body: {
-					annotationObject,
-					aliases,
-					resources,
-					edges
-				}
+				body: vertex
 			}
 		);
 
@@ -128,43 +124,42 @@ export class AuditableItemGraphClient
 
 	/**
 	 * Update a graph vertex.
-	 * @param id The id of the vertex to update.
-	 * @param annotationObject The annotation object for the vertex as JSON-LD.
-	 * @param aliases Alternative aliases that can be used to identify the vertex.
-	 * @param resources The resources attached to the vertex.
-	 * @param edges The edges connected to the vertex.
+	 * @param vertex The vertex to update.
+	 * @param vertex.id The id of the vertex to update.
+	 * @param vertex.annotationObject The annotation object for the vertex as JSON-LD.
+	 * @param vertex.aliases Alternative aliases that can be used to identify the vertex.
+	 * @param vertex.resources The resources attached to the vertex.
+	 * @param vertex.edges The edges connected to the vertex.
 	 * @returns Nothing.
 	 */
-	public async update(
-		id: string,
-		annotationObject?: IJsonLdNodeObject,
+	public async update(vertex: {
+		id: string;
+		annotationObject?: IJsonLdNodeObject;
 		aliases?: {
 			id: string;
 			aliasFormat?: string;
 			annotationObject?: IJsonLdNodeObject;
-		}[],
+		}[];
 		resources?: {
 			id?: string;
 			resourceObject?: IJsonLdNodeObject;
-		}[],
+		}[];
 		edges?: {
 			id: string;
 			edgeRelationship: string;
 			annotationObject?: IJsonLdNodeObject;
-		}[]
-	): Promise<void> {
-		Guards.stringValue(this.CLASS_NAME, nameof(id), id);
+		}[];
+	}): Promise<void> {
+		Guards.object(this.CLASS_NAME, nameof(vertex), vertex);
+		Guards.stringValue(this.CLASS_NAME, nameof(vertex.id), vertex.id);
+
+		const { id, ...rest } = vertex;
 
 		await this.fetch<IAuditableItemGraphUpdateRequest, INoContentResponse>("/:id", "PUT", {
 			pathParams: {
 				id
 			},
-			body: {
-				annotationObject,
-				aliases,
-				resources,
-				edges
-			}
+			body: rest
 		});
 	}
 

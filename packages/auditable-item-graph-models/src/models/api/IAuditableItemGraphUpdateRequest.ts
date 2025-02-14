@@ -19,7 +19,7 @@ export interface IAuditableItemGraphUpdateRequest {
 	/**
 	 * The data to be used in the vertex.
 	 */
-	body?: {
+	body: {
 		/**
 		 * The object to be used in the vertex as JSON-LD.
 		 */

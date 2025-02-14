@@ -58,31 +58,35 @@ Runtime name for the class.
 
 ### create()
 
-> **create**(`annotationObject`?, `aliases`?, `resources`?, `edges`?, `userIdentity`?, `nodeIdentity`?): `Promise`\<`string`\>
+> **create**(`vertex`, `userIdentity`?, `nodeIdentity`?): `Promise`\<`string`\>
 
 Create a new graph vertex.
 
 #### Parameters
 
-##### annotationObject?
+##### vertex
+
+The vertex to create.
+
+###### annotationObject?
 
 `IJsonLdNodeObject`
 
 The annotation object for the vertex as JSON-LD.
 
-##### aliases?
+###### aliases?
 
 `object`[]
 
 Alternative aliases that can be used to identify the vertex.
 
-##### resources?
+###### resources?
 
 `object`[]
 
 The resources attached to the vertex.
 
-##### edges?
+###### edges?
 
 `object`[]
 
@@ -166,37 +170,41 @@ NotFoundError if the vertex is not found.
 
 ### update()
 
-> **update**(`id`, `annotationObject`?, `aliases`?, `resources`?, `edges`?, `userIdentity`?, `nodeIdentity`?): `Promise`\<`void`\>
+> **update**(`vertex`, `userIdentity`?, `nodeIdentity`?): `Promise`\<`void`\>
 
 Update a graph vertex.
 
 #### Parameters
 
-##### id
+##### vertex
+
+The vertex to update.
+
+###### id
 
 `string`
 
 The id of the vertex to update.
 
-##### annotationObject?
+###### annotationObject?
 
 `IJsonLdNodeObject`
 
-The annotation object for the vertex.
+The annotation object for the vertex as JSON-LD.
 
-##### aliases?
+###### aliases?
 
 `object`[]
 
 Alternative aliases that can be used to identify the vertex.
 
-##### resources?
+###### resources?
 
 `object`[]
 
 The resources attached to the vertex.
 
-##### edges?
+###### edges?
 
 `object`[]
 

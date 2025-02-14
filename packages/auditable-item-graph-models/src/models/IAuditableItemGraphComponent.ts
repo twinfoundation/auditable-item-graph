@@ -13,62 +13,68 @@ import type { VerifyDepth } from "./verifyDepth";
 export interface IAuditableItemGraphComponent extends IComponent {
 	/**
 	 * Create a new graph vertex.
-	 * @param annotationObject The annotation object for the vertex as JSON-LD.
-	 * @param aliases Alternative aliases that can be used to identify the vertex.
-	 * @param resources The resources attached to the vertex.
-	 * @param edges The edges connected to the vertex.
+	 * @param vertex The vertex to create.
+	 * @param vertex.annotationObject The annotation object for the vertex as JSON-LD.
+	 * @param vertex.aliases Alternative aliases that can be used to identify the vertex.
+	 * @param vertex.resources The resources attached to the vertex.
+	 * @param vertex.edges The edges connected to the vertex.
 	 * @param userIdentity The identity to create the auditable item graph operation with.
 	 * @param nodeIdentity The node identity to use for vault operations.
 	 * @returns The id of the new graph item.
 	 */
 	create(
-		annotationObject?: IJsonLdNodeObject,
-		aliases?: {
-			id: string;
-			aliasFormat?: string;
+		vertex: {
 			annotationObject?: IJsonLdNodeObject;
-		}[],
-		resources?: {
-			id?: string;
-			resourceObject?: IJsonLdNodeObject;
-		}[],
-		edges?: {
-			id: string;
-			edgeRelationship: string;
-			annotationObject?: IJsonLdNodeObject;
-		}[],
+			aliases?: {
+				id: string;
+				aliasFormat?: string;
+				annotationObject?: IJsonLdNodeObject;
+			}[];
+			resources?: {
+				id?: string;
+				resourceObject?: IJsonLdNodeObject;
+			}[];
+			edges?: {
+				id: string;
+				edgeRelationship: string;
+				annotationObject?: IJsonLdNodeObject;
+			}[];
+		},
 		userIdentity?: string,
 		nodeIdentity?: string
 	): Promise<string>;
 
 	/**
 	 * Update a graph vertex.
-	 * @param id The id of the vertex to update.
-	 * @param annotationObject The annotation object for the vertex as JSON-LD.
-	 * @param aliases Alternative aliases that can be used to identify the vertex.
-	 * @param resources The resources attached to the vertex.
-	 * @param edges The edges connected to the vertex.
+	 * @param vertex The vertex to update.
+	 * @param vertex.id The id of the vertex to update.
+	 * @param vertex.annotationObject The annotation object for the vertex as JSON-LD.
+	 * @param vertex.aliases Alternative aliases that can be used to identify the vertex.
+	 * @param vertex.resources The resources attached to the vertex.
+	 * @param vertex.edges The edges connected to the vertex.
 	 * @param userIdentity The identity to create the auditable item graph operation with.
 	 * @param nodeIdentity The node identity to use for vault operations.
 	 * @returns Nothing.
 	 */
 	update(
-		id: string,
-		annotationObject?: IJsonLdNodeObject,
-		aliases?: {
+		vertex: {
 			id: string;
-			aliasFormat?: string;
 			annotationObject?: IJsonLdNodeObject;
-		}[],
-		resources?: {
-			id?: string;
-			resourceObject?: IJsonLdNodeObject;
-		}[],
-		edges?: {
-			id: string;
-			edgeRelationship: string;
-			annotationObject?: IJsonLdNodeObject;
-		}[],
+			aliases?: {
+				id: string;
+				aliasFormat?: string;
+				annotationObject?: IJsonLdNodeObject;
+			}[];
+			resources?: {
+				id?: string;
+				resourceObject?: IJsonLdNodeObject;
+			}[];
+			edges?: {
+				id: string;
+				edgeRelationship: string;
+				annotationObject?: IJsonLdNodeObject;
+			}[];
+		},
 		userIdentity?: string,
 		nodeIdentity?: string
 	): Promise<void>;

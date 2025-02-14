@@ -33,7 +33,7 @@
 						}
 					],
 					"additionalItems": {
-						"type": "string"
+						"$ref": "https://schema.twindev.org/json-ld/JsonLdContextDefinitionElement"
 					}
 				}
 			],

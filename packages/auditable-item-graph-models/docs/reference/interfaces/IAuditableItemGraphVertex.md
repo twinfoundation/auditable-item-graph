@@ -8,9 +8,9 @@ Interface describing an auditable item graph vertex.
 
 ## Properties
 
-### dateCreated
+### dateCreated?
 
-> **dateCreated**: `string`
+> `optional` **dateCreated**: `string`
 
 The date/time of when the element was created.
 

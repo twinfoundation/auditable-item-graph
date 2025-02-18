@@ -13,7 +13,7 @@ export interface IAuditableItemGraphAuditedElement {
 	/**
 	 * The date/time of when the element was created.
 	 */
-	dateCreated: string;
+	dateCreated?: string;
 
 	/**
 	 * The date/time of when the element was modified.

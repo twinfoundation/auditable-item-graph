@@ -8,9 +8,9 @@ Interface describing an edge between two vertices in an auditable item graph.
 
 ## Properties
 
-### dateCreated
+### dateCreated?
 
-> **dateCreated**: `string`
+> `optional` **dateCreated**: `string`
 
 The date/time of when the element was created.
 

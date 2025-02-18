@@ -51,7 +51,6 @@
 	},
 	"required": [
 		"@context",
-		"dateCreated",
 		"type"
 	],
 	"additionalProperties": false,

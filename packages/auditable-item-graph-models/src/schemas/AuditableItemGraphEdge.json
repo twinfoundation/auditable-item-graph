@@ -55,10 +55,9 @@
 	},
 	"required": [
 		"@context",
-		"dateCreated",
-		"edgeRelationship",
 		"id",
-		"type"
+		"type",
+		"edgeRelationship"
 	],
 	"additionalProperties": false,
 	"description": "Interface describing an edge between two vertices in an auditable item graph."

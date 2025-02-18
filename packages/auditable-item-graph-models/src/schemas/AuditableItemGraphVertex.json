@@ -87,7 +87,6 @@
 	},
 	"required": [
 		"@context",
-		"dateCreated",
 		"id",
 		"type"
 	],

@@ -52,9 +52,9 @@ The format of the id in the alias.
 
 ***
 
-### dateCreated
+### dateCreated?
 
-> **dateCreated**: `string`
+> `optional` **dateCreated**: `string`
 
 The date/time of when the element was created.
 

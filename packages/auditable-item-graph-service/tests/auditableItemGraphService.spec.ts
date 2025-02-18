@@ -462,7 +462,7 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.org"
 			],
 			type: "AuditableItemGraphVertex",
-			id: "0101010101010101010101010101010101010101010101010101010101010101",
+			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
@@ -532,7 +532,7 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.org"
 			],
 			type: "AuditableItemGraphVertex",
-			id: "0101010101010101010101010101010101010101010101010101010101010101",
+			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
@@ -702,7 +702,7 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.org"
 			],
 			type: "AuditableItemGraphVertex",
-			id: "0101010101010101010101010101010101010101010101010101010101010101",
+			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
@@ -901,7 +901,7 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.org"
 			],
-			id: "0101010101010101010101010101010101010101010101010101010101010101",
+			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			dateModified: "2024-08-22T11:55:16.271Z",
@@ -1052,7 +1052,7 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.org"
 			],
-			id: "0101010101010101010101010101010101010101010101010101010101010101",
+			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			dateModified: "2024-08-22T11:56:56.272Z",
@@ -1309,7 +1309,7 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.org"
 			],
-			id: "0101010101010101010101010101010101010101010101010101010101010101",
+			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			dateModified: "2024-08-22T11:56:56.272Z",
@@ -1620,7 +1620,7 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.org"
 			],
-			id: "0101010101010101010101010101010101010101010101010101010101010101",
+			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			dateModified: "2024-08-22T11:56:56.272Z",
@@ -1989,7 +1989,7 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.org"
 			],
-			id: "0101010101010101010101010101010101010101010101010101010101010101",
+			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			dateModified: "2024-08-22T11:56:56.272Z",
@@ -2399,7 +2399,7 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.org"
 			],
-			id: "0101010101010101010101010101010101010101010101010101010101010101",
+			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			dateModified: "2024-08-22T11:56:56.272Z",
@@ -2953,7 +2953,7 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.org"
 			],
-			id: "0101010101010101010101010101010101010101010101010101010101010101",
+			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
 			dateCreated: "2024-08-22T11:55:16.271Z",
 			dateModified: "2024-08-22T11:55:16.271Z",
@@ -3012,7 +3012,7 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					type: "AuditableItemGraphVertex",
-					id: "0101010101010101010101010101010101010101010101010101010101010101",
+					id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:55:16.271Z"
 				}
@@ -3060,7 +3060,7 @@ describe("AuditableItemGraphService", () => {
 					]
 				},
 				{
-					id: "0101010101010101010101010101010101010101010101010101010101010101",
+					id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 					type: "AuditableItemGraphVertex",
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:55:16.271Z",
@@ -3098,13 +3098,13 @@ describe("AuditableItemGraphService", () => {
 			type: "AuditableItemGraphVertexList",
 			vertices: [
 				{
-					id: "0505050505050505050505050505050505050505050505050505050505050505",
+					id: "aig:0505050505050505050505050505050505050505050505050505050505050505",
 					type: "AuditableItemGraphVertex",
 					dateCreated: "2024-08-22T11:56:56.272Z",
 					dateModified: "2024-08-22T11:56:56.272Z"
 				},
 				{
-					id: "0101010101010101010101010101010101010101010101010101010101010101",
+					id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 					type: "AuditableItemGraphVertex",
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:55:16.271Z",
@@ -3133,7 +3133,7 @@ describe("AuditableItemGraphService", () => {
 			type: "AuditableItemGraphVertexList",
 			vertices: [
 				{
-					id: "0505050505050505050505050505050505050505050505050505050505050505",
+					id: "aig:0505050505050505050505050505050505050505050505050505050505050505",
 					type: "AuditableItemGraphVertex",
 					dateCreated: "2024-08-22T11:56:56.272Z",
 					dateModified: "2024-08-22T11:56:56.272Z"
@@ -3161,7 +3161,7 @@ describe("AuditableItemGraphService", () => {
 			type: "AuditableItemGraphVertexList",
 			vertices: [
 				{
-					id: "0101010101010101010101010101010101010101010101010101010101010101",
+					id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 					type: "AuditableItemGraphVertex",
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:55:16.271Z",

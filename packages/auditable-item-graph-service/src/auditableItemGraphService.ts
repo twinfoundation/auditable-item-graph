@@ -592,7 +592,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				SchemaOrgTypes.ContextRoot
 			],
 			type: AuditableItemGraphTypes.Vertex,
-			id: vertexEntity.id,
+			id: new Urn(AuditableItemGraphService.NAMESPACE, vertexEntity.id).toString(),
 			dateCreated: vertexEntity.dateCreated,
 			dateModified: vertexEntity.dateModified,
 			nodeIdentity: vertexEntity.nodeIdentity,
@@ -1034,11 +1034,13 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		let changesetsResult;
 		let verified = true;
 
+		const vertexId = Urn.fromValidString(vertex.id);
+
 		do {
 			changesetsResult = await this._changesetStorage.query(
 				{
 					property: "vertexId",
-					value: vertex.id,
+					value: vertexId.namespaceSpecific(),
 					comparison: ComparisonOperator.Equals
 				},
 				[

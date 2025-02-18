@@ -12,6 +12,11 @@ export const AuditableItemGraphTypes = {
 	ContextRoot: "https://schema.twindev.org/aig/",
 
 	/**
+	 * The context root for the common types.
+	 */
+	ContextRootCommon: "https://schema.twindev.org/common/",
+
+	/**
 	 * Represents auditable item graph vertex.
 	 */
 	Vertex: "AuditableItemGraphVertex",

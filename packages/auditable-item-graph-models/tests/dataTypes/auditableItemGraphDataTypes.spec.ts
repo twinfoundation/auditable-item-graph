@@ -30,7 +30,10 @@ describe("AuditableItemGraphDataTypes", () => {
 			"",
 			AuditableItemGraphTypes.Vertex,
 			{
-				"@context": AuditableItemGraphTypes.ContextRoot,
+				"@context": [
+					AuditableItemGraphTypes.ContextRoot,
+					AuditableItemGraphTypes.ContextRootCommon
+				],
 				type: AuditableItemGraphTypes.Vertex,
 				dateCreated: new Date().toISOString(),
 				id: "1111"

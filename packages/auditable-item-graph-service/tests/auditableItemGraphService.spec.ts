@@ -191,11 +191,12 @@ describe("AuditableItemGraphService", () => {
 		expect(immutableProof).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
+				"https://schema.twindev.org/common/",
 				"https://w3id.org/security/data-integrity/v2"
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "oUHhd2GCsVcdxJ4ockuxaLg7sC+s5bh6hwX8IOWfDe4=",
+			proofObjectHash: "5oYlbk5KHN0bxlDv1r1XJZhSf3WREWG1nE1EnPLOYdQ=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -205,7 +206,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"4p5uf9Q8BacXJEMnGwjT6UYRUkX9HzY4tGfdT6Y1xgtaPQUwdNy7CumvFo9VMXCYkZVi86XbNNApBsPrTr8DAtJx",
+					"24GPfSZ21wkcHPYRyiLQzKA9LfPp7ZYi2ax2VLq2cRkaSTRDmuiHejVncNcrrqYKvBaTUunzZai3axLpnoWgZh4k",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -289,11 +290,12 @@ describe("AuditableItemGraphService", () => {
 		expect(immutableProof).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
+				"https://schema.twindev.org/common/",
 				"https://w3id.org/security/data-integrity/v2"
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "MLCqfVryT5zGNItNRUD9+ZdSoWWFqcDcf0425F1P+ek=",
+			proofObjectHash: "DnwUmDwWYyhQXS2cxG/ZSZnn7/v+aZ1xLhscws5+hIo=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -303,7 +305,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"3WJnKZcAKG1nb3u9WSwUhDiMmCFs7sWhcJChn1eA7Qt79XhncyHWxjnFmPo8RAxgpKwzgSqRhv64V7ELRuENG9zu",
+					"tDwwAWKvf5sLrDttULGzc8nT7GxrhJx3eiXbDMbSNRXTZeLMVudzf2RQdJ9XP7fSVxfsc5aBNZpYGb48SnpUF5X",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -407,11 +409,12 @@ describe("AuditableItemGraphService", () => {
 		expect(immutableProof).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
+				"https://schema.twindev.org/common/",
 				"https://w3id.org/security/data-integrity/v2"
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "7Pf8grdhkbXYTZCylFzdhvvPvCN4nz4/OmAs+yTCTFI=",
+			proofObjectHash: "wyxvdWSkCKolV5xQNEDwA0RvjvvByZTodetM4qb3Z90=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -421,7 +424,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"2UMcomEtnezeGu3bymwfNA5rPaTAgRJaWRCUfw2ZGALTyLF4ruU5KvvXW85yYcf5sNbXFzq6psG1jm1L4nXeQWRR",
+					"5UkTs3TU9crS2PnYk2zABTGMiNzAn6UwVtYB2eBNQRfo91CmktBspRA2UtuRNRfweSsh8ZtnA1a67oFuSkr654kD",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -458,6 +461,7 @@ describe("AuditableItemGraphService", () => {
 		expect(result).toEqual({
 			"@context": [
 				"https://schema.twindev.org/aig/",
+				"https://schema.twindev.org/common/",
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.org"
 			],
@@ -528,6 +532,7 @@ describe("AuditableItemGraphService", () => {
 		expect(result).toEqual({
 			"@context": [
 				"https://schema.twindev.org/aig/",
+				"https://schema.twindev.org/common/",
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.org"
 			],
@@ -641,11 +646,12 @@ describe("AuditableItemGraphService", () => {
 		expect(immutableProof).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
+				"https://schema.twindev.org/common/",
 				"https://w3id.org/security/data-integrity/v2"
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "meJxRYsSeR8ZiRqLemmGeenbcBVjGKwoPG1aVV2DfF8=",
+			proofObjectHash: "osfWisi/QJUUsHBwK/gFeRAZD8wLZEb6Qf7/imhpIds=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -655,7 +661,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"3tF8h6GsfJ3mbo5suhH55iAoJKzmEiVQKgZQn6sDxvXb2izZBgw4P7dwVaBstGBrfPV3yu3bBjhkLH1BCdjfr6eg",
+					"2VdJMb3sDyZ51BvDK8TNAmQrHh7uncUtxeVbt59WstXD7mo2gwrXx6aQujc9q8hhMSE5aNrEqwAuZsocS6GevPrY",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -698,6 +704,7 @@ describe("AuditableItemGraphService", () => {
 		expect(result).toEqual({
 			"@context": [
 				"https://schema.twindev.org/aig/",
+				"https://schema.twindev.org/common/",
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.org"
 			],
@@ -820,11 +827,12 @@ describe("AuditableItemGraphService", () => {
 		expect(immutableProof).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
+				"https://schema.twindev.org/common/",
 				"https://w3id.org/security/data-integrity/v2"
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "t/wjnkUvAIzx4i5uZfgIuYJOd2cZ/i9Yu/6WdvmoJLk=",
+			proofObjectHash: "OsPcfJqhm5lo+90IxTc0wnXosz0mj/im0505St5ThTI=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -834,7 +842,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"YF5mkAyu8KquPBXbSfMg3YzRhphiFG2A7MdE8fgc7NwGXM9MUS2fUJbF7VVm5fxSWczMU8Lq7gSKmKxS8AdCsPh",
+					"5Sk2KtENcFjRTA5g2Agjss3qkZHD6sACGCeJT9wDaKqTuqzByiGy5yy4fqrArjdZUByxbrwj7JUz8MUShQEx6bUJ",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -898,6 +906,7 @@ describe("AuditableItemGraphService", () => {
 		expect(result).toEqual({
 			"@context": [
 				"https://schema.twindev.org/aig/",
+				"https://schema.twindev.org/common/",
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.org"
 			],
@@ -1049,6 +1058,7 @@ describe("AuditableItemGraphService", () => {
 		expect(result).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/aig/",
+				"https://schema.twindev.org/common/",
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.org"
 			],
@@ -1205,11 +1215,12 @@ describe("AuditableItemGraphService", () => {
 		expect(immutableProof).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
+				"https://schema.twindev.org/common/",
 				"https://w3id.org/security/data-integrity/v2"
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "t/wjnkUvAIzx4i5uZfgIuYJOd2cZ/i9Yu/6WdvmoJLk=",
+			proofObjectHash: "OsPcfJqhm5lo+90IxTc0wnXosz0mj/im0505St5ThTI=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -1219,7 +1230,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"YF5mkAyu8KquPBXbSfMg3YzRhphiFG2A7MdE8fgc7NwGXM9MUS2fUJbF7VVm5fxSWczMU8Lq7gSKmKxS8AdCsPh",
+					"5Sk2KtENcFjRTA5g2Agjss3qkZHD6sACGCeJT9wDaKqTuqzByiGy5yy4fqrArjdZUByxbrwj7JUz8MUShQEx6bUJ",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1231,10 +1242,11 @@ describe("AuditableItemGraphService", () => {
 		expect(immutableProof).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
+				"https://schema.twindev.org/common/",
 				"https://w3id.org/security/data-integrity/v2"
 			],
 			type: "ImmutableProof",
-			proofObjectHash: "MmpS4LawqoKu2aHCiWwelba6dDGtaNANnSYN7fUicwc=",
+			proofObjectHash: "NkbwRF+Fzc7a8zeeVLBkfSJ47zs2F8162DKTzXJuhOQ=",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
@@ -1242,7 +1254,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"2rUcWZNHx4FLe5xTWXSGSRrDosWat8w3ambPZPeuRtPS4TwYv1G2HSg6ZbMQwV4ncF9c3huYSXvsRCn6fHkD6Fao",
+					"5qvFHEReKgazGEVHkqAkphdPhVyMGLqP9q1i3bNJVy6Lo7pqHv6VBFcunPfFoYYy7MQtgBpB24sHw9Qd1PNnpqsp",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1306,6 +1318,7 @@ describe("AuditableItemGraphService", () => {
 		expect(result).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/aig/",
+				"https://schema.twindev.org/common/",
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.org"
 			],
@@ -1444,11 +1457,12 @@ describe("AuditableItemGraphService", () => {
 		expect(immutableProof).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
+				"https://schema.twindev.org/common/",
 				"https://w3id.org/security/data-integrity/v2"
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "t/wjnkUvAIzx4i5uZfgIuYJOd2cZ/i9Yu/6WdvmoJLk=",
+			proofObjectHash: "OsPcfJqhm5lo+90IxTc0wnXosz0mj/im0505St5ThTI=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -1458,7 +1472,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"YF5mkAyu8KquPBXbSfMg3YzRhphiFG2A7MdE8fgc7NwGXM9MUS2fUJbF7VVm5fxSWczMU8Lq7gSKmKxS8AdCsPh",
+					"5Sk2KtENcFjRTA5g2Agjss3qkZHD6sACGCeJT9wDaKqTuqzByiGy5yy4fqrArjdZUByxbrwj7JUz8MUShQEx6bUJ",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1470,10 +1484,11 @@ describe("AuditableItemGraphService", () => {
 		expect(immutableProof).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
+				"https://schema.twindev.org/common/",
 				"https://w3id.org/security/data-integrity/v2"
 			],
 			type: "ImmutableProof",
-			proofObjectHash: "WdCw1L0yufQ5ZOo+/Ja5Zw4/F9erNtqlrH50LmQRCrU=",
+			proofObjectHash: "WGbjTmZbvttD/O5a3HS6qXewnzujz0D4aaefFoKrWqc=",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
@@ -1481,7 +1496,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"DJdMMp7CjfzRzB8oEtsNT1Yyz8QDSkf6RdrpCvJrcTrxNvYYEFN6Ano71majpCBocNEN12hDUY3LZEPC8tPxJCN",
+					"5M9DqR9qSgXgBZe9nrdjtG2Z7MpMZgai5XiEcoSksVrPbm67VgqbpJwvVRHib6oxkdKX9hAxvyZ6gThDwukaUhnF",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1617,6 +1632,7 @@ describe("AuditableItemGraphService", () => {
 		expect(result).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/aig/",
+				"https://schema.twindev.org/common/",
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.org"
 			],
@@ -1875,11 +1891,12 @@ describe("AuditableItemGraphService", () => {
 		expect(immutableProof).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
+				"https://schema.twindev.org/common/",
 				"https://w3id.org/security/data-integrity/v2"
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "qmn0O5zxzV/LQuVAQCUPYvxluue+8WKrGjKpLhOV9n4=",
+			proofObjectHash: "jd85+7HOnNCp3o9yvUGz7kWmsc5eYlu25XsNjXFJul4=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -1889,7 +1906,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"3KPUzLxaAQcVmb4HmiLCP1xDmwr76eCAuVjVGM4H25T4UoUPR5daEnPcDVB2tPW7hdvTUpFGTWzqruCgiPWvBYam",
+					"3W85jaMs37AswTxRYuj3YPSE3vT3UqP52EMmhADTqxJ2Xn9DuNbCS9dKxGCU8nwdc1pGGm9nUuZAyMZR1L8iXjk9",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1901,10 +1918,11 @@ describe("AuditableItemGraphService", () => {
 		expect(immutableProof).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
+				"https://schema.twindev.org/common/",
 				"https://w3id.org/security/data-integrity/v2"
 			],
 			type: "ImmutableProof",
-			proofObjectHash: "HAwIjoJ/d3ooMzKZavJk+xwUhjwyNJIk8f0YDxm/nBU=",
+			proofObjectHash: "9UOjMSHTW0vasIz8T0WJR2Gug24xCkJj1N1GLvTvjDI=",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
@@ -1912,7 +1930,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"2D2WHb8jK69XF9GVXRh55Y4r5966QS3EL7UmWDEhgtR4JFU97PR93D3FArzwDvDggS3GJNtTCfs9hDvodoxQJ6Fh",
+					"4Unpvm9vrP2jqp4ZZdAFA1dFsH1ArgH8cUpTWXgkvgqjS77ERcdoTDvXzSmjeCLeEEktkBjULgzVsrKfkvro8uV4",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1986,6 +2004,7 @@ describe("AuditableItemGraphService", () => {
 		expect(result).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/aig/",
+				"https://schema.twindev.org/common/",
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.org"
 			],
@@ -2396,6 +2415,7 @@ describe("AuditableItemGraphService", () => {
 		expect(result).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/aig/",
+				"https://schema.twindev.org/common/",
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.org"
 			],
@@ -2881,11 +2901,12 @@ describe("AuditableItemGraphService", () => {
 		expect(immutableProof).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
+				"https://schema.twindev.org/common/",
 				"https://w3id.org/security/data-integrity/v2"
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "9CV9Kyr/ayoVvWZhmWZtw0nf1E6ODrZ8zvwpaDeT/wE=",
+			proofObjectHash: "YcNv+JCKgrYuocJ/CJEG9qOpTLQTr6/ebqykFtXCbHE=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -2895,7 +2916,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"3SPaQiGcFsn9EcbsXH7vRsBWedixJ7mBzPU82shVRBCsLjrNBrakcwAwRsg81inacuaWF4cG3W2ChwmmBQYcPvu6",
+					"2nMY1YAx8ygK9jZ6RVFGFCd7r96FY56HJAkccyrC6m7eYAngsxVwvn9UuQ6ucrMGj9wQiS6dNehtM3mX8YJHW23D",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -2907,10 +2928,11 @@ describe("AuditableItemGraphService", () => {
 		expect(immutableProof).toMatchObject({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
+				"https://schema.twindev.org/common/",
 				"https://w3id.org/security/data-integrity/v2"
 			],
 			type: "ImmutableProof",
-			proofObjectHash: "7+v3ST9mIClbtmletkfCsr/pIHEBDtKfUOH8iyC6N8Y=",
+			proofObjectHash: "Z/7YO6rqLPC4PTBAxpUX4UFoTMEZBZXKyQx1y0FPUh4=",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
@@ -2918,7 +2940,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"2NzvVDinNunYNW1o6GnY7bwqPiGuVzbWGLaGZmkJkahf4v319LcEA8JHAbfmdjuRjA6vm9oBgxp2jprKbRDECKeM",
+					"6uJjZFGhRcpYSqgKfKbWkmeuEAm4cyKJdbe9rSudLydXCmD7TqnxojxK7EG67TZPuy2S53Yf4M4NA7neTvmESMU",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -2950,6 +2972,7 @@ describe("AuditableItemGraphService", () => {
 		expect(result).toEqual({
 			"@context": [
 				"https://schema.twindev.org/aig/",
+				"https://schema.twindev.org/common/",
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.org"
 			],
@@ -3002,7 +3025,11 @@ describe("AuditableItemGraphService", () => {
 		const results = await service.query({ id: "0" });
 
 		expect(results).toMatchObject({
-			"@context": ["https://schema.twindev.org/aig/", "https://schema.org"],
+			"@context": [
+				"https://schema.twindev.org/aig/",
+				"https://schema.twindev.org/common/",
+				"https://schema.org"
+			],
 			type: "AuditableItemGraphVertexList",
 			vertices: [
 				{
@@ -3039,7 +3066,11 @@ describe("AuditableItemGraphService", () => {
 
 		const results = await service.query({ id: "foo" });
 		expect(results).toMatchObject({
-			"@context": ["https://schema.twindev.org/aig/", "https://schema.org"],
+			"@context": [
+				"https://schema.twindev.org/aig/",
+				"https://schema.twindev.org/common/",
+				"https://schema.org"
+			],
 			type: "AuditableItemGraphVertexList",
 			vertices: [
 				{
@@ -3094,7 +3125,11 @@ describe("AuditableItemGraphService", () => {
 
 		const results = await service.query({ id: "5" });
 		expect(results).toEqual({
-			"@context": ["https://schema.twindev.org/aig/", "https://schema.org"],
+			"@context": [
+				"https://schema.twindev.org/aig/",
+				"https://schema.twindev.org/common/",
+				"https://schema.org"
+			],
 			type: "AuditableItemGraphVertexList",
 			vertices: [
 				{
@@ -3129,7 +3164,11 @@ describe("AuditableItemGraphService", () => {
 
 		const results = await service.query({ id: "5", idMode: "id" });
 		expect(results).toEqual({
-			"@context": ["https://schema.twindev.org/aig/", "https://schema.org"],
+			"@context": [
+				"https://schema.twindev.org/aig/",
+				"https://schema.twindev.org/common/",
+				"https://schema.org"
+			],
 			type: "AuditableItemGraphVertexList",
 			vertices: [
 				{
@@ -3157,7 +3196,11 @@ describe("AuditableItemGraphService", () => {
 
 		const results = await service.query({ id: "4", idMode: "alias" });
 		expect(results).toEqual({
-			"@context": ["https://schema.twindev.org/aig/", "https://schema.org"],
+			"@context": [
+				"https://schema.twindev.org/aig/",
+				"https://schema.twindev.org/common/",
+				"https://schema.org"
+			],
 			type: "AuditableItemGraphVertexList",
 			vertices: [
 				{

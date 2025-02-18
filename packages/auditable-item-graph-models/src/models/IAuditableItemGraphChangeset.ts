@@ -12,9 +12,11 @@ export interface IAuditableItemGraphChangeset {
 	/**
 	 * JSON-LD Context.
 	 */
-	"@context":
-		| typeof AuditableItemGraphTypes.ContextRoot
-		| [typeof AuditableItemGraphTypes.ContextRoot, ...IJsonLdContextDefinitionElement[]];
+	"@context": [
+		typeof AuditableItemGraphTypes.ContextRoot,
+		typeof AuditableItemGraphTypes.ContextRootCommon,
+		...IJsonLdContextDefinitionElement[]
+	];
 
 	/**
 	 * JSON-LD Type.

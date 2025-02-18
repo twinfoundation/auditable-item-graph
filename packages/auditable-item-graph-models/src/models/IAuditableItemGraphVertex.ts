@@ -16,9 +16,11 @@ export interface IAuditableItemGraphVertex
 	/**
 	 * JSON-LD Context.
 	 */
-	"@context":
-		| typeof AuditableItemGraphTypes.ContextRoot
-		| [typeof AuditableItemGraphTypes.ContextRoot, ...IJsonLdContextDefinitionElement[]];
+	"@context": [
+		typeof AuditableItemGraphTypes.ContextRoot,
+		typeof AuditableItemGraphTypes.ContextRootCommon,
+		...IJsonLdContextDefinitionElement[]
+	];
 
 	/**
 	 * The id of the element.

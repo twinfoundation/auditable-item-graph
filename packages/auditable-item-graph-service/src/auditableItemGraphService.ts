@@ -565,7 +565,11 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			);
 
 			const vertexList: IAuditableItemGraphVertexList = {
-				"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+				"@context": [
+					AuditableItemGraphTypes.ContextRoot,
+					AuditableItemGraphTypes.ContextRootCommon,
+					SchemaOrgTypes.ContextRoot
+				],
 				type: AuditableItemGraphTypes.VertexList,
 				vertices: models,
 				cursor: results.cursor
@@ -588,6 +592,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		const model: IAuditableItemGraphVertex = {
 			"@context": [
 				AuditableItemGraphTypes.ContextRoot,
+				AuditableItemGraphTypes.ContextRootCommon,
 				ImmutableProofTypes.ContextRoot,
 				SchemaOrgTypes.ContextRoot
 			],
@@ -603,7 +608,11 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			model.aliases ??= [];
 			for (const aliasEntity of vertexEntity.aliases) {
 				const aliasModel: IAuditableItemGraphAlias = {
-					"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+					"@context": [
+						AuditableItemGraphTypes.ContextRoot,
+						AuditableItemGraphTypes.ContextRootCommon,
+						SchemaOrgTypes.ContextRoot
+					],
 					type: AuditableItemGraphTypes.Alias,
 					id: aliasEntity.id,
 					aliasFormat: aliasEntity.aliasFormat,
@@ -620,7 +629,11 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			model.resources ??= [];
 			for (const resourceEntity of vertexEntity.resources) {
 				const resourceModel: IAuditableItemGraphResource = {
-					"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+					"@context": [
+						AuditableItemGraphTypes.ContextRoot,
+						AuditableItemGraphTypes.ContextRootCommon,
+						SchemaOrgTypes.ContextRoot
+					],
 					type: AuditableItemGraphTypes.Resource,
 					id: resourceEntity.id,
 					dateCreated: resourceEntity.dateCreated,
@@ -636,7 +649,11 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			model.edges ??= [];
 			for (const edgeEntity of vertexEntity.edges) {
 				const edgeModel: IAuditableItemGraphEdge = {
-					"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+					"@context": [
+						AuditableItemGraphTypes.ContextRoot,
+						AuditableItemGraphTypes.ContextRootCommon,
+						SchemaOrgTypes.ContextRoot
+					],
 					type: AuditableItemGraphTypes.Edge,
 					id: edgeEntity.id,
 					dateCreated: edgeEntity.dateCreated,
@@ -662,13 +679,21 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		changesetEntity: AuditableItemGraphChangeset
 	): IAuditableItemGraphChangeset {
 		const model: IAuditableItemGraphChangeset = {
-			"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+			"@context": [
+				AuditableItemGraphTypes.ContextRoot,
+				AuditableItemGraphTypes.ContextRootCommon,
+				SchemaOrgTypes.ContextRoot
+			],
 			type: AuditableItemGraphTypes.Changeset,
 			id: changesetEntity.id,
 			dateCreated: changesetEntity.dateCreated,
 			userIdentity: changesetEntity.userIdentity,
 			patches: changesetEntity.patches.map(p => ({
-				"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+				"@context": [
+					AuditableItemGraphTypes.ContextRoot,
+					AuditableItemGraphTypes.ContextRootCommon,
+					SchemaOrgTypes.ContextRoot
+				],
 				type: AuditableItemGraphTypes.PatchOperation,
 				patchOperation: p.op,
 				patchPath: p.path,

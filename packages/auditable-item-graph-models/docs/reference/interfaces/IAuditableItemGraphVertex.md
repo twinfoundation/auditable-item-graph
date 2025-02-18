@@ -46,7 +46,7 @@ The date/time of when the element was deleted, as we never actually remove items
 
 ### @context
 
-> **@context**: `"https://schema.twindev.org/aig/"` \| \[`"https://schema.twindev.org/aig/"`, `...IJsonLdContextDefinitionElement[]`\]
+> **@context**: \[`"https://schema.twindev.org/aig/"`, `"https://schema.twindev.org/common/"`, `...IJsonLdContextDefinitionElement[]`\]
 
 JSON-LD Context.
 

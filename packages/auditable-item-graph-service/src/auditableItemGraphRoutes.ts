@@ -180,7 +180,11 @@ export function generateRestRoutesAuditableItemGraph(
 						id: "auditableItemGraphGetResponseExample",
 						response: {
 							body: {
-								"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+								"@context": [
+									AuditableItemGraphTypes.ContextRoot,
+									AuditableItemGraphTypes.ContextRootCommon,
+									SchemaOrgTypes.ContextRoot
+								],
 								type: AuditableItemGraphTypes.Vertex,
 								id: "aig:1234567890",
 								dateCreated: "2024-08-22T11:55:16.271Z",
@@ -192,7 +196,11 @@ export function generateRestRoutesAuditableItemGraph(
 								},
 								aliases: [
 									{
-										"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+										"@context": [
+											AuditableItemGraphTypes.ContextRoot,
+											AuditableItemGraphTypes.ContextRootCommon,
+											SchemaOrgTypes.ContextRoot
+										],
 										type: AuditableItemGraphTypes.Alias,
 										id: "tst:1234567890",
 										dateCreated: "2024-08-22T11:55:16.271Z"
@@ -214,7 +222,11 @@ export function generateRestRoutesAuditableItemGraph(
 								[HeaderTypes.ContentType]: MimeTypes.JsonLd
 							},
 							body: {
-								"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+								"@context": [
+									AuditableItemGraphTypes.ContextRoot,
+									AuditableItemGraphTypes.ContextRootCommon,
+									SchemaOrgTypes.ContextRoot
+								],
 								type: AuditableItemGraphTypes.Vertex,
 								id: "aig:1234567890",
 								dateCreated: "2024-08-22T11:55:16.271Z",
@@ -226,7 +238,11 @@ export function generateRestRoutesAuditableItemGraph(
 								},
 								aliases: [
 									{
-										"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+										"@context": [
+											AuditableItemGraphTypes.ContextRoot,
+											AuditableItemGraphTypes.ContextRootCommon,
+											SchemaOrgTypes.ContextRoot
+										],
 										type: AuditableItemGraphTypes.Alias,
 										dateCreated: "2024-08-22T11:55:16.271Z",
 										id: "tst:1234567890"
@@ -364,11 +380,19 @@ export function generateRestRoutesAuditableItemGraph(
 						id: "auditableItemGraphListResponseExample",
 						response: {
 							body: {
-								"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+								"@context": [
+									AuditableItemGraphTypes.ContextRoot,
+									AuditableItemGraphTypes.ContextRootCommon,
+									SchemaOrgTypes.ContextRoot
+								],
 								type: AuditableItemGraphTypes.VertexList,
 								vertices: [
 									{
-										"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+										"@context": [
+											AuditableItemGraphTypes.ContextRoot,
+											AuditableItemGraphTypes.ContextRootCommon,
+											SchemaOrgTypes.ContextRoot
+										],
 										type: AuditableItemGraphTypes.Vertex,
 										id: "0101010101010101010101010101010101010101010101010101010101010101",
 										dateCreated: "2024-08-22T11:55:16.271Z",
@@ -376,6 +400,7 @@ export function generateRestRoutesAuditableItemGraph(
 											{
 												"@context": [
 													AuditableItemGraphTypes.ContextRoot,
+													AuditableItemGraphTypes.ContextRootCommon,
 													SchemaOrgTypes.ContextRoot
 												],
 												type: AuditableItemGraphTypes.Alias,
@@ -402,11 +427,19 @@ export function generateRestRoutesAuditableItemGraph(
 								[HeaderTypes.ContentType]: MimeTypes.JsonLd
 							},
 							body: {
-								"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+								"@context": [
+									AuditableItemGraphTypes.ContextRoot,
+									AuditableItemGraphTypes.ContextRootCommon,
+									SchemaOrgTypes.ContextRoot
+								],
 								type: AuditableItemGraphTypes.VertexList,
 								vertices: [
 									{
-										"@context": [AuditableItemGraphTypes.ContextRoot, SchemaOrgTypes.ContextRoot],
+										"@context": [
+											AuditableItemGraphTypes.ContextRoot,
+											AuditableItemGraphTypes.ContextRootCommon,
+											SchemaOrgTypes.ContextRoot
+										],
 										type: AuditableItemGraphTypes.Vertex,
 										id: "0101010101010101010101010101010101010101010101010101010101010101",
 										dateCreated: "2024-08-22T11:55:16.271Z",
@@ -414,6 +447,7 @@ export function generateRestRoutesAuditableItemGraph(
 											{
 												"@context": [
 													AuditableItemGraphTypes.ContextRoot,
+													AuditableItemGraphTypes.ContextRootCommon,
 													SchemaOrgTypes.ContextRoot
 												],
 												type: AuditableItemGraphTypes.Alias,

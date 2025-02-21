@@ -282,6 +282,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				const verifyResult = await this.verifyChangesets(vertexModel, verifySignatureDepth);
 				verified = verifyResult.verified;
 				changesets = verifyResult.changesets;
+				vertexModel["@context"].push(ImmutableProofTypes.ContextRoot);
 			}
 
 			if (!(options?.includeDeleted ?? false)) {
@@ -313,7 +314,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				vertexModel.verified = verified;
 			}
 
-			return JsonLdProcessor.compact(vertexModel);
+			return JsonLdProcessor.compact(vertexModel, vertexModel["@context"]);
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "getFailed", undefined, error);
 		}
@@ -574,7 +575,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				cursor: results.cursor
 			};
 
-			return JsonLdProcessor.compact(vertexList);
+			return JsonLdProcessor.compact(vertexList, vertexList["@context"]);
 		} catch (error) {
 			throw new GeneralError(this.CLASS_NAME, "queryingFailed", undefined, error);
 		}

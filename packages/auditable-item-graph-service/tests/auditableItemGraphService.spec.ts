@@ -462,8 +462,7 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/",
-				"https://schema.org",
-				"https://www.w3.org/ns/activitystreams"
+				"https://schema.org"
 			],
 			type: "AuditableItemGraphVertex",
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
@@ -471,6 +470,7 @@ describe("AuditableItemGraphService", () => {
 			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
 			annotationObject: {
+				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: {
 					type: "Person",
@@ -533,7 +533,7 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/",
 				"https://schema.org",
-				"https://www.w3.org/ns/activitystreams"
+				"https://schema.twindev.org/immutable-proof/"
 			],
 			type: "AuditableItemGraphVertex",
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
@@ -541,6 +541,7 @@ describe("AuditableItemGraphService", () => {
 			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
 			annotationObject: {
+				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
 				object: { type: "Note", content: "This is a simple note" },
@@ -704,7 +705,6 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/",
 				"https://schema.org",
-				"https://www.w3.org/ns/activitystreams",
 				"https://schema.twindev.org/immutable-proof/"
 			],
 			type: "AuditableItemGraphVertex",
@@ -713,6 +713,7 @@ describe("AuditableItemGraphService", () => {
 			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
 			annotationObject: {
+				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
 				object: { type: "Note", content: "This is a simple note" },
@@ -906,7 +907,6 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/",
 				"https://schema.org",
-				"https://www.w3.org/ns/activitystreams",
 				"https://schema.twindev.org/immutable-proof/"
 			],
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
@@ -953,6 +953,7 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			annotationObject: {
+				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
 				object: { type: "Note", content: "This is a simple note" },
@@ -1058,7 +1059,6 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/",
 				"https://schema.org",
-				"https://www.w3.org/ns/activitystreams",
 				"https://schema.twindev.org/immutable-proof/"
 			],
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
@@ -1141,6 +1141,7 @@ describe("AuditableItemGraphService", () => {
 				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			verified: true,
 			annotationObject: {
+				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
 				object: { type: "Note", content: "This is a simple note" },
@@ -1318,7 +1319,6 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/",
 				"https://schema.org",
-				"https://www.w3.org/ns/activitystreams",
 				"https://schema.twindev.org/immutable-proof/"
 			],
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
@@ -1380,6 +1380,7 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			annotationObject: {
+				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
 				object: { type: "Note", content: "This is a simple note 2" },
@@ -1632,7 +1633,6 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/",
 				"https://schema.org",
-				"https://www.w3.org/ns/activitystreams",
 				"https://schema.twindev.org/immutable-proof/"
 			],
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
@@ -1773,6 +1773,7 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			annotationObject: {
+				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
 				object: { type: "Note", content: "This is a simple note 2" },
@@ -2002,7 +2003,6 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/",
 				"https://schema.org",
-				"https://www.w3.org/ns/activitystreams",
 				"https://schema.twindev.org/immutable-proof/"
 			],
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
@@ -2074,6 +2074,7 @@ describe("AuditableItemGraphService", () => {
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					annotationObject: {
+						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
 						object: { type: "Note", content: "This is a simple note 2" },
@@ -2413,7 +2414,6 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/",
 				"https://schema.org",
-				"https://www.w3.org/ns/activitystreams",
 				"https://schema.twindev.org/immutable-proof/"
 			],
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",

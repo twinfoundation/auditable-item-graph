@@ -1753,6 +1753,7 @@ describe("AuditableItemGraphService", () => {
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					resourceObject: {
+						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
 						object: { type: "Note", content: "This is a simple note resource 10" },
@@ -1765,6 +1766,7 @@ describe("AuditableItemGraphService", () => {
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					resourceObject: {
+						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { type: "Person", id: "acct:person@example.org", name: "Person" },
 						object: { type: "Note", content: "This is a simple note resource 11" },
@@ -2427,6 +2429,7 @@ describe("AuditableItemGraphService", () => {
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					annotationObject: {
+						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
 						object: { type: "Note", content: "This is a simple note alias 10" },
@@ -2439,6 +2442,7 @@ describe("AuditableItemGraphService", () => {
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					annotationObject: {
+						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
 						object: { type: "Note", content: "This is a simple note alias 20" },
@@ -2655,6 +2659,7 @@ describe("AuditableItemGraphService", () => {
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					annotationObject: {
+						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
 						object: { type: "Note", content: "This is a simple note edge 10" },
@@ -2668,6 +2673,7 @@ describe("AuditableItemGraphService", () => {
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					annotationObject: {
+						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
 						object: { type: "Note", content: "This is a simple note edge 20" },
@@ -2683,6 +2689,7 @@ describe("AuditableItemGraphService", () => {
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					resourceObject: {
+						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
 						object: { type: "Note", content: "This is a simple note resource 10" },
@@ -2695,6 +2702,7 @@ describe("AuditableItemGraphService", () => {
 					dateCreated: "2024-08-22T11:55:16.271Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					resourceObject: {
+						"@context": "https://www.w3.org/ns/activitystreams",
 						type: "Create",
 						actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
 						object: { type: "Note", content: "This is a simple note resource 20" },
@@ -2703,6 +2711,7 @@ describe("AuditableItemGraphService", () => {
 				}
 			],
 			annotationObject: {
+				"@context": "https://www.w3.org/ns/activitystreams",
 				type: "Create",
 				actor: { id: "acct:person@example.org", type: "Person", name: "Person" },
 				object: { type: "Note", content: "This is a simple note 2" },

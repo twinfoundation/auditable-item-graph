@@ -192,11 +192,11 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
-				"https://w3id.org/security/data-integrity/v2"
+				"https://www.w3.org/ns/credentials/v2"
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "5oYlbk5KHN0bxlDv1r1XJZhSf3WREWG1nE1EnPLOYdQ=",
+			proofObjectHash: "sha256:VPsHqgigEIPtBZmXKsCegSd8+nDilQq8go9+LkdYduc=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -206,7 +206,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"24GPfSZ21wkcHPYRyiLQzKA9LfPp7ZYi2ax2VLq2cRkaSTRDmuiHejVncNcrrqYKvBaTUunzZai3axLpnoWgZh4k",
+					"z3Vcuh2BP9ShC4UEJ3yRZgcTJ6gmRtydDrh6AmY1zEciQqEWTvXfBZNxxjTzdJjT44cmn9VDWbBHqxFsX9fjsfXzK",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -291,11 +291,11 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
-				"https://w3id.org/security/data-integrity/v2"
+				"https://www.w3.org/ns/credentials/v2"
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "DnwUmDwWYyhQXS2cxG/ZSZnn7/v+aZ1xLhscws5+hIo=",
+			proofObjectHash: "sha256:jKUvHHZ9kpNC5ufgYpDV5f1tjkz/JDlLCmou/x99XPo=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -305,7 +305,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"tDwwAWKvf5sLrDttULGzc8nT7GxrhJx3eiXbDMbSNRXTZeLMVudzf2RQdJ9XP7fSVxfsc5aBNZpYGb48SnpUF5X",
+					"z36h2kQu8EXzMYSWtkZgvcVjYeuRTm79Yr9dPzVG8jASNcjFXQheTe6GTGbgoa3qPhneYr9GBXhdArjpF5eC7vptU",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -410,11 +410,11 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
-				"https://w3id.org/security/data-integrity/v2"
+				"https://www.w3.org/ns/credentials/v2"
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "wyxvdWSkCKolV5xQNEDwA0RvjvvByZTodetM4qb3Z90=",
+			proofObjectHash: "sha256:RsaJ2Rz9CCk++m5DVMeu+hj3nlw4160HjHlySNzQoro=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -424,7 +424,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"5UkTs3TU9crS2PnYk2zABTGMiNzAn6UwVtYB2eBNQRfo91CmktBspRA2UtuRNRfweSsh8ZtnA1a67oFuSkr654kD",
+					"zfpKdFqWRps8ZtrJLZDF8AcgVvC7vHUvk2A5hUJn1pa2UX2RaFUG8GvJJ2uEdrpBqwMDuewfocqGNbom9w2xfRrA",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -646,11 +646,11 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
-				"https://w3id.org/security/data-integrity/v2"
+				"https://www.w3.org/ns/credentials/v2"
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "osfWisi/QJUUsHBwK/gFeRAZD8wLZEb6Qf7/imhpIds=",
+			proofObjectHash: "sha256:gzqEabyev+HBwDTx4lDsvdtsTo3fr29ZwqSwpWfR1lg=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -660,7 +660,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"2VdJMb3sDyZ51BvDK8TNAmQrHh7uncUtxeVbt59WstXD7mo2gwrXx6aQujc9q8hhMSE5aNrEqwAuZsocS6GevPrY",
+					"z9PjsoAebKoMuY8dzzrigbguxNVii8qmXm2FBm9XJKbjQqErSGqdMhfRi6ag98R3R2rEMfXuF2Y3vhAj4ueg2k4Q",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -827,11 +827,11 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
-				"https://w3id.org/security/data-integrity/v2"
+				"https://www.w3.org/ns/credentials/v2"
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "OsPcfJqhm5lo+90IxTc0wnXosz0mj/im0505St5ThTI=",
+			proofObjectHash: "sha256:qexHFOvtq+O7X9p/073R4Nac6l8EfHuZLQ1zDgt/WQA=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -841,7 +841,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"5Sk2KtENcFjRTA5g2Agjss3qkZHD6sACGCeJT9wDaKqTuqzByiGy5yy4fqrArjdZUByxbrwj7JUz8MUShQEx6bUJ",
+					"z3B3ibaXsdYkY9ATiVF6AFBtVKvV3zKdj4dpwaHp1h3XhqjCk2pUFjTL4RsFeGGBkHBgZudXaYkFfe5h3e5V4kmTE",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1215,11 +1215,11 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
-				"https://w3id.org/security/data-integrity/v2"
+				"https://www.w3.org/ns/credentials/v2"
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "OsPcfJqhm5lo+90IxTc0wnXosz0mj/im0505St5ThTI=",
+			proofObjectHash: "sha256:qexHFOvtq+O7X9p/073R4Nac6l8EfHuZLQ1zDgt/WQA=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -1229,7 +1229,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"5Sk2KtENcFjRTA5g2Agjss3qkZHD6sACGCeJT9wDaKqTuqzByiGy5yy4fqrArjdZUByxbrwj7JUz8MUShQEx6bUJ",
+					"z3B3ibaXsdYkY9ATiVF6AFBtVKvV3zKdj4dpwaHp1h3XhqjCk2pUFjTL4RsFeGGBkHBgZudXaYkFfe5h3e5V4kmTE",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1242,10 +1242,10 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
-				"https://w3id.org/security/data-integrity/v2"
+				"https://www.w3.org/ns/credentials/v2"
 			],
 			type: "ImmutableProof",
-			proofObjectHash: "NkbwRF+Fzc7a8zeeVLBkfSJ47zs2F8162DKTzXJuhOQ=",
+			proofObjectHash: "sha256:0jEEy9KV4/E3OpdfGI5o0PvXG4cijtMTex2uGPyL6bg=",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
@@ -1253,7 +1253,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"5qvFHEReKgazGEVHkqAkphdPhVyMGLqP9q1i3bNJVy6Lo7pqHv6VBFcunPfFoYYy7MQtgBpB24sHw9Qd1PNnpqsp",
+					"z4poHio4SKuVx8PT49proW5tUaMHgAX7eebwszxVqVKkn6MWVzz9FtZYFru8wGYbUNuNUJ6Z2s2qC4mjPHdJ7Wag4",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1457,11 +1457,11 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
-				"https://w3id.org/security/data-integrity/v2"
+				"https://www.w3.org/ns/credentials/v2"
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "OsPcfJqhm5lo+90IxTc0wnXosz0mj/im0505St5ThTI=",
+			proofObjectHash: "sha256:qexHFOvtq+O7X9p/073R4Nac6l8EfHuZLQ1zDgt/WQA=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -1471,7 +1471,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"5Sk2KtENcFjRTA5g2Agjss3qkZHD6sACGCeJT9wDaKqTuqzByiGy5yy4fqrArjdZUByxbrwj7JUz8MUShQEx6bUJ",
+					"z3B3ibaXsdYkY9ATiVF6AFBtVKvV3zKdj4dpwaHp1h3XhqjCk2pUFjTL4RsFeGGBkHBgZudXaYkFfe5h3e5V4kmTE",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1484,10 +1484,10 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
-				"https://w3id.org/security/data-integrity/v2"
+				"https://www.w3.org/ns/credentials/v2"
 			],
 			type: "ImmutableProof",
-			proofObjectHash: "WGbjTmZbvttD/O5a3HS6qXewnzujz0D4aaefFoKrWqc=",
+			proofObjectHash: "sha256:Ib+Ku9nMWbHkXoh1laoNmf0KPVxvJfpn/0fHsNhaLdA=",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
@@ -1495,7 +1495,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"5M9DqR9qSgXgBZe9nrdjtG2Z7MpMZgai5XiEcoSksVrPbm67VgqbpJwvVRHib6oxkdKX9hAxvyZ6gThDwukaUhnF",
+					"z4gtm399Ntvq2MzSu7xQh2Y2Jr1z1cJaZahvpGV6U2ht7ngpPzYGtSuzjniKPvDcF529Z3fuubAZPkWeuoqLwyeSp",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1891,11 +1891,11 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
-				"https://w3id.org/security/data-integrity/v2"
+				"https://www.w3.org/ns/credentials/v2"
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "jd85+7HOnNCp3o9yvUGz7kWmsc5eYlu25XsNjXFJul4=",
+			proofObjectHash: "sha256:gz7dLiGwPZCpPmquOrBQy47bNpPWd8TIwg+bwhX7rEg=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -1905,7 +1905,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"3W85jaMs37AswTxRYuj3YPSE3vT3UqP52EMmhADTqxJ2Xn9DuNbCS9dKxGCU8nwdc1pGGm9nUuZAyMZR1L8iXjk9",
+					"zoZx3LWaDJTnbeMjFFF1NYLhJQzcwQyKcKdwUxJn6DLA8YfSBJD7AMo8spLG6SJVsbgpqeg1oVfdLWjfDP2CmM3U",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1918,10 +1918,10 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
-				"https://w3id.org/security/data-integrity/v2"
+				"https://www.w3.org/ns/credentials/v2"
 			],
 			type: "ImmutableProof",
-			proofObjectHash: "9UOjMSHTW0vasIz8T0WJR2Gug24xCkJj1N1GLvTvjDI=",
+			proofObjectHash: "sha256:TrY9E2Kr+SYrcEpSZzR3ZEh4TpQRK29NNoNOkrlQMuo=",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
@@ -1929,7 +1929,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"4Unpvm9vrP2jqp4ZZdAFA1dFsH1ArgH8cUpTWXgkvgqjS77ERcdoTDvXzSmjeCLeEEktkBjULgzVsrKfkvro8uV4",
+					"z591VqHL1GGGAxVth1qTwRkNFESpB8MzcTiwQ2LquUh49fP8tqWYATS46TgiXpsktvhY479axMNc2A9CCWc4YAJdC",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -2901,11 +2901,11 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
-				"https://w3id.org/security/data-integrity/v2"
+				"https://www.w3.org/ns/credentials/v2"
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "YcNv+JCKgrYuocJ/CJEG9qOpTLQTr6/ebqykFtXCbHE=",
+			proofObjectHash: "sha256:zu9n3x5vQtD445LYA/w8Rf9QL7v6u3WCWXfS14EpI4k=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -2915,7 +2915,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"2nMY1YAx8ygK9jZ6RVFGFCd7r96FY56HJAkccyrC6m7eYAngsxVwvn9UuQ6ucrMGj9wQiS6dNehtM3mX8YJHW23D",
+					"z2skXKosKpZz5T2TtcTa12tvZwrsoMSsFMWrTrKagdrDmecB28QbAimbsvpPkwiMYVEvL8yyy4MyQxDNpX8vg77JS",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -2928,10 +2928,10 @@ describe("AuditableItemGraphService", () => {
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
-				"https://w3id.org/security/data-integrity/v2"
+				"https://www.w3.org/ns/credentials/v2"
 			],
 			type: "ImmutableProof",
-			proofObjectHash: "Z/7YO6rqLPC4PTBAxpUX4UFoTMEZBZXKyQx1y0FPUh4=",
+			proofObjectHash: "sha256:nbAKN2Rxdk1NfKl77bQIn9ht4zoPT0HyEtsoVHTaI6o=",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
@@ -2939,7 +2939,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"6uJjZFGhRcpYSqgKfKbWkmeuEAm4cyKJdbe9rSudLydXCmD7TqnxojxK7EG67TZPuy2S53Yf4M4NA7neTvmESMU",
+					"z4JVRFoxtWmkRs1XTP6orRsP2Pdwub3BJxHuakzBc6VS5m1uAG7xXf1AznJz7NAR97BSXFpqE5p1maktHgFJWNzBF",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}

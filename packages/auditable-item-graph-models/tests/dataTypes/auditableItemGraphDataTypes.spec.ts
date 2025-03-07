@@ -4,6 +4,7 @@ import type { IValidationFailure } from "@twin.org/core";
 import { DataTypeHelper } from "@twin.org/data-core";
 import { JsonLdDataTypes } from "@twin.org/data-json-ld";
 import { AuditableItemGraphDataTypes } from "../../src/dataTypes/auditableItemGraphDataTypes";
+import { AuditableItemGraphContexts } from "../../src/models/auditableItemGraphContexts";
 import { AuditableItemGraphTypes } from "../../src/models/auditableItemGraphTypes";
 
 describe("AuditableItemGraphDataTypes", () => {
@@ -31,8 +32,8 @@ describe("AuditableItemGraphDataTypes", () => {
 			AuditableItemGraphTypes.Vertex,
 			{
 				"@context": [
-					AuditableItemGraphTypes.ContextRoot,
-					AuditableItemGraphTypes.ContextRootCommon
+					AuditableItemGraphContexts.ContextRoot,
+					AuditableItemGraphContexts.ContextRootCommon
 				],
 				type: AuditableItemGraphTypes.Vertex,
 				dateCreated: new Date().toISOString(),

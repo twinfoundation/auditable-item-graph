@@ -1,6 +1,7 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import {
+	AuditableItemGraphContexts,
 	AuditableItemGraphTopics,
 	AuditableItemGraphTypes,
 	VerifyDepth,
@@ -43,12 +44,13 @@ import {
 } from "@twin.org/entity-storage-models";
 import type { IEventBusComponent } from "@twin.org/event-bus-models";
 import {
+	ImmutableProofContexts,
 	ImmutableProofFailure,
 	ImmutableProofTypes,
 	type IImmutableProofComponent
 } from "@twin.org/immutable-proof-models";
 import { nameof } from "@twin.org/nameof";
-import { SchemaOrgDataTypes, SchemaOrgTypes } from "@twin.org/standards-schema-org";
+import { SchemaOrgContexts, SchemaOrgDataTypes } from "@twin.org/standards-schema-org";
 import type { AuditableItemGraphAlias } from "./entities/auditableItemGraphAlias";
 import type { AuditableItemGraphChangeset } from "./entities/auditableItemGraphChangeset";
 import type { AuditableItemGraphEdge } from "./entities/auditableItemGraphEdge";
@@ -282,7 +284,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				const verifyResult = await this.verifyChangesets(vertexModel, verifySignatureDepth);
 				verified = verifyResult.verified;
 				changesets = verifyResult.changesets;
-				vertexModel["@context"].push(ImmutableProofTypes.ContextRoot);
+				vertexModel["@context"].push(ImmutableProofContexts.ContextRoot);
 			}
 
 			if (!(options?.includeDeleted ?? false)) {
@@ -566,9 +568,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 			const vertexList: IAuditableItemGraphVertexList = {
 				"@context": [
-					AuditableItemGraphTypes.ContextRoot,
-					AuditableItemGraphTypes.ContextRootCommon,
-					SchemaOrgTypes.ContextRoot
+					AuditableItemGraphContexts.ContextRoot,
+					AuditableItemGraphContexts.ContextRootCommon,
+					SchemaOrgContexts.ContextRoot
 				],
 				type: AuditableItemGraphTypes.VertexList,
 				vertices: models,
@@ -590,9 +592,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	private vertexEntityToJsonLd(vertexEntity: AuditableItemGraphVertex): IAuditableItemGraphVertex {
 		const model: IAuditableItemGraphVertex = {
 			"@context": [
-				AuditableItemGraphTypes.ContextRoot,
-				AuditableItemGraphTypes.ContextRootCommon,
-				SchemaOrgTypes.ContextRoot
+				AuditableItemGraphContexts.ContextRoot,
+				AuditableItemGraphContexts.ContextRootCommon,
+				SchemaOrgContexts.ContextRoot
 			],
 			type: AuditableItemGraphTypes.Vertex,
 			id: new Urn(AuditableItemGraphService.NAMESPACE, vertexEntity.id).toString(),
@@ -607,9 +609,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			for (const aliasEntity of vertexEntity.aliases) {
 				const aliasModel: IAuditableItemGraphAlias = {
 					"@context": [
-						AuditableItemGraphTypes.ContextRoot,
-						AuditableItemGraphTypes.ContextRootCommon,
-						SchemaOrgTypes.ContextRoot
+						AuditableItemGraphContexts.ContextRoot,
+						AuditableItemGraphContexts.ContextRootCommon,
+						SchemaOrgContexts.ContextRoot
 					],
 					type: AuditableItemGraphTypes.Alias,
 					id: aliasEntity.id,
@@ -628,9 +630,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			for (const resourceEntity of vertexEntity.resources) {
 				const resourceModel: IAuditableItemGraphResource = {
 					"@context": [
-						AuditableItemGraphTypes.ContextRoot,
-						AuditableItemGraphTypes.ContextRootCommon,
-						SchemaOrgTypes.ContextRoot
+						AuditableItemGraphContexts.ContextRoot,
+						AuditableItemGraphContexts.ContextRootCommon,
+						SchemaOrgContexts.ContextRoot
 					],
 					type: AuditableItemGraphTypes.Resource,
 					id: resourceEntity.id,
@@ -648,9 +650,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			for (const edgeEntity of vertexEntity.edges) {
 				const edgeModel: IAuditableItemGraphEdge = {
 					"@context": [
-						AuditableItemGraphTypes.ContextRoot,
-						AuditableItemGraphTypes.ContextRootCommon,
-						SchemaOrgTypes.ContextRoot
+						AuditableItemGraphContexts.ContextRoot,
+						AuditableItemGraphContexts.ContextRootCommon,
+						SchemaOrgContexts.ContextRoot
 					],
 					type: AuditableItemGraphTypes.Edge,
 					id: edgeEntity.id,
@@ -678,9 +680,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	): IAuditableItemGraphChangeset {
 		const model: IAuditableItemGraphChangeset = {
 			"@context": [
-				AuditableItemGraphTypes.ContextRoot,
-				AuditableItemGraphTypes.ContextRootCommon,
-				SchemaOrgTypes.ContextRoot
+				AuditableItemGraphContexts.ContextRoot,
+				AuditableItemGraphContexts.ContextRootCommon,
+				SchemaOrgContexts.ContextRoot
 			],
 			type: AuditableItemGraphTypes.Changeset,
 			id: changesetEntity.id,
@@ -688,9 +690,9 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			userIdentity: changesetEntity.userIdentity,
 			patches: changesetEntity.patches.map(p => ({
 				"@context": [
-					AuditableItemGraphTypes.ContextRoot,
-					AuditableItemGraphTypes.ContextRootCommon,
-					SchemaOrgTypes.ContextRoot
+					AuditableItemGraphContexts.ContextRoot,
+					AuditableItemGraphContexts.ContextRootCommon,
+					SchemaOrgContexts.ContextRoot
 				],
 				type: AuditableItemGraphTypes.PatchOperation,
 				patchOperation: p.op,
@@ -1096,7 +1098,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 						if (!Is.stringValue(storedChangeset.proofId)) {
 							verified = false;
 							storedChangesetJsonLd.verification = {
-								"@context": ImmutableProofTypes.ContextRoot,
+								"@context": ImmutableProofContexts.ContextRoot,
 								type: ImmutableProofTypes.ImmutableProofVerification,
 								verified: false,
 								failure: ImmutableProofFailure.ProofMissing

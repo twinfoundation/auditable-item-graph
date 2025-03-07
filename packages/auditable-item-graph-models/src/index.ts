@@ -7,6 +7,7 @@ export * from "./models/api/IAuditableItemGraphGetResponse";
 export * from "./models/api/IAuditableItemGraphListRequest";
 export * from "./models/api/IAuditableItemGraphListResponse";
 export * from "./models/api/IAuditableItemGraphUpdateRequest";
+export * from "./models/auditableItemGraphContexts";
 export * from "./models/auditableItemGraphTopics";
 export * from "./models/auditableItemGraphTypes";
 export * from "./models/eventBus/IAuditableItemGraphEventBusVertexCreated";

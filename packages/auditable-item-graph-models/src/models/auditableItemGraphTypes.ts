@@ -7,16 +7,6 @@
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export const AuditableItemGraphTypes = {
 	/**
-	 * The context root for the auditable item graph types.
-	 */
-	ContextRoot: "https://schema.twindev.org/aig/",
-
-	/**
-	 * The context root for the common types.
-	 */
-	ContextRootCommon: "https://schema.twindev.org/common/",
-
-	/**
 	 * Represents auditable item graph vertex.
 	 */
 	Vertex: "AuditableItemGraphVertex",

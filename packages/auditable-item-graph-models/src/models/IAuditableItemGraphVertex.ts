@@ -1,6 +1,7 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import type { IJsonLdContextDefinitionElement, IJsonLdNodeObject } from "@twin.org/data-json-ld";
+import type { AuditableItemGraphContexts } from "./auditableItemGraphContexts";
 import type { AuditableItemGraphTypes } from "./auditableItemGraphTypes";
 import type { IAuditableItemGraphAlias } from "./IAuditableItemGraphAlias";
 import type { IAuditableItemGraphAuditedElement } from "./IAuditableItemGraphAuditedElement";
@@ -17,8 +18,8 @@ export interface IAuditableItemGraphVertex
 	 * JSON-LD Context.
 	 */
 	"@context": [
-		typeof AuditableItemGraphTypes.ContextRoot,
-		typeof AuditableItemGraphTypes.ContextRootCommon,
+		typeof AuditableItemGraphContexts.ContextRoot,
+		typeof AuditableItemGraphContexts.ContextRootCommon,
 		...IJsonLdContextDefinitionElement[]
 	];
 

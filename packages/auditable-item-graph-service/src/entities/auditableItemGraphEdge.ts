@@ -23,13 +23,13 @@ export class AuditableItemGraphEdge {
 	/**
 	 * The date/time of when the edge was last modified.
 	 */
-	@property({ type: "string", format: "date-time" })
+	@property({ type: "string", format: "date-time", optional: true })
 	public dateModified?: string;
 
 	/**
 	 * The timestamp of when the edge was deleted, as we never actually remove items.
 	 */
-	@property({ type: "string", format: "date-time" })
+	@property({ type: "string", format: "date-time", optional: true })
 	public dateDeleted?: string;
 
 	/**
@@ -41,6 +41,6 @@ export class AuditableItemGraphEdge {
 	/**
 	 * Object to associate with the edge as JSON-LD.
 	 */
-	@property({ type: "object", itemTypeRef: JsonLdTypes.NodeObject })
+	@property({ type: "object", itemTypeRef: JsonLdTypes.NodeObject, optional: true })
 	public annotationObject?: IJsonLdNodeObject;
 }

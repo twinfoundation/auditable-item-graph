@@ -22,12 +22,12 @@ export class AuditableItemGraphPatch {
 	/**
 	 * The from for the patch.
 	 */
-	@property({ type: "string" })
+	@property({ type: "string", optional: true })
 	public from?: string;
 
 	/**
 	 * The value for the patch.
 	 */
-	@property({ type: "object" })
+	@property({ type: "object", optional: true })
 	public value?: unknown;
 }

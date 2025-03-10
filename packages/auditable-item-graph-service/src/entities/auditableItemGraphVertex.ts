@@ -20,7 +20,7 @@ export class AuditableItemGraphVertex {
 	/**
 	 * The identity of the node which controls the vertex.
 	 */
-	@property({ type: "string" })
+	@property({ type: "string", optional: true })
 	public nodeIdentity?: string;
 
 	/**
@@ -32,36 +32,41 @@ export class AuditableItemGraphVertex {
 	/**
 	 * The date/time of when the vertex was last modified.
 	 */
-	@property({ type: "string", format: "date-time", sortDirection: SortDirection.Descending })
+	@property({
+		type: "string",
+		format: "date-time",
+		sortDirection: SortDirection.Descending,
+		optional: true
+	})
 	public dateModified?: string;
 
 	/**
 	 * Combined alias index for the vertex used for querying.
 	 */
-	@property({ type: "string", isSecondary: true })
+	@property({ type: "string", isSecondary: true, optional: true })
 	public aliasIndex?: string;
 
 	/**
 	 * Object to associate with the vertex as JSON-LD.
 	 */
-	@property({ type: "object", itemTypeRef: JsonLdTypes.NodeObject })
+	@property({ type: "object", itemTypeRef: JsonLdTypes.NodeObject, optional: true })
 	public annotationObject?: IJsonLdNodeObject;
 
 	/**
 	 * Alternative aliases that can be used to identify the vertex.
 	 */
-	@property({ type: "array", itemType: "string" })
+	@property({ type: "array", itemType: "string", optional: true })
 	public aliases?: AuditableItemGraphAlias[];
 
 	/**
 	 * The resources attached to the vertex.
 	 */
-	@property({ type: "array", itemTypeRef: "AuditableItemGraphResource" })
+	@property({ type: "array", itemTypeRef: "AuditableItemGraphResource", optional: true })
 	public resources?: AuditableItemGraphResource[];
 
 	/**
 	 * Edges connected to the vertex.
 	 */
-	@property({ type: "array", itemTypeRef: "AuditableItemGraphEdge" })
+	@property({ type: "array", itemTypeRef: "AuditableItemGraphEdge", optional: true })
 	public edges?: AuditableItemGraphEdge[];
 }

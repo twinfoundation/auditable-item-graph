@@ -17,7 +17,7 @@ export class AuditableItemGraphAlias {
 	/**
 	 * The format of the alias for the vertex.
 	 */
-	@property({ type: "string" })
+	@property({ type: "string", optional: true })
 	public aliasFormat?: string;
 
 	/**
@@ -29,18 +29,18 @@ export class AuditableItemGraphAlias {
 	/**
 	 * The date/time of when the alias was last modified.
 	 */
-	@property({ type: "string", format: "date-time" })
+	@property({ type: "string", format: "date-time", optional: true })
 	public dateModified?: string;
 
 	/**
 	 * The timestamp of when the alias was deleted, as we never actually remove items.
 	 */
-	@property({ type: "string", format: "date-time" })
+	@property({ type: "string", format: "date-time", optional: true })
 	public dateDeleted?: string;
 
 	/**
 	 * Object to associate with the alias as JSON-LD.
 	 */
-	@property({ type: "object", itemTypeRef: JsonLdTypes.NodeObject })
+	@property({ type: "object", itemTypeRef: JsonLdTypes.NodeObject, optional: true })
 	public annotationObject?: IJsonLdNodeObject;
 }

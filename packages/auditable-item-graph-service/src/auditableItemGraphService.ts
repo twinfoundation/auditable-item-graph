@@ -1010,8 +1010,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				vertexId: updated.id,
 				dateCreated: context.now,
 				userIdentity: context.userIdentity,
-				patches,
-				proofId: ""
+				patches
 			};
 
 			// Create the JSON-LD object we want to use for the proof

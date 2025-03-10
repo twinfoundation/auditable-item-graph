@@ -41,6 +41,6 @@ export class AuditableItemGraphChangeset {
 	/**
 	 * The immutable proof id which contains the signature for this changeset.
 	 */
-	@property({ type: "string" })
-	public proofId!: string;
+	@property({ type: "string", optional: true })
+	public proofId?: string;
 }

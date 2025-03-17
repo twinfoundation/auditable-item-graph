@@ -164,14 +164,14 @@ export class AuditableItemGraphClient
 	}
 
 	/**
-	 * Remove the immutable storage for an item.
+	 * Remove the verifiable storage for an item.
 	 * @param id The id of the vertex to get.
 	 * @returns Nothing.
 	 * @throws NotFoundError if the vertex is not found.
 	 * @internal
 	 */
-	public async removeImmutable(id: string): Promise<void> {
-		throw new NotSupportedError(this.CLASS_NAME, "removeImmutable");
+	public async removeVerifiable(id: string): Promise<void> {
+		throw new NotSupportedError(this.CLASS_NAME, "removeVerifiable");
 	}
 
 	/**

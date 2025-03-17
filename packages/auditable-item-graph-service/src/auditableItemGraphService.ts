@@ -426,13 +426,13 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	}
 
 	/**
-	 * Remove the immutable storage for an item.
+	 * Remove the verifiable storage for an item.
 	 * @param id The id of the vertex to get.
 	 * @param nodeIdentity The node identity to use for vault operations.
 	 * @returns Nothing.
 	 * @throws NotFoundError if the vertex is not found.
 	 */
-	public async removeImmutable(id: string, nodeIdentity?: string): Promise<void> {
+	public async removeVerifiable(id: string, nodeIdentity?: string): Promise<void> {
 		Guards.stringValue(this.CLASS_NAME, nameof(id), id);
 		Guards.stringValue(this.CLASS_NAME, nameof(nodeIdentity), nodeIdentity);
 
@@ -473,14 +473,14 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 				for (const changeset of changesetsResult.entities) {
 					if (Is.stringValue(changeset.proofId)) {
-						await this._immutableProofComponent.removeImmutable(changeset.proofId, nodeIdentity);
+						await this._immutableProofComponent.removeVerifiable(changeset.proofId, nodeIdentity);
 						delete changeset.proofId;
 						await this._changesetStorage.set(changeset as AuditableItemGraphChangeset);
 					}
 				}
 			} while (Is.stringValue(changesetsResult.cursor));
 		} catch (error) {
-			throw new GeneralError(this.CLASS_NAME, "removeImmutableFailed", undefined, error);
+			throw new GeneralError(this.CLASS_NAME, "removeVerifiableFailed", undefined, error);
 		}
 	}
 
@@ -1030,7 +1030,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				context.nodeIdentity
 			);
 
-			// Link the immutable storage id to the changeset
+			// Link the verifiable storage id to the changeset
 			await this._changesetStorage.set(changesetEntity);
 
 			return patches;

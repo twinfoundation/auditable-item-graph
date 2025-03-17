@@ -99,13 +99,13 @@ export interface IAuditableItemGraphComponent extends IComponent {
 	): Promise<IAuditableItemGraphVertex>;
 
 	/**
-	 * Remove the immutable storage for an item.
+	 * Remove the verifiable storage for an item.
 	 * @param id The id of the vertex to remove the storage from.
 	 * @param nodeIdentity The node identity to use for vault operations.
 	 * @returns Nothing.
 	 * @throws NotFoundError if the vertex is not found.
 	 */
-	removeImmutable(id: string, nodeIdentity?: string): Promise<void>;
+	removeVerifiable(id: string, nodeIdentity?: string): Promise<void>;
 
 	/**
 	 * Query the graph for vertices.

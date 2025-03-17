@@ -16,14 +16,14 @@ import {
 	ImmutableProofService,
 	initSchema as initSchemaImmutableProof
 } from "@twin.org/immutable-proof-service";
-import {
-	EntityStorageImmutableStorageConnector,
-	type ImmutableItem,
-	initSchema as initSchemaImmutableStorage
-} from "@twin.org/immutable-storage-connector-entity-storage";
-import { ImmutableStorageConnectorFactory } from "@twin.org/immutable-storage-models";
 import { ModuleHelper } from "@twin.org/modules";
 import { nameof } from "@twin.org/nameof";
+import {
+	EntityStorageVerifiableStorageConnector,
+	type VerifiableItem,
+	initSchema as initSchemaVerifiableStorage
+} from "@twin.org/verifiable-storage-connector-entity-storage";
+import { VerifiableStorageConnectorFactory } from "@twin.org/verifiable-storage-models";
 import {
 	cleanupTestEnv,
 	setupTestEnv,
@@ -38,7 +38,7 @@ import { initSchema } from "../src/schema";
 let vertexStorage: MemoryEntityStorageConnector<AuditableItemGraphVertex>;
 let changesetStorage: MemoryEntityStorageConnector<AuditableItemGraphChangeset>;
 let immutableProofStorage: MemoryEntityStorageConnector<ImmutableProof>;
-let immutableStorage: MemoryEntityStorageConnector<ImmutableItem>;
+let verifiableStorage: MemoryEntityStorageConnector<VerifiableItem>;
 let backgroundTaskStorage: MemoryEntityStorageConnector<BackgroundTask>;
 
 const FIRST_TICK = 1724327716271;
@@ -52,7 +52,7 @@ async function waitForProofGeneration(proofCount: number = 1): Promise<void> {
 	let count = 0;
 	do {
 		await new Promise(resolve => setTimeout(resolve, 200));
-	} while (immutableStorage.getStore().length < proofCount && count++ < proofCount * 40);
+	} while (verifiableStorage.getStore().length < proofCount && count++ < proofCount * 40);
 	if (count >= proofCount * 40) {
 		// eslint-disable-next-line no-restricted-syntax
 		throw new Error("Proof generation timed out");
@@ -64,7 +64,7 @@ describe("AuditableItemGraphService", () => {
 		await setupTestEnv();
 
 		initSchema();
-		initSchemaImmutableStorage();
+		initSchemaVerifiableStorage();
 		initSchemaImmutableProof();
 		initSchemaBackgroundTask();
 
@@ -95,14 +95,14 @@ describe("AuditableItemGraphService", () => {
 			() => changesetStorage
 		);
 
-		immutableStorage = new MemoryEntityStorageConnector<ImmutableItem>({
-			entitySchema: nameof<ImmutableItem>()
+		verifiableStorage = new MemoryEntityStorageConnector<VerifiableItem>({
+			entitySchema: nameof<VerifiableItem>()
 		});
-		EntityStorageConnectorFactory.register("immutable-item", () => immutableStorage);
+		EntityStorageConnectorFactory.register("verifiable-item", () => verifiableStorage);
 
-		ImmutableStorageConnectorFactory.register(
-			"immutable-storage",
-			() => new EntityStorageImmutableStorageConnector()
+		VerifiableStorageConnectorFactory.register(
+			"verifiable-storage",
+			() => new EntityStorageVerifiableStorageConnector()
 		);
 
 		immutableProofStorage = new MemoryEntityStorageConnector<ImmutableProof>({
@@ -176,7 +176,7 @@ describe("AuditableItemGraphService", () => {
 			}
 		]);
 
-		const immutableStore = immutableStorage.getStore();
+		const immutableStore = verifiableStorage.getStore();
 		expect(immutableStore).toMatchObject([
 			{
 				id: "0505050505050505050505050505050505050505050505050505050505050505",
@@ -275,7 +275,7 @@ describe("AuditableItemGraphService", () => {
 
 		await waitForProofGeneration();
 
-		const immutableStore = immutableStorage.getStore();
+		const immutableStore = verifiableStorage.getStore();
 		expect(immutableStore).toMatchObject([
 			{
 				id: "0505050505050505050505050505050505050505050505050505050505050505",
@@ -394,7 +394,7 @@ describe("AuditableItemGraphService", () => {
 
 		await waitForProofGeneration();
 
-		const immutableStore = immutableStorage.getStore();
+		const immutableStore = verifiableStorage.getStore();
 		expect(immutableStore).toMatchObject([
 			{
 				id: "0505050505050505050505050505050505050505050505050505050505050505",
@@ -631,7 +631,7 @@ describe("AuditableItemGraphService", () => {
 
 		await waitForProofGeneration();
 
-		const immutableStore = immutableStorage.getStore();
+		const immutableStore = verifiableStorage.getStore();
 		expect(immutableStore).toMatchObject([
 			{
 				controller:
@@ -811,7 +811,7 @@ describe("AuditableItemGraphService", () => {
 
 		await waitForProofGeneration();
 
-		const immutableStore = immutableStorage.getStore();
+		const immutableStore = verifiableStorage.getStore();
 		expect(immutableStore).toMatchObject([
 			{
 				id: "0505050505050505050505050505050505050505050505050505050505050505",
@@ -1196,7 +1196,7 @@ describe("AuditableItemGraphService", () => {
 			}
 		]);
 
-		const immutableStore = immutableStorage.getStore();
+		const immutableStore = verifiableStorage.getStore();
 		expect(immutableStore).toMatchObject([
 			{
 				controller:
@@ -1438,7 +1438,7 @@ describe("AuditableItemGraphService", () => {
 			}
 		]);
 
-		const immutableStore = immutableStorage.getStore();
+		const immutableStore = verifiableStorage.getStore();
 		expect(immutableStore).toMatchObject([
 			{
 				controller:
@@ -1872,7 +1872,7 @@ describe("AuditableItemGraphService", () => {
 			}
 		]);
 
-		const immutableStore = immutableStorage.getStore();
+		const immutableStore = verifiableStorage.getStore();
 		expect(immutableStore).toMatchObject([
 			{
 				controller:
@@ -2882,7 +2882,7 @@ describe("AuditableItemGraphService", () => {
 			}
 		]);
 
-		const immutableStore = immutableStorage.getStore();
+		const immutableStore = verifiableStorage.getStore();
 		expect(immutableStore).toMatchObject([
 			{
 				controller:
@@ -2946,7 +2946,7 @@ describe("AuditableItemGraphService", () => {
 		});
 	});
 
-	test("Can remove the immutable storage for a vertex", async () => {
+	test("Can remove the verifiable storage for a vertex", async () => {
 		const service = new AuditableItemGraphService({ config: {} });
 		const id = await service.create(
 			{
@@ -2958,10 +2958,10 @@ describe("AuditableItemGraphService", () => {
 
 		await waitForProofGeneration();
 
-		const immutableStore = immutableStorage.getStore();
+		const immutableStore = verifiableStorage.getStore();
 		expect(immutableStore.length).toEqual(1);
 
-		await service.removeImmutable(id, TEST_NODE_IDENTITY);
+		await service.removeVerifiable(id, TEST_NODE_IDENTITY);
 
 		const result = await service.get(id, {
 			includeChangesets: true,

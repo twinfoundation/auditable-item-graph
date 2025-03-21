@@ -47,7 +47,7 @@ export interface IAuditableItemGraphUpdateRequest {
 		 */
 		edges?: {
 			id: string;
-			edgeRelationship: string;
+			edgeRelationships: string[];
 			annotationObject?: IJsonLdNodeObject;
 		}[];
 	};

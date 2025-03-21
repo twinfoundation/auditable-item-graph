@@ -37,7 +37,7 @@ export interface IAuditableItemGraphCreateRequest {
 		 */
 		edges?: {
 			id: string;
-			edgeRelationship: string;
+			edgeRelationships: string[];
 			annotationObject?: IJsonLdNodeObject;
 		}[];
 	};

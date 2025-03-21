@@ -67,7 +67,7 @@ export class AuditableItemGraphClient
 		}[];
 		edges?: {
 			id: string;
-			edgeRelationship: string;
+			edgeRelationships: string[];
 			annotationObject?: IJsonLdNodeObject;
 		}[];
 	}): Promise<string> {
@@ -146,7 +146,7 @@ export class AuditableItemGraphClient
 		}[];
 		edges?: {
 			id: string;
-			edgeRelationship: string;
+			edgeRelationships: string[];
 			annotationObject?: IJsonLdNodeObject;
 		}[];
 	}): Promise<void> {

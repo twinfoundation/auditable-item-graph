@@ -33,10 +33,10 @@ export class AuditableItemGraphEdge {
 	public dateDeleted?: string;
 
 	/**
-	 * The relationship between the two vertices.
+	 * The relationships between the two vertices.
 	 */
-	@property({ type: "string" })
-	public edgeRelationship!: string;
+	@property({ type: "array" })
+	public edgeRelationships!: string[];
 
 	/**
 	 * Object to associate with the edge as JSON-LD.

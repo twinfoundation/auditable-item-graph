@@ -16,6 +16,7 @@ import {
 	type IAuditableItemGraphVertexList
 } from "@twin.org/auditable-item-graph-models";
 import {
+	ArrayHelper,
 	ComponentFactory,
 	Converter,
 	GeneralError,
@@ -163,7 +164,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			}[];
 			edges?: {
 				id: string;
-				edgeRelationship: string;
+				edgeRelationships: string[];
 				annotationObject?: IJsonLdNodeObject;
 			}[];
 		},
@@ -349,7 +350,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			}[];
 			edges?: {
 				id: string;
-				edgeRelationship: string;
+				edgeRelationships: string[];
 				annotationObject?: IJsonLdNodeObject;
 			}[];
 		},
@@ -659,7 +660,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 					dateCreated: edgeEntity.dateCreated,
 					dateModified: edgeEntity.dateModified,
 					dateDeleted: edgeEntity.dateDeleted,
-					edgeRelationship: edgeEntity.edgeRelationship,
+					edgeRelationships: edgeEntity.edgeRelationships,
 					annotationObject: edgeEntity.annotationObject
 				};
 				model.edges.push(edgeModel);
@@ -899,7 +900,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		vertex: AuditableItemGraphVertex,
 		edges?: {
 			id: string;
-			edgeRelationship: string;
+			edgeRelationships: string[];
 			annotationObject?: IJsonLdNodeObject;
 		}[]
 	): Promise<void> {
@@ -933,13 +934,13 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		vertex: AuditableItemGraphVertex,
 		edge: {
 			id: string;
-			edgeRelationship: string;
+			edgeRelationships: string[];
 			annotationObject?: IJsonLdNodeObject;
 		}
 	): Promise<void> {
 		Guards.object(this.CLASS_NAME, nameof(edge), edge);
 		Guards.stringValue(this.CLASS_NAME, nameof(edge.id), edge.id);
-		Guards.stringValue(this.CLASS_NAME, nameof(edge.edgeRelationship), edge.edgeRelationship);
+		Guards.arrayValue(this.CLASS_NAME, nameof(edge.edgeRelationships), edge.edgeRelationships);
 
 		const validationFailures: IValidationFailure[] = [];
 		if (edge.id === vertex.id) {
@@ -971,17 +972,17 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				id: edge.id,
 				dateCreated: context.now,
 				annotationObject: edge.annotationObject,
-				edgeRelationship: edge.edgeRelationship
+				edgeRelationships: edge.edgeRelationships
 			};
 
 			vertex.edges.push(model);
 		} else if (
-			existing.edgeRelationship !== edge.edgeRelationship ||
+			!ArrayHelper.matches(existing.edgeRelationships, edge.edgeRelationships) ||
 			!ObjectHelper.equal(existing.annotationObject, edge.annotationObject, false)
 		) {
 			// Existing resource found, update the annotationObject.
 			existing.dateModified = context.now;
-			existing.edgeRelationship = edge.edgeRelationship;
+			existing.edgeRelationships = edge.edgeRelationships;
 			existing.annotationObject = edge.annotationObject;
 		}
 	}

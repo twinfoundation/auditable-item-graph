@@ -32,7 +32,7 @@ export interface IAuditableItemGraphEdge extends IAuditableItemGraphAuditedEleme
 	annotationObject?: IJsonLdNodeObject;
 
 	/**
-	 * The relationship between the two vertices.
+	 * The relationships between the two vertices.
 	 */
-	edgeRelationship: string;
+	edgeRelationships: string[];
 }

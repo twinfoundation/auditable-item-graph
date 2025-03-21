@@ -1943,7 +1943,7 @@ describe("AuditableItemGraphService", () => {
 				edges: [
 					{
 						id: "edge1",
-						edgeRelationship: "friend",
+						edgeRelationships: ["friend"],
 						annotationObject: {
 							"@context": "https://www.w3.org/ns/activitystreams",
 							type: "Create",
@@ -1971,7 +1971,7 @@ describe("AuditableItemGraphService", () => {
 				edges: [
 					{
 						id: "edge1",
-						edgeRelationship: "frenemy",
+						edgeRelationships: ["frenemy"],
 						annotationObject: {
 							"@context": "https://www.w3.org/ns/activitystreams",
 							type: "Create",
@@ -2033,7 +2033,7 @@ describe("AuditableItemGraphService", () => {
 									object: { type: "Note", content: "This is a simple note" },
 									published: "2015-01-25T12:34:56Z"
 								},
-								edgeRelationship: "friend"
+								edgeRelationships: ["friend"]
 							}
 						}
 					],
@@ -2060,7 +2060,7 @@ describe("AuditableItemGraphService", () => {
 						{
 							type: "AuditableItemGraphPatchOperation",
 							patchOperation: "replace",
-							patchPath: "/edges/0/edgeRelationship",
+							patchPath: "/edges/0/edgeRelationships/0",
 							patchValue: "frenemy"
 						}
 					],
@@ -2082,7 +2082,7 @@ describe("AuditableItemGraphService", () => {
 						object: { type: "Note", content: "This is a simple note 2" },
 						published: "2015-01-25T12:34:56Z"
 					},
-					edgeRelationship: "frenemy"
+					edgeRelationships: ["frenemy"]
 				}
 			],
 			nodeIdentity:
@@ -2114,7 +2114,7 @@ describe("AuditableItemGraphService", () => {
 									object: { type: "Note", content: "This is a simple note" },
 									published: "2015-01-25T12:34:56Z"
 								},
-								edgeRelationship: "friend"
+								edgeRelationships: ["friend"]
 							}
 						]
 					}
@@ -2133,7 +2133,7 @@ describe("AuditableItemGraphService", () => {
 						path: "/edges/0/annotationObject/object/content",
 						value: "This is a simple note 2"
 					},
-					{ op: "replace", path: "/edges/0/edgeRelationship", value: "frenemy" }
+					{ op: "replace", path: "/edges/0/edgeRelationships/0", value: "frenemy" }
 				]
 			}
 		]);
@@ -2232,7 +2232,7 @@ describe("AuditableItemGraphService", () => {
 				edges: [
 					{
 						id: "edge1",
-						edgeRelationship: "friend",
+						edgeRelationships: ["friend"],
 						annotationObject: {
 							"@context": "https://www.w3.org/ns/activitystreams",
 							type: "Create",
@@ -2250,7 +2250,7 @@ describe("AuditableItemGraphService", () => {
 					},
 					{
 						id: "edge2",
-						edgeRelationship: "enemy",
+						edgeRelationships: ["enemy"],
 						annotationObject: {
 							"@context": "https://www.w3.org/ns/activitystreams",
 							type: "Create",
@@ -2364,7 +2364,7 @@ describe("AuditableItemGraphService", () => {
 				edges: [
 					{
 						id: "edge1",
-						edgeRelationship: "friend",
+						edgeRelationships: ["friend"],
 						annotationObject: {
 							"@context": "https://www.w3.org/ns/activitystreams",
 							type: "Create",
@@ -2382,7 +2382,7 @@ describe("AuditableItemGraphService", () => {
 					},
 					{
 						id: "edge2",
-						edgeRelationship: "enemy",
+						edgeRelationships: ["enemy"],
 						annotationObject: {
 							"@context": "https://www.w3.org/ns/activitystreams",
 							type: "Create",
@@ -2543,7 +2543,7 @@ describe("AuditableItemGraphService", () => {
 										object: { type: "Note", content: "This is a simple edge 1" },
 										published: "2015-01-25T12:34:56Z"
 									},
-									edgeRelationship: "friend"
+									edgeRelationships: ["friend"]
 								},
 								{
 									id: "edge2",
@@ -2555,7 +2555,7 @@ describe("AuditableItemGraphService", () => {
 										object: { type: "Note", content: "This is a simple edge 2" },
 										published: "2015-01-25T12:34:56Z"
 									},
-									edgeRelationship: "enemy"
+									edgeRelationships: ["enemy"]
 								}
 							]
 						}
@@ -2665,7 +2665,7 @@ describe("AuditableItemGraphService", () => {
 						object: { type: "Note", content: "This is a simple note edge 10" },
 						published: "2015-01-25T12:34:56Z"
 					},
-					edgeRelationship: "friend"
+					edgeRelationships: ["friend"]
 				},
 				{
 					id: "edge2",
@@ -2679,7 +2679,7 @@ describe("AuditableItemGraphService", () => {
 						object: { type: "Note", content: "This is a simple note edge 20" },
 						published: "2015-01-25T12:34:56Z"
 					},
-					edgeRelationship: "enemy"
+					edgeRelationships: ["enemy"]
 				}
 			],
 			resources: [
@@ -2812,7 +2812,7 @@ describe("AuditableItemGraphService", () => {
 									object: { type: "Note", content: "This is a simple edge 1" },
 									published: "2015-01-25T12:34:56Z"
 								},
-								edgeRelationship: "friend"
+								edgeRelationships: ["friend"]
 							},
 							{
 								id: "edge2",
@@ -2824,7 +2824,7 @@ describe("AuditableItemGraphService", () => {
 									object: { type: "Note", content: "This is a simple edge 2" },
 									published: "2015-01-25T12:34:56Z"
 								},
-								edgeRelationship: "enemy"
+								edgeRelationships: ["enemy"]
 							}
 						]
 					}
@@ -2905,7 +2905,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "sha256:zu9n3x5vQtD445LYA/w8Rf9QL7v6u3WCWXfS14EpI4k=",
+			proofObjectHash: "sha256:IE7WGzMdCsgdszOS5tAdV7gzDYu42SWbJOzuJphw+bo=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			userIdentity:
@@ -2915,7 +2915,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"z2skXKosKpZz5T2TtcTa12tvZwrsoMSsFMWrTrKagdrDmecB28QbAimbsvpPkwiMYVEvL8yyy4MyQxDNpX8vg77JS",
+					"z3CfhZatQt7pS7QqkJGcYg7ffMhzUKj9WD5yUm3UB6TUdxtp4EWLAhuSPtUcAh8w4i58591AYRaCEJsYqLu9hst5V",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}

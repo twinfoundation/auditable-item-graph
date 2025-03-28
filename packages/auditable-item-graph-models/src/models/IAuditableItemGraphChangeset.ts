@@ -7,7 +7,7 @@ import type { AuditableItemGraphTypes } from "./auditableItemGraphTypes";
 import type { IAuditableItemGraphPatchOperation } from "./IAuditableItemGraphPatchOperation";
 
 /**
- * Interface describing a set of updates to the vertex.
+ * Interface describing a set of changes to the vertex.
  */
 export interface IAuditableItemGraphChangeset {
 	/**

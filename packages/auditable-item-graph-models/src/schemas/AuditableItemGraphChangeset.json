@@ -61,5 +61,5 @@
 		"patches"
 	],
 	"additionalProperties": false,
-	"description": "Interface describing a set of updates to the vertex."
+	"description": "Interface describing a set of changes to the vertex."
 }

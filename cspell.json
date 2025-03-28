@@ -17,7 +17,17 @@
 		".eslintrc.cjs",
 		"**/wordlists/**"
 	],
-	"words": ["bech", "Faucet", "ipfs", "Jsonld", "nameof", "openapi", "Stiftung", "Unrevoke"],
+	"words": [
+		"abbrev",
+		"bech",
+		"Faucet",
+		"ipfs",
+		"Jsonld",
+		"nameof",
+		"openapi",
+		"Stiftung",
+		"Unrevoke"
+	],
 	"ignoreRegExpList": [
 		"/from\\s+(['\"]).*\\1/",
 		"/eslint-disable.*/",

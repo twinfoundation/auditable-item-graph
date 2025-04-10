@@ -40,11 +40,7 @@
 			"description": "The cursor to get the next chunk of vertices."
 		}
 	},
-	"required": [
-		"@context",
-		"type",
-		"vertices"
-	],
+	"required": ["@context", "type", "vertices"],
 	"additionalProperties": false,
 	"description": "Interface describing an auditable item graph vertex list."
 }

@@ -53,11 +53,7 @@
 			"description": "The format of the id in the alias."
 		}
 	},
-	"required": [
-		"@context",
-		"id",
-		"type"
-	],
+	"required": ["@context", "id", "type"],
 	"additionalProperties": false,
 	"description": "Interface describing an alias for a vertex."
 }

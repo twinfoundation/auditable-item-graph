@@ -197,8 +197,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			const vertexModel: AuditableItemGraphVertex = {
 				id,
 				nodeIdentity,
-				dateCreated: context.now,
-				dateModified: context.now
+				dateCreated: context.now
 			};
 			const originalEntity = ObjectHelper.clone(vertexModel);
 

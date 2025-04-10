@@ -160,7 +160,6 @@ describe("AuditableItemGraphService", () => {
 		expect(vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
-			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY
 		});
 
@@ -230,7 +229,6 @@ describe("AuditableItemGraphService", () => {
 		expect(vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
-			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
 			aliasIndex: "foo123||bar456",
 			aliases: [
@@ -342,7 +340,6 @@ describe("AuditableItemGraphService", () => {
 		expect(vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
-			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
 			annotationObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
@@ -467,7 +464,6 @@ describe("AuditableItemGraphService", () => {
 			type: "AuditableItemGraphVertex",
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
-			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
 			annotationObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
@@ -538,7 +534,6 @@ describe("AuditableItemGraphService", () => {
 			type: "AuditableItemGraphVertex",
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
-			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
 			annotationObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
@@ -710,7 +705,6 @@ describe("AuditableItemGraphService", () => {
 			type: "AuditableItemGraphVertex",
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			dateCreated: "2024-08-22T11:55:16.271Z",
-			dateModified: "2024-08-22T11:55:16.271Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
 			annotationObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
@@ -912,7 +906,6 @@ describe("AuditableItemGraphService", () => {
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
 			dateCreated: "2024-08-22T11:55:16.271Z",
-			dateModified: "2024-08-22T11:55:16.271Z",
 			aliases: [
 				{ id: "foo123", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" },
 				{ id: "bar456", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" }
@@ -2978,7 +2971,6 @@ describe("AuditableItemGraphService", () => {
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
 			dateCreated: "2024-08-22T11:55:16.271Z",
-			dateModified: "2024-08-22T11:55:16.271Z",
 			aliases: [
 				{ id: "foo123", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" },
 				{ id: "bar456", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" }
@@ -3033,14 +3025,12 @@ describe("AuditableItemGraphService", () => {
 			vertices: [
 				{
 					type: "AuditableItemGraphVertex",
-					dateCreated: "2024-08-22T11:56:56.272Z",
-					dateModified: "2024-08-22T11:56:56.272Z"
+					dateCreated: "2024-08-22T11:56:56.272Z"
 				},
 				{
 					type: "AuditableItemGraphVertex",
 					id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
-					dateCreated: "2024-08-22T11:55:16.271Z",
-					dateModified: "2024-08-22T11:55:16.271Z"
+					dateCreated: "2024-08-22T11:55:16.271Z"
 				}
 			]
 		});
@@ -3075,7 +3065,6 @@ describe("AuditableItemGraphService", () => {
 				{
 					type: "AuditableItemGraphVertex",
 					dateCreated: "2024-08-22T11:56:56.272Z",
-					dateModified: "2024-08-22T11:56:56.272Z",
 					aliases: [
 						{
 							id: "foo456",
@@ -3093,7 +3082,6 @@ describe("AuditableItemGraphService", () => {
 					id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 					type: "AuditableItemGraphVertex",
 					dateCreated: "2024-08-22T11:55:16.271Z",
-					dateModified: "2024-08-22T11:55:16.271Z",
 					aliases: [
 						{
 							id: "foo123",
@@ -3134,14 +3122,12 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "aig:0505050505050505050505050505050505050505050505050505050505050505",
 					type: "AuditableItemGraphVertex",
-					dateCreated: "2024-08-22T11:56:56.272Z",
-					dateModified: "2024-08-22T11:56:56.272Z"
+					dateCreated: "2024-08-22T11:56:56.272Z"
 				},
 				{
 					id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 					type: "AuditableItemGraphVertex",
 					dateCreated: "2024-08-22T11:55:16.271Z",
-					dateModified: "2024-08-22T11:55:16.271Z",
 					aliases: [
 						{ id: "foo5", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" }
 					]
@@ -3173,8 +3159,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "aig:0505050505050505050505050505050505050505050505050505050505050505",
 					type: "AuditableItemGraphVertex",
-					dateCreated: "2024-08-22T11:56:56.272Z",
-					dateModified: "2024-08-22T11:56:56.272Z"
+					dateCreated: "2024-08-22T11:56:56.272Z"
 				}
 			]
 		});
@@ -3206,7 +3191,6 @@ describe("AuditableItemGraphService", () => {
 					id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 					type: "AuditableItemGraphVertex",
 					dateCreated: "2024-08-22T11:55:16.271Z",
-					dateModified: "2024-08-22T11:55:16.271Z",
 					aliases: [
 						{ id: "foo4", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" }
 					]

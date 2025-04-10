@@ -1,5 +1,5 @@
 {
-	"packages/auditable-item-graph-models": "0.0.1-next.34",
-	"packages/auditable-item-graph-service": "0.0.1-next.34",
-	"packages/auditable-item-graph-rest-client": "0.0.1-next.34"
+	"packages/auditable-item-graph-models": "0.0.1-next.35",
+	"packages/auditable-item-graph-service": "0.0.1-next.35",
+	"packages/auditable-item-graph-rest-client": "0.0.1-next.35"
 }

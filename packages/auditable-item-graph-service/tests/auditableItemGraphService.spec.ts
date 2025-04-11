@@ -176,9 +176,10 @@ describe("AuditableItemGraphService", () => {
 		]);
 
 		const immutableStore = verifiableStorage.getStore();
-		expect(immutableStore).toMatchObject([
+		expect(immutableStore).toEqual([
 			{
 				id: "0505050505050505050505050505050505050505050505050505050505050505",
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6M1ZjdWgyQlA5U2hDNFVFSjN5UlpnY1RKNmdtUnR5ZERyaDZBbVkxekVjaVFxRVdUdlhmQlpOeHhqVHpkSmpUNDRjbW45VkRXYkJIcXhGc1g5ZmpzZlh6SyIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6VlBzSHFnaWdFSVB0QlptWEtzQ2VnU2Q4K25EaWxRcThnbzkrTGtkWWR1Yz0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIifQ==",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			}
@@ -187,7 +188,7 @@ describe("AuditableItemGraphService", () => {
 		const immutableProof = ObjectHelper.fromBytes<IImmutableProof>(
 			Converter.base64ToBytes(immutableStore[0].data)
 		);
-		expect(immutableProof).toMatchObject({
+		expect(immutableProof).toEqual({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
@@ -198,9 +199,12 @@ describe("AuditableItemGraphService", () => {
 			proofObjectHash: "sha256:VPsHqgigEIPtBZmXKsCegSd8+nDilQq8go9+LkdYduc=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
+				created: "2024-08-22T11:56:56.272Z",
 				type: "DataIntegrityProof",
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
@@ -274,9 +278,10 @@ describe("AuditableItemGraphService", () => {
 		await waitForProofGeneration();
 
 		const immutableStore = verifiableStorage.getStore();
-		expect(immutableStore).toMatchObject([
+		expect(immutableStore).toEqual([
 			{
 				id: "0505050505050505050505050505050505050505050505050505050505050505",
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6MzZoMmtRdThFWHpNWVNXdGtaZ3ZjVmpZZXVSVG03OVlyOWRQelZHOGpBU05jakZYUWhlVGU2R1RHYmdvYTNxUGhuZVlyOUdCWGhkQXJqcEY1ZUM3dnB0VSIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6aktVdkhIWjlrcE5DNXVmZ1lwRFY1ZjF0amt6L0pEbExDbW91L3g5OVhQbz0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIifQ==",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			}
@@ -285,7 +290,7 @@ describe("AuditableItemGraphService", () => {
 		const immutableProof = ObjectHelper.fromBytes<IImmutableProof>(
 			Converter.base64ToBytes(immutableStore[0].data)
 		);
-		expect(immutableProof).toMatchObject({
+		expect(immutableProof).toEqual({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
@@ -296,10 +301,13 @@ describe("AuditableItemGraphService", () => {
 			proofObjectHash: "sha256:jKUvHHZ9kpNC5ufgYpDV5f1tjkz/JDlLCmou/x99XPo=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
 				type: "DataIntegrityProof",
+				created: "2024-08-22T11:56:56.272Z",
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
@@ -392,9 +400,10 @@ describe("AuditableItemGraphService", () => {
 		await waitForProofGeneration();
 
 		const immutableStore = verifiableStorage.getStore();
-		expect(immutableStore).toMatchObject([
+		expect(immutableStore).toEqual([
 			{
 				id: "0505050505050505050505050505050505050505050505050505050505050505",
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6ZnBLZEZxV1JwczhadHJKTFpERjhBY2dWdkM3dkhVdmsyQTVoVUpuMXBhMlVYMlJhRlVHOEd2SkoydUVkcnBCcXdNRHVld2ZvY3FHTmJvbTl3MnhmUnJBIiwidmVyaWZpY2F0aW9uTWV0aG9kIjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MyNpbW11dGFibGUtcHJvb2YtYXNzZXJ0aW9uIn0sInByb29mT2JqZWN0SGFzaCI6InNoYTI1NjpSc2FKMlJ6OUNDaysrbTVEVk1ldStoajNubHc0MTYwSGpIbHlTTnpRb3JvPSIsInByb29mT2JqZWN0SWQiOiJhaWc6MDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTpjaGFuZ2VzZXQ6MDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMiJ9",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			}
@@ -403,7 +412,7 @@ describe("AuditableItemGraphService", () => {
 		const immutableProof = ObjectHelper.fromBytes<IImmutableProof>(
 			Converter.base64ToBytes(immutableStore[0].data)
 		);
-		expect(immutableProof).toMatchObject({
+		expect(immutableProof).toEqual({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
@@ -414,10 +423,13 @@ describe("AuditableItemGraphService", () => {
 			proofObjectHash: "sha256:RsaJ2Rz9CCk++m5DVMeu+hj3nlw4160HjHlySNzQoro=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
 				type: "DataIntegrityProof",
+				created: "2024-08-22T11:56:56.272Z",
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
@@ -627,8 +639,10 @@ describe("AuditableItemGraphService", () => {
 		await waitForProofGeneration();
 
 		const immutableStore = verifiableStorage.getStore();
-		expect(immutableStore).toMatchObject([
+		expect(immutableStore).toEqual([
 			{
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6OVBqc29BZWJLb011WThkenpyaWdiZ3V4TlZpaThxbVhtMkZCbTlYSktialFxRXJTR3FkTWhmUmk2YWc5OFIzUjJyRU1mWHVGMlkzdmhBajR1ZWcyazRRIiwidmVyaWZpY2F0aW9uTWV0aG9kIjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MyNpbW11dGFibGUtcHJvb2YtYXNzZXJ0aW9uIn0sInByb29mT2JqZWN0SGFzaCI6InNoYTI1NjpnenFFYWJ5ZXYrSEJ3RFR4NGxEc3ZkdHNUbzNmcjI5WndxU3dwV2ZSMWxnPSIsInByb29mT2JqZWN0SWQiOiJhaWc6MDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTpjaGFuZ2VzZXQ6MDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMiJ9",
+				id: "0505050505050505050505050505050505050505050505050505050505050505",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			}
@@ -637,7 +651,7 @@ describe("AuditableItemGraphService", () => {
 		const immutableProof = ObjectHelper.fromBytes<IImmutableProof>(
 			Converter.base64ToBytes(immutableStore[0].data)
 		);
-		expect(immutableProof).toMatchObject({
+		expect(immutableProof).toEqual({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
@@ -648,10 +662,13 @@ describe("AuditableItemGraphService", () => {
 			proofObjectHash: "sha256:gzqEabyev+HBwDTx4lDsvdtsTo3fr29ZwqSwpWfR1lg=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
 				type: "DataIntegrityProof",
+				created: "2024-08-22T11:56:56.272Z",
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
@@ -806,18 +823,19 @@ describe("AuditableItemGraphService", () => {
 		await waitForProofGeneration();
 
 		const immutableStore = verifiableStorage.getStore();
-		expect(immutableStore).toMatchObject([
+		expect(immutableStore).toEqual([
 			{
 				id: "0505050505050505050505050505050505050505050505050505050505050505",
 				controller:
-					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
+					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6M0IzaWJhWHNkWWtZOUFUaVZGNkFGQnRWS3ZWM3pLZGo0ZHB3YUhwMWgzWGhxakNrMnBVRmpUTDRSc0ZlR0dCa0hCZ1p1ZFhhWWtGZmU1aDNlNVY0a21URSIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6cWV4SEZPdnRxK083WDlwLzA3M1I0TmFjNmw4RWZIdVpMUTF6RGd0L1dRQT0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIifQ=="
 			}
 		]);
 
 		const immutableProof = ObjectHelper.fromBytes<IImmutableProof>(
 			Converter.base64ToBytes(immutableStore[0].data)
 		);
-		expect(immutableProof).toMatchObject({
+		expect(immutableProof).toEqual({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
@@ -828,10 +846,13 @@ describe("AuditableItemGraphService", () => {
 			proofObjectHash: "sha256:qexHFOvtq+O7X9p/073R4Nac6l8EfHuZLQ1zDgt/WQA=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
 				type: "DataIntegrityProof",
+				created: "2024-08-22T11:56:56.272Z",
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
@@ -1047,7 +1068,7 @@ describe("AuditableItemGraphService", () => {
 			verifySignatureDepth: VerifyDepth.All
 		});
 
-		expect(result).toMatchObject({
+		expect(result).toEqual({
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/",
@@ -1127,7 +1148,10 @@ describe("AuditableItemGraphService", () => {
 						verified: true
 					},
 					userIdentity:
-						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
+						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+					id: "0606060606060606060606060606060606060606060606060606060606060606",
+					proofId:
+						"immutable-proof:0707070707070707070707070707070707070707070707070707070707070707"
 				}
 			],
 			nodeIdentity:
@@ -1143,7 +1167,7 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		const changesetStore = changesetStorage.getStore();
-		expect(changesetStore).toMatchObject([
+		expect(changesetStore).toEqual([
 			{
 				id: "0202020202020202020202020202020202020202020202020202020202020202",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
@@ -1176,6 +1200,7 @@ describe("AuditableItemGraphService", () => {
 			{
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 				dateCreated: "2024-08-22T11:56:56.272Z",
+				id: "0606060606060606060606060606060606060606060606060606060606060606",
 				userIdentity:
 					"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 				patches: [
@@ -1185,17 +1210,22 @@ describe("AuditableItemGraphService", () => {
 						path: "/aliases/-",
 						value: { id: "foo321", dateCreated: "2024-08-22T11:56:56.272Z" }
 					}
-				]
+				],
+				proofId: "immutable-proof:0707070707070707070707070707070707070707070707070707070707070707"
 			}
 		]);
 
 		const immutableStore = verifiableStorage.getStore();
-		expect(immutableStore).toMatchObject([
+		expect(immutableStore).toEqual([
 			{
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6M0IzaWJhWHNkWWtZOUFUaVZGNkFGQnRWS3ZWM3pLZGo0ZHB3YUhwMWgzWGhxakNrMnBVRmpUTDRSc0ZlR0dCa0hCZ1p1ZFhhWWtGZmU1aDNlNVY0a21URSIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6cWV4SEZPdnRxK083WDlwLzA3M1I0TmFjNmw4RWZIdVpMUTF6RGd0L1dRQT0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIifQ==",
+				id: "0505050505050505050505050505050505050505050505050505050505050505",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			},
 			{
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDciLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6NU1ld0N3OXYxOUdFNXdSb0pMTWZjSGhpU21NdVA3TDdYS0E5TWh3N3ZFZkpuQlZUY3F6RUZGV3l3a1dUV3B4SmpreFdFd3hFY0p6TlRhcUh5bUh0U2JVSCIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6cTdoTHNUY2NzbFBJSDlxMFFZaDZjZlNhcHFsNUM3NUZwNThRODI2Y2cvWT0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYifQ==",
+				id: "0909090909090909090909090909090909090909090909090909090909090909",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			}
@@ -1204,7 +1234,7 @@ describe("AuditableItemGraphService", () => {
 		let immutableProof = ObjectHelper.fromBytes<IImmutableProof>(
 			Converter.base64ToBytes(immutableStore[0].data)
 		);
-		expect(immutableProof).toMatchObject({
+		expect(immutableProof).toEqual({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
@@ -1215,10 +1245,13 @@ describe("AuditableItemGraphService", () => {
 			proofObjectHash: "sha256:qexHFOvtq+O7X9p/073R4Nac6l8EfHuZLQ1zDgt/WQA=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
 				type: "DataIntegrityProof",
+				created: "2024-08-22T11:56:56.272Z",
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
@@ -1231,25 +1264,31 @@ describe("AuditableItemGraphService", () => {
 		immutableProof = ObjectHelper.fromBytes<IImmutableProof>(
 			Converter.base64ToBytes(immutableStore[1].data)
 		);
-		expect(immutableProof).toMatchObject({
+		expect(immutableProof).toEqual({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
 				"https://www.w3.org/ns/credentials/v2"
 			],
 			type: "ImmutableProof",
-			proofObjectHash: "sha256:0jEEy9KV4/E3OpdfGI5o0PvXG4cijtMTex2uGPyL6bg=",
+			id: "0707070707070707070707070707070707070707070707070707070707070707",
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+			proofObjectHash: "sha256:q7hLsTccslPIH9q0QYh6cfSapql5C75Fp58Q826cg/Y=",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
 				type: "DataIntegrityProof",
+				created: "2024-08-22T11:56:56.272Z",
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"z4poHio4SKuVx8PT49proW5tUaMHgAX7eebwszxVqVKkn6MWVzz9FtZYFru8wGYbUNuNUJ6Z2s2qC4mjPHdJ7Wag4",
+					"z5MewCw9v19GE5wRoJLMfcHhiSmMuP7L7XKA9Mhw7vEfJnBVTcqzEFFWywkWTWpxJjkxWEwxEcJzNTaqHymHtSbUH",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
-			}
+			},
+			proofObjectId:
+				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0606060606060606060606060606060606060606060606060606060606060606"
 		});
 	});
 
@@ -1307,7 +1346,7 @@ describe("AuditableItemGraphService", () => {
 			verifySignatureDepth: VerifyDepth.All
 		});
 
-		expect(result).toMatchObject({
+		expect(result).toEqual({
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/",
@@ -1358,6 +1397,7 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					type: "AuditableItemGraphChangeset",
+					id: "0606060606060606060606060606060606060606060606060606060606060606",
 					dateCreated: "2024-08-22T11:56:56.272Z",
 					patches: [
 						{
@@ -1368,6 +1408,8 @@ describe("AuditableItemGraphService", () => {
 						}
 					],
 					verification: { type: "ImmutableProofVerification", verified: true },
+					proofId:
+						"immutable-proof:0707070707070707070707070707070707070707070707070707070707070707",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				}
@@ -1386,7 +1428,7 @@ describe("AuditableItemGraphService", () => {
 
 		const changesetStore = changesetStorage.getStore();
 
-		expect(changesetStore).toMatchObject([
+		expect(changesetStore).toEqual([
 			{
 				id: "0202020202020202020202020202020202020202020202020202020202020202",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
@@ -1417,10 +1459,12 @@ describe("AuditableItemGraphService", () => {
 				proofId: "immutable-proof:0303030303030303030303030303030303030303030303030303030303030303"
 			},
 			{
+				id: "0606060606060606060606060606060606060606060606060606060606060606",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 				dateCreated: "2024-08-22T11:56:56.272Z",
 				userIdentity:
 					"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
+				proofId: "immutable-proof:0707070707070707070707070707070707070707070707070707070707070707",
 				patches: [
 					{
 						op: "replace",
@@ -1432,12 +1476,16 @@ describe("AuditableItemGraphService", () => {
 		]);
 
 		const immutableStore = verifiableStorage.getStore();
-		expect(immutableStore).toMatchObject([
+		expect(immutableStore).toEqual([
 			{
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6M0IzaWJhWHNkWWtZOUFUaVZGNkFGQnRWS3ZWM3pLZGo0ZHB3YUhwMWgzWGhxakNrMnBVRmpUTDRSc0ZlR0dCa0hCZ1p1ZFhhWWtGZmU1aDNlNVY0a21URSIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6cWV4SEZPdnRxK083WDlwLzA3M1I0TmFjNmw4RWZIdVpMUTF6RGd0L1dRQT0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIifQ==",
+				id: "0505050505050505050505050505050505050505050505050505050505050505",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			},
 			{
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDciLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6NVhKNUtKQ3NicU1YYUszODc5em9Zc2pDSGRtWGtBRnhTOEhjcXRZY1dDa0IySk16UXdFTlFjS0RuYWtCcm51cG5xOXhURG82MlMxVjRmUzJ3TW5RYjc2byIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6RndSTTlsdU90Zy9UZktjaXN0Z0NGcTlSaGxzZUM2RjBvb1ZRSFVSaDdQUT0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYifQ==",
+				id: "0909090909090909090909090909090909090909090909090909090909090909",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			}
@@ -1446,7 +1494,7 @@ describe("AuditableItemGraphService", () => {
 		let immutableProof = ObjectHelper.fromBytes<IImmutableProof>(
 			Converter.base64ToBytes(immutableStore[0].data)
 		);
-		expect(immutableProof).toMatchObject({
+		expect(immutableProof).toEqual({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
@@ -1457,10 +1505,13 @@ describe("AuditableItemGraphService", () => {
 			proofObjectHash: "sha256:qexHFOvtq+O7X9p/073R4Nac6l8EfHuZLQ1zDgt/WQA=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
 				type: "DataIntegrityProof",
+				created: "2024-08-22T11:56:56.272Z",
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
@@ -1473,22 +1524,28 @@ describe("AuditableItemGraphService", () => {
 		immutableProof = ObjectHelper.fromBytes<IImmutableProof>(
 			Converter.base64ToBytes(immutableStore[1].data)
 		);
-		expect(immutableProof).toMatchObject({
+		expect(immutableProof).toEqual({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
 				"https://www.w3.org/ns/credentials/v2"
 			],
 			type: "ImmutableProof",
-			proofObjectHash: "sha256:Ib+Ku9nMWbHkXoh1laoNmf0KPVxvJfpn/0fHsNhaLdA=",
+			proofObjectHash: "sha256:FwRM9luOtg/TfKcistgCFq9RhlseC6F0ooVQHURh7PQ=",
+			proofObjectId:
+				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0606060606060606060606060606060606060606060606060606060606060606",
+			id: "0707070707070707070707070707070707070707070707070707070707070707",
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
 				type: "DataIntegrityProof",
+				created: "2024-08-22T11:56:56.272Z",
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"z4gtm399Ntvq2MzSu7xQh2Y2Jr1z1cJaZahvpGV6U2ht7ngpPzYGtSuzjniKPvDcF529Z3fuubAZPkWeuoqLwyeSp",
+					"z5XJ5KJCsbqMXaK3879zoYsjCHdmXkAFxS8HcqtYcWCkB2JMzQwENQcKDnakBrnupnq9xTDo62S1V4fS2wMnQb76o",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1621,7 +1678,7 @@ describe("AuditableItemGraphService", () => {
 			verifySignatureDepth: VerifyDepth.All
 		});
 
-		expect(result).toMatchObject({
+		expect(result).toEqual({
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/",
@@ -1701,6 +1758,7 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					type: "AuditableItemGraphChangeset",
+					id: "0606060606060606060606060606060606060606060606060606060606060606",
 					dateCreated: "2024-08-22T11:56:56.272Z",
 					patches: [
 						{
@@ -1735,6 +1793,8 @@ describe("AuditableItemGraphService", () => {
 						}
 					],
 					verification: { type: "ImmutableProofVerification", verified: true },
+					proofId:
+						"immutable-proof:0707070707070707070707070707070707070707070707070707070707070707",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				}
@@ -1780,7 +1840,7 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		const changesetStore = changesetStorage.getStore();
-		expect(changesetStore).toMatchObject([
+		expect(changesetStore).toEqual([
 			{
 				id: "0202020202020202020202020202020202020202020202020202020202020202",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
@@ -1839,6 +1899,7 @@ describe("AuditableItemGraphService", () => {
 				proofId: "immutable-proof:0303030303030303030303030303030303030303030303030303030303030303"
 			},
 			{
+				id: "0606060606060606060606060606060606060606060606060606060606060606",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
 				dateCreated: "2024-08-22T11:56:56.272Z",
 				userIdentity:
@@ -1861,17 +1922,22 @@ describe("AuditableItemGraphService", () => {
 						path: "/resources/1/resourceObject/object/content",
 						value: "This is a simple note resource 11"
 					}
-				]
+				],
+				proofId: "immutable-proof:0707070707070707070707070707070707070707070707070707070707070707"
 			}
 		]);
 
 		const immutableStore = verifiableStorage.getStore();
-		expect(immutableStore).toMatchObject([
+		expect(immutableStore).toEqual([
 			{
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6b1p4M0xXYURKVG5iZU1qRkZGMU5ZTGhKUXpjd1F5S2NLZHdVeEpuNkRMQThZZlNCSkQ3QU1vOHNwTEc2U0pWc2JncHFlZzFvVmZkTFdqZkRQMkNtTTNVIiwidmVyaWZpY2F0aW9uTWV0aG9kIjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MyNpbW11dGFibGUtcHJvb2YtYXNzZXJ0aW9uIn0sInByb29mT2JqZWN0SGFzaCI6InNoYTI1NjpnejdkTGlHd1BaQ3BQbXF1T3JCUXk0N2JOcFBXZDhUSXdnK2J3aFg3ckVnPSIsInByb29mT2JqZWN0SWQiOiJhaWc6MDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTpjaGFuZ2VzZXQ6MDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMiJ9",
+				id: "0505050505050505050505050505050505050505050505050505050505050505",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			},
 			{
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDciLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6NG82WjR1b2NoRDlFWFh5d3RUYzd0VWVlVHRpTkQ0TTZ0clhyU3c0OUhDdVJRYzljRUs4aTlHOFp0ZnQzdWlNVld6dW9BMjJhR1BacUZwRE5pS3c4anZiVyIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6dUFVUXErL0JUdGd6T083eUIvVXdXcSsyT2xZSUpXSkw3VHYzN2JBOExzaz0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYifQ==",
+				id: "0909090909090909090909090909090909090909090909090909090909090909",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			}
@@ -1880,7 +1946,7 @@ describe("AuditableItemGraphService", () => {
 		let immutableProof = ObjectHelper.fromBytes<IImmutableProof>(
 			Converter.base64ToBytes(immutableStore[0].data)
 		);
-		expect(immutableProof).toMatchObject({
+		expect(immutableProof).toEqual({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
@@ -1891,10 +1957,13 @@ describe("AuditableItemGraphService", () => {
 			proofObjectHash: "sha256:gz7dLiGwPZCpPmquOrBQy47bNpPWd8TIwg+bwhX7rEg=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
 				type: "DataIntegrityProof",
+				created: "2024-08-22T11:56:56.272Z",
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
@@ -1907,25 +1976,31 @@ describe("AuditableItemGraphService", () => {
 		immutableProof = ObjectHelper.fromBytes<IImmutableProof>(
 			Converter.base64ToBytes(immutableStore[1].data)
 		);
-		expect(immutableProof).toMatchObject({
+		expect(immutableProof).toEqual({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
 				"https://www.w3.org/ns/credentials/v2"
 			],
 			type: "ImmutableProof",
-			proofObjectHash: "sha256:TrY9E2Kr+SYrcEpSZzR3ZEh4TpQRK29NNoNOkrlQMuo=",
+			id: "0707070707070707070707070707070707070707070707070707070707070707",
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
 				type: "DataIntegrityProof",
+				created: "2024-08-22T11:56:56.272Z",
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"z591VqHL1GGGAxVth1qTwRkNFESpB8MzcTiwQ2LquUh49fP8tqWYATS46TgiXpsktvhY479axMNc2A9CCWc4YAJdC",
+					"z4o6Z4uochD9EXXywtTc7tUeeTtiND4M6trXrSw49HCuRQc9cEK8i9G8Ztft3uiMVWzuoA22aGPZqFpDNiKw8jvbW",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
-			}
+			},
+			proofObjectHash: "sha256:uAUQq+/BTtgzOO7yB/UwWq+2OlYIJWJL7Tv37bA8Lsk=",
+			proofObjectId:
+				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0606060606060606060606060606060606060606060606060606060606060606"
 		});
 	});
 
@@ -1993,7 +2068,7 @@ describe("AuditableItemGraphService", () => {
 			verifySignatureDepth: VerifyDepth.All
 		});
 
-		expect(result).toMatchObject({
+		expect(result).toEqual({
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/",
@@ -2036,6 +2111,7 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					type: "AuditableItemGraphChangeset",
+					id: "0606060606060606060606060606060606060606060606060606060606060606",
 					dateCreated: "2024-08-22T11:56:56.272Z",
 					patches: [
 						{
@@ -2058,6 +2134,8 @@ describe("AuditableItemGraphService", () => {
 						}
 					],
 					verification: { type: "ImmutableProofVerification", verified: true },
+					proofId:
+						"immutable-proof:0707070707070707070707070707070707070707070707070707070707070707",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				}
@@ -2085,7 +2163,7 @@ describe("AuditableItemGraphService", () => {
 
 		const changesetStore = changesetStorage.getStore();
 
-		expect(changesetStore).toMatchObject([
+		expect(changesetStore).toEqual([
 			{
 				id: "0202020202020202020202020202020202020202020202020202020202020202",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
@@ -2116,6 +2194,7 @@ describe("AuditableItemGraphService", () => {
 			},
 			{
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+				id: "0606060606060606060606060606060606060606060606060606060606060606",
 				dateCreated: "2024-08-22T11:56:56.272Z",
 				userIdentity:
 					"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
@@ -2127,7 +2206,8 @@ describe("AuditableItemGraphService", () => {
 						value: "This is a simple note 2"
 					},
 					{ op: "replace", path: "/edges/0/edgeRelationships/0", value: "frenemy" }
-				]
+				],
+				proofId: "immutable-proof:0707070707070707070707070707070707070707070707070707070707070707"
 			}
 		]);
 	});
@@ -2404,7 +2484,7 @@ describe("AuditableItemGraphService", () => {
 			verifySignatureDepth: VerifyDepth.All
 		});
 
-		expect(result).toMatchObject({
+		expect(result).toEqual({
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/",
@@ -2559,6 +2639,7 @@ describe("AuditableItemGraphService", () => {
 				},
 				{
 					type: "AuditableItemGraphChangeset",
+					id: "0606060606060606060606060606060606060606060606060606060606060606",
 					dateCreated: "2024-08-22T11:56:56.272Z",
 					patches: [
 						{
@@ -2641,6 +2722,8 @@ describe("AuditableItemGraphService", () => {
 						}
 					],
 					verification: { type: "ImmutableProofVerification", verified: true },
+					proofId:
+						"immutable-proof:0707070707070707070707070707070707070707070707070707070707070707",
 					userIdentity:
 						"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858"
 				}
@@ -2716,7 +2799,7 @@ describe("AuditableItemGraphService", () => {
 		});
 
 		const changesetStore = changesetStorage.getStore();
-		expect(changesetStore).toMatchObject([
+		expect(changesetStore).toEqual([
 			{
 				id: "0202020202020202020202020202020202020202020202020202020202020202",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
@@ -2826,6 +2909,7 @@ describe("AuditableItemGraphService", () => {
 			},
 			{
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
+				id: "0606060606060606060606060606060606060606060606060606060606060606",
 				dateCreated: "2024-08-22T11:56:56.272Z",
 				userIdentity:
 					"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
@@ -2871,17 +2955,22 @@ describe("AuditableItemGraphService", () => {
 						path: "/edges/1/annotationObject/object/content",
 						value: "This is a simple note edge 20"
 					}
-				]
+				],
+				proofId: "immutable-proof:0707070707070707070707070707070707070707070707070707070707070707"
 			}
 		]);
 
 		const immutableStore = verifiableStorage.getStore();
-		expect(immutableStore).toMatchObject([
+		expect(immutableStore).toEqual([
 			{
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6M0NmaFphdFF0N3BTN1Fxa0pHY1lnN2ZmTWh6VUtqOVdENXlVbTNVQjZUVWR4dHA0RVdMQWh1U1B0VWNBaDh3NGk1ODU5MUFZUmFDRUpzWXFMdTloc3Q1ViIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6SUU3V0d6TWRDc2dkc3pPUzV0QWRWN2d6RFl1NDJTV2JKT3p1SnBodytibz0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIifQ==",
+				id: "0505050505050505050505050505050505050505050505050505050505050505",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			},
 			{
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDciLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6NGdtb0ZhSnhtRm1kdmMzSm1QV01MZDhQSGQzRGV0NDI4VDNHV2NLU3JWZnROamtCTVBxb3g2UVFMbVdpVUpudEJSQVlZV3VRSERxNzJWMldvaEFjcXVHMSIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6TkkzYTNhT0Vya1gwNDNLcmthUzBLK3NWZE85dGtCUjZYVURlZHkyTkxKND0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYifQ==",
+				id: "0909090909090909090909090909090909090909090909090909090909090909",
 				controller:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
 			}
@@ -2890,7 +2979,7 @@ describe("AuditableItemGraphService", () => {
 		let immutableProof = ObjectHelper.fromBytes<IImmutableProof>(
 			Converter.base64ToBytes(immutableStore[0].data)
 		);
-		expect(immutableProof).toMatchObject({
+		expect(immutableProof).toEqual({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
@@ -2901,10 +2990,13 @@ describe("AuditableItemGraphService", () => {
 			proofObjectHash: "sha256:IE7WGzMdCsgdszOS5tAdV7gzDYu42SWbJOzuJphw+bo=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
 				type: "DataIntegrityProof",
+				created: "2024-08-22T11:56:56.272Z",
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
@@ -2917,22 +3009,28 @@ describe("AuditableItemGraphService", () => {
 		immutableProof = ObjectHelper.fromBytes<IImmutableProof>(
 			Converter.base64ToBytes(immutableStore[1].data)
 		);
-		expect(immutableProof).toMatchObject({
+		expect(immutableProof).toEqual({
 			"@context": [
 				"https://schema.twindev.org/immutable-proof/",
 				"https://schema.twindev.org/common/",
 				"https://www.w3.org/ns/credentials/v2"
 			],
 			type: "ImmutableProof",
-			proofObjectHash: "sha256:nbAKN2Rxdk1NfKl77bQIn9ht4zoPT0HyEtsoVHTaI6o=",
+			proofObjectHash: "sha256:NI3a3aOErkX043KrkaS0K+sVdO9tkBR6XUDedy2NLJ4=",
+			proofObjectId:
+				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0606060606060606060606060606060606060606060606060606060606060606",
+			id: "0707070707070707070707070707070707070707070707070707070707070707",
+			nodeIdentity:
+				"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 			userIdentity:
 				"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 			proof: {
 				type: "DataIntegrityProof",
+				created: "2024-08-22T11:56:56.272Z",
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"z4JVRFoxtWmkRs1XTP6orRsP2Pdwub3BJxHuakzBc6VS5m1uAG7xXf1AznJz7NAR97BSXFpqE5p1maktHgFJWNzBF",
+					"z4gmoFaJxmFmdvc3JmPWMLd8PHd3Det428T3GWcKSrVftNjkBMPqox6QQLmWiUJntBRAYYWuQHDq72V2WohAcquG1",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -3015,7 +3113,7 @@ describe("AuditableItemGraphService", () => {
 
 		const results = await service.query({ id: "0" });
 
-		expect(results).toMatchObject({
+		expect(results).toEqual({
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/",
@@ -3025,6 +3123,7 @@ describe("AuditableItemGraphService", () => {
 			vertices: [
 				{
 					type: "AuditableItemGraphVertex",
+					id: "aig:0606060606060606060606060606060606060606060606060606060606060606",
 					dateCreated: "2024-08-22T11:56:56.272Z"
 				},
 				{
@@ -3054,7 +3153,7 @@ describe("AuditableItemGraphService", () => {
 		);
 
 		const results = await service.query({ id: "foo" });
-		expect(results).toMatchObject({
+		expect(results).toEqual({
 			"@context": [
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/",
@@ -3064,6 +3163,7 @@ describe("AuditableItemGraphService", () => {
 			vertices: [
 				{
 					type: "AuditableItemGraphVertex",
+					id: "aig:0606060606060606060606060606060606060606060606060606060606060606",
 					dateCreated: "2024-08-22T11:56:56.272Z",
 					aliases: [
 						{
@@ -3120,11 +3220,6 @@ describe("AuditableItemGraphService", () => {
 			type: "AuditableItemGraphVertexList",
 			vertices: [
 				{
-					id: "aig:0505050505050505050505050505050505050505050505050505050505050505",
-					type: "AuditableItemGraphVertex",
-					dateCreated: "2024-08-22T11:56:56.272Z"
-				},
-				{
 					id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 					type: "AuditableItemGraphVertex",
 					dateCreated: "2024-08-22T11:55:16.271Z",
@@ -3147,7 +3242,7 @@ describe("AuditableItemGraphService", () => {
 		);
 		await service.create({}, TEST_USER_IDENTITY, TEST_NODE_IDENTITY);
 
-		const results = await service.query({ id: "5", idMode: "id" });
+		const results = await service.query({ id: "6", idMode: "id" });
 		expect(results).toEqual({
 			"@context": [
 				"https://schema.twindev.org/aig/",
@@ -3157,7 +3252,7 @@ describe("AuditableItemGraphService", () => {
 			type: "AuditableItemGraphVertexList",
 			vertices: [
 				{
-					id: "aig:0505050505050505050505050505050505050505050505050505050505050505",
+					id: "aig:0606060606060606060606060606060606060606060606060606060606060606",
 					type: "AuditableItemGraphVertex",
 					dateCreated: "2024-08-22T11:56:56.272Z"
 				}

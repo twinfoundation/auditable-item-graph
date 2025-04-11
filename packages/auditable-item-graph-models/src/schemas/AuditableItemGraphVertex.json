@@ -81,7 +81,11 @@
 			"description": "Is the vertex verified, will only be populated when verification is requested."
 		}
 	},
-	"required": ["@context", "id", "type"],
+	"required": [
+		"@context",
+		"id",
+		"type"
+	],
 	"additionalProperties": false,
 	"description": "Interface describing an auditable item graph vertex."
 }

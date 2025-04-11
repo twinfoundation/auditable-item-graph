@@ -1,5 +1,19 @@
 # @twin.org/auditable-item-graph-rest-client - Changelog
 
+## [0.0.1-next.36](https://github.com/twinfoundation/auditable-item-graph/compare/auditable-item-graph-rest-client-v0.0.1-next.35...auditable-item-graph-rest-client-v0.0.1-next.36) (2025-04-11)
+
+
+### Bug Fixes
+
+* only include alias in index if not deleted ([#6](https://github.com/twinfoundation/auditable-item-graph/issues/6)) ([5da3c41](https://github.com/twinfoundation/auditable-item-graph/commit/5da3c419fafa2afefd34b1c570d103012b888a75))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @twin.org/auditable-item-graph-models bumped from 0.0.1-next.35 to 0.0.1-next.36
+
 ## [0.0.1-next.35](https://github.com/twinfoundation/auditable-item-graph/compare/auditable-item-graph-rest-client-v0.0.1-next.34...auditable-item-graph-rest-client-v0.0.1-next.35) (2025-04-10)
 
 

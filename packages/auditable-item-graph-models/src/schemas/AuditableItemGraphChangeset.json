@@ -52,7 +52,14 @@
 			"description": "The verification for the changeset."
 		}
 	},
-	"required": ["@context", "type", "id", "dateCreated", "userIdentity", "patches"],
+	"required": [
+		"@context",
+		"type",
+		"id",
+		"dateCreated",
+		"userIdentity",
+		"patches"
+	],
 	"additionalProperties": false,
 	"description": "Interface describing a set of changes to the vertex."
 }

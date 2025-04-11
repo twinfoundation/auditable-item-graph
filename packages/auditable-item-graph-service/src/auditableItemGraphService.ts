@@ -213,7 +213,8 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			await this._vertexStorage.set({
 				...vertexModel,
 				aliasIndex: vertexModel.aliases
-					?.map(a => a.id)
+					?.filter(a => Is.empty(a.dateDeleted))
+					.map(a => a.id)
 					.join("||")
 					.toLowerCase()
 			});
@@ -410,7 +411,8 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 				await this._vertexStorage.set({
 					...newEntity,
 					aliasIndex: newEntity.aliases
-						?.map(a => a.id)
+						?.filter(a => Is.empty(a.dateDeleted))
+						.map(a => a.id)
 						.join("||")
 						.toLowerCase()
 				});

@@ -49,7 +49,10 @@
 			"description": "The JSON-LD object for the resource."
 		}
 	},
-	"required": ["@context", "type"],
+	"required": [
+		"@context",
+		"type"
+	],
 	"additionalProperties": false,
 	"description": "Interface describing an auditable item graph vertex resource."
 }

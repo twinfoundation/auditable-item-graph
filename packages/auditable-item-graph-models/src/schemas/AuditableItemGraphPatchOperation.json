@@ -30,7 +30,14 @@
 		},
 		"patchOperation": {
 			"type": "string",
-			"enum": ["add", "remove", "replace", "move", "copy", "test"],
+			"enum": [
+				"add",
+				"remove",
+				"replace",
+				"move",
+				"copy",
+				"test"
+			],
 			"description": "The operation that was performed on the item."
 		},
 		"patchPath": {
@@ -45,7 +52,12 @@
 			"description": "The value to add."
 		}
 	},
-	"required": ["@context", "type", "patchOperation", "patchPath"],
+	"required": [
+		"@context",
+		"type",
+		"patchOperation",
+		"patchPath"
+	],
 	"additionalProperties": false,
 	"description": "The patch operation for JSON diffs."
 }

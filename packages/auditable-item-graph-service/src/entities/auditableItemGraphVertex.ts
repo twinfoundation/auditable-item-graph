@@ -47,6 +47,12 @@ export class AuditableItemGraphVertex {
 	public aliasIndex?: string;
 
 	/**
+	 * Combined resource type index for the vertex used for querying.
+	 */
+	@property({ type: "string", isSecondary: true, optional: true })
+	public resourceTypeIndex?: string;
+
+	/**
 	 * Object to associate with the vertex as JSON-LD.
 	 */
 	@property({ type: "object", itemTypeRef: JsonLdTypes.NodeObject, optional: true })

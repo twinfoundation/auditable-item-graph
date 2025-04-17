@@ -30,6 +30,11 @@ export interface IAuditableItemGraphListRequest {
 		idMode?: "id" | "alias" | "both";
 
 		/**
+		 * Include vertices with specific resource types, comma separated.
+		 */
+		resourceTypes?: string;
+
+		/**
 		 * The conditions to filter the streams, JSON stringified IComparator[].
 		 */
 		conditions?: string;

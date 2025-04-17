@@ -3293,4 +3293,82 @@ describe("AuditableItemGraphService", () => {
 			]
 		});
 	});
+
+	test("Can query for a vertex using resource types", async () => {
+		const service = new AuditableItemGraphService({ config: {} });
+		await service.create(
+			{
+				resources: [
+					{
+						id: "resource1",
+						resourceObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Create",
+							actor: {
+								type: "Person",
+								id: "acct:person@example.org",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple note"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
+					}
+				]
+			},
+			TEST_USER_IDENTITY,
+			TEST_NODE_IDENTITY
+		);
+		await service.create(
+			{
+				resources: [
+					{
+						id: "resource1",
+						resourceObject: {
+							"@context": "https://www.w3.org/ns/activitystreams",
+							type: "Delete",
+							actor: {
+								type: "Person",
+								id: "acct:person@example.org",
+								name: "Person"
+							},
+							object: {
+								type: "Note",
+								content: "This is a simple note"
+							},
+							published: "2015-01-25T12:34:56Z"
+						}
+					}
+				]
+			},
+			TEST_USER_IDENTITY,
+			TEST_NODE_IDENTITY
+		);
+
+		await waitForProofGeneration();
+
+		const results = await service.query({ includesResourceTypes: ["Create", "Delete"] });
+		expect(results).toEqual({
+			"@context": [
+				"https://schema.twindev.org/aig/",
+				"https://schema.twindev.org/common/",
+				"https://schema.org"
+			],
+			type: "AuditableItemGraphVertexList",
+			vertices: [
+				{
+					dateCreated: "2024-08-22T11:56:56.272Z",
+					id: "aig:0606060606060606060606060606060606060606060606060606060606060606",
+					type: "AuditableItemGraphVertex"
+				},
+				{
+					id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
+					type: "AuditableItemGraphVertex",
+					dateCreated: "2024-08-22T11:55:16.271Z"
+				}
+			]
+		});
+	});
 });

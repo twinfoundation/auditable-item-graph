@@ -602,7 +602,8 @@ export async function auditableItemGraphList(
 	const result = await component.query(
 		{
 			id: request.query?.id,
-			idMode: request.query?.idMode
+			idMode: request.query?.idMode,
+			resourceTypes: HttpParameterHelper.arrayFromString(request.query?.resourceTypes)
 		},
 		HttpParameterHelper.objectFromString(request.query?.conditions),
 		request.query?.orderBy,

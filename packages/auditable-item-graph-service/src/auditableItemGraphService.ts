@@ -208,15 +208,12 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			await this.updateEdgeList(context, vertexModel, vertex.edges);
 
 			delete originalEntity.aliasIndex;
+			delete originalEntity.resourceTypeIndex;
 			await this.addChangeset(context, originalEntity, vertexModel, true);
 
 			await this._vertexStorage.set({
 				...vertexModel,
-				aliasIndex: vertexModel.aliases
-					?.filter(a => Is.empty(a.dateDeleted))
-					.map(a => a.id)
-					.join("||")
-					.toLowerCase()
+				...this.buildIndexes(vertexModel)
 			});
 
 			const fullId = new Urn(AuditableItemGraphService.NAMESPACE, id).toString();
@@ -408,13 +405,12 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			const patches = await this.addChangeset(context, originalEntity, newEntity, false);
 			if (patches.length > 0) {
 				newEntity.dateModified = context.now;
+
+				const indexes = this.buildIndexes(newEntity);
+
 				await this._vertexStorage.set({
 					...newEntity,
-					aliasIndex: newEntity.aliases
-						?.filter(a => Is.empty(a.dateDeleted))
-						.map(a => a.id)
-						.join("||")
-						.toLowerCase()
+					...indexes
 				});
 
 				await this._eventBusComponent?.publish<IAuditableItemGraphEventBusVertexUpdated>(
@@ -491,6 +487,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 	 * @param options The query options.
 	 * @param options.id The optional id to look for.
 	 * @param options.idMode Look in id, alias or both, defaults to both.
+	 * @param options.includesResourceTypes Include vertices with specific resource types.
 	 * @param conditions Conditions to use in the query.
 	 * @param orderBy The order for the results, defaults to created.
 	 * @param orderByDirection The direction for the order, defaults to desc.
@@ -503,6 +500,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 		options?: {
 			id?: string;
 			idMode?: "id" | "alias" | "both";
+			includesResourceTypes?: string[];
 		},
 		conditions?: IComparator[],
 		orderBy?: keyof Pick<IAuditableItemGraphVertex, "dateCreated" | "dateModified">,
@@ -538,6 +536,16 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 						property: "aliasIndex",
 						comparison: ComparisonOperator.Includes,
 						value: idOrAlias.toLowerCase()
+					});
+				}
+			}
+
+			if (Is.arrayValue(options?.includesResourceTypes)) {
+				for (const resourceType of options.includesResourceTypes) {
+					combinedConditions.push({
+						property: "resourceTypeIndex",
+						comparison: ComparisonOperator.Includes,
+						value: resourceType.toLowerCase()
 					});
 				}
 			}
@@ -1140,5 +1148,44 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 			resource.id ??
 			ObjectHelper.extractProperty<string>(resource.resourceObject, ["id", "@id"], false)
 		);
+	}
+
+	/**
+	 * Build the indexes for the vertex.
+	 * @param vertex The vertex to build the indexes for.
+	 * @returns The indexes.
+	 * @internal
+	 */
+	private buildIndexes(vertex: AuditableItemGraphVertex): {
+		aliasIndex?: string;
+		resourceTypeIndex?: string;
+	} {
+		const aliasIndex = vertex.aliases
+			?.filter(a => Is.empty(a.dateDeleted))
+			.map(a => a.id)
+			.join("||")
+			.toLowerCase();
+
+		const resourceTypes: string[] = [];
+		if (Is.arrayValue(vertex.resources)) {
+			for (const resource of vertex.resources) {
+				const resourceType = ObjectHelper.extractProperty<string>(
+					resource.resourceObject,
+					["@type", "type"],
+					false
+				);
+
+				if (Is.stringValue(resourceType) && !resourceTypes.includes(resourceType)) {
+					resourceTypes.push(resourceType);
+				}
+			}
+		}
+
+		const resourceTypeIndex = resourceTypes.join("||").toLowerCase();
+
+		return {
+			aliasIndex: Is.stringValue(aliasIndex) ? aliasIndex : undefined,
+			resourceTypeIndex: Is.stringValue(resourceTypeIndex) ? resourceTypeIndex : undefined
+		};
 	}
 }

@@ -1,5 +1,12 @@
 # @twin.org/auditable-item-graph-models - Changelog
 
+## [0.0.1-next.38](https://github.com/twinfoundation/auditable-item-graph/compare/auditable-item-graph-models-v0.0.1-next.37...auditable-item-graph-models-v0.0.1-next.38) (2025-04-17)
+
+
+### Features
+
+* use shared store mechanism ([#10](https://github.com/twinfoundation/auditable-item-graph/issues/10)) ([da035e5](https://github.com/twinfoundation/auditable-item-graph/commit/da035e5eb8f157482b4eb2bdbc689c6c0647ff7d))
+
 ## [0.0.1-next.37](https://github.com/twinfoundation/auditable-item-graph/compare/auditable-item-graph-models-v0.0.1-next.36...auditable-item-graph-models-v0.0.1-next.37) (2025-04-11)
 
 

@@ -21,7 +21,7 @@ import {
 } from "@twin.org/auditable-item-graph-models";
 import { ComponentFactory, Guards } from "@twin.org/core";
 import { nameof } from "@twin.org/nameof";
-import { SchemaOrgContexts } from "@twin.org/standards-schema-org";
+import { SchemaOrgContexts, SchemaOrgTypes } from "@twin.org/standards-schema-org";
 import { HeaderTypes, HttpStatusCode, MimeTypes } from "@twin.org/web";
 
 /**
@@ -382,12 +382,12 @@ export function generateRestRoutesAuditableItemGraph(
 						response: {
 							body: {
 								"@context": [
+									SchemaOrgContexts.ContextRoot,
 									AuditableItemGraphContexts.ContextRoot,
-									AuditableItemGraphContexts.ContextRootCommon,
-									SchemaOrgContexts.ContextRoot
+									AuditableItemGraphContexts.ContextRootCommon
 								],
-								type: AuditableItemGraphTypes.VertexList,
-								vertices: [
+								type: SchemaOrgTypes.ItemList,
+								[SchemaOrgTypes.ItemListElement]: [
 									{
 										"@context": [
 											AuditableItemGraphContexts.ContextRoot,
@@ -411,7 +411,7 @@ export function generateRestRoutesAuditableItemGraph(
 										]
 									}
 								],
-								cursor: "1"
+								[SchemaOrgTypes.NextItem]: "1"
 							}
 						}
 					}
@@ -429,12 +429,12 @@ export function generateRestRoutesAuditableItemGraph(
 							},
 							body: {
 								"@context": [
+									SchemaOrgContexts.ContextRoot,
 									AuditableItemGraphContexts.ContextRoot,
-									AuditableItemGraphContexts.ContextRootCommon,
-									SchemaOrgContexts.ContextRoot
+									AuditableItemGraphContexts.ContextRootCommon
 								],
-								type: AuditableItemGraphTypes.VertexList,
-								vertices: [
+								type: SchemaOrgTypes.ItemList,
+								[SchemaOrgTypes.ItemListElement]: [
 									{
 										"@context": [
 											AuditableItemGraphContexts.ContextRoot,
@@ -458,7 +458,7 @@ export function generateRestRoutesAuditableItemGraph(
 										]
 									}
 								],
-								cursor: "1"
+								[SchemaOrgTypes.NextItem]: "1"
 							}
 						}
 					}

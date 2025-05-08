@@ -34,12 +34,7 @@ export const AuditableItemGraphTypes = {
 	/**
 	 * Represents patch operation.
 	 */
-	PatchOperation: "AuditableItemGraphPatchOperation",
-
-	/**
-	 * Represents auditable item stream vertex list.
-	 */
-	VertexList: "AuditableItemGraphVertexList"
+	PatchOperation: "AuditableItemGraphPatchOperation"
 } as const;
 
 /**

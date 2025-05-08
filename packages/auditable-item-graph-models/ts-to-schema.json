@@ -7,8 +7,7 @@
 		"IAuditableItemGraphResource",
 		"IAuditableItemGraphEdge",
 		"IAuditableItemGraphChangeset",
-		"IAuditableItemGraphPatchOperation",
-		"IAuditableItemGraphVertexList"
+		"IAuditableItemGraphPatchOperation"
 	],
 	"externalReferences": {
 		"IJsonLd(.*)": "https://schema.twindev.org/json-ld/JsonLd$1",

@@ -1,8 +1,8 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
 import type { IJsonLdContextDefinitionElement } from "@twin.org/data-json-ld";
+import type { SchemaOrgContexts, SchemaOrgTypes } from "@twin.org/standards-schema-org";
 import type { AuditableItemGraphContexts } from "./auditableItemGraphContexts";
-import type { AuditableItemGraphTypes } from "./auditableItemGraphTypes";
 import type { IAuditableItemGraphVertex } from "./IAuditableItemGraphVertex";
 
 /**
@@ -12,22 +12,24 @@ export interface IAuditableItemGraphVertexList {
 	/**
 	 * JSON-LD Context.
 	 */
-	"@context":
-		| typeof AuditableItemGraphContexts.ContextRoot
-		| [typeof AuditableItemGraphContexts.ContextRoot, ...IJsonLdContextDefinitionElement[]];
+	"@context": [
+		typeof SchemaOrgContexts.ContextRoot,
+		typeof AuditableItemGraphContexts.ContextRoot,
+		...IJsonLdContextDefinitionElement[]
+	];
 
 	/**
 	 * JSON-LD Type.
 	 */
-	type: typeof AuditableItemGraphTypes.VertexList;
+	type: typeof SchemaOrgTypes.ItemList;
 
 	/**
 	 * The list of vertices.
 	 */
-	vertices: IAuditableItemGraphVertex[];
+	[SchemaOrgTypes.ItemListElement]: IAuditableItemGraphVertex[];
 
 	/**
 	 * The cursor to get the next chunk of vertices.
 	 */
-	cursor?: string;
+	[SchemaOrgTypes.NextItem]?: string;
 }

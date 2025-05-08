@@ -3115,12 +3115,12 @@ describe("AuditableItemGraphService", () => {
 
 		expect(results).toEqual({
 			"@context": [
+				"https://schema.org",
 				"https://schema.twindev.org/aig/",
-				"https://schema.twindev.org/common/",
-				"https://schema.org"
+				"https://schema.twindev.org/common/"
 			],
-			type: "AuditableItemGraphVertexList",
-			vertices: [
+			type: "ItemList",
+			itemListElement: [
 				{
 					type: "AuditableItemGraphVertex",
 					id: "aig:0606060606060606060606060606060606060606060606060606060606060606",
@@ -3155,12 +3155,12 @@ describe("AuditableItemGraphService", () => {
 		const results = await service.query({ id: "foo" });
 		expect(results).toEqual({
 			"@context": [
+				"https://schema.org",
 				"https://schema.twindev.org/aig/",
-				"https://schema.twindev.org/common/",
-				"https://schema.org"
+				"https://schema.twindev.org/common/"
 			],
-			type: "AuditableItemGraphVertexList",
-			vertices: [
+			type: "ItemList",
+			itemListElement: [
 				{
 					type: "AuditableItemGraphVertex",
 					id: "aig:0606060606060606060606060606060606060606060606060606060606060606",
@@ -3213,12 +3213,12 @@ describe("AuditableItemGraphService", () => {
 		const results = await service.query({ id: "5" });
 		expect(results).toEqual({
 			"@context": [
+				"https://schema.org",
 				"https://schema.twindev.org/aig/",
-				"https://schema.twindev.org/common/",
-				"https://schema.org"
+				"https://schema.twindev.org/common/"
 			],
-			type: "AuditableItemGraphVertexList",
-			vertices: [
+			type: "ItemList",
+			itemListElement: [
 				{
 					id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 					type: "AuditableItemGraphVertex",
@@ -3245,12 +3245,12 @@ describe("AuditableItemGraphService", () => {
 		const results = await service.query({ id: "6", idMode: "id" });
 		expect(results).toEqual({
 			"@context": [
+				"https://schema.org",
 				"https://schema.twindev.org/aig/",
-				"https://schema.twindev.org/common/",
-				"https://schema.org"
+				"https://schema.twindev.org/common/"
 			],
-			type: "AuditableItemGraphVertexList",
-			vertices: [
+			type: "ItemList",
+			itemListElement: [
 				{
 					id: "aig:0606060606060606060606060606060606060606060606060606060606060606",
 					type: "AuditableItemGraphVertex",
@@ -3276,12 +3276,12 @@ describe("AuditableItemGraphService", () => {
 		const results = await service.query({ id: "4", idMode: "alias" });
 		expect(results).toEqual({
 			"@context": [
+				"https://schema.org",
 				"https://schema.twindev.org/aig/",
-				"https://schema.twindev.org/common/",
-				"https://schema.org"
+				"https://schema.twindev.org/common/"
 			],
-			type: "AuditableItemGraphVertexList",
-			vertices: [
+			type: "ItemList",
+			itemListElement: [
 				{
 					id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 					type: "AuditableItemGraphVertex",
@@ -3352,12 +3352,12 @@ describe("AuditableItemGraphService", () => {
 		const results = await service.query({ includesResourceTypes: ["Create", "Delete"] });
 		expect(results).toEqual({
 			"@context": [
+				"https://schema.org",
 				"https://schema.twindev.org/aig/",
-				"https://schema.twindev.org/common/",
-				"https://schema.org"
+				"https://schema.twindev.org/common/"
 			],
-			type: "AuditableItemGraphVertexList",
-			vertices: [
+			type: "ItemList",
+			itemListElement: [
 				{
 					dateCreated: "2024-08-22T11:56:56.272Z",
 					id: "aig:0606060606060606060606060606060606060606060606060606060606060606",

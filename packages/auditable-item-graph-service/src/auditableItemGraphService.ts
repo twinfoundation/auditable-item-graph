@@ -51,7 +51,11 @@ import {
 	type IImmutableProofComponent
 } from "@twin.org/immutable-proof-models";
 import { nameof } from "@twin.org/nameof";
-import { SchemaOrgContexts, SchemaOrgDataTypes } from "@twin.org/standards-schema-org";
+import {
+	SchemaOrgContexts,
+	SchemaOrgDataTypes,
+	SchemaOrgTypes
+} from "@twin.org/standards-schema-org";
 import type { AuditableItemGraphAlias } from "./entities/auditableItemGraphAlias";
 import type { AuditableItemGraphChangeset } from "./entities/auditableItemGraphChangeset";
 import type { AuditableItemGraphEdge } from "./entities/auditableItemGraphEdge";
@@ -578,13 +582,13 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 			const vertexList: IAuditableItemGraphVertexList = {
 				"@context": [
+					SchemaOrgContexts.ContextRoot,
 					AuditableItemGraphContexts.ContextRoot,
-					AuditableItemGraphContexts.ContextRootCommon,
-					SchemaOrgContexts.ContextRoot
+					AuditableItemGraphContexts.ContextRootCommon
 				],
-				type: AuditableItemGraphTypes.VertexList,
-				vertices: models,
-				cursor: results.cursor
+				type: SchemaOrgTypes.ItemList,
+				[SchemaOrgTypes.ItemListElement]: models,
+				[SchemaOrgTypes.NextItem]: results.cursor
 			};
 
 			return JsonLdProcessor.compact(vertexList, vertexList["@context"]);

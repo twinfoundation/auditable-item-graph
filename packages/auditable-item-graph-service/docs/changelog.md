@@ -1,5 +1,19 @@
 # @twin.org/auditable-item-graph-service - Changelog
 
+## [0.0.1-next.40](https://github.com/twinfoundation/auditable-item-graph/compare/auditable-item-graph-service-v0.0.1-next.39...auditable-item-graph-service-v0.0.1-next.40) (2025-05-28)
+
+
+### Features
+
+* add data types with fully qualified name ([93e1ee7](https://github.com/twinfoundation/auditable-item-graph/commit/93e1ee7c0f7bad81f003787f797f363864e201af))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @twin.org/auditable-item-graph-models bumped from 0.0.1-next.39 to 0.0.1-next.40
+
 ## [0.0.1-next.39](https://github.com/twinfoundation/auditable-item-graph/compare/auditable-item-graph-service-v0.0.1-next.38...auditable-item-graph-service-v0.0.1-next.39) (2025-05-08)
 
 

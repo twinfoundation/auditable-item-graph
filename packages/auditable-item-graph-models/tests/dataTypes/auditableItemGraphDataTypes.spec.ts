@@ -17,7 +17,7 @@ describe("AuditableItemGraphDataTypes", () => {
 		const validationFailures: IValidationFailure[] = [];
 		const isValid = await DataTypeHelper.validate(
 			"",
-			AuditableItemGraphTypes.Vertex,
+			`${AuditableItemGraphContexts.ContextRoot}${AuditableItemGraphTypes.Vertex}`,
 			{},
 			validationFailures
 		);
@@ -29,7 +29,7 @@ describe("AuditableItemGraphDataTypes", () => {
 		const validationFailures: IValidationFailure[] = [];
 		const isValid = await DataTypeHelper.validate(
 			"",
-			AuditableItemGraphTypes.Vertex,
+			`${AuditableItemGraphContexts.ContextRoot}${AuditableItemGraphTypes.Vertex}`,
 			{
 				"@context": [
 					AuditableItemGraphContexts.ContextRoot,

@@ -870,7 +870,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 
 		if (Is.object(resource.resourceObject)) {
 			const validationFailures: IValidationFailure[] = [];
-			await JsonLdHelper.validate(resource, validationFailures);
+			await JsonLdHelper.validate(resource.resourceObject, validationFailures);
 			Validation.asValidationError(
 				this.CLASS_NAME,
 				nameof(resource.resourceObject),

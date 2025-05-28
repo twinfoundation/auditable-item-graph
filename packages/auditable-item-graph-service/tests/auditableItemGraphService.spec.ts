@@ -180,8 +180,12 @@ describe("AuditableItemGraphService", () => {
 			{
 				id: "0505050505050505050505050505050505050505050505050505050505050505",
 				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6M1ZjdWgyQlA5U2hDNFVFSjN5UlpnY1RKNmdtUnR5ZERyaDZBbVkxekVjaVFxRVdUdlhmQlpOeHhqVHpkSmpUNDRjbW45VkRXYkJIcXhGc1g5ZmpzZlh6SyIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6VlBzSHFnaWdFSVB0QlptWEtzQ2VnU2Q4K25EaWxRcThnbzkrTGtkWWR1Yz0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIifQ==",
-				controller:
+				creator:
+					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+				allowList: [
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
+				],
+				maxAllowListSize: 100
 			}
 		]);
 
@@ -282,8 +286,12 @@ describe("AuditableItemGraphService", () => {
 			{
 				id: "0505050505050505050505050505050505050505050505050505050505050505",
 				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6MzZoMmtRdThFWHpNWVNXdGtaZ3ZjVmpZZXVSVG03OVlyOWRQelZHOGpBU05jakZYUWhlVGU2R1RHYmdvYTNxUGhuZVlyOUdCWGhkQXJqcEY1ZUM3dnB0VSIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6aktVdkhIWjlrcE5DNXVmZ1lwRFY1ZjF0amt6L0pEbExDbW91L3g5OVhQbz0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIifQ==",
-				controller:
+				creator:
+					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+				allowList: [
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
+				],
+				maxAllowListSize: 100
 			}
 		]);
 
@@ -347,7 +355,7 @@ describe("AuditableItemGraphService", () => {
 
 		expect(vertex).toEqual({
 			id: "0101010101010101010101010101010101010101010101010101010101010101",
-			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateCreated: "2024-08-22T11:56:56.272Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
 			annotationObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
@@ -371,7 +379,7 @@ describe("AuditableItemGraphService", () => {
 			{
 				id: "0202020202020202020202020202020202020202020202020202020202020202",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-				dateCreated: "2024-08-22T11:55:16.271Z",
+				dateCreated: "2024-08-22T11:56:56.272Z",
 				userIdentity: TEST_USER_IDENTITY,
 				patches: [
 					{
@@ -402,10 +410,14 @@ describe("AuditableItemGraphService", () => {
 		const immutableStore = verifiableStorage.getStore();
 		expect(immutableStore).toEqual([
 			{
-				id: "0505050505050505050505050505050505050505050505050505050505050505",
-				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6ZnBLZEZxV1JwczhadHJKTFpERjhBY2dWdkM3dkhVdmsyQTVoVUpuMXBhMlVYMlJhRlVHOEd2SkoydUVkcnBCcXdNRHVld2ZvY3FHTmJvbTl3MnhmUnJBIiwidmVyaWZpY2F0aW9uTWV0aG9kIjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MyNpbW11dGFibGUtcHJvb2YtYXNzZXJ0aW9uIn0sInByb29mT2JqZWN0SGFzaCI6InNoYTI1NjpSc2FKMlJ6OUNDaysrbTVEVk1ldStoajNubHc0MTYwSGpIbHlTTnpRb3JvPSIsInByb29mT2JqZWN0SWQiOiJhaWc6MDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTpjaGFuZ2VzZXQ6MDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMiJ9",
-				controller:
+				allowList: [
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
+				],
+				creator:
+					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6Rnlid0FOcmRNbThzampmelBGeGh5WVllN0tZRXJzSkNLQWV1blBFRFp1N3d2RXVoS0xpWHlyTWNhUVY3V1hOR2JIUHNzdFVSd1FmdnE0Q041c2k2b0JvIiwidmVyaWZpY2F0aW9uTWV0aG9kIjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MyNpbW11dGFibGUtcHJvb2YtYXNzZXJ0aW9uIn0sInByb29mT2JqZWN0SGFzaCI6InNoYTI1NjpROFFlZ1o3VkRZenl0MHdnZmRYS0lnUW1rZmZQQ2czZTR6Y3djNW1wcEpNPSIsInByb29mT2JqZWN0SWQiOiJhaWc6MDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTpjaGFuZ2VzZXQ6MDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMiJ9",
+				id: "0505050505050505050505050505050505050505050505050505050505050505",
+				maxAllowListSize: 100
 			}
 		]);
 
@@ -420,7 +432,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "sha256:RsaJ2Rz9CCk++m5DVMeu+hj3nlw4160HjHlySNzQoro=",
+			proofObjectHash: "sha256:Q8QegZ7VDYzyt0wgfdXKIgQmkffPCg3e4zcwc5mppJM=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			nodeIdentity:
@@ -433,7 +445,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"zfpKdFqWRps8ZtrJLZDF8AcgVvC7vHUvk2A5hUJn1pa2UX2RaFUG8GvJJ2uEdrpBqwMDuewfocqGNbom9w2xfRrA",
+					"zFybwANrdMm8sjjfzPFxhyYYe7KYErsJCKAeunPEDZu7wvEuhKLiXyrMcaQV7WXNGbHPsstURwQfvq4CN5si6oBo",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -475,7 +487,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			type: "AuditableItemGraphVertex",
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
-			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateCreated: "2024-08-22T11:56:56.272Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
 			annotationObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
@@ -495,12 +507,12 @@ describe("AuditableItemGraphService", () => {
 				{
 					type: "AuditableItemGraphAlias",
 					id: "foo123",
-					dateCreated: "2024-08-22T11:55:16.271Z"
+					dateCreated: "2024-08-22T11:56:56.272Z"
 				},
 				{
 					type: "AuditableItemGraphAlias",
 					id: "bar456",
-					dateCreated: "2024-08-22T11:55:16.271Z"
+					dateCreated: "2024-08-22T11:56:56.272Z"
 				}
 			]
 		});
@@ -545,7 +557,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			type: "AuditableItemGraphVertex",
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
-			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateCreated: "2024-08-22T11:56:56.272Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
 			annotationObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
@@ -559,20 +571,20 @@ describe("AuditableItemGraphService", () => {
 					type: "AuditableItemGraphAlias",
 					id: "foo123",
 					aliasFormat: "type1",
-					dateCreated: "2024-08-22T11:55:16.271Z"
+					dateCreated: "2024-08-22T11:56:56.272Z"
 				},
 				{
 					type: "AuditableItemGraphAlias",
 					id: "bar456",
 					aliasFormat: "type2",
-					dateCreated: "2024-08-22T11:55:16.271Z"
+					dateCreated: "2024-08-22T11:56:56.272Z"
 				}
 			],
 			changesets: [
 				{
 					id: "0202020202020202020202020202020202020202020202020202020202020202",
 					type: "AuditableItemGraphChangeset",
-					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateCreated: "2024-08-22T11:56:56.272Z",
 					userIdentity: TEST_USER_IDENTITY,
 					proofId:
 						"immutable-proof:0303030303030303030303030303030303030303030303030303030303030303",
@@ -594,8 +606,8 @@ describe("AuditableItemGraphService", () => {
 							patchOperation: "add",
 							patchPath: "/aliases",
 							patchValue: [
-								{ id: "foo123", aliasFormat: "type1", dateCreated: "2024-08-22T11:55:16.271Z" },
-								{ id: "bar456", aliasFormat: "type2", dateCreated: "2024-08-22T11:55:16.271Z" }
+								{ id: "foo123", aliasFormat: "type1", dateCreated: "2024-08-22T11:56:56.272Z" },
+								{ id: "bar456", aliasFormat: "type2", dateCreated: "2024-08-22T11:56:56.272Z" }
 							]
 						}
 					]
@@ -609,7 +621,7 @@ describe("AuditableItemGraphService", () => {
 			{
 				id: "0202020202020202020202020202020202020202020202020202020202020202",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-				dateCreated: "2024-08-22T11:55:16.271Z",
+				dateCreated: "2024-08-22T11:56:56.272Z",
 				userIdentity: TEST_USER_IDENTITY,
 				proofId: "immutable-proof:0303030303030303030303030303030303030303030303030303030303030303",
 				patches: [
@@ -628,8 +640,8 @@ describe("AuditableItemGraphService", () => {
 						op: "add",
 						path: "/aliases",
 						value: [
-							{ id: "foo123", aliasFormat: "type1", dateCreated: "2024-08-22T11:55:16.271Z" },
-							{ id: "bar456", aliasFormat: "type2", dateCreated: "2024-08-22T11:55:16.271Z" }
+							{ id: "foo123", aliasFormat: "type1", dateCreated: "2024-08-22T11:56:56.272Z" },
+							{ id: "bar456", aliasFormat: "type2", dateCreated: "2024-08-22T11:56:56.272Z" }
 						]
 					}
 				]
@@ -641,10 +653,14 @@ describe("AuditableItemGraphService", () => {
 		const immutableStore = verifiableStorage.getStore();
 		expect(immutableStore).toEqual([
 			{
-				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6OVBqc29BZWJLb011WThkenpyaWdiZ3V4TlZpaThxbVhtMkZCbTlYSktialFxRXJTR3FkTWhmUmk2YWc5OFIzUjJyRU1mWHVGMlkzdmhBajR1ZWcyazRRIiwidmVyaWZpY2F0aW9uTWV0aG9kIjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MyNpbW11dGFibGUtcHJvb2YtYXNzZXJ0aW9uIn0sInByb29mT2JqZWN0SGFzaCI6InNoYTI1NjpnenFFYWJ5ZXYrSEJ3RFR4NGxEc3ZkdHNUbzNmcjI5WndxU3dwV2ZSMWxnPSIsInByb29mT2JqZWN0SWQiOiJhaWc6MDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTpjaGFuZ2VzZXQ6MDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMiJ9",
-				id: "0505050505050505050505050505050505050505050505050505050505050505",
-				controller:
+				allowList: [
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
+				],
+				creator:
+					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6M3ZnZGhxZXRKVVU2WjlEYXJkTms2eXF4U3ZIQVBqUm5KR2pEdXZzRDl4TkZFM1pmaVVQNGJTVldGTTFoVnJ4OTRzNGkyUVBCQ0Myd2JBUlVHRDJEZEhuSiIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6UWVhb2xYakcwQ1ZDUnpkRzkydnB3a28wL0EwV1c2dVRYQzZwT29pdVBoOD0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIifQ==",
+				id: "0505050505050505050505050505050505050505050505050505050505050505",
+				maxAllowListSize: 100
 			}
 		]);
 
@@ -659,7 +675,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "sha256:gzqEabyev+HBwDTx4lDsvdtsTo3fr29ZwqSwpWfR1lg=",
+			proofObjectHash: "sha256:QeaolXjG0CVCRzdG92vpwko0/A0WW6uTXC6pOoiuPh8=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			nodeIdentity:
@@ -672,7 +688,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"z9PjsoAebKoMuY8dzzrigbguxNVii8qmXm2FBm9XJKbjQqErSGqdMhfRi6ag98R3R2rEMfXuF2Y3vhAj4ueg2k4Q",
+					"z3vgdhqetJUU6Z9DardNk6yqxSvHAPjRnJGjDuvsD9xNFE3ZfiUP4bSVWFM1hVrx94s4i2QPBCC2wbARUGD2DdHnJ",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -721,7 +737,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			type: "AuditableItemGraphVertex",
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
-			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateCreated: "2024-08-22T11:56:56.272Z",
 			nodeIdentity: TEST_NODE_IDENTITY,
 			annotationObject: {
 				"@context": "https://www.w3.org/ns/activitystreams",
@@ -731,14 +747,14 @@ describe("AuditableItemGraphService", () => {
 				published: "2015-01-25T12:34:56Z"
 			},
 			aliases: [
-				{ type: "AuditableItemGraphAlias", id: "foo123", dateCreated: "2024-08-22T11:55:16.271Z" },
-				{ type: "AuditableItemGraphAlias", id: "bar456", dateCreated: "2024-08-22T11:55:16.271Z" }
+				{ type: "AuditableItemGraphAlias", id: "foo123", dateCreated: "2024-08-22T11:56:56.272Z" },
+				{ type: "AuditableItemGraphAlias", id: "bar456", dateCreated: "2024-08-22T11:56:56.272Z" }
 			],
 			changesets: [
 				{
 					type: "AuditableItemGraphChangeset",
 					id: "0202020202020202020202020202020202020202020202020202020202020202",
-					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateCreated: "2024-08-22T11:56:56.272Z",
 					userIdentity: TEST_USER_IDENTITY,
 					proofId:
 						"immutable-proof:0303030303030303030303030303030303030303030303030303030303030303",
@@ -760,8 +776,8 @@ describe("AuditableItemGraphService", () => {
 							patchOperation: "add",
 							patchPath: "/aliases",
 							patchValue: [
-								{ id: "foo123", dateCreated: "2024-08-22T11:55:16.271Z" },
-								{ id: "bar456", dateCreated: "2024-08-22T11:55:16.271Z" }
+								{ id: "foo123", dateCreated: "2024-08-22T11:56:56.272Z" },
+								{ id: "bar456", dateCreated: "2024-08-22T11:56:56.272Z" }
 							]
 						}
 					],
@@ -780,7 +796,7 @@ describe("AuditableItemGraphService", () => {
 			{
 				id: "0202020202020202020202020202020202020202020202020202020202020202",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-				dateCreated: "2024-08-22T11:55:16.271Z",
+				dateCreated: "2024-08-22T11:56:56.272Z",
 				userIdentity: TEST_USER_IDENTITY,
 				patches: [
 					{
@@ -807,11 +823,11 @@ describe("AuditableItemGraphService", () => {
 						value: [
 							{
 								id: "foo123",
-								dateCreated: "2024-08-22T11:55:16.271Z"
+								dateCreated: "2024-08-22T11:56:56.272Z"
 							},
 							{
 								id: "bar456",
-								dateCreated: "2024-08-22T11:55:16.271Z"
+								dateCreated: "2024-08-22T11:56:56.272Z"
 							}
 						]
 					}
@@ -825,10 +841,14 @@ describe("AuditableItemGraphService", () => {
 		const immutableStore = verifiableStorage.getStore();
 		expect(immutableStore).toEqual([
 			{
-				id: "0505050505050505050505050505050505050505050505050505050505050505",
-				controller:
+				allowList: [
+					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
+				],
+				creator:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
-				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6M0IzaWJhWHNkWWtZOUFUaVZGNkFGQnRWS3ZWM3pLZGo0ZHB3YUhwMWgzWGhxakNrMnBVRmpUTDRSc0ZlR0dCa0hCZ1p1ZFhhWWtGZmU1aDNlNVY0a21URSIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6cWV4SEZPdnRxK083WDlwLzA3M1I0TmFjNmw4RWZIdVpMUTF6RGd0L1dRQT0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIifQ=="
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6MnJONEs2elpTaVpXell1cHV1U05Oc29UNFl3cnBLb0JEZFQ3ZDFQeDlDbnVLRHd1eEVVUWpqbmlhNktwalgyQ3BMWHBVbUNjTmJvR3ZMY1RKbTNncFNnaSIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6ZllVUFEyY1BTZnJkZXgvc0hzNytUN3k5aDVvSHRGVlhIajV0RmxqUXlkZz0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIifQ==",
+				id: "0505050505050505050505050505050505050505050505050505050505050505",
+				maxAllowListSize: 100
 			}
 		]);
 
@@ -843,7 +863,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "sha256:qexHFOvtq+O7X9p/073R4Nac6l8EfHuZLQ1zDgt/WQA=",
+			proofObjectHash: "sha256:fYUPQ2cPSfrdex/sHs7+T7y9h5oHtFVXHj5tFljQydg=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			nodeIdentity:
@@ -856,7 +876,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"z3B3ibaXsdYkY9ATiVF6AFBtVKvV3zKdj4dpwaHp1h3XhqjCk2pUFjTL4RsFeGGBkHBgZudXaYkFfe5h3e5V4kmTE",
+					"z2rN4K6zZSiZWzYupuuSNNsoT4YwrpKoBDdT7d1Px9CnuKDwuxEUQjjnia6KpjX2CpLXpUmCcNboGvLcTJm3gpSgi",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -926,16 +946,16 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
-			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateCreated: "2024-08-22T11:56:56.272Z",
 			aliases: [
-				{ id: "foo123", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" },
-				{ id: "bar456", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" }
+				{ id: "foo123", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:56:56.272Z" },
+				{ id: "bar456", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:56:56.272Z" }
 			],
 			changesets: [
 				{
 					id: "0202020202020202020202020202020202020202020202020202020202020202",
 					type: "AuditableItemGraphChangeset",
-					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateCreated: "2024-08-22T11:56:56.272Z",
 					proofId:
 						"immutable-proof:0303030303030303030303030303030303030303030303030303030303030303",
 					patches: [
@@ -956,8 +976,8 @@ describe("AuditableItemGraphService", () => {
 							patchOperation: "add",
 							patchPath: "/aliases",
 							patchValue: [
-								{ id: "foo123", dateCreated: "2024-08-22T11:55:16.271Z" },
-								{ id: "bar456", dateCreated: "2024-08-22T11:55:16.271Z" }
+								{ id: "foo123", dateCreated: "2024-08-22T11:56:56.272Z" },
+								{ id: "bar456", dateCreated: "2024-08-22T11:56:56.272Z" }
 							]
 						}
 					],
@@ -984,7 +1004,7 @@ describe("AuditableItemGraphService", () => {
 			{
 				id: "0202020202020202020202020202020202020202020202020202020202020202",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-				dateCreated: "2024-08-22T11:55:16.271Z",
+				dateCreated: "2024-08-22T11:56:56.272Z",
 				userIdentity:
 					"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 				patches: [
@@ -1003,8 +1023,8 @@ describe("AuditableItemGraphService", () => {
 						op: "add",
 						path: "/aliases",
 						value: [
-							{ id: "foo123", dateCreated: "2024-08-22T11:55:16.271Z" },
-							{ id: "bar456", dateCreated: "2024-08-22T11:55:16.271Z" }
+							{ id: "foo123", dateCreated: "2024-08-22T11:56:56.272Z" },
+							{ id: "bar456", dateCreated: "2024-08-22T11:56:56.272Z" }
 						]
 					}
 				],
@@ -1077,23 +1097,23 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
-			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateCreated: "2024-08-22T11:56:56.272Z",
 			dateModified: "2024-08-22T11:56:56.272Z",
 			aliases: [
 				{
 					type: "AuditableItemGraphAlias",
 					id: "foo123",
-					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateCreated: "2024-08-22T11:56:56.272Z",
 					dateDeleted: "2024-08-22T11:56:56.272Z"
 				},
-				{ type: "AuditableItemGraphAlias", id: "bar456", dateCreated: "2024-08-22T11:55:16.271Z" },
+				{ type: "AuditableItemGraphAlias", id: "bar456", dateCreated: "2024-08-22T11:56:56.272Z" },
 				{ type: "AuditableItemGraphAlias", id: "foo321", dateCreated: "2024-08-22T11:56:56.272Z" }
 			],
 			changesets: [
 				{
 					type: "AuditableItemGraphChangeset",
 					id: "0202020202020202020202020202020202020202020202020202020202020202",
-					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateCreated: "2024-08-22T11:56:56.272Z",
 					patches: [
 						{
 							type: "AuditableItemGraphPatchOperation",
@@ -1112,8 +1132,8 @@ describe("AuditableItemGraphService", () => {
 							patchOperation: "add",
 							patchPath: "/aliases",
 							patchValue: [
-								{ id: "foo123", dateCreated: "2024-08-22T11:55:16.271Z" },
-								{ id: "bar456", dateCreated: "2024-08-22T11:55:16.271Z" }
+								{ id: "foo123", dateCreated: "2024-08-22T11:56:56.272Z" },
+								{ id: "bar456", dateCreated: "2024-08-22T11:56:56.272Z" }
 							]
 						}
 					],
@@ -1171,7 +1191,7 @@ describe("AuditableItemGraphService", () => {
 			{
 				id: "0202020202020202020202020202020202020202020202020202020202020202",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-				dateCreated: "2024-08-22T11:55:16.271Z",
+				dateCreated: "2024-08-22T11:56:56.272Z",
 				userIdentity:
 					"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 				patches: [
@@ -1190,8 +1210,8 @@ describe("AuditableItemGraphService", () => {
 						op: "add",
 						path: "/aliases",
 						value: [
-							{ id: "foo123", dateCreated: "2024-08-22T11:55:16.271Z" },
-							{ id: "bar456", dateCreated: "2024-08-22T11:55:16.271Z" }
+							{ id: "foo123", dateCreated: "2024-08-22T11:56:56.272Z" },
+							{ id: "bar456", dateCreated: "2024-08-22T11:56:56.272Z" }
 						]
 					}
 				],
@@ -1218,16 +1238,24 @@ describe("AuditableItemGraphService", () => {
 		const immutableStore = verifiableStorage.getStore();
 		expect(immutableStore).toEqual([
 			{
-				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6M0IzaWJhWHNkWWtZOUFUaVZGNkFGQnRWS3ZWM3pLZGo0ZHB3YUhwMWgzWGhxakNrMnBVRmpUTDRSc0ZlR0dCa0hCZ1p1ZFhhWWtGZmU1aDNlNVY0a21URSIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6cWV4SEZPdnRxK083WDlwLzA3M1I0TmFjNmw4RWZIdVpMUTF6RGd0L1dRQT0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIifQ==",
-				id: "0505050505050505050505050505050505050505050505050505050505050505",
-				controller:
+				allowList: [
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
+				],
+				creator:
+					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6MnJONEs2elpTaVpXell1cHV1U05Oc29UNFl3cnBLb0JEZFQ3ZDFQeDlDbnVLRHd1eEVVUWpqbmlhNktwalgyQ3BMWHBVbUNjTmJvR3ZMY1RKbTNncFNnaSIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6ZllVUFEyY1BTZnJkZXgvc0hzNytUN3k5aDVvSHRGVlhIajV0RmxqUXlkZz0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIifQ==",
+				id: "0505050505050505050505050505050505050505050505050505050505050505",
+				maxAllowListSize: 100
 			},
 			{
+				allowList: [
+					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
+				],
+				creator:
+					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDciLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6NU1ld0N3OXYxOUdFNXdSb0pMTWZjSGhpU21NdVA3TDdYS0E5TWh3N3ZFZkpuQlZUY3F6RUZGV3l3a1dUV3B4SmpreFdFd3hFY0p6TlRhcUh5bUh0U2JVSCIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6cTdoTHNUY2NzbFBJSDlxMFFZaDZjZlNhcHFsNUM3NUZwNThRODI2Y2cvWT0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYifQ==",
 				id: "0909090909090909090909090909090909090909090909090909090909090909",
-				controller:
-					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
+				maxAllowListSize: 100
 			}
 		]);
 
@@ -1242,7 +1270,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "sha256:qexHFOvtq+O7X9p/073R4Nac6l8EfHuZLQ1zDgt/WQA=",
+			proofObjectHash: "sha256:fYUPQ2cPSfrdex/sHs7+T7y9h5oHtFVXHj5tFljQydg=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			nodeIdentity:
@@ -1255,7 +1283,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"z3B3ibaXsdYkY9ATiVF6AFBtVKvV3zKdj4dpwaHp1h3XhqjCk2pUFjTL4RsFeGGBkHBgZudXaYkFfe5h3e5V4kmTE",
+					"z2rN4K6zZSiZWzYupuuSNNsoT4YwrpKoBDdT7d1Px9CnuKDwuxEUQjjnia6KpjX2CpLXpUmCcNboGvLcTJm3gpSgi",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1355,17 +1383,17 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
-			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateCreated: "2024-08-22T11:56:56.272Z",
 			dateModified: "2024-08-22T11:56:56.272Z",
 			aliases: [
-				{ id: "foo123", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" },
-				{ id: "bar456", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" }
+				{ id: "foo123", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:56:56.272Z" },
+				{ id: "bar456", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:56:56.272Z" }
 			],
 			changesets: [
 				{
 					id: "0202020202020202020202020202020202020202020202020202020202020202",
 					type: "AuditableItemGraphChangeset",
-					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateCreated: "2024-08-22T11:56:56.272Z",
 					proofId:
 						"immutable-proof:0303030303030303030303030303030303030303030303030303030303030303",
 					patches: [
@@ -1386,8 +1414,8 @@ describe("AuditableItemGraphService", () => {
 							patchOperation: "add",
 							patchPath: "/aliases",
 							patchValue: [
-								{ id: "foo123", dateCreated: "2024-08-22T11:55:16.271Z" },
-								{ id: "bar456", dateCreated: "2024-08-22T11:55:16.271Z" }
+								{ id: "foo123", dateCreated: "2024-08-22T11:56:56.272Z" },
+								{ id: "bar456", dateCreated: "2024-08-22T11:56:56.272Z" }
 							]
 						}
 					],
@@ -1432,7 +1460,7 @@ describe("AuditableItemGraphService", () => {
 			{
 				id: "0202020202020202020202020202020202020202020202020202020202020202",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-				dateCreated: "2024-08-22T11:55:16.271Z",
+				dateCreated: "2024-08-22T11:56:56.272Z",
 				userIdentity:
 					"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 				patches: [
@@ -1451,8 +1479,8 @@ describe("AuditableItemGraphService", () => {
 						op: "add",
 						path: "/aliases",
 						value: [
-							{ id: "foo123", dateCreated: "2024-08-22T11:55:16.271Z" },
-							{ id: "bar456", dateCreated: "2024-08-22T11:55:16.271Z" }
+							{ id: "foo123", dateCreated: "2024-08-22T11:56:56.272Z" },
+							{ id: "bar456", dateCreated: "2024-08-22T11:56:56.272Z" }
 						]
 					}
 				],
@@ -1478,16 +1506,24 @@ describe("AuditableItemGraphService", () => {
 		const immutableStore = verifiableStorage.getStore();
 		expect(immutableStore).toEqual([
 			{
-				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6M0IzaWJhWHNkWWtZOUFUaVZGNkFGQnRWS3ZWM3pLZGo0ZHB3YUhwMWgzWGhxakNrMnBVRmpUTDRSc0ZlR0dCa0hCZ1p1ZFhhWWtGZmU1aDNlNVY0a21URSIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6cWV4SEZPdnRxK083WDlwLzA3M1I0TmFjNmw4RWZIdVpMUTF6RGd0L1dRQT0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIifQ==",
-				id: "0505050505050505050505050505050505050505050505050505050505050505",
-				controller:
+				allowList: [
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
+				],
+				creator:
+					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6MnJONEs2elpTaVpXell1cHV1U05Oc29UNFl3cnBLb0JEZFQ3ZDFQeDlDbnVLRHd1eEVVUWpqbmlhNktwalgyQ3BMWHBVbUNjTmJvR3ZMY1RKbTNncFNnaSIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6ZllVUFEyY1BTZnJkZXgvc0hzNytUN3k5aDVvSHRGVlhIajV0RmxqUXlkZz0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIifQ==",
+				id: "0505050505050505050505050505050505050505050505050505050505050505",
+				maxAllowListSize: 100
 			},
 			{
+				allowList: [
+					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
+				],
+				creator:
+					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDciLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6NVhKNUtKQ3NicU1YYUszODc5em9Zc2pDSGRtWGtBRnhTOEhjcXRZY1dDa0IySk16UXdFTlFjS0RuYWtCcm51cG5xOXhURG82MlMxVjRmUzJ3TW5RYjc2byIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6RndSTTlsdU90Zy9UZktjaXN0Z0NGcTlSaGxzZUM2RjBvb1ZRSFVSaDdQUT0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYifQ==",
 				id: "0909090909090909090909090909090909090909090909090909090909090909",
-				controller:
-					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
+				maxAllowListSize: 100
 			}
 		]);
 
@@ -1502,7 +1538,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "sha256:qexHFOvtq+O7X9p/073R4Nac6l8EfHuZLQ1zDgt/WQA=",
+			proofObjectHash: "sha256:fYUPQ2cPSfrdex/sHs7+T7y9h5oHtFVXHj5tFljQydg=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			nodeIdentity:
@@ -1515,7 +1551,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"z3B3ibaXsdYkY9ATiVF6AFBtVKvV3zKdj4dpwaHp1h3XhqjCk2pUFjTL4RsFeGGBkHBgZudXaYkFfe5h3e5V4kmTE",
+					"z2rN4K6zZSiZWzYupuuSNNsoT4YwrpKoBDdT7d1Px9CnuKDwuxEUQjjnia6KpjX2CpLXpUmCcNboGvLcTJm3gpSgi",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -1552,7 +1588,7 @@ describe("AuditableItemGraphService", () => {
 		});
 	});
 
-	test("Can create and update and verify aliases and object", async () => {
+	test("Can create and update and verify resources, aliases and object", async () => {
 		const service = new AuditableItemGraphService({ config: {} });
 		const id = await service.create(
 			{
@@ -1687,17 +1723,17 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
-			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateCreated: "2024-08-22T11:56:56.272Z",
 			dateModified: "2024-08-22T11:56:56.272Z",
 			aliases: [
-				{ id: "foo123", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" },
-				{ id: "bar456", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:55:16.271Z" }
+				{ id: "foo123", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:56:56.272Z" },
+				{ id: "bar456", type: "AuditableItemGraphAlias", dateCreated: "2024-08-22T11:56:56.272Z" }
 			],
 			changesets: [
 				{
 					id: "0202020202020202020202020202020202020202020202020202020202020202",
 					type: "AuditableItemGraphChangeset",
-					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateCreated: "2024-08-22T11:56:56.272Z",
 					proofId:
 						"immutable-proof:0303030303030303030303030303030303030303030303030303030303030303",
 					patches: [
@@ -1718,8 +1754,8 @@ describe("AuditableItemGraphService", () => {
 							patchOperation: "add",
 							patchPath: "/aliases",
 							patchValue: [
-								{ id: "foo123", dateCreated: "2024-08-22T11:55:16.271Z" },
-								{ id: "bar456", dateCreated: "2024-08-22T11:55:16.271Z" }
+								{ id: "foo123", dateCreated: "2024-08-22T11:56:56.272Z" },
+								{ id: "bar456", dateCreated: "2024-08-22T11:56:56.272Z" }
 							]
 						},
 						{
@@ -1729,7 +1765,7 @@ describe("AuditableItemGraphService", () => {
 							patchValue: [
 								{
 									id: "resource1",
-									dateCreated: "2024-08-22T11:55:16.271Z",
+									dateCreated: "2024-08-22T11:56:56.272Z",
 									resourceObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										type: "Create",
@@ -1740,7 +1776,7 @@ describe("AuditableItemGraphService", () => {
 								},
 								{
 									id: "resource2",
-									dateCreated: "2024-08-22T11:55:16.271Z",
+									dateCreated: "2024-08-22T11:56:56.272Z",
 									resourceObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										type: "Create",
@@ -1803,7 +1839,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "resource1",
 					type: "AuditableItemGraphResource",
-					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateCreated: "2024-08-22T11:56:56.272Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
@@ -1816,7 +1852,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "resource2",
 					type: "AuditableItemGraphResource",
-					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateCreated: "2024-08-22T11:56:56.272Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
@@ -1844,7 +1880,7 @@ describe("AuditableItemGraphService", () => {
 			{
 				id: "0202020202020202020202020202020202020202020202020202020202020202",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-				dateCreated: "2024-08-22T11:55:16.271Z",
+				dateCreated: "2024-08-22T11:56:56.272Z",
 				userIdentity:
 					"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 				patches: [
@@ -1863,8 +1899,8 @@ describe("AuditableItemGraphService", () => {
 						op: "add",
 						path: "/aliases",
 						value: [
-							{ id: "foo123", dateCreated: "2024-08-22T11:55:16.271Z" },
-							{ id: "bar456", dateCreated: "2024-08-22T11:55:16.271Z" }
+							{ id: "foo123", dateCreated: "2024-08-22T11:56:56.272Z" },
+							{ id: "bar456", dateCreated: "2024-08-22T11:56:56.272Z" }
 						]
 					},
 					{
@@ -1873,7 +1909,7 @@ describe("AuditableItemGraphService", () => {
 						value: [
 							{
 								id: "resource1",
-								dateCreated: "2024-08-22T11:55:16.271Z",
+								dateCreated: "2024-08-22T11:56:56.272Z",
 								resourceObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
 									type: "Create",
@@ -1884,7 +1920,7 @@ describe("AuditableItemGraphService", () => {
 							},
 							{
 								id: "resource2",
-								dateCreated: "2024-08-22T11:55:16.271Z",
+								dateCreated: "2024-08-22T11:56:56.272Z",
 								resourceObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
 									type: "Create",
@@ -1930,16 +1966,24 @@ describe("AuditableItemGraphService", () => {
 		const immutableStore = verifiableStorage.getStore();
 		expect(immutableStore).toEqual([
 			{
-				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6b1p4M0xXYURKVG5iZU1qRkZGMU5ZTGhKUXpjd1F5S2NLZHdVeEpuNkRMQThZZlNCSkQ3QU1vOHNwTEc2U0pWc2JncHFlZzFvVmZkTFdqZkRQMkNtTTNVIiwidmVyaWZpY2F0aW9uTWV0aG9kIjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MyNpbW11dGFibGUtcHJvb2YtYXNzZXJ0aW9uIn0sInByb29mT2JqZWN0SGFzaCI6InNoYTI1NjpnejdkTGlHd1BaQ3BQbXF1T3JCUXk0N2JOcFBXZDhUSXdnK2J3aFg3ckVnPSIsInByb29mT2JqZWN0SWQiOiJhaWc6MDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTpjaGFuZ2VzZXQ6MDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMiJ9",
-				id: "0505050505050505050505050505050505050505050505050505050505050505",
-				controller:
+				allowList: [
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
+				],
+				creator:
+					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6NFZpR0U2MjIyN2lmbmZCY1phMmJKUDhxd3RWNUxqRDNINzJnM2FkQ2tkQTFQQ2JUSDlxbjdEdExHSGlHV0NjUVRaYVpqN1ZiWWJpTUs2dkNkYW1Bd1lUQyIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6d3R2aFVyL3FEcFFUcTBVaDhVZld0MzVZMjE5OFgyY2hxdFNlVDFqK1BSQT0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIifQ==",
+				id: "0505050505050505050505050505050505050505050505050505050505050505",
+				maxAllowListSize: 100
 			},
 			{
+				allowList: [
+					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
+				],
+				creator:
+					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDciLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6NG82WjR1b2NoRDlFWFh5d3RUYzd0VWVlVHRpTkQ0TTZ0clhyU3c0OUhDdVJRYzljRUs4aTlHOFp0ZnQzdWlNVld6dW9BMjJhR1BacUZwRE5pS3c4anZiVyIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6dUFVUXErL0JUdGd6T083eUIvVXdXcSsyT2xZSUpXSkw3VHYzN2JBOExzaz0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYifQ==",
 				id: "0909090909090909090909090909090909090909090909090909090909090909",
-				controller:
-					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
+				maxAllowListSize: 100
 			}
 		]);
 
@@ -1954,7 +1998,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "sha256:gz7dLiGwPZCpPmquOrBQy47bNpPWd8TIwg+bwhX7rEg=",
+			proofObjectHash: "sha256:wtvhUr/qDpQTq0Uh8UfWt35Y2198X2chqtSeT1j+PRA=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			nodeIdentity:
@@ -1967,7 +2011,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"zoZx3LWaDJTnbeMjFFF1NYLhJQzcwQyKcKdwUxJn6DLA8YfSBJD7AMo8spLG6SJVsbgpqeg1oVfdLWjfDP2CmM3U",
+					"z4ViGE62227ifnfBcZa2bJP8qwtV5LjD3H72g3adCkdA1PCbTH9qn7DtLGHiGWCcQTZaZj7VbYbiMK6vCdamAwYTC",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}
@@ -2493,13 +2537,13 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
 			type: "AuditableItemGraphVertex",
-			dateCreated: "2024-08-22T11:55:16.271Z",
+			dateCreated: "2024-08-22T11:56:56.272Z",
 			dateModified: "2024-08-22T11:56:56.272Z",
 			aliases: [
 				{
 					id: "foo123",
 					type: "AuditableItemGraphAlias",
-					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateCreated: "2024-08-22T11:56:56.272Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					annotationObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
@@ -2512,7 +2556,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "bar456",
 					type: "AuditableItemGraphAlias",
-					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateCreated: "2024-08-22T11:56:56.272Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					annotationObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
@@ -2527,7 +2571,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "0202020202020202020202020202020202020202020202020202020202020202",
 					type: "AuditableItemGraphChangeset",
-					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateCreated: "2024-08-22T11:56:56.272Z",
 					proofId:
 						"immutable-proof:0303030303030303030303030303030303030303030303030303030303030303",
 					patches: [
@@ -2550,7 +2594,7 @@ describe("AuditableItemGraphService", () => {
 							patchValue: [
 								{
 									id: "foo123",
-									dateCreated: "2024-08-22T11:55:16.271Z",
+									dateCreated: "2024-08-22T11:56:56.272Z",
 									annotationObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										type: "Create",
@@ -2561,7 +2605,7 @@ describe("AuditableItemGraphService", () => {
 								},
 								{
 									id: "bar456",
-									dateCreated: "2024-08-22T11:55:16.271Z",
+									dateCreated: "2024-08-22T11:56:56.272Z",
 									annotationObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										type: "Create",
@@ -2579,7 +2623,7 @@ describe("AuditableItemGraphService", () => {
 							patchValue: [
 								{
 									id: "resource1",
-									dateCreated: "2024-08-22T11:55:16.271Z",
+									dateCreated: "2024-08-22T11:56:56.272Z",
 									resourceObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										type: "Create",
@@ -2590,7 +2634,7 @@ describe("AuditableItemGraphService", () => {
 								},
 								{
 									id: "resource2",
-									dateCreated: "2024-08-22T11:55:16.271Z",
+									dateCreated: "2024-08-22T11:56:56.272Z",
 									resourceObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										type: "Create",
@@ -2608,7 +2652,7 @@ describe("AuditableItemGraphService", () => {
 							patchValue: [
 								{
 									id: "edge1",
-									dateCreated: "2024-08-22T11:55:16.271Z",
+									dateCreated: "2024-08-22T11:56:56.272Z",
 									annotationObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										type: "Create",
@@ -2620,7 +2664,7 @@ describe("AuditableItemGraphService", () => {
 								},
 								{
 									id: "edge2",
-									dateCreated: "2024-08-22T11:55:16.271Z",
+									dateCreated: "2024-08-22T11:56:56.272Z",
 									annotationObject: {
 										"@context": "https://www.w3.org/ns/activitystreams",
 										type: "Create",
@@ -2732,7 +2776,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "edge1",
 					type: "AuditableItemGraphEdge",
-					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateCreated: "2024-08-22T11:56:56.272Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					annotationObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
@@ -2746,7 +2790,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "edge2",
 					type: "AuditableItemGraphEdge",
-					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateCreated: "2024-08-22T11:56:56.272Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					annotationObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
@@ -2762,7 +2806,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "resource1",
 					type: "AuditableItemGraphResource",
-					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateCreated: "2024-08-22T11:56:56.272Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
@@ -2775,7 +2819,7 @@ describe("AuditableItemGraphService", () => {
 				{
 					id: "resource2",
 					type: "AuditableItemGraphResource",
-					dateCreated: "2024-08-22T11:55:16.271Z",
+					dateCreated: "2024-08-22T11:56:56.272Z",
 					dateModified: "2024-08-22T11:56:56.272Z",
 					resourceObject: {
 						"@context": "https://www.w3.org/ns/activitystreams",
@@ -2803,7 +2847,7 @@ describe("AuditableItemGraphService", () => {
 			{
 				id: "0202020202020202020202020202020202020202020202020202020202020202",
 				vertexId: "0101010101010101010101010101010101010101010101010101010101010101",
-				dateCreated: "2024-08-22T11:55:16.271Z",
+				dateCreated: "2024-08-22T11:56:56.272Z",
 				userIdentity:
 					"did:entity-storage:0x5858585858585858585858585858585858585858585858585858585858585858",
 				patches: [
@@ -2824,7 +2868,7 @@ describe("AuditableItemGraphService", () => {
 						value: [
 							{
 								id: "foo123",
-								dateCreated: "2024-08-22T11:55:16.271Z",
+								dateCreated: "2024-08-22T11:56:56.272Z",
 								annotationObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
 									type: "Create",
@@ -2835,7 +2879,7 @@ describe("AuditableItemGraphService", () => {
 							},
 							{
 								id: "bar456",
-								dateCreated: "2024-08-22T11:55:16.271Z",
+								dateCreated: "2024-08-22T11:56:56.272Z",
 								annotationObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
 									type: "Create",
@@ -2852,7 +2896,7 @@ describe("AuditableItemGraphService", () => {
 						value: [
 							{
 								id: "resource1",
-								dateCreated: "2024-08-22T11:55:16.271Z",
+								dateCreated: "2024-08-22T11:56:56.272Z",
 								resourceObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
 									type: "Create",
@@ -2863,7 +2907,7 @@ describe("AuditableItemGraphService", () => {
 							},
 							{
 								id: "resource2",
-								dateCreated: "2024-08-22T11:55:16.271Z",
+								dateCreated: "2024-08-22T11:56:56.272Z",
 								resourceObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
 									type: "Create",
@@ -2880,7 +2924,7 @@ describe("AuditableItemGraphService", () => {
 						value: [
 							{
 								id: "edge1",
-								dateCreated: "2024-08-22T11:55:16.271Z",
+								dateCreated: "2024-08-22T11:56:56.272Z",
 								annotationObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
 									type: "Create",
@@ -2892,7 +2936,7 @@ describe("AuditableItemGraphService", () => {
 							},
 							{
 								id: "edge2",
-								dateCreated: "2024-08-22T11:55:16.271Z",
+								dateCreated: "2024-08-22T11:56:56.272Z",
 								annotationObject: {
 									"@context": "https://www.w3.org/ns/activitystreams",
 									type: "Create",
@@ -2963,16 +3007,24 @@ describe("AuditableItemGraphService", () => {
 		const immutableStore = verifiableStorage.getStore();
 		expect(immutableStore).toEqual([
 			{
-				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6M0NmaFphdFF0N3BTN1Fxa0pHY1lnN2ZmTWh6VUtqOVdENXlVbTNVQjZUVWR4dHA0RVdMQWh1U1B0VWNBaDh3NGk1ODU5MUFZUmFDRUpzWXFMdTloc3Q1ViIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6SUU3V0d6TWRDc2dkc3pPUzV0QWRWN2d6RFl1NDJTV2JKT3p1SnBodytibz0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIifQ==",
-				id: "0505050505050505050505050505050505050505050505050505050505050505",
-				controller:
+				allowList: [
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
+				],
+				creator:
+					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
+				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMwMzAzMDMiLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6NFJCa0tEVlROcTZYSFBGNkc0WGdGUW5HeGZIZVFyWXhEYmt5R01FNVNVQ1NmeGR4WXFUemd5ZWhDZ0hxOWdIV1Q2WFpmcjk4TWFnZlpmRGE0c0RoWDFGcSIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6enF2VmZWZkp4U2lUODllblRkUWEzN0Rzd0NaMVg3TDlmZG53QWlWMzZ5ND0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIwMjAyMDIifQ==",
+				id: "0505050505050505050505050505050505050505050505050505050505050505",
+				maxAllowListSize: 100
 			},
 			{
+				allowList: [
+					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
+				],
+				creator:
+					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363",
 				data: "eyJAY29udGV4dCI6WyJodHRwczovL3NjaGVtYS50d2luZGV2Lm9yZy9pbW11dGFibGUtcHJvb2YvIiwiaHR0cHM6Ly9zY2hlbWEudHdpbmRldi5vcmcvY29tbW9uLyIsImh0dHBzOi8vd3d3LnczLm9yZy9ucy9jcmVkZW50aWFscy92MiJdLCJpZCI6IjA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDcwNzA3MDciLCJ0eXBlIjoiSW1tdXRhYmxlUHJvb2YiLCJub2RlSWRlbnRpdHkiOiJkaWQ6ZW50aXR5LXN0b3JhZ2U6MHg2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzIiwidXNlcklkZW50aXR5IjoiZGlkOmVudGl0eS1zdG9yYWdlOjB4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1ODU4NTg1OCIsInByb29mIjp7InR5cGUiOiJEYXRhSW50ZWdyaXR5UHJvb2YiLCJjcmVhdGVkIjoiMjAyNC0wOC0yMlQxMTo1Njo1Ni4yNzJaIiwiY3J5cHRvc3VpdGUiOiJlZGRzYS1qY3MtMjAyMiIsInByb29mUHVycG9zZSI6ImFzc2VydGlvbk1ldGhvZCIsInByb29mVmFsdWUiOiJ6NGdtb0ZhSnhtRm1kdmMzSm1QV01MZDhQSGQzRGV0NDI4VDNHV2NLU3JWZnROamtCTVBxb3g2UVFMbVdpVUpudEJSQVlZV3VRSERxNzJWMldvaEFjcXVHMSIsInZlcmlmaWNhdGlvbk1ldGhvZCI6ImRpZDplbnRpdHktc3RvcmFnZToweDYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjM2MzYzNjMjaW1tdXRhYmxlLXByb29mLWFzc2VydGlvbiJ9LCJwcm9vZk9iamVjdEhhc2giOiJzaGEyNTY6TkkzYTNhT0Vya1gwNDNLcmthUzBLK3NWZE85dGtCUjZYVURlZHkyTkxKND0iLCJwcm9vZk9iamVjdElkIjoiYWlnOjAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDEwMTAxMDE6Y2hhbmdlc2V0OjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYwNjA2MDYifQ==",
 				id: "0909090909090909090909090909090909090909090909090909090909090909",
-				controller:
-					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363"
+				maxAllowListSize: 100
 			}
 		]);
 
@@ -2987,7 +3039,7 @@ describe("AuditableItemGraphService", () => {
 			],
 			id: "0303030303030303030303030303030303030303030303030303030303030303",
 			type: "ImmutableProof",
-			proofObjectHash: "sha256:IE7WGzMdCsgdszOS5tAdV7gzDYu42SWbJOzuJphw+bo=",
+			proofObjectHash: "sha256:zqvVfVfJxSiT89enTdQa37DswCZ1X7L9fdnwAiV36y4=",
 			proofObjectId:
 				"aig:0101010101010101010101010101010101010101010101010101010101010101:changeset:0202020202020202020202020202020202020202020202020202020202020202",
 			nodeIdentity:
@@ -3000,7 +3052,7 @@ describe("AuditableItemGraphService", () => {
 				cryptosuite: "eddsa-jcs-2022",
 				proofPurpose: "assertionMethod",
 				proofValue:
-					"z3CfhZatQt7pS7QqkJGcYg7ffMhzUKj9WD5yUm3UB6TUdxtp4EWLAhuSPtUcAh8w4i58591AYRaCEJsYqLu9hst5V",
+					"z4RBkKDVTNq6XHPF6G4XgFQnGxfHeQrYxDbkyGME5SUCSfxdxYqTzgyehCgHq9gHWT6XZfr98MagfZfDa4sDhX1Fq",
 				verificationMethod:
 					"did:entity-storage:0x6363636363636363636363636363636363636363636363636363636363636363#immutable-proof-assertion"
 			}

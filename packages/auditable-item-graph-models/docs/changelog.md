@@ -1,5 +1,12 @@
 # @twin.org/auditable-item-graph-models - Changelog
 
+## [0.0.1-next.41](https://github.com/twinfoundation/auditable-item-graph/compare/auditable-item-graph-models-v0.0.1-next.40...auditable-item-graph-models-v0.0.1-next.41) (2025-06-03)
+
+
+### Features
+
+* update ts-to-schema generation ([edce91e](https://github.com/twinfoundation/auditable-item-graph/commit/edce91e8272ab361595489458066040caf582df2))
+
 ## [0.0.1-next.40](https://github.com/twinfoundation/auditable-item-graph/compare/auditable-item-graph-models-v0.0.1-next.39...auditable-item-graph-models-v0.0.1-next.40) (2025-05-28)
 
 

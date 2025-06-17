@@ -12,6 +12,11 @@ export const AuditableItemGraphTypes = {
 	Vertex: "AuditableItemGraphVertex",
 
 	/**
+	 * Represents auditable item graph vertex list.
+	 */
+	VertexList: "AuditableItemGraphVertexList",
+
+	/**
 	 * Represents auditable item graph alias.
 	 */
 	Alias: "AuditableItemGraphAlias",

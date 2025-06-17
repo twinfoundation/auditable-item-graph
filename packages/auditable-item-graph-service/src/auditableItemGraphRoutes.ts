@@ -386,7 +386,7 @@ export function generateRestRoutesAuditableItemGraph(
 									AuditableItemGraphContexts.ContextRoot,
 									AuditableItemGraphContexts.ContextRootCommon
 								],
-								type: SchemaOrgTypes.ItemList,
+								type: [SchemaOrgTypes.ItemList, AuditableItemGraphTypes.VertexList],
 								[SchemaOrgTypes.ItemListElement]: [
 									{
 										"@context": [
@@ -433,7 +433,7 @@ export function generateRestRoutesAuditableItemGraph(
 									AuditableItemGraphContexts.ContextRoot,
 									AuditableItemGraphContexts.ContextRootCommon
 								],
-								type: SchemaOrgTypes.ItemList,
+								type: [SchemaOrgTypes.ItemList, AuditableItemGraphTypes.VertexList],
 								[SchemaOrgTypes.ItemListElement]: [
 									{
 										"@context": [

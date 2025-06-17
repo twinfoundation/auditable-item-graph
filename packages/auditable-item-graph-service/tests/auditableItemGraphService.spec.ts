@@ -3171,7 +3171,7 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/"
 			],
-			type: "ItemList",
+			type: ["ItemList", "AuditableItemGraphVertexList"],
 			itemListElement: [
 				{
 					type: "AuditableItemGraphVertex",
@@ -3211,7 +3211,7 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/"
 			],
-			type: "ItemList",
+			type: ["ItemList", "AuditableItemGraphVertexList"],
 			itemListElement: [
 				{
 					type: "AuditableItemGraphVertex",
@@ -3269,7 +3269,7 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/"
 			],
-			type: "ItemList",
+			type: ["ItemList", "AuditableItemGraphVertexList"],
 			itemListElement: [
 				{
 					id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
@@ -3301,7 +3301,7 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/"
 			],
-			type: "ItemList",
+			type: ["ItemList", "AuditableItemGraphVertexList"],
 			itemListElement: [
 				{
 					id: "aig:0606060606060606060606060606060606060606060606060606060606060606",
@@ -3332,7 +3332,7 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/"
 			],
-			type: "ItemList",
+			type: ["ItemList", "AuditableItemGraphVertexList"],
 			itemListElement: [
 				{
 					id: "aig:0101010101010101010101010101010101010101010101010101010101010101",
@@ -3408,7 +3408,7 @@ describe("AuditableItemGraphService", () => {
 				"https://schema.twindev.org/aig/",
 				"https://schema.twindev.org/common/"
 			],
-			type: "ItemList",
+			type: ["ItemList", "AuditableItemGraphVertexList"],
 			itemListElement: [
 				{
 					dateCreated: "2024-08-22T11:56:56.272Z",

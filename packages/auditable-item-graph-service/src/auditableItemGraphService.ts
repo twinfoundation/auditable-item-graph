@@ -586,7 +586,7 @@ export class AuditableItemGraphService implements IAuditableItemGraphComponent {
 					AuditableItemGraphContexts.ContextRoot,
 					AuditableItemGraphContexts.ContextRootCommon
 				],
-				type: SchemaOrgTypes.ItemList,
+				type: [SchemaOrgTypes.ItemList, AuditableItemGraphTypes.VertexList],
 				[SchemaOrgTypes.ItemListElement]: models,
 				[SchemaOrgTypes.NextItem]: results.cursor
 			};

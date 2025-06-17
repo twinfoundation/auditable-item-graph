@@ -1,12 +1,13 @@
 {
 	"baseUrl": "https://schema.twindev.org/aig/",
 	"types": [
-		"./src/models/IAuditableItemGraphVertex.ts",
 		"./src/models/IAuditableItemGraphAlias.ts",
-		"./src/models/IAuditableItemGraphResource.ts",
-		"./src/models/IAuditableItemGraphEdge.ts",
 		"./src/models/IAuditableItemGraphChangeset.ts",
-		"./src/models/IAuditableItemGraphPatchOperation.ts"
+		"./src/models/IAuditableItemGraphEdge.ts",
+		"./src/models/IAuditableItemGraphPatchOperation.ts",
+		"./src/models/IAuditableItemGraphResource.ts",
+		"./src/models/IAuditableItemGraphVertex.ts",
+		"./src/models/IAuditableItemGraphVertexList.ts"
 	],
 	"externalReferences": {
 		"IJsonLd(.*)": "https://schema.twindev.org/json-ld/JsonLd$1",

@@ -9,6 +9,7 @@ import AuditableItemGraphEdgeSchema from "../schemas/AuditableItemGraphEdge.json
 import AuditableItemGraphPatchOperationSchema from "../schemas/AuditableItemGraphPatchOperation.json";
 import AuditableItemGraphResourceSchema from "../schemas/AuditableItemGraphResource.json";
 import AuditableItemGraphVertexSchema from "../schemas/AuditableItemGraphVertex.json";
+import AuditableItemGraphVertexListSchema from "../schemas/AuditableItemGraphVertexList.json";
 
 /**
  * Handle all the data types for auditable item graph.
@@ -25,6 +26,15 @@ export class AuditableItemGraphDataTypes {
 				type: AuditableItemGraphTypes.Vertex,
 				defaultValue: {},
 				jsonSchema: async () => AuditableItemGraphVertexSchema as IJsonSchema
+			})
+		);
+		DataTypeHandlerFactory.register(
+			`${AuditableItemGraphContexts.ContextRoot}${AuditableItemGraphTypes.VertexList}`,
+			() => ({
+				context: AuditableItemGraphContexts.ContextRoot,
+				type: AuditableItemGraphTypes.VertexList,
+				defaultValue: {},
+				jsonSchema: async () => AuditableItemGraphVertexListSchema as IJsonSchema
 			})
 		);
 		DataTypeHandlerFactory.register(

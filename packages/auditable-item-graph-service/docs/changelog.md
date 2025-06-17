@@ -1,5 +1,19 @@
 # @twin.org/auditable-item-graph-service - Changelog
 
+## [0.0.1-next.43](https://github.com/twinfoundation/auditable-item-graph/compare/auditable-item-graph-service-v0.0.1-next.42...auditable-item-graph-service-v0.0.1-next.43) (2025-06-17)
+
+
+### Features
+
+* improve JSON schemas ([bec8dc1](https://github.com/twinfoundation/auditable-item-graph/commit/bec8dc1f270c6c9710623a192b984cf46f8a5613))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @twin.org/auditable-item-graph-models bumped from 0.0.1-next.42 to 0.0.1-next.43
+
 ## [0.0.1-next.42](https://github.com/twinfoundation/auditable-item-graph/compare/auditable-item-graph-service-v0.0.1-next.41...auditable-item-graph-service-v0.0.1-next.42) (2025-06-12)
 
 

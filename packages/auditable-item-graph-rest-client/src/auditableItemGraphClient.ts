@@ -19,7 +19,7 @@ import type {
 	IAuditableItemGraphVertexList,
 	VerifyDepth
 } from "@twin.org/auditable-item-graph-models";
-import { Guards, NotSupportedError } from "@twin.org/core";
+import { Coerce, Guards, NotSupportedError } from "@twin.org/core";
 import type { IJsonLdNodeObject } from "@twin.org/data-json-ld";
 import type { IComparator, SortDirection } from "@twin.org/entity";
 import { nameof } from "@twin.org/nameof";
@@ -217,7 +217,7 @@ export class AuditableItemGraphClient
 				orderByDirection,
 				properties: HttpParameterHelper.arrayToString(properties),
 				cursor,
-				pageSize
+				pageSize: Coerce.integer(pageSize)
 			}
 		});
 

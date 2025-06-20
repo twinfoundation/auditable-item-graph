@@ -19,7 +19,7 @@ import {
 	type IAuditableItemGraphListResponse,
 	type IAuditableItemGraphUpdateRequest
 } from "@twin.org/auditable-item-graph-models";
-import { ComponentFactory, Guards } from "@twin.org/core";
+import { Coerce, ComponentFactory, Guards } from "@twin.org/core";
 import { nameof } from "@twin.org/nameof";
 import { SchemaOrgContexts, SchemaOrgTypes } from "@twin.org/standards-schema-org";
 import { HeaderTypes, HttpStatusCode, MimeTypes } from "@twin.org/web";
@@ -527,8 +527,8 @@ export async function auditableItemGraphGet(
 
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
 	const result = await component.get(request.pathParams.id, {
-		includeDeleted: request.query?.includeDeleted,
-		includeChangesets: request.query?.includeChangesets,
+		includeDeleted: Coerce.boolean(request.query?.includeDeleted),
+		includeChangesets: Coerce.boolean(request.query?.includeChangesets),
 		verifySignatureDepth: request.query?.verifySignatureDepth
 	});
 
@@ -610,7 +610,7 @@ export async function auditableItemGraphList(
 		request.query?.orderByDirection,
 		HttpParameterHelper.arrayFromString(request.query?.properties),
 		request.query?.cursor,
-		request.query?.pageSize
+		Coerce.integer(request.query?.pageSize)
 	);
 
 	return {

@@ -31,12 +31,12 @@ export interface IAuditableItemGraphGetRequest {
 		/**
 		 * Whether to include deleted aliases, resource, edges, defaults to false.
 		 */
-		includeDeleted?: boolean;
+		includeDeleted?: boolean | string;
 
 		/**
 		 * Whether to include the changesets of the vertex, defaults to false.
 		 */
-		includeChangesets?: boolean;
+		includeChangesets?: boolean | string;
 
 		/**
 		 * How many signatures to verify, none, current or all, defaults to "none".

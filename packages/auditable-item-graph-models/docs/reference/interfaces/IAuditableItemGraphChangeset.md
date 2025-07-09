@@ -1,35 +1,67 @@
 # Interface: IAuditableItemGraphChangeset
 
-Interface describing a set of updates to the vertex.
+Interface describing a set of changes to the vertex.
 
 ## Properties
 
-### created
+### @context
 
-> **created**: `number`
+> **@context**: \[`"https://schema.twindev.org/aig/"`, `"https://schema.twindev.org/common/"`, `...IJsonLdContextDefinitionElement[]`\]
 
-The timestamp of when the changeset was created.
-
-***
-
-### identity
-
-> **identity**: `string`
-
-The identity of the user who made the changeset.
+JSON-LD Context.
 
 ***
 
-### hash
+### type
 
-> **hash**: `string`
+> **type**: `"AuditableItemGraphChangeset"`
 
-The hash for the changeset.
+JSON-LD Type.
 
 ***
 
-### immutableStorageId
+### id
 
-> **immutableStorageId**: `string`
+> **id**: `string`
 
-The immutable storage id containing the signature for the changeset.
+The id of the changeset.
+
+***
+
+### dateCreated
+
+> **dateCreated**: `string`
+
+The date/time of when the changeset was created.
+
+***
+
+### userIdentity
+
+> **userIdentity**: `string`
+
+The user identity that created the changes.
+
+***
+
+### patches
+
+> **patches**: [`IAuditableItemGraphPatchOperation`](IAuditableItemGraphPatchOperation.md)[]
+
+The patches in the changeset.
+
+***
+
+### proofId?
+
+> `optional` **proofId**: `string`
+
+The immutable proof id which contains the signature for this changeset.
+
+***
+
+### verification?
+
+> `optional` **verification**: `IImmutableProofVerification`
+
+The verification for the changeset.

@@ -10,3 +10,4 @@ coverage
 **/.tmp
 .env.dev
 vitest.config.ts.timestamp*
+working

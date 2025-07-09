@@ -1,7 +1,7 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import { entity, property } from "@gtsc/entity";
-import type { AuditableItemGraphProperty } from "./auditableItemGraphProperty";
+import { JsonLdTypes, type IJsonLdNodeObject } from "@twin.org/data-json-ld";
+import { entity, property } from "@twin.org/entity";
 
 /**
  * Class describing the auditable item graph vertex resource.
@@ -9,26 +9,32 @@ import type { AuditableItemGraphProperty } from "./auditableItemGraphProperty";
 @entity()
 export class AuditableItemGraphResource {
 	/**
-	 * The id of the vertex.
+	 * The id of the resource.
 	 */
-	@property({ type: "string", isPrimary: true })
-	public id!: string;
+	@property({ type: "string", optional: true })
+	public id?: string;
 
 	/**
-	 * The timestamp of when the vertex was created.
+	 * The date/time of when the resource was created.
 	 */
-	@property({ type: "number" })
-	public created!: number;
+	@property({ type: "string", format: "date-time" })
+	public dateCreated!: string;
+
+	/**
+	 * The date/time of when the resource was last modified.
+	 */
+	@property({ type: "string", format: "date-time", optional: true })
+	public dateModified?: string;
 
 	/**
 	 * The timestamp of when the resource was deleted, as we never actually remove items.
 	 */
-	@property({ type: "number" })
-	public deleted?: number;
+	@property({ type: "string", format: "date-time", optional: true })
+	public dateDeleted?: string;
 
 	/**
-	 * Metadata to associate with the vertex.
+	 * Object to associate with the resource as JSON-LD.
 	 */
-	@property({ type: "object", itemTypeRef: "AuditableItemGraphProperty" })
-	public metadata?: { [id: string]: AuditableItemGraphProperty };
+	@property({ type: "object", itemTypeRef: JsonLdTypes.NodeObject, optional: true })
+	public resourceObject?: IJsonLdNodeObject;
 }

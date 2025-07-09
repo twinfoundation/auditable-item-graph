@@ -4,9 +4,53 @@ Interface describing an auditable item graph vertex.
 
 ## Extends
 
-- [`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).`IAuditableItemGraphMetadataElement`
+- `Omit`\<[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md), `"deleted"`\>
 
 ## Properties
+
+### dateCreated?
+
+> `optional` **dateCreated**: `string`
+
+The date/time of when the element was created.
+
+#### Inherited from
+
+`Omit.dateCreated`
+
+***
+
+### dateModified?
+
+> `optional` **dateModified**: `string`
+
+The date/time of when the element was modified.
+
+#### Inherited from
+
+`Omit.dateModified`
+
+***
+
+### dateDeleted?
+
+> `optional` **dateDeleted**: `string`
+
+The date/time of when the element was deleted, as we never actually remove items.
+
+#### Inherited from
+
+`Omit.dateDeleted`
+
+***
+
+### @context
+
+> **@context**: \[`"https://schema.twindev.org/aig/"`, `"https://schema.twindev.org/common/"`, `...IJsonLdContextDefinitionElement[]`\]
+
+JSON-LD Context.
+
+***
 
 ### id
 
@@ -14,47 +58,17 @@ Interface describing an auditable item graph vertex.
 
 The id of the element.
 
-#### Inherited from
+#### Overrides
 
-[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`id`](IAuditableItemGraphAuditedElement.md#id)
-
-***
-
-### created
-
-> **created**: `number`
-
-The timestamp of when the element was created.
-
-#### Inherited from
-
-[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`created`](IAuditableItemGraphAuditedElement.md#created)
+`Omit.id`
 
 ***
 
-### deleted?
+### type
 
-> `optional` **deleted**: `number`
+> **type**: `"AuditableItemGraphVertex"`
 
-The timestamp of when the element was deleted, as we never actually remove items.
-A property can also be marked as deleted if the value was updated, in which case
-a new value is created and the old one marked as deleted.
-
-#### Inherited from
-
-[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`deleted`](IAuditableItemGraphAuditedElement.md#deleted)
-
-***
-
-### metadata?
-
-> `optional` **metadata**: [`IAuditableItemGraphProperty`](IAuditableItemGraphProperty.md)[]
-
-Metadata to associate with the element.
-
-#### Inherited from
-
-`IAuditableItemGraphMetadataElement.metadata`
+JSON-LD Type.
 
 ***
 
@@ -66,9 +80,17 @@ The identity of the node which controls the vertex.
 
 ***
 
+### annotationObject?
+
+> `optional` **annotationObject**: `IJsonLdNodeObject`
+
+The JSON-LD annotation object for the vertex.
+
+***
+
 ### aliases?
 
-> `optional` **aliases**: [`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md)[]
+> `optional` **aliases**: [`IAuditableItemGraphAlias`](IAuditableItemGraphAlias.md)[]
 
 Alternative aliases that can be used to identify the vertex.
 
@@ -94,4 +116,12 @@ Edges connected to the vertex.
 
 > `optional` **changesets**: [`IAuditableItemGraphChangeset`](IAuditableItemGraphChangeset.md)[]
 
-Changesets containing time sliced changes to the vertex.
+Changesets for the vertex.
+
+***
+
+### verified?
+
+> `optional` **verified**: `boolean`
+
+Is the vertex verified, will only be populated when verification is requested.

@@ -1,21 +1,25 @@
 # Function: generateRestRoutesAuditableItemGraph()
 
-> **generateRestRoutesAuditableItemGraph**(`baseRouteName`, `componentName`): `IRestRoute`[]
+> **generateRestRoutesAuditableItemGraph**(`baseRouteName`, `componentName`): `IRestRoute`\<`any`, `any`\>[]
 
 The REST routes for auditable item graph.
 
 ## Parameters
 
-• **baseRouteName**: `string`
+### baseRouteName
+
+`string`
 
 Prefix to prepend to the paths.
 
-• **componentName**: `string`
+### componentName
+
+`string`
 
 The name of the component to use in the routes stored in the ComponentFactory.
 
 ## Returns
 
-`IRestRoute`[]
+`IRestRoute`\<`any`, `any`\>[]
 
 The generated routes.

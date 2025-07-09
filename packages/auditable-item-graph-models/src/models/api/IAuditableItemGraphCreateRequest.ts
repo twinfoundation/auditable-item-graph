@@ -1,23 +1,44 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import type { IProperty } from "@gtsc/schema";
+import type { IJsonLdNodeObject } from "@twin.org/data-json-ld";
 
 /**
  * Create an auditable item graph vertex.
  */
 export interface IAuditableItemGraphCreateRequest {
 	/**
-	 * The data to be used in the item.
+	 * The data to be used in the vertex.
 	 */
 	body: {
 		/**
-		 * Alternative aliases that can be used to identify the vertex.
+		 * The object to be used in the vertex as JSON-LD.
 		 */
-		aliases?: string[];
+		annotationObject?: IJsonLdNodeObject;
 
 		/**
-		 * The metadata to be used in the item.
+		 * Alternative aliases that can be used to identify the vertex.
 		 */
-		metadata?: IProperty[];
+		aliases?: {
+			id: string;
+			aliasFormat?: string;
+			annotationObject?: IJsonLdNodeObject;
+		}[];
+
+		/**
+		 * The resources attached to the vertex.
+		 */
+		resources?: {
+			id?: string;
+			resourceObject?: IJsonLdNodeObject;
+		}[];
+
+		/**
+		 * The edges connected to the vertex.
+		 */
+		edges?: {
+			id: string;
+			edgeRelationships: string[];
+			annotationObject?: IJsonLdNodeObject;
+		}[];
 	};
 }

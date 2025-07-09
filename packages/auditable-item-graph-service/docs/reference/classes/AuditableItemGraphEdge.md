@@ -4,13 +4,13 @@ Class describing the auditable item graph edge.
 
 ## Constructors
 
-### new AuditableItemGraphEdge()
+### Constructor
 
-> **new AuditableItemGraphEdge**(): [`AuditableItemGraphEdge`](AuditableItemGraphEdge.md)
+> **new AuditableItemGraphEdge**(): `AuditableItemGraphEdge`
 
 #### Returns
 
-[`AuditableItemGraphEdge`](AuditableItemGraphEdge.md)
+`AuditableItemGraphEdge`
 
 ## Properties
 
@@ -22,36 +22,40 @@ The id of the edge.
 
 ***
 
-### created
+### dateCreated
 
-> **created**: `number`
+> **dateCreated**: `string`
 
-The timestamp of when the edge was created.
+The date/time of when the edge was created.
 
 ***
 
-### deleted?
+### dateModified?
 
-> `optional` **deleted**: `number`
+> `optional` **dateModified**: `string`
+
+The date/time of when the edge was last modified.
+
+***
+
+### dateDeleted?
+
+> `optional` **dateDeleted**: `string`
 
 The timestamp of when the edge was deleted, as we never actually remove items.
 
 ***
 
-### relationship
+### edgeRelationships
 
-> **relationship**: `string`
+> **edgeRelationships**: `string`[]
 
-The relationship between the two vertices.
+The relationships between the two vertices.
 
 ***
 
-### metadata?
+### annotationObject?
 
-> `optional` **metadata**: `object`
+> `optional` **annotationObject**: `IJsonLdNodeObject`
 
-Metadata to associate with the edge.
-
-#### Index signature
-
- \[`id`: `string`\]: [`AuditableItemGraphProperty`](AuditableItemGraphProperty.md)
+Object to associate with the edge as JSON-LD.

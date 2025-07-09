@@ -6,22 +6,17 @@
  */
 export interface IAuditableItemGraphServiceContext {
 	/**
-	 * The current timestamp.
+	 * The current date/time.
 	 */
-	now: number;
+	now: string;
 
 	/**
 	 * The identity of the user.
 	 */
-	identity: string;
+	userIdentity: string;
 
 	/**
 	 * The identity of the node.
 	 */
 	nodeIdentity: string;
-
-	/**
-	 * The changes for the current operation.
-	 */
-	changes: unknown[];
 }

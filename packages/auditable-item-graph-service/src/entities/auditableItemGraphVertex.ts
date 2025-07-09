@@ -1,10 +1,9 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import { entity, property } from "@gtsc/entity";
+import { JsonLdTypes, type IJsonLdNodeObject } from "@twin.org/data-json-ld";
+import { entity, property, SortDirection } from "@twin.org/entity";
 import type { AuditableItemGraphAlias } from "./auditableItemGraphAlias";
-import type { AuditableItemGraphChangeset } from "./auditableItemGraphChangeset";
 import type { AuditableItemGraphEdge } from "./auditableItemGraphEdge";
-import type { AuditableItemGraphProperty } from "./auditableItemGraphProperty";
 import type { AuditableItemGraphResource } from "./auditableItemGraphResource";
 
 /**
@@ -21,42 +20,59 @@ export class AuditableItemGraphVertex {
 	/**
 	 * The identity of the node which controls the vertex.
 	 */
-	@property({ type: "string" })
+	@property({ type: "string", optional: true })
 	public nodeIdentity?: string;
 
 	/**
-	 * The timestamp of when the vertex was created.
+	 * The date/time of when the vertex was created.
 	 */
-	@property({ type: "number" })
-	public created!: number;
+	@property({ type: "string", format: "date-time", sortDirection: SortDirection.Descending })
+	public dateCreated!: string;
+
+	/**
+	 * The date/time of when the vertex was last modified.
+	 */
+	@property({
+		type: "string",
+		format: "date-time",
+		sortDirection: SortDirection.Descending,
+		optional: true
+	})
+	public dateModified?: string;
+
+	/**
+	 * Combined alias index for the vertex used for querying.
+	 */
+	@property({ type: "string", isSecondary: true, optional: true })
+	public aliasIndex?: string;
+
+	/**
+	 * Combined resource type index for the vertex used for querying.
+	 */
+	@property({ type: "string", isSecondary: true, optional: true })
+	public resourceTypeIndex?: string;
+
+	/**
+	 * Object to associate with the vertex as JSON-LD.
+	 */
+	@property({ type: "object", itemTypeRef: JsonLdTypes.NodeObject, optional: true })
+	public annotationObject?: IJsonLdNodeObject;
 
 	/**
 	 * Alternative aliases that can be used to identify the vertex.
 	 */
-	@property({ type: "array", itemType: "string" })
+	@property({ type: "array", itemType: "string", optional: true })
 	public aliases?: AuditableItemGraphAlias[];
-
-	/**
-	 * Metadata to associate with the vertex.
-	 */
-	@property({ type: "object", itemTypeRef: "AuditableItemGraphProperty" })
-	public metadata?: { [id: string]: AuditableItemGraphProperty };
 
 	/**
 	 * The resources attached to the vertex.
 	 */
-	@property({ type: "array", itemTypeRef: "AuditableItemGraphResource" })
+	@property({ type: "array", itemTypeRef: "AuditableItemGraphResource", optional: true })
 	public resources?: AuditableItemGraphResource[];
 
 	/**
 	 * Edges connected to the vertex.
 	 */
-	@property({ type: "array", itemTypeRef: "AuditableItemGraphEdge" })
+	@property({ type: "array", itemTypeRef: "AuditableItemGraphEdge", optional: true })
 	public edges?: AuditableItemGraphEdge[];
-
-	/**
-	 * Changesets containing time sliced changes to the vertex.
-	 */
-	@property({ type: "array", itemTypeRef: "AuditableItemGraphChange" })
-	public changesets?: AuditableItemGraphChangeset[];
 }

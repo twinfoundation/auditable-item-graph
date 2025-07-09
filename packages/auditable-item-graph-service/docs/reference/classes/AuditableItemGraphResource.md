@@ -4,46 +4,50 @@ Class describing the auditable item graph vertex resource.
 
 ## Constructors
 
-### new AuditableItemGraphResource()
+### Constructor
 
-> **new AuditableItemGraphResource**(): [`AuditableItemGraphResource`](AuditableItemGraphResource.md)
+> **new AuditableItemGraphResource**(): `AuditableItemGraphResource`
 
 #### Returns
 
-[`AuditableItemGraphResource`](AuditableItemGraphResource.md)
+`AuditableItemGraphResource`
 
 ## Properties
 
-### id
+### id?
 
-> **id**: `string`
+> `optional` **id**: `string`
 
-The id of the vertex.
-
-***
-
-### created
-
-> **created**: `number`
-
-The timestamp of when the vertex was created.
+The id of the resource.
 
 ***
 
-### deleted?
+### dateCreated
 
-> `optional` **deleted**: `number`
+> **dateCreated**: `string`
+
+The date/time of when the resource was created.
+
+***
+
+### dateModified?
+
+> `optional` **dateModified**: `string`
+
+The date/time of when the resource was last modified.
+
+***
+
+### dateDeleted?
+
+> `optional` **dateDeleted**: `string`
 
 The timestamp of when the resource was deleted, as we never actually remove items.
 
 ***
 
-### metadata?
+### resourceObject?
 
-> `optional` **metadata**: `object`
+> `optional` **resourceObject**: `IJsonLdNodeObject`
 
-Metadata to associate with the vertex.
-
-#### Index signature
-
- \[`id`: `string`\]: [`AuditableItemGraphProperty`](AuditableItemGraphProperty.md)
+Object to associate with the resource as JSON-LD.

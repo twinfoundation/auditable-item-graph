@@ -1,1 +1,1 @@
-# @gtsc/auditable-item-graph-rest-client - Examples
+# @twin.org/auditable-item-graph-rest-client - Examples

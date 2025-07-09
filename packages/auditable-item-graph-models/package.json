@@ -1,10 +1,10 @@
 {
-	"name": "@gtsc/auditable-item-graph-models",
-	"version": "0.0.5-next.1",
+	"name": "@twin.org/auditable-item-graph-models",
+	"version": "0.0.0",
 	"description": "Models which define the structure of the auditable item graph connectors and services",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/gtscio/auditable-item-graph.git",
+		"url": "git+https://github.com/twinfoundation/auditable-item-graph.git",
 		"directory": "packages/auditable-item-graph-models"
 	},
 	"author": "martyn.janes@iota.org",
@@ -14,8 +14,10 @@
 		"node": ">=20.0.0"
 	},
 	"scripts": {
-		"clean": "rimraf dist coverage docs/reference",
-		"build": "tspc",
+		"clean": "rimraf dist coverage docs/reference src/schemas",
+		"build:schema": "ts-to-schema ./ts-to-schema.json ./src/schemas",
+		"build:compile": "tsc",
+		"build": "npm run build:schema && npm run build:compile",
 		"test": "vitest --run --config ./vitest.config.ts --no-cache",
 		"coverage": "vitest --run --coverage --config ./vitest.config.ts --no-cache",
 		"bundle:esm": "rollup --config rollup.config.mjs --environment MODULE:esm",
@@ -23,41 +25,47 @@
 		"bundle": "npm run bundle:esm && npm run bundle:cjs",
 		"docs:clean": "rimraf docs/reference",
 		"docs:generate": "typedoc",
-		"docs:remove-header": "replace-in-files --regex='^.*overview.md.*?\\s\\s.*?\\s\\s' --string='docs/' --replacement='' \"docs/**/*.md\"",
-		"docs": "npm run docs:clean && npm run docs:generate && npm run docs:remove-header",
-		"dist": "npm run clean && npm run build && npm run test && npm run bundle && npm run docs"
+		"docs": "npm run docs:clean && npm run docs:generate",
+		"dist": "npm run clean && npm run build && npm run test && npm run bundle && npm run docs",
+		"dist:no-test": "npm run clean && npm run build && npm run bundle && npm run docs",
+		"prepare": "ts-patch install -s"
 	},
 	"dependencies": {
-		"@gtsc/core": "next",
-		"@gtsc/entity": "next",
-		"@gtsc/nameof": "next",
-		"@gtsc/schema": "next",
-		"@gtsc/standards-w3c-did": "next"
+		"@twin.org/core": "^0.0.1",
+		"@twin.org/data-core": "^0.0.1",
+		"@twin.org/data-json-ld": "^0.0.1",
+		"@twin.org/entity": "^0.0.1",
+		"@twin.org/nameof": "^0.0.1",
+		"@twin.org/immutable-proof-models": "^0.0.1",
+		"@twin.org/standards-schema-org": "^0.0.1",
+		"@twin.org/web": "^0.0.1"
 	},
 	"devDependencies": {
-		"@gtsc/nameof-transformer": "next",
-		"@vitest/coverage-v8": "1.6.0",
+		"@twin.org/nameof-transformer": "^0.0.1",
+		"@twin.org/nameof-vitest-plugin": "^0.0.1",
+		"@twin.org/ts-to-schema": "^0.0.1",
+		"@rollup/plugin-json": "6.1.0",
+		"@vitest/coverage-v8": "3.2.3",
 		"copyfiles": "2.4.1",
-		"replace-in-files-cli": "2.2.0",
-		"rimraf": "5.0.7",
-		"rollup": "4.18.0",
-		"rollup-plugin-typescript2": "0.36.0",
-		"ts-patch": "3.2.0",
-		"typedoc": "0.25.13",
-		"typedoc-plugin-markdown": "4.0.3",
-		"typescript": "5.4.5",
-		"vitest": "1.6.0"
+		"nodemon": "3.1.10",
+		"rimraf": "6.0.1",
+		"rollup": "4.43.0",
+		"ts-patch": "3.3.0",
+		"typedoc": "0.28.5",
+		"typedoc-plugin-markdown": "4.6.4",
+		"typescript": "5.8.3",
+		"vitest": "3.2.3"
 	},
 	"main": "./dist/cjs/index.cjs",
 	"module": "./dist/esm/index.mjs",
 	"types": "./dist/types/index.d.ts",
 	"exports": {
 		".": {
+			"types": "./dist/types/index.d.ts",
 			"require": "./dist/cjs/index.cjs",
-			"import": "./dist/esm/index.mjs",
-			"types": "./dist/types/index.d.ts"
+			"import": "./dist/esm/index.mjs"
 		},
-		"./locales": "./locales"
+		"./locales/*.json": "./locales/*.json"
 	},
 	"files": [
 		"dist/cjs",

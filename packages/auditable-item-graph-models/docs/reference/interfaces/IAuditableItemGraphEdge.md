@@ -4,9 +4,53 @@ Interface describing an edge between two vertices in an auditable item graph.
 
 ## Extends
 
-- [`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).`IAuditableItemGraphMetadataElement`
+- [`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md)
 
 ## Properties
+
+### dateCreated?
+
+> `optional` **dateCreated**: `string`
+
+The date/time of when the element was created.
+
+#### Inherited from
+
+[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`dateCreated`](IAuditableItemGraphAuditedElement.md#datecreated)
+
+***
+
+### dateModified?
+
+> `optional` **dateModified**: `string`
+
+The date/time of when the element was modified.
+
+#### Inherited from
+
+[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`dateModified`](IAuditableItemGraphAuditedElement.md#datemodified)
+
+***
+
+### dateDeleted?
+
+> `optional` **dateDeleted**: `string`
+
+The date/time of when the element was deleted, as we never actually remove items.
+
+#### Inherited from
+
+[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`dateDeleted`](IAuditableItemGraphAuditedElement.md#datedeleted)
+
+***
+
+### @context
+
+> **@context**: `"https://schema.twindev.org/aig/"` \| \[`"https://schema.twindev.org/aig/"`, `...IJsonLdContextDefinitionElement[]`\]
+
+JSON-LD Context.
+
+***
 
 ### id
 
@@ -14,52 +58,30 @@ Interface describing an edge between two vertices in an auditable item graph.
 
 The id of the element.
 
-#### Inherited from
+#### Overrides
 
 [`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`id`](IAuditableItemGraphAuditedElement.md#id)
 
 ***
 
-### created
+### type
 
-> **created**: `number`
+> **type**: `"AuditableItemGraphEdge"`
 
-The timestamp of when the element was created.
-
-#### Inherited from
-
-[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`created`](IAuditableItemGraphAuditedElement.md#created)
+JSON-LD Type.
 
 ***
 
-### deleted?
+### annotationObject?
 
-> `optional` **deleted**: `number`
+> `optional` **annotationObject**: `IJsonLdNodeObject`
 
-The timestamp of when the element was deleted, as we never actually remove items.
-A property can also be marked as deleted if the value was updated, in which case
-a new value is created and the old one marked as deleted.
-
-#### Inherited from
-
-[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`deleted`](IAuditableItemGraphAuditedElement.md#deleted)
+The JSON-LD annotation object for the edge.
 
 ***
 
-### relationship
+### edgeRelationships
 
-> **relationship**: `string`
+> **edgeRelationships**: `string`[]
 
-The relationship between the two vertices.
-
-***
-
-### metadata?
-
-> `optional` **metadata**: [`IAuditableItemGraphProperty`](IAuditableItemGraphProperty.md)[]
-
-Metadata to associate with the element.
-
-#### Inherited from
-
-`IAuditableItemGraphMetadataElement.metadata`
+The relationships between the two vertices.

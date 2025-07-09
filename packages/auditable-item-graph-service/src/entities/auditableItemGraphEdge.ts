@@ -1,7 +1,7 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import { entity, property } from "@gtsc/entity";
-import type { AuditableItemGraphProperty } from "./auditableItemGraphProperty";
+import { JsonLdTypes, type IJsonLdNodeObject } from "@twin.org/data-json-ld";
+import { entity, property } from "@twin.org/entity";
 
 /**
  * Class describing the auditable item graph edge.
@@ -15,26 +15,32 @@ export class AuditableItemGraphEdge {
 	public id!: string;
 
 	/**
-	 * The timestamp of when the edge was created.
+	 * The date/time of when the edge was created.
 	 */
-	@property({ type: "number" })
-	public created!: number;
+	@property({ type: "string", format: "date-time" })
+	public dateCreated!: string;
+
+	/**
+	 * The date/time of when the edge was last modified.
+	 */
+	@property({ type: "string", format: "date-time", optional: true })
+	public dateModified?: string;
 
 	/**
 	 * The timestamp of when the edge was deleted, as we never actually remove items.
 	 */
-	@property({ type: "number" })
-	public deleted?: number;
+	@property({ type: "string", format: "date-time", optional: true })
+	public dateDeleted?: string;
 
 	/**
-	 * The relationship between the two vertices.
+	 * The relationships between the two vertices.
 	 */
-	@property({ type: "string" })
-	public relationship!: string;
+	@property({ type: "array" })
+	public edgeRelationships!: string[];
 
 	/**
-	 * Metadata to associate with the edge.
+	 * Object to associate with the edge as JSON-LD.
 	 */
-	@property({ type: "object", itemTypeRef: "AuditableItemGraphProperty" })
-	public metadata?: { [id: string]: AuditableItemGraphProperty };
+	@property({ type: "object", itemTypeRef: JsonLdTypes.NodeObject, optional: true })
+	public annotationObject?: IJsonLdNodeObject;
 }

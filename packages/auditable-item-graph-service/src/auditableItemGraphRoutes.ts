@@ -1,15 +1,28 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import type { ICreatedResponse, IHttpRequestContext, IRestRoute, ITag } from "@gtsc/api-models";
-import type {
-	IAuditableItemGraphComponent,
-	IAuditableItemGraphCreateRequest,
-	IAuditableItemGraphGetRequest,
-	IAuditableItemGraphGetResponse
-} from "@gtsc/auditable-item-graph-models";
-import { ComponentFactory, Guards } from "@gtsc/core";
-import { nameof } from "@gtsc/nameof";
-import { HttpStatusCode } from "@gtsc/web";
+import {
+	HttpParameterHelper,
+	type ICreatedResponse,
+	type IHttpRequestContext,
+	type INoContentResponse,
+	type IRestRoute,
+	type ITag
+} from "@twin.org/api-models";
+import {
+	AuditableItemGraphContexts,
+	AuditableItemGraphTypes,
+	type IAuditableItemGraphComponent,
+	type IAuditableItemGraphCreateRequest,
+	type IAuditableItemGraphGetRequest,
+	type IAuditableItemGraphGetResponse,
+	type IAuditableItemGraphListRequest,
+	type IAuditableItemGraphListResponse,
+	type IAuditableItemGraphUpdateRequest
+} from "@twin.org/auditable-item-graph-models";
+import { Coerce, ComponentFactory, Guards } from "@twin.org/core";
+import { nameof } from "@twin.org/nameof";
+import { SchemaOrgContexts, SchemaOrgTypes } from "@twin.org/standards-schema-org";
+import { HeaderTypes, HttpStatusCode, MimeTypes } from "@twin.org/web";
 
 /**
  * The source used when communicating about these routes.
@@ -50,14 +63,88 @@ export function generateRestRoutesAuditableItemGraph(
 				{
 					id: "auditableItemGraphCreateRequestExample",
 					request: {
-						body: {}
+						body: {
+							annotationObject: {
+								"@context": "https://schema.org",
+								"@type": "Note",
+								content: "This is a simple note"
+							},
+							aliases: [
+								{
+									id: "bar456",
+									annotationObject: {
+										"@context": "https://schema.org",
+										"@type": "Note",
+										content: "This is a simple note"
+									}
+								},
+								{
+									id: "foo321",
+									annotationObject: {
+										"@context": "https://schema.org",
+										"@type": "Note",
+										content: "This is a simple note"
+									}
+								}
+							],
+							resources: [
+								{
+									id: "resource1",
+									resourceObject: {
+										"@context": "https://schema.org",
+										"@type": "Note",
+										content: "This is a simple note"
+									}
+								},
+								{
+									id: "resource2",
+									resourceObject: {
+										"@context": "https://schema.org",
+										"@type": "Note",
+										content: "This is a simple note"
+									}
+								}
+							],
+							edges: [
+								{
+									id: "edge1",
+									edgeRelationships: ["frenemy"],
+									annotationObject: {
+										"@context": "https://schema.org",
+										"@type": "Note",
+										content: "This is a simple note"
+									}
+								},
+								{
+									id: "edge2",
+									edgeRelationships: ["end"],
+									annotationObject: {
+										"@context": "https://schema.org",
+										"@type": "Note",
+										content: "This is a simple note"
+									}
+								}
+							]
+						}
 					}
 				}
 			]
 		},
 		responseType: [
 			{
-				type: nameof<ICreatedResponse>()
+				type: nameof<ICreatedResponse>(),
+				examples: [
+					{
+						id: "auditableItemGraphCreateResponseExample",
+						description: "The response when a new graph vertex is created.",
+						response: {
+							statusCode: HttpStatusCode.created,
+							headers: {
+								[HeaderTypes.Location]: "aig:1234567890"
+							}
+						}
+					}
+				]
 			}
 		]
 	};
@@ -76,6 +163,9 @@ export function generateRestRoutesAuditableItemGraph(
 				{
 					id: "auditableItemGraphGetRequestExample",
 					request: {
+						headers: {
+							[HeaderTypes.Accept]: MimeTypes.Json
+						},
 						pathParams: {
 							id: "aig:1234567890"
 						}
@@ -91,20 +181,72 @@ export function generateRestRoutesAuditableItemGraph(
 						id: "auditableItemGraphGetResponseExample",
 						response: {
 							body: {
+								"@context": [
+									AuditableItemGraphContexts.ContextRoot,
+									AuditableItemGraphContexts.ContextRootCommon,
+									SchemaOrgContexts.ContextRoot
+								],
+								type: AuditableItemGraphTypes.Vertex,
 								id: "aig:1234567890",
-								created: 1724220078321,
+								dateCreated: "2024-08-22T11:55:16.271Z",
+								dateModified: "2024-08-22T11:55:16.271Z",
+								annotationObject: {
+									"@context": "https://schema.org",
+									"@type": "Note",
+									content: "This is a simple note"
+								},
 								aliases: [
 									{
-										created: 1724220078321,
-										id: "tst:1234567890"
+										"@context": [
+											AuditableItemGraphContexts.ContextRoot,
+											AuditableItemGraphContexts.ContextRootCommon,
+											SchemaOrgContexts.ContextRoot
+										],
+										type: AuditableItemGraphTypes.Alias,
+										id: "tst:1234567890",
+										dateCreated: "2024-08-22T11:55:16.271Z"
 									}
+								]
+							}
+						}
+					}
+				]
+			},
+			{
+				type: nameof<IAuditableItemGraphGetResponse>(),
+				mimeType: MimeTypes.JsonLd,
+				examples: [
+					{
+						id: "auditableItemGraphJsonLdGetResponseExample",
+						response: {
+							headers: {
+								[HeaderTypes.ContentType]: MimeTypes.JsonLd
+							},
+							body: {
+								"@context": [
+									AuditableItemGraphContexts.ContextRoot,
+									AuditableItemGraphContexts.ContextRootCommon,
+									SchemaOrgContexts.ContextRoot
 								],
-								metadata: [
+								type: AuditableItemGraphTypes.Vertex,
+								id: "aig:1234567890",
+								dateCreated: "2024-08-22T11:55:16.271Z",
+								dateModified: "2024-08-22T11:55:16.271Z",
+								annotationObject: {
+									"@context": "https://schema.org",
+									"@type": "Note",
+									content: "This is a simple note"
+								},
+								aliases: [
 									{
-										id: "description",
-										type: "https://schema.org/Text",
-										value: "This is a test item",
-										created: 1724220078321
+										"@context": [
+											AuditableItemGraphContexts.ContextRoot,
+											AuditableItemGraphContexts.ContextRootCommon,
+											SchemaOrgContexts.ContextRoot
+										],
+										type: AuditableItemGraphTypes.Alias,
+										dateCreated: "2024-08-22T11:55:16.271Z",
+										id: "tst:1234567890"
 									}
 								]
 							}
@@ -115,7 +257,217 @@ export function generateRestRoutesAuditableItemGraph(
 		]
 	};
 
-	return [createRoute, getRoute];
+	const updateRoute: IRestRoute<IAuditableItemGraphUpdateRequest, INoContentResponse> = {
+		operationId: "auditableItemGraphUpdate",
+		summary: "Update a graph vertex",
+		tag: tagsAuditableItemGraph[0].name,
+		method: "PUT",
+		path: `${baseRouteName}/:id`,
+		handler: async (httpRequestContext, request) =>
+			auditableItemGraphUpdate(httpRequestContext, componentName, request),
+		requestType: {
+			type: nameof<IAuditableItemGraphUpdateRequest>(),
+			examples: [
+				{
+					id: "auditableItemGraphUpdateRequestExample",
+					request: {
+						pathParams: {
+							id: "aig:1234567890"
+						},
+						body: {
+							annotationObject: {
+								"@context": "https://schema.org",
+								"@type": "Note",
+								content: "This is a simple note"
+							},
+							aliases: [
+								{
+									id: "bar456",
+									annotationObject: {
+										"@context": "https://schema.org",
+										"@type": "Note",
+										content: "This is a simple note"
+									}
+								},
+								{
+									id: "foo321",
+									annotationObject: {
+										"@context": "https://schema.org",
+										"@type": "Note",
+										content: "This is a simple note"
+									}
+								}
+							],
+							resources: [
+								{
+									id: "resource1",
+									resourceObject: {
+										"@context": "https://schema.org",
+										"@type": "Note",
+										content: "This is a simple note"
+									}
+								},
+								{
+									id: "resource2",
+									resourceObject: {
+										"@context": "https://schema.org",
+										"@type": "Note",
+										content: "This is a simple note"
+									}
+								}
+							],
+							edges: [
+								{
+									id: "edge1",
+									edgeRelationships: ["frenemy"],
+									annotationObject: {
+										"@context": "https://schema.org",
+										"@type": "Note",
+										content: "This is a simple note"
+									}
+								},
+								{
+									id: "edge2",
+									edgeRelationships: ["end"],
+									annotationObject: {
+										"@context": "https://schema.org",
+										"@type": "Note",
+										content: "This is a simple note"
+									}
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		responseType: [
+			{
+				type: nameof<INoContentResponse>()
+			}
+		]
+	};
+
+	const listRoute: IRestRoute<IAuditableItemGraphListRequest, IAuditableItemGraphListResponse> = {
+		operationId: "auditableItemGraphList",
+		summary: "Query graph vertices by id or alias",
+		tag: tagsAuditableItemGraph[0].name,
+		method: "GET",
+		path: `${baseRouteName}/`,
+		handler: async (httpRequestContext, request) =>
+			auditableItemGraphList(httpRequestContext, componentName, request),
+		requestType: {
+			type: nameof<IAuditableItemGraphListRequest>(),
+			examples: [
+				{
+					id: "IAuditableItemGraphListAllRequest",
+					request: {}
+				},
+				{
+					id: "IAuditableItemGraphListIdRequest",
+					request: {
+						query: {
+							id: "1234567890"
+						}
+					}
+				}
+			]
+		},
+		responseType: [
+			{
+				type: nameof<IAuditableItemGraphListResponse>(),
+				examples: [
+					{
+						id: "auditableItemGraphListResponseExample",
+						response: {
+							body: {
+								"@context": [
+									SchemaOrgContexts.ContextRoot,
+									AuditableItemGraphContexts.ContextRoot,
+									AuditableItemGraphContexts.ContextRootCommon
+								],
+								type: [SchemaOrgTypes.ItemList, AuditableItemGraphTypes.VertexList],
+								[SchemaOrgTypes.ItemListElement]: [
+									{
+										"@context": [
+											AuditableItemGraphContexts.ContextRoot,
+											AuditableItemGraphContexts.ContextRootCommon,
+											SchemaOrgContexts.ContextRoot
+										],
+										type: AuditableItemGraphTypes.Vertex,
+										id: "0101010101010101010101010101010101010101010101010101010101010101",
+										dateCreated: "2024-08-22T11:55:16.271Z",
+										aliases: [
+											{
+												"@context": [
+													AuditableItemGraphContexts.ContextRoot,
+													AuditableItemGraphContexts.ContextRootCommon,
+													SchemaOrgContexts.ContextRoot
+												],
+												type: AuditableItemGraphTypes.Alias,
+												id: "foo4",
+												dateCreated: "2024-08-22T11:55:16.271Z"
+											}
+										]
+									}
+								],
+								[SchemaOrgTypes.NextItem]: "1"
+							}
+						}
+					}
+				]
+			},
+			{
+				type: nameof<IAuditableItemGraphListResponse>(),
+				mimeType: MimeTypes.JsonLd,
+				examples: [
+					{
+						id: "auditableItemGraphJsonLdListResponseExample",
+						response: {
+							headers: {
+								[HeaderTypes.ContentType]: MimeTypes.JsonLd
+							},
+							body: {
+								"@context": [
+									SchemaOrgContexts.ContextRoot,
+									AuditableItemGraphContexts.ContextRoot,
+									AuditableItemGraphContexts.ContextRootCommon
+								],
+								type: [SchemaOrgTypes.ItemList, AuditableItemGraphTypes.VertexList],
+								[SchemaOrgTypes.ItemListElement]: [
+									{
+										"@context": [
+											AuditableItemGraphContexts.ContextRoot,
+											AuditableItemGraphContexts.ContextRootCommon,
+											SchemaOrgContexts.ContextRoot
+										],
+										type: AuditableItemGraphTypes.Vertex,
+										id: "0101010101010101010101010101010101010101010101010101010101010101",
+										dateCreated: "2024-08-22T11:55:16.271Z",
+										aliases: [
+											{
+												"@context": [
+													AuditableItemGraphContexts.ContextRoot,
+													AuditableItemGraphContexts.ContextRootCommon,
+													SchemaOrgContexts.ContextRoot
+												],
+												type: AuditableItemGraphTypes.Alias,
+												id: "foo4",
+												dateCreated: "2024-08-22T11:55:16.271Z"
+											}
+										]
+									}
+								],
+								[SchemaOrgTypes.NextItem]: "1"
+							}
+						}
+					}
+				]
+			}
+		]
+	};
+
+	return [createRoute, getRoute, updateRoute, listRoute];
 }
 
 /**
@@ -139,15 +491,14 @@ export async function auditableItemGraphCreate(
 
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
 	const id = await component.create(
-		request.body.aliases,
-		request.body.metadata,
+		request.body,
 		httpRequestContext.userIdentity,
 		httpRequestContext.nodeIdentity
 	);
 	return {
 		statusCode: HttpStatusCode.created,
 		headers: {
-			location: id
+			[HeaderTypes.Location]: id
 		}
 	};
 }
@@ -172,14 +523,100 @@ export async function auditableItemGraphGet(
 	);
 	Guards.stringValue(ROUTES_SOURCE, nameof(request.pathParams.id), request.pathParams.id);
 
+	const mimeType = request.headers?.[HeaderTypes.Accept] === MimeTypes.JsonLd ? "jsonld" : "json";
+
 	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
 	const result = await component.get(request.pathParams.id, {
-		includeDeleted: request.queryParams?.includeDeleted,
-		includeChangesets: request.queryParams?.includeChangesets,
-		verifySignatureDepth: request.queryParams?.verifySignatureDepth
+		includeDeleted: Coerce.boolean(request.query?.includeDeleted),
+		includeChangesets: Coerce.boolean(request.query?.includeChangesets),
+		verifySignatureDepth: request.query?.verifySignatureDepth
 	});
 
 	return {
+		headers: {
+			[HeaderTypes.ContentType]: mimeType === "json" ? MimeTypes.Json : MimeTypes.JsonLd
+		},
+		body: result
+	};
+}
+
+/**
+ * Update the graph vertex.
+ * @param httpRequestContext The request context for the API.
+ * @param componentName The name of the component to use in the routes.
+ * @param request The request.
+ * @returns The response object with additional http response properties.
+ */
+export async function auditableItemGraphUpdate(
+	httpRequestContext: IHttpRequestContext,
+	componentName: string,
+	request: IAuditableItemGraphUpdateRequest
+): Promise<INoContentResponse> {
+	Guards.object<IAuditableItemGraphUpdateRequest>(ROUTES_SOURCE, nameof(request), request);
+	Guards.object<IAuditableItemGraphUpdateRequest["pathParams"]>(
+		ROUTES_SOURCE,
+		nameof(request.pathParams),
+		request.pathParams
+	);
+	Guards.stringValue(ROUTES_SOURCE, nameof(request.pathParams.id), request.pathParams.id);
+	Guards.object<IAuditableItemGraphUpdateRequest["body"]>(
+		ROUTES_SOURCE,
+		nameof(request.body),
+		request.body
+	);
+
+	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
+	await component.update(
+		{ ...request.body, id: request.pathParams.id },
+		httpRequestContext.userIdentity,
+		httpRequestContext.nodeIdentity
+	);
+	return {
+		statusCode: HttpStatusCode.noContent
+	};
+}
+
+/**
+ * Query the graph vertices.
+ * @param httpRequestContext The request context for the API.
+ * @param componentName The name of the component to use in the routes.
+ * @param request The request.
+ * @returns The response object with additional http response properties.
+ */
+export async function auditableItemGraphList(
+	httpRequestContext: IHttpRequestContext,
+	componentName: string,
+	request: IAuditableItemGraphListRequest
+): Promise<IAuditableItemGraphListResponse> {
+	Guards.object<IAuditableItemGraphListRequest>(ROUTES_SOURCE, nameof(request), request);
+	Guards.object<IAuditableItemGraphListRequest["query"]>(
+		ROUTES_SOURCE,
+		nameof(request.query),
+		request.query
+	);
+
+	const mimeType = request.headers?.[HeaderTypes.Accept] === MimeTypes.JsonLd ? "jsonld" : "json";
+
+	const component = ComponentFactory.get<IAuditableItemGraphComponent>(componentName);
+
+	const result = await component.query(
+		{
+			id: request.query?.id,
+			idMode: request.query?.idMode,
+			resourceTypes: HttpParameterHelper.arrayFromString(request.query?.resourceTypes)
+		},
+		HttpParameterHelper.objectFromString(request.query?.conditions),
+		request.query?.orderBy,
+		request.query?.orderByDirection,
+		HttpParameterHelper.arrayFromString(request.query?.properties),
+		request.query?.cursor,
+		Coerce.integer(request.query?.pageSize)
+	);
+
+	return {
+		headers: {
+			[HeaderTypes.ContentType]: mimeType === "json" ? MimeTypes.Json : MimeTypes.JsonLd
+		},
 		body: result
 	};
 }

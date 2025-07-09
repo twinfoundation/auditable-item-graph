@@ -1,6 +1,7 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import { entity, property } from "@gtsc/entity";
+import { entity, property, SortDirection } from "@twin.org/entity";
+import type { AuditableItemGraphPatch } from "./auditableItemGraphPatch";
 
 /**
  * Class describing a set of updates to the vertex.
@@ -8,26 +9,38 @@ import { entity, property } from "@gtsc/entity";
 @entity()
 export class AuditableItemGraphChangeset {
 	/**
-	 * The timestamp of when the changeset was created.
+	 * The id of the changeset.
 	 */
-	@property({ type: "number" })
-	public created!: number;
+	@property({ type: "string", isPrimary: true })
+	public id!: string;
+
+	/**
+	 * The vertex the changeset belongs to.
+	 */
+	@property({ type: "string", isSecondary: true })
+	public vertexId!: string;
+
+	/**
+	 * The date/time of when the changeset was created.
+	 */
+	@property({ type: "string", format: "date-time", sortDirection: SortDirection.Descending })
+	public dateCreated!: string;
 
 	/**
 	 * The identity of the user who made the changeset.
 	 */
 	@property({ type: "string" })
-	public identity!: string;
+	public userIdentity!: string;
 
 	/**
-	 * The hash of the changeset.
+	 * The patches in the changeset.
 	 */
-	@property({ type: "string" })
-	public hash!: string;
+	@property({ type: "array", itemTypeRef: "AuditableItemGraphPatch" })
+	public patches!: AuditableItemGraphPatch[];
 
 	/**
-	 * The immutable storage id which contains the signature for this changeset.
+	 * The immutable proof id which contains the signature for this changeset.
 	 */
-	@property({ type: "string" })
-	public immutableStorageId!: string;
+	@property({ type: "string", optional: true })
+	public proofId?: string;
 }

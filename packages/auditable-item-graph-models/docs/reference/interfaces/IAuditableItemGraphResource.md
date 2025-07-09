@@ -4,13 +4,13 @@ Interface describing an auditable item graph vertex resource.
 
 ## Extends
 
-- [`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).`IAuditableItemGraphMetadataElement`
+- [`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md)
 
 ## Properties
 
-### id
+### id?
 
-> **id**: `string`
+> `optional` **id**: `string`
 
 The id of the element.
 
@@ -20,38 +20,60 @@ The id of the element.
 
 ***
 
-### created
+### dateCreated?
 
-> **created**: `number`
+> `optional` **dateCreated**: `string`
 
-The timestamp of when the element was created.
+The date/time of when the element was created.
 
 #### Inherited from
 
-[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`created`](IAuditableItemGraphAuditedElement.md#created)
+[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`dateCreated`](IAuditableItemGraphAuditedElement.md#datecreated)
 
 ***
 
-### deleted?
+### dateModified?
 
-> `optional` **deleted**: `number`
+> `optional` **dateModified**: `string`
 
-The timestamp of when the element was deleted, as we never actually remove items.
-A property can also be marked as deleted if the value was updated, in which case
-a new value is created and the old one marked as deleted.
+The date/time of when the element was modified.
 
 #### Inherited from
 
-[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`deleted`](IAuditableItemGraphAuditedElement.md#deleted)
+[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`dateModified`](IAuditableItemGraphAuditedElement.md#datemodified)
 
 ***
 
-### metadata?
+### dateDeleted?
 
-> `optional` **metadata**: [`IAuditableItemGraphProperty`](IAuditableItemGraphProperty.md)[]
+> `optional` **dateDeleted**: `string`
 
-Metadata to associate with the element.
+The date/time of when the element was deleted, as we never actually remove items.
 
 #### Inherited from
 
-`IAuditableItemGraphMetadataElement.metadata`
+[`IAuditableItemGraphAuditedElement`](IAuditableItemGraphAuditedElement.md).[`dateDeleted`](IAuditableItemGraphAuditedElement.md#datedeleted)
+
+***
+
+### @context
+
+> **@context**: `"https://schema.twindev.org/aig/"` \| \[`"https://schema.twindev.org/aig/"`, `...IJsonLdContextDefinitionElement[]`\]
+
+JSON-LD Context.
+
+***
+
+### type
+
+> **type**: `"AuditableItemGraphResource"`
+
+JSON-LD Type.
+
+***
+
+### resourceObject?
+
+> `optional` **resourceObject**: `IJsonLdNodeObject`
+
+The JSON-LD object for the resource.

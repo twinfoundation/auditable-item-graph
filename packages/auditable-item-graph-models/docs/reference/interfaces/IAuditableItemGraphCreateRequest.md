@@ -8,16 +8,28 @@ Create an auditable item graph vertex.
 
 > **body**: `object`
 
-The data to be used in the item.
+The data to be used in the vertex.
+
+#### annotationObject?
+
+> `optional` **annotationObject**: `IJsonLdNodeObject`
+
+The object to be used in the vertex as JSON-LD.
 
 #### aliases?
 
-> `optional` **aliases**: `string`[]
+> `optional` **aliases**: `object`[]
 
 Alternative aliases that can be used to identify the vertex.
 
-#### metadata?
+#### resources?
 
-> `optional` **metadata**: `IProperty`[]
+> `optional` **resources**: `object`[]
 
-The metadata to be used in the item.
+The resources attached to the vertex.
+
+#### edges?
+
+> `optional` **edges**: `object`[]
+
+The edges connected to the vertex.

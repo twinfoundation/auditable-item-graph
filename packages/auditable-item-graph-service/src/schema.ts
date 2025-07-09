@@ -1,11 +1,11 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import { EntitySchemaFactory, EntitySchemaHelper } from "@gtsc/entity";
-import { nameof } from "@gtsc/nameof";
+import { EntitySchemaFactory, EntitySchemaHelper } from "@twin.org/entity";
+import { nameof } from "@twin.org/nameof";
 import { AuditableItemGraphAlias } from "./entities/auditableItemGraphAlias";
 import { AuditableItemGraphChangeset } from "./entities/auditableItemGraphChangeset";
 import { AuditableItemGraphEdge } from "./entities/auditableItemGraphEdge";
-import { AuditableItemGraphProperty } from "./entities/auditableItemGraphProperty";
+import { AuditableItemGraphPatch } from "./entities/auditableItemGraphPatch";
 import { AuditableItemGraphResource } from "./entities/auditableItemGraphResource";
 import { AuditableItemGraphVertex } from "./entities/auditableItemGraphVertex";
 
@@ -25,10 +25,10 @@ export function initSchema(): void {
 	EntitySchemaFactory.register(nameof<AuditableItemGraphEdge>(), () =>
 		EntitySchemaHelper.getSchema(AuditableItemGraphEdge)
 	);
-	EntitySchemaFactory.register(nameof<AuditableItemGraphProperty>(), () =>
-		EntitySchemaHelper.getSchema(AuditableItemGraphProperty)
-	);
 	EntitySchemaFactory.register(nameof<AuditableItemGraphChangeset>(), () =>
 		EntitySchemaHelper.getSchema(AuditableItemGraphChangeset)
+	);
+	EntitySchemaFactory.register(nameof<AuditableItemGraphPatch>(), () =>
+		EntitySchemaHelper.getSchema(AuditableItemGraphPatch)
 	);
 }

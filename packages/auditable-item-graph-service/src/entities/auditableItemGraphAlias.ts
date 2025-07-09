@@ -1,6 +1,7 @@
 // Copyright 2024 IOTA Stiftung.
 // SPDX-License-Identifier: Apache-2.0.
-import { entity, property } from "@gtsc/entity";
+import { JsonLdTypes, type IJsonLdNodeObject } from "@twin.org/data-json-ld";
+import { entity, property } from "@twin.org/entity";
 
 /**
  * Class describing the auditable item graph alias.
@@ -14,14 +15,32 @@ export class AuditableItemGraphAlias {
 	public id!: string;
 
 	/**
-	 * The timestamp of when the alias was created.
+	 * The format of the alias for the vertex.
 	 */
-	@property({ type: "number" })
-	public created!: number;
+	@property({ type: "string", optional: true })
+	public aliasFormat?: string;
+
+	/**
+	 * The date/time of when the alias was created.
+	 */
+	@property({ type: "string", format: "date-time" })
+	public dateCreated!: string;
+
+	/**
+	 * The date/time of when the alias was last modified.
+	 */
+	@property({ type: "string", format: "date-time", optional: true })
+	public dateModified?: string;
 
 	/**
 	 * The timestamp of when the alias was deleted, as we never actually remove items.
 	 */
-	@property({ type: "number" })
-	public deleted?: number;
+	@property({ type: "string", format: "date-time", optional: true })
+	public dateDeleted?: string;
+
+	/**
+	 * Object to associate with the alias as JSON-LD.
+	 */
+	@property({ type: "object", itemTypeRef: JsonLdTypes.NodeObject, optional: true })
+	public annotationObject?: IJsonLdNodeObject;
 }

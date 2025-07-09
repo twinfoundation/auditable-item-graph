@@ -4,6 +4,18 @@ Get an auditable item graph vertex.
 
 ## Properties
 
+### headers?
+
+> `optional` **headers**: `object`
+
+The headers which can be used to determine the response data type.
+
+#### accept
+
+> **accept**: `"application/json"` \| `"application/ld+json"`
+
+***
+
 ### pathParams
 
 > **pathParams**: `object`
@@ -18,44 +30,26 @@ The id of the vertex to get.
 
 ***
 
-### queryParams?
+### query?
 
-> `optional` **queryParams**: `object`
+> `optional` **query**: `object`
 
 The query parameters.
 
 #### includeDeleted?
 
-> `optional` **includeDeleted**: `boolean`
+> `optional` **includeDeleted**: `string` \| `boolean`
 
-Whether to include deleted aliases, resource, edges.
-
-##### Default
-
-```ts
-false
-```
+Whether to include deleted aliases, resource, edges, defaults to false.
 
 #### includeChangesets?
 
-> `optional` **includeChangesets**: `boolean`
+> `optional` **includeChangesets**: `string` \| `boolean`
 
-Whether to include the changesets of the vertex.
-
-##### Default
-
-```ts
-false
-```
+Whether to include the changesets of the vertex, defaults to false.
 
 #### verifySignatureDepth?
 
-> `optional` **verifySignatureDepth**: `"all"` \| `"none"` \| `"current"`
+> `optional` **verifySignatureDepth**: [`VerifyDepth`](../type-aliases/VerifyDepth.md)
 
-How many signatures to verify.
-
-##### Default
-
-```ts
-"none"
-```
+How many signatures to verify, none, current or all, defaults to "none".

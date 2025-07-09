@@ -4,13 +4,13 @@ Class describing the auditable item graph alias.
 
 ## Constructors
 
-### new AuditableItemGraphAlias()
+### Constructor
 
-> **new AuditableItemGraphAlias**(): [`AuditableItemGraphAlias`](AuditableItemGraphAlias.md)
+> **new AuditableItemGraphAlias**(): `AuditableItemGraphAlias`
 
 #### Returns
 
-[`AuditableItemGraphAlias`](AuditableItemGraphAlias.md)
+`AuditableItemGraphAlias`
 
 ## Properties
 
@@ -22,16 +22,40 @@ The alternative alias for the vertex.
 
 ***
 
-### created
+### aliasFormat?
 
-> **created**: `number`
+> `optional` **aliasFormat**: `string`
 
-The timestamp of when the alias was created.
+The format of the alias for the vertex.
 
 ***
 
-### deleted?
+### dateCreated
 
-> `optional` **deleted**: `number`
+> **dateCreated**: `string`
+
+The date/time of when the alias was created.
+
+***
+
+### dateModified?
+
+> `optional` **dateModified**: `string`
+
+The date/time of when the alias was last modified.
+
+***
+
+### dateDeleted?
+
+> `optional` **dateDeleted**: `string`
 
 The timestamp of when the alias was deleted, as we never actually remove items.
+
+***
+
+### annotationObject?
+
+> `optional` **annotationObject**: `IJsonLdNodeObject`
+
+Object to associate with the alias as JSON-LD.

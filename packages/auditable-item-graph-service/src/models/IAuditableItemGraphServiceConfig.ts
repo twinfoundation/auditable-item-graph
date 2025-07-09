@@ -4,10 +4,5 @@
 /**
  * Configuration for the auditable item graph service.
  */
-export interface IAuditableItemGraphServiceConfig {
-	/**
-	 * The key to use for signing the graph.
-	 * @default auditable-item-graph
-	 */
-	vaultSigningKeyId?: string;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface IAuditableItemGraphServiceConfig {}

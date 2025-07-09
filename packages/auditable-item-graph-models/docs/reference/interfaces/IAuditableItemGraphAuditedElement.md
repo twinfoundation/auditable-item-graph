@@ -4,33 +4,38 @@ Interface describing the base properties for auditable elements.
 
 ## Extended by
 
+- [`IAuditableItemGraphAlias`](IAuditableItemGraphAlias.md)
 - [`IAuditableItemGraphEdge`](IAuditableItemGraphEdge.md)
-- [`IAuditableItemGraphProperty`](IAuditableItemGraphProperty.md)
 - [`IAuditableItemGraphResource`](IAuditableItemGraphResource.md)
-- [`IAuditableItemGraphVertex`](IAuditableItemGraphVertex.md)
 
 ## Properties
 
-### id
+### id?
 
-> **id**: `string`
+> `optional` **id**: `string`
 
 The id of the element.
 
 ***
 
-### created
+### dateCreated?
 
-> **created**: `number`
+> `optional` **dateCreated**: `string`
 
-The timestamp of when the element was created.
+The date/time of when the element was created.
 
 ***
 
-### deleted?
+### dateModified?
 
-> `optional` **deleted**: `number`
+> `optional` **dateModified**: `string`
 
-The timestamp of when the element was deleted, as we never actually remove items.
-A property can also be marked as deleted if the value was updated, in which case
-a new value is created and the old one marked as deleted.
+The date/time of when the element was modified.
+
+***
+
+### dateDeleted?
+
+> `optional` **dateDeleted**: `string`
+
+The date/time of when the element was deleted, as we never actually remove items.
